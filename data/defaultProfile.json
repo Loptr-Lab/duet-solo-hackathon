@@ -1,0 +1,18 @@
+{
+  "userId": "guest_default",
+  "createdAt": "2026-07-21T00:00:00.000Z",
+  "preferences": {
+    "screenReaderOptimized": true,
+    "audioCueTheme": "default_clean",
+    "speechRate": 1.0
+  },
+  "entitlements": {
+    "accessibilityPack": false,
+    "badge": "none"
+  },
+  "stats": {
+    "gamesPlayed": 0,
+    "wins": 0,
+    "lastMatchAt": null
+  }
+}
