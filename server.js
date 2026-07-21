@@ -52,12 +52,14 @@ app.post('/api/agent', async (req, res) => {
     }
 
     try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+        // FIXED: Appended ?key=${GEMINI_API_KEY} to the URL query parameters
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+        
         const geminiRes = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'x-goog-api-key': GEMINI_API_KEY,
+                // Removed 'x-goog-api-key' header which triggered OAuth access token expectation
             },
             body: JSON.stringify({
                 systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
