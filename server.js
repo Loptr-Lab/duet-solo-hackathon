@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 
+const { getPlayerProfile, savePlayerProfile } = require('./services/storage');
+
 const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -10,13 +12,6 @@ const PORT = process.env.PORT || 8080;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 
-// ==========================================================================
-// SYSTEM SCOPE — this agent handles business operations only:
-// onboarding, accessibility support, and the paid upgrade conversation.
-// It must NEVER suggest chess moves or strategy (that's the separate,
-// already-built chess AI difficulty toggle — a completely different thing).
-// It must NEVER generate audio.
-// ==========================================================================
 const SYSTEM_INSTRUCTION = `You are the onboarding and support agent for Duet, a screen-reader-first chess variant. Your job has exactly three parts:
 
 1. ONBOARDING: greet new players, confirm their screen reader is working, explain the move format (e.g. "e2e4" to move, "e4" to query a square).
@@ -31,14 +26,38 @@ STRICT RULES:
 Respond ONLY with a JSON object, no other text, in this exact shape:
 {"reply": "your response text here", "intent": "onboarding" | "support" | "upsell" | "off_topic"}`;
 
-// ==========================================================================
-// LOGGING — every interaction is written to stdout, which Cloud Run
-// automatically captures in Cloud Logging. This is the hackathon's
-// required "agent execution log" evidence — no database needed.
-// ==========================================================================
 function logInteraction(entry) {
     console.log(JSON.stringify({ type: 'agent_interaction', timestamp: new Date().toISOString(), ...entry }));
 }
+
+app.get('/api/profile/:userId', (req, res) => {
+    const profile = getPlayerProfile(req.params.userId);
+    if (!profile) {
+        return res.status(500).json({ error: 'Failed to load or create profile.' });
+    }
+    res.json(profile);
+});
+
+app.post('/api/profile/:userId', (req, res) => {
+    const currentProfile = getPlayerProfile(req.params.userId);
+    if (!currentProfile) {
+        return res.status(500).json({ error: 'Profile not found.' });
+    }
+
+    const updatedProfile = {
+        ...currentProfile,
+        preferences: { ...currentProfile.preferences, ...(req.body.preferences || {}) },
+        stats: { ...currentProfile.stats, ...(req.body.stats || {}) },
+        entitlements: { ...currentProfile.entitlements, ...(req.body.entitlements || {}) }
+    };
+
+    const saved = savePlayerProfile(req.params.userId, updatedProfile);
+    if (!saved) {
+        return res.status(500).json({ error: 'Failed to save profile updates.' });
+    }
+
+    res.json({ success: true, profile: updatedProfile });
+});
 
 app.post('/api/agent', async (req, res) => {
     const userMessage = (req.body && req.body.message || '').trim();
@@ -52,14 +71,12 @@ app.post('/api/agent', async (req, res) => {
     }
 
     try {
-        // FIXED: Appended ?key=${GEMINI_API_KEY} to the URL query parameters
         const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
         
         const geminiRes = await fetch(url, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                // Removed 'x-goog-api-key' header which triggered OAuth access token expectation
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
@@ -78,12 +95,9 @@ app.post('/api/agent', async (req, res) => {
 
         let parsed;
         try {
-            // Model sometimes wraps JSON in markdown fences - strip if present.
             const cleaned = rawText.replace(/```json\s*|\s*```/g, '').trim();
             parsed = JSON.parse(cleaned);
         } catch (e) {
-            // Fallback: treat the whole thing as a plain reply if it didn't
-            // return valid JSON, rather than failing the request outright.
             parsed = { reply: rawText || "Sorry, I didn't catch that — could you rephrase?", intent: 'unknown' };
         }
 
@@ -98,6 +112,10 @@ app.post('/api/agent', async (req, res) => {
         logInteraction({ input: userMessage, error: err.message });
         res.status(500).json({ error: 'Agent request failed.' });
     }
+});
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
