@@ -220,14 +220,6 @@
             margin: 14px 0 4px 0;
         }
         .panel p { font-size: 14px; line-height: 1.5; margin: 4px 0; }
-        #rpgactor-status {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 13px;
-            margin-top: 8px;
-        }
-        #rpgactor-stats dl { margin: 8px 0 0 0; }
-        #rpgactor-stats dt { color: var(--accent-gold); font-size: 13px; margin-top: 6px; }
-        #rpgactor-stats dd { margin: 0 0 0 0; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -302,17 +294,6 @@
         a round. Death's Sanctuary is the one place that effect can't reach.</p>
     </section>
 
-    <section class="panel" aria-labelledby="rpgactor-heading">
-        <h2 id="rpgactor-heading">rpg.actor Character Lookup</h2>
-        <p>Enter a Bluesky handle to look up any existing rpg.actor stats on record. Read-only - this does not
-        log you in or change anything on your account.</p>
-        <label for="rpgactor-handle">Bluesky handle</label>
-        <input type="text" id="rpgactor-handle" placeholder="e.g. yourname.bsky.social" autocomplete="off">
-        <button onclick="loadRpgActorProfile()">Look Up</button>
-        <p id="rpgactor-status" role="status" aria-live="polite"></p>
-        <div id="rpgactor-stats"></div>
-    </section>
-
 <script>
     const GameState = {
         board: [],
@@ -323,155 +304,6 @@
 
     let audioEnabled = false;
     let audioCtx, osc, gainNode;
-
-    async function loadRpgActorProfile() {
-        const handleInput = document.getElementById('rpgactor-handle');
-        const statusEl = document.getElementById('rpgactor-status');
-        const statsEl = document.getElementById('rpgactor-stats');
-        const handle = handleInput.value.trim().replace(/^@/, '');
-
-        statsEl.innerHTML = '';
-        if (!handle) {
-            statusEl.textContent = 'Enter a Bluesky handle first.';
-            return;
-        }
-
-        try {
-            statusEl.textContent = 'Resolving handle...';
-            const did = await resolveHandleToDid(handle);
-
-            statusEl.textContent = 'Locating personal data server...';
-            const pdsUrl = await resolveDidToPdsEndpoint(did);
-
-            statusEl.textContent = 'Fetching character record...';
-            const record = await fetchActorRpgStats(pdsUrl, did);
-
-            if (!record) {
-                statusEl.textContent = `No rpg.actor record found for ${handle}.`;
-                return;
-            }
-
-            statusEl.textContent = `Loaded character for ${handle}.`;
-            renderRpgActorStats(record);
-        } catch (err) {
-            statusEl.textContent = `Couldn't load that profile (${err.message}). Double-check the handle and try again.`;
-        }
-    }
-
-    async function resolveHandleToDid(handle) {
-        const res = await fetch(
-            `https://public.api.bsky.app/xrpc/com.atproto.identity.resolveHandle?handle=${encodeURIComponent(handle)}`
-        );
-        if (!res.ok) throw new Error('handle not found');
-        const data = await res.json();
-        if (!data.did) throw new Error('no DID in response');
-        return data.did;
-    }
-
-    async function resolveDidToPdsEndpoint(did) {
-        if (!did.startsWith('did:plc:')) {
-            throw new Error('only did:plc identities are supported in this lookup');
-        }
-        const res = await fetch(`https://plc.directory/${did}`);
-        if (!res.ok) throw new Error('DID document not found');
-        const doc = await res.json();
-        const pds = (doc.service || []).find(s => s.type === 'AtprotoPersonalDataServer');
-        if (!pds) throw new Error('no PDS listed for this account');
-        return pds.serviceEndpoint;
-    }
-
-    async function fetchActorRpgStats(pdsUrl, did) {
-        const res = await fetch(
-            `${pdsUrl}/xrpc/com.atproto.repo.listRecords?repo=${encodeURIComponent(did)}&collection=actor.rpg.stats&limit=100`
-        );
-        if (!res.ok) throw new Error('could not read records from PDS');
-        const data = await res.json();
-        if (!data.records || data.records.length === 0) return null;
-
-        const metaKeys = new Set(['$type', 'createdAt', 'updatedAt', 'system', 'data']);
-        const systems = [];
-
-        for (const rec of data.records) {
-            const value = rec.value || {};
-            if (typeof value.system === 'string' && 'data' in value) {
-                systems.push({
-                    systemKey: value.system,
-                    fields: value.data || {},
-                    createdAt: value.createdAt,
-                });
-            } else {
-                for (const key of Object.keys(value)) {
-                    if (metaKeys.has(key)) continue;
-                    systems.push({
-                        systemKey: key,
-                        fields: value[key] || {},
-                        createdAt: value.createdAt,
-                    });
-                }
-            }
-        }
-        return systems.length > 0 ? systems : null;
-    }
-
-    function renderRpgActorStats(systems) {
-        const statsEl = document.getElementById('rpgactor-stats');
-        statsEl.innerHTML = '';
-
-        if (!systems || systems.length === 0) {
-            const p = document.createElement('p');
-            p.textContent = 'This actor has a record, but no populated stat systems.';
-            statsEl.appendChild(p);
-            return;
-        }
-
-        let latestCreatedAt = null;
-
-        for (const { systemKey, fields, createdAt } of systems) {
-            if (createdAt && (!latestCreatedAt || createdAt > latestCreatedAt)) {
-                latestCreatedAt = createdAt;
-            }
-
-            const heading = document.createElement('h3');
-            heading.textContent = (systemKey === 'custom' || systemKey === 'veileddominion')
-                ? 'Veiled Dominion stats'
-                : `${systemKey} system`;
-            statsEl.appendChild(heading);
-
-            if (systemKey === 'custom' || systemKey === 'veileddominion') {
-                if (Object.keys(fields || {}).length === 0) {
-                    const note = document.createElement('p');
-                    note.textContent = 'No Veiled Dominion stats recorded yet for this actor.';
-                    statsEl.appendChild(note);
-                    continue;
-                }
-            } else {
-                const note = document.createElement('p');
-                note.style.opacity = '0.7';
-                note.style.fontSize = '12px';
-                note.textContent = `This character's data lives in a different system (${systemKey}), not Veiled Dominion's - shown for reference only.`;
-                statsEl.appendChild(note);
-            }
-
-            const dl = document.createElement('dl');
-            for (const [key, value] of Object.entries(fields || {})) {
-                const dt = document.createElement('dt');
-                dt.textContent = key;
-                const dd = document.createElement('dd');
-                dd.textContent = typeof value === 'object' ? JSON.stringify(value) : String(value);
-                dl.appendChild(dt);
-                dl.appendChild(dd);
-            }
-            statsEl.appendChild(dl);
-        }
-
-        if (latestCreatedAt) {
-            const meta = document.createElement('p');
-            meta.style.opacity = '0.6';
-            meta.style.fontSize = '12px';
-            meta.textContent = `Record created ${latestCreatedAt}`;
-            statsEl.appendChild(meta);
-        }
-    }
 
     let selectedSquare = null;
 
