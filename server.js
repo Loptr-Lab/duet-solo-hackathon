@@ -1,4 +1,3 @@
-cat << 'EOF' > server.js
 const express = require('express');
 const path = require('path');
 const storage = require('./services/storage');
@@ -114,4 +113,3 @@ app.listen(PORT, () => {
         timestamp: new Date().toISOString()
     }));
 });
-EOF
