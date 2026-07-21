@@ -72,6 +72,91 @@ app.post('/api/agent', async (req, res) => {
     }
 });
 
+const express = require('express');
+const path = require('path');
+// Initialize Stripe with your secret key
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
+const app = express();
+const PORT = process.env.PORT || 8080;
+
+// Note: Stripe Webhooks require the raw request body, so mount standard JSON parsing carefully
+app.use((req, res, next) => {
+    if (req.originalUrl === '/api/webhook') {
+        next();
+    } else {
+        express.json()(req, res, next);
+    }
+});
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+// 1. CREATE STRIPE CHECKOUT SESSION ROUTE
+app.post('/api/create-checkout-session', async (req, res) => {
+    try {
+        const domainUrl = process.env.PUBLIC_URL || `${req.protocol}://${req.get('host')}`;
+
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items: [
+                {
+                    price_data: {
+                        currency: 'usd',
+                        product_data: {
+                            name: 'Duet: Solo — Accessibility & Supporter Pack',
+                            description: 'Includes custom high-contrast chess themes, enhanced screen-reader voice profiles, and exclusive telemetry badges.',
+                        },
+                        unit_amount: 499, // $4.99 USD
+                    },
+                    quantity: 1,
+                },
+            ],
+            mode: 'payment',
+            success_url: `${domainUrl}/?payment=success&session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${domainUrl}/?payment=cancelled`,
+        });
+
+        res.json({ url: session.url });
+    } catch (err) {
+        console.error("Stripe Session Error:", err);
+        res.status(500).json({ error: "Failed to initialize payment session." });
+    }
+});
+
+// 2. STRIPE WEBHOOK LISTENER (To record verified transactions for XPRIZE P&L)
+app.post('/api/webhook', express.raw({ type: 'application/json' }), (req, res) => {
+    const sig = req.headers['stripe-signature'];
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+    let event;
+
+    try {
+        if (webhookSecret) {
+            event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
+        } else {
+            event = JSON.parse(req.body);
+        }
+    } catch (err) {
+        console.error(`Webhook Signature Verification Failed: ${err.message}`);
+        return res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+
+    // Handle completed payment
+    if (event.type === 'checkout.session.completed') {
+        const session = event.data.object;
+        
+        console.log(`[VERIFIED TRANSACTION] Payment received for Session ${session.id}! Amount: $${session.amount_total / 100}`);
+        
+        // TODO: Save transaction ID and timestamp to Cloud Firestore for XPRIZE Financial Audits
+    }
+
+    res.json({ received: true });
+});
+
+app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
+});
+
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
 });
