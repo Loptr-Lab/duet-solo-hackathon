@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const storage = require('./services/storage');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -16,22 +15,21 @@ function logInteraction(payload) {
     }));
 }
 
+// In-memory profile fallback (no external require needed)
+let userProfile = {
+    screenReader: true,
+    packOwned: true,
+    wins: 0,
+    losses: 0
+};
+
 app.get('/api/profile', (req, res) => {
-    try {
-        const profile = storage.getProfile();
-        res.json(profile);
-    } catch (err) {
-        res.status(500).json({ error: 'Failed to retrieve profile' });
-    }
+    res.json(userProfile);
 });
 
 app.post('/api/profile', (req, res) => {
-    try {
-        const updated = storage.updateProfile(req.body);
-        res.json(updated);
-    } catch (err) {
-        res.status(500).json({ error: 'Failed to update profile' });
-    }
+    userProfile = { ...userProfile, ...req.body };
+    res.json(userProfile);
 });
 
 app.post('/api/agent', async (req, res) => {
