@@ -6,11 +6,11 @@
     <title>Veiled Dominion: Duet</title>
     <style>
         :root {
-            --bg-base: #0D0C0E;           /* obsidian black */
-            --surface-concrete: #1A191C;  /* muted charcoal */
-            --accent-crimson: #9E1B1B;    /* active threat / block accents */
-            --accent-gold: #D4AF37;       /* locked / protected states */
-            --text-primary: #F5F5F7;      /* stark industrial white */
+            --bg-base: #0D0C0E;
+            --surface-concrete: #1A191C;
+            --accent-crimson: #9E1B1B;
+            --accent-gold: #D4AF37;
+            --text-primary: #F5F5F7;
         }
         * { box-sizing: border-box; }
         body {
@@ -19,21 +19,11 @@
             color: var(--text-primary);
             margin: 0;
         }
-        /* Page shell - keeps line lengths readable and centers the whole
-           experience instead of hugging the browser's left edge. */
         .page {
             max-width: 780px;
             margin: 0 auto;
             padding: 32px 20px 48px;
         }
-
-        /* ==========================================================================
-           HERO / LANDING HEADER
-           Purely additive framing above the existing game - no game markup or
-           logic below this point is touched. Gives first-time visitors (jam
-           participants, junior devs) a 10-second orientation before the
-           command input, instead of dropping them straight into a raw input box.
-           ========================================================================== */
         .hero {
             padding-bottom: 20px;
             margin-bottom: 28px;
@@ -90,8 +80,6 @@
             padding: 1px 6px;
             font-family: 'Roboto Mono', monospace;
         }
-
-        /* Visual representation for sighted devs/testers. Fully hidden from screen readers. */
         #visual-board {
             display: grid;
             grid-template-columns: repeat(8, 40px);
@@ -109,8 +97,6 @@
             justify-content: center;
             font-size: 24px;
         }
-        /* Small screens: shrink the board so 8 columns still fit without
-           horizontal scrolling (8 * 34px + gaps ≈ fits a 360px viewport). */
         @media (max-width: 400px) {
             #visual-board {
                 grid-template-columns: repeat(8, 34px);
@@ -118,26 +104,18 @@
             }
             .sq { font-size: 20px; }
         }
-        /* Two brand darks, not wood tones - board stays in the monochromatic family */
         .sq.light { background: var(--surface-concrete); color: var(--text-primary); }
         .sq.dark { background: var(--bg-base); color: var(--text-primary); }
-        /* Radius of Ruin: crimson is reserved for active-threat states in the design system.
-           Dashed inner outline gives it a shape identity too, not just color, so it still
-           reads for colorblind or grayscale viewing. */
         .sq.ruin {
             box-shadow: inset 0 0 0 4px rgba(158, 27, 27, 0.7);
             outline: 2px dashed rgba(158, 27, 27, 0.9);
             outline-offset: -8px;
         }
-        /* Sanctuary: gold reads as "locked/protected", not blue (blue is off-palette entirely).
-           Dotted inner outline distinguishes it from Ruin's dashed pattern by shape alone. */
         .sq.sanctuary {
             box-shadow: inset 0 0 0 4px rgba(212, 175, 55, 0.6);
             outline: 2px dotted rgba(212, 175, 55, 0.9);
             outline-offset: -8px;
         }
-        /* Veiled: 45-degree diagonal hatch, per the design system's Veil State Pattern -
-           a flat gray fill was a placeholder, not the spec */
         .sq.veiled {
             background-color: var(--surface-concrete) !important;
             background-image: repeating-linear-gradient(
@@ -149,8 +127,6 @@
             ) !important;
             color: rgba(245, 245, 247, 0.6) !important;
         }
-
-        /* Accessibility: Screen Reader Only Live Region */
         .sr-only {
             position: absolute;
             width: 1px;
@@ -199,9 +175,6 @@
             padding: 1px 6px;
             font-family: inherit;
         }
-        /* Click-to-select highlight for sighted mouse/keyboard users - purely additive,
-           screen readers never see this board (aria-hidden), so this doesn't touch
-           or complicate the accessible input path at all. */
         .sq { cursor: pointer; }
         .sq.selected { box-shadow: inset 0 0 0 3px var(--text-primary); }
         #log {
@@ -209,14 +182,11 @@
             background: var(--surface-concrete);
             color: var(--text-primary);
             padding: 10px;
-            border-radius: 0; /* doc rejects rounded/soft treatments in favor of flat structural edges */
+            border-radius: 0;
             max-height: 200px;
             overflow-y: auto;
-            font-family: 'Roboto Mono', monospace; /* Data/Logs typeface per the doc's typography hierarchy */
+            font-family: 'Roboto Mono', monospace;
         }
-        /* Accessible counterpart to #log: a real, focusable, navigable list (not
-           aria-hidden) so screen reader users can review move history item by item,
-           the same way sighted users can scroll the visual log. */
         .history-log {
             max-height: 200px;
             overflow-y: auto;
@@ -279,11 +249,8 @@
         </p>
     </header>
 
-    <!-- Screen Reader Live Region -->
-    <!-- This handles the "Board-state layer" natively via the user's own assistive tech -->
     <div id="sr-status" class="sr-only" role="status" aria-live="assertive" aria-atomic="true"></div>
 
-    <!-- Visual Board (Aria-hidden so screen readers don't get confused by duplicate visual state) -->
     <div id="visual-board" aria-hidden="true"></div>
 
     <div class="controls">
@@ -315,18 +282,11 @@
         <div id="log" aria-hidden="true"></div>
     </div>
 
-    <!-- Accessible move/event history: unlike #sr-status (which only speaks the latest
-         event once, live), this is a real, navigable list a screen reader user can move
-         through item by item to review past moves - not aria-hidden, no aria-live, so it
-         doesn't re-announce and doesn't duplicate #sr-status's job, just extends it. -->
     <section class="panel" aria-labelledby="history-heading">
         <h3 id="history-heading">Move &amp; Event History</h3>
         <ol id="history-log" class="history-log"></ol>
     </section>
 
-    <!-- Lore panel - plain readable text, intentionally NOT aria-hidden since this content
-         is meaningful to blind players too, unlike the visual board. Placed below the game
-         itself so the board/controls are the first thing encountered. -->
     <section class="panel" aria-labelledby="lore-heading">
         <h2 id="lore-heading">Lore</h2>
         <h3>Rebirth</h3>
@@ -342,9 +302,6 @@
         a round. Death's Sanctuary is the one place that effect can't reach.</p>
     </section>
 
-    <!-- rpg.actor integration - read-only lookup. Unauthenticated GET only; no login, no writes.
-         See RPGACTOR_INTEGRATION_NOTES section further down in this file for what Phase 2 (OAuth
-         write-back) would require - deliberately out of scope for this pass. -->
     <section class="panel" aria-labelledby="rpgactor-heading">
         <h2 id="rpgactor-heading">rpg.actor Character Lookup</h2>
         <p>Enter a Bluesky handle to look up any existing rpg.actor stats on record. Read-only - this does not
@@ -357,28 +314,6 @@
     </section>
 
 <script>
-    /* ==========================================================================
-       ENGINE ARCHITECTURE NOTE
-       --------------------------------------------------------------------------
-       Duet is a standalone HTML/JS build (not the main C#/.NET/Unity engine),
-       but this file is organized to follow the same architecture contract
-       documented in Loptr-Lab/veiled-dominion-engine's ARCHITECTURE_OVERVIEW.md:
-
-         - Turn Lifecycle: START PHASE -> ACTION PHASE -> RESOLUTION PHASE
-         - Ordered Engine Sequence:
-             PlayerIntent -> OnValidateIntent -> OnApplyMove -> OnResolveCapture
-             -> OnResolveSystems -> OnCheckEndState -> Snapshot -> UI Refresh
-         - Veiled State Lifecycle: trigger / duration / effects / refresh-not-stack
-         - Systems operate on canonical state; UI consumes read-only Snapshots
-           rather than reaching into live engine state directly.
-
-       This keeps Duet's internals conceptually portable to the real engine
-       later, even though nothing here shares code with it.
-       ========================================================================== */
-
-    // ==========================================================================
-    // GAME STATE (engine-owned; treat as private, mutate only via the phases below)
-    // ==========================================================================
     const GameState = {
         board: [],
         turn: 'w',
@@ -389,27 +324,6 @@
     let audioEnabled = false;
     let audioCtx, osc, gainNode;
 
-    // ==========================================================================
-    // RPG.ACTOR INTEGRATION - PHASE 1 (READ-ONLY)
-    //
-    // Per rpg.actor's developer guide: reading is unauthenticated, writing
-    // requires OAuth (PKCE + DPoP) against the player's own PDS. This is
-    // intentionally read-only - no login, no write-back of match results yet.
-    // That's a separately-scoped Phase 2, not a small addition, since a write
-    // integration must fetch-merge-put (putRecord replaces the WHOLE record,
-    // so a naive write can wipe out a player's stats from other games).
-    //
-    // Flow: Bluesky handle -> DID (via public AppView) -> PDS service endpoint
-    // (via did:plc directory) -> actor.rpg.stats record on that PDS.
-    //
-    // NOTE: these calls hit real public AT Protocol infrastructure and could
-    // not be exercised against a live handle in the environment this was
-    // built in (no network path to bsky.app/plc.directory from that sandbox).
-    // Test against a real handle with actual rpg.actor records before
-    // relying on this in production - endpoint shapes are implemented per
-    // rpg.actor's and AT Protocol's documented conventions, not verified
-    // end-to-end here.
-    // ==========================================================================
     async function loadRpgActorProfile() {
         const handleInput = document.getElementById('rpgactor-handle');
         const statusEl = document.getElementById('rpgactor-status');
@@ -455,8 +369,6 @@
     }
 
     async function resolveDidToPdsEndpoint(did) {
-        // did:plc identifiers resolve via the PLC directory; did:web would need
-        // fetching the domain's /.well-known/did.json instead - not handled here.
         if (!did.startsWith('did:plc:')) {
             throw new Error('only did:plc identities are supported in this lookup');
         }
@@ -469,12 +381,6 @@
     }
 
     async function fetchActorRpgStats(pdsUrl, did) {
-        // The rpg.actor standard is now per-system rkey: one actor.rpg.stats
-        // record per system (rkey = system key), shaped { system, data, ... }.
-        // The old single 'self' record (top-level keys ARE the system names)
-        // is deprecated but some actors may still only have that. Read every
-        // record in the collection and normalize both shapes into one list -
-        // don't just grab record #1 and assume its shape.
         const res = await fetch(
             `${pdsUrl}/xrpc/com.atproto.repo.listRecords?repo=${encodeURIComponent(did)}&collection=actor.rpg.stats&limit=100`
         );
@@ -488,14 +394,12 @@
         for (const rec of data.records) {
             const value = rec.value || {};
             if (typeof value.system === 'string' && 'data' in value) {
-                // Modern per-system rkey record.
                 systems.push({
                     systemKey: value.system,
                     fields: value.data || {},
                     createdAt: value.createdAt,
                 });
             } else {
-                // Legacy self record: every non-meta top-level key is a system.
                 for (const key of Object.keys(value)) {
                     if (metaKeys.has(key)) continue;
                     systems.push({
@@ -513,13 +417,6 @@
         const statsEl = document.getElementById('rpgactor-stats');
         statsEl.innerHTML = '';
 
-        // `systems` is a normalized list of { systemKey, fields, createdAt },
-        // already flattened from whichever record shape(s) fetchActorRpgStats
-        // found - modern per-system rkey records, legacy self records, or a
-        // mix of both. A character can have more than one populated system -
-        // e.g. a Reverie House character stores data under "reverie", a D&D
-        // character under "dnd", and Veiled Dominion today under "custom"
-        // (until it registers its own system key). Render whichever are present.
         if (!systems || systems.length === 0) {
             const p = document.createElement('p');
             p.textContent = 'This actor has a record, but no populated stat systems.';
@@ -576,14 +473,6 @@
         }
     }
 
-    // ==========================================================================
-    // CLICK-TO-FILL (sighted mouse/keyboard convenience layer)
-    // The visual board is aria-hidden - screen readers never see or interact
-    // with it - so this is purely additive on top of the accessible command
-    // path, not a second input system that has to stay in sync with it.
-    // Clicking two squares just types the same "e2e4" string a keyboard user
-    // would have typed, then submits it through the normal PlayerIntent flow.
-    // ==========================================================================
     let selectedSquare = null;
 
     function handleSquareClick(sq) {
@@ -592,11 +481,10 @@
         if (!selectedSquare) {
             selectedSquare = sq;
             cmdInput.value = sq;
-            renderVisualBoard(createSnapshot()); // re-render to show selection highlight
+            renderVisualBoard(createSnapshot());
             return;
         }
         if (selectedSquare === sq) {
-            // clicking the same square again cancels the selection
             selectedSquare = null;
             cmdInput.value = '';
             renderVisualBoard(createSnapshot());
@@ -607,14 +495,6 @@
         processCommand();
     }
 
-    // ==========================================================================
-    // SNAPSHOT CONTRACT
-    // "consumers should react to snapshots rather than reconstruct engine
-    //  state from partial events" - ARCHITECTURE_OVERVIEW.md
-    // The UI layer (renderVisualBoard, announce) only ever reads from a
-    // Snapshot, never from GameState directly. This is the same boundary
-    // the real engine draws between engine state and replay/UI/persistence.
-    // ==========================================================================
     function createSnapshot() {
         return {
             board: GameState.board.map(row => row.map(cell => cell ? { ...cell } : null)),
@@ -624,29 +504,23 @@
         };
     }
 
-    // ==========================================================================
-    // INITIALIZATION (equivalent to an initial Snapshot + START PHASE)
-    // ==========================================================================
     function initGame() {
         GameState.board = Array(8).fill(null).map(() => Array(8).fill(null));
-        // Pawns
         for (let i = 0; i < 8; i++) {
             GameState.board[1][i] = { type: 'p', color: 'b' };
             GameState.board[6][i] = { type: 'p', color: 'w' };
         }
-        // Black back row (0)
         GameState.board[0][0] = { type: 'r', color: 'b' }; GameState.board[0][7] = { type: 'r', color: 'b' };
         GameState.board[0][1] = { type: 'n', color: 'b' }; GameState.board[0][6] = { type: 'n', color: 'b' };
         GameState.board[0][2] = { type: 'b', color: 'b' }; GameState.board[0][5] = { type: 'b', color: 'b' };
-        GameState.board[0][3] = { type: 'rb', color: 'b' }; // Rebirth (Queen equivalent)
-        GameState.board[0][4] = { type: 'd', color: 'b' };  // Death (King equivalent)
+        GameState.board[0][3] = { type: 'rb', color: 'b' };
+        GameState.board[0][4] = { type: 'd', color: 'b' };
 
-        // White back row (7)
         GameState.board[7][0] = { type: 'r', color: 'w' }; GameState.board[7][7] = { type: 'r', color: 'w' };
         GameState.board[7][1] = { type: 'n', color: 'w' }; GameState.board[7][6] = { type: 'n', color: 'w' };
         GameState.board[7][2] = { type: 'b', color: 'w' }; GameState.board[7][5] = { type: 'b', color: 'w' };
-        GameState.board[7][3] = { type: 'rb', color: 'w' }; // Rebirth
-        GameState.board[7][4] = { type: 'd', color: 'w' };  // Death
+        GameState.board[7][3] = { type: 'rb', color: 'w' };
+        GameState.board[7][4] = { type: 'd', color: 'w' };
 
         GameState.turn = 'w';
         GameState.gameOver = false;
@@ -660,10 +534,6 @@
         maybeTriggerAI();
     }
 
-    // ==========================================================================
-    // ACCESSIBILITY: SCREEN READER ANNOUNCEMENTS
-    // (part of UI Refresh, consumes only strings, no engine-state coupling)
-    // ==========================================================================
     function announce(msg) {
         document.getElementById('sr-status').innerText = msg;
         document.getElementById('log').innerText += msg + '\n';
@@ -676,10 +546,6 @@
         historyLog.scrollTop = historyLog.scrollHeight;
     }
 
-    // ==========================================================================
-    // COMMAND PARSING (BOARD-STATE LAYER)
-    // This is where a raw player command becomes a PlayerIntent.
-    // ==========================================================================
     function processCommand() {
         if (GameState.gameOver) {
             announce("Game over. Refresh page to restart.");
@@ -696,7 +562,6 @@
         if (cmd.length === 2) {
             querySquare(cmd);
         } else if (cmd.length === 4) {
-            // Build a PlayerIntent and hand it to the engine sequence.
             const intent = {
                 type: 'MOVE',
                 from: cmd.substring(0, 2),
@@ -722,14 +587,6 @@
         }
     }
 
-    // ==========================================================================
-    // ORDERED ENGINE SEQUENCE
-    //   PlayerIntent -> OnValidateIntent -> OnApplyMove -> OnResolveCapture
-    //   -> OnResolveSystems -> OnCheckEndState -> Snapshot -> UI Refresh
-    // Each stage is its own named function so the sequence stays legible and
-    // any one stage can be swapped/extended (e.g. a future variant hook)
-    // without touching the others.
-    // ==========================================================================
     function submitPlayerIntent(intent) {
         const validation = onValidateIntent(intent);
         if (!validation.valid) {
@@ -742,7 +599,6 @@
         onResolveSystems(captureResult);
         onCheckEndState();
 
-        // ACTION PHASE is over; advance to next player's START PHASE.
         advanceTurn();
 
         const snapshot = createSnapshot();
@@ -751,9 +607,6 @@
         maybeTriggerAI();
     }
 
-    // --- OnValidateIntent -------------------------------------------------
-    // Confirms the action is legal in the current state: turn ownership,
-    // piece restrictions (Veiled), and destination legality.
     function onValidateIntent(intent) {
         const from = parseSquare(intent.from);
         const to = parseSquare(intent.to);
@@ -765,8 +618,6 @@
             return { valid: false, reason: `That is not your piece. It is ${GameState.turn === 'w' ? 'White' : 'Black'}'s turn.` };
         }
 
-        // Spatial state modifier: Veiled pieces move under restricted rules
-        // rather than their normal class locomotion (per Veiled State Lifecycle).
         if (piece.veiled) {
             if (to.c !== from.c) return { valid: false, reason: "Veiled pieces may only move 1 square forward. Invalid move." };
             if (piece.color === 'w' && to.r !== from.r - 1) return { valid: false, reason: "Veiled pieces may only move 1 square forward." };
@@ -784,9 +635,6 @@
         return { valid: true, from, to, piece, target, fromStr: intent.from, toStr: intent.to };
     }
 
-    // --- OnApplyMove --------------------------------------------------------
-    // Mutates board state in a controlled way: move the piece, update
-    // occupancy, apply immediate local changes (promotion).
     function onApplyMove(validated) {
         const { from, to, piece, target, toStr } = validated;
 
@@ -802,9 +650,6 @@
         return { ...validated, promoted };
     }
 
-    // --- OnResolveCapture -----------------------------------------------------
-    // Resolves capture/announcement text. (Duet has no graveyard/displacement
-    // system yet - this stage is the hook where one would live.)
     function onResolveCapture(applied) {
         const { piece, target, toStr, promoted } = applied;
         const moverName = GameState.turn === 'w' ? 'White' : 'Black';
@@ -820,20 +665,11 @@
         return applied;
     }
 
-    // --- OnResolveSystems -----------------------------------------------------
-    // Runs stateful global systems (RadiusOfRuinSystem / VeiledStateSystem)
-    // and updates counters. Order matches ARCHITECTURE_OVERVIEW.md's
-    // RESOLUTION PHASE: recalc Radius of Ruin -> apply Veiled states.
     function onResolveSystems() {
         RadiusOfRuinSystem.resolve(GameState.turn);
         VeiledStateSystem.tickDown(GameState.turn);
     }
 
-    // --- OnCheckEndState --------------------------------------------------
-    // Evaluate victory/loss conditions. Duet is full-information standard
-    // chess + Rebirth/Death/Veiling with no win-condition variants yet, so
-    // this is currently a no-op hook, kept explicit rather than omitted so
-    // future rules (e.g. Rebirth Leadership Points) have a clear seam.
     function onCheckEndState() {
         // no-op for Duet's current scope
     }
@@ -844,12 +680,6 @@
         announce(`It is now ${GameState.turn === 'w' ? 'White' : 'Black'}'s turn.`);
     }
 
-    // ==========================================================================
-    // RADIUS OF RUIN SYSTEM
-    // Finds Rebirth/Death anchors and marks any newly-exposed enemy piece
-    // as Veiled. Mirrors the "Apply Resource / Aura Overrides" stage of the
-    // Movement Calculation Pipeline in ARCHITECTURE_OVERVIEW.md.
-    // ==========================================================================
     const RadiusOfRuinSystem = {
         resolve(activeColor) {
             const enemyColor = activeColor === 'w' ? 'b' : 'w';
@@ -886,25 +716,10 @@
         },
     };
 
-    // ==========================================================================
-    // VEILED STATE SYSTEM
-    // Implements the Veiled State Lifecycle exactly as specified in
-    // ARCHITECTURE_OVERVIEW.md:
-    //   Trigger  - non-immune piece ends resolution phase in the aura
-    //   Duration - lasts until that piece's owner's next Start Phase
-    //   Effects  - 1-square-forward only, no capture (enforced in OnValidateIntent)
-    //   Refresh  - re-entering refreshes duration, it does NOT stack
-    //
-    // NOTE: the original prototype only set veiled_turns on first entry and
-    // never refreshed it on re-entry - this fixes that to match the
-    // documented "refresh behavior" contract from the real engine.
-    // ==========================================================================
     const VeiledStateSystem = {
-        DURATION_TURNS: 2, // 1 full round: opponent's turn + owner's own turn
+        DURATION_TURNS: 2,
 
         apply(piece) {
-            // Refresh-not-stack: always reset to full duration on (re-)entry,
-            // regardless of whether the piece was already veiled.
             piece.veiled = true;
             piece.veiled_turns = this.DURATION_TURNS;
         },
@@ -925,16 +740,6 @@
         },
     };
 
-    // ==========================================================================
-    // MOVEMENT LEGALITY (standard chess + Rebirth/Death mappings)
-    // Corresponds to "Calculate Base Movement Vectors" + "Filter Illegal
-    // Moves" stages of the Movement Calculation Pipeline. Duet checks a
-    // single proposed destination rather than generating a full legal-move
-    // set - a full vector-list generator (matching the real engine's
-    // pipeline shape exactly) is a reasonable next step, but is a larger,
-    // separately-testable change and is left out of this pass to avoid
-    // touching working move logic without a test harness to verify against.
-    // ==========================================================================
     function isValidMove(piece, from, to) {
         let dr = to.r - from.r;
         let dc = to.c - from.c;
@@ -966,11 +771,11 @@
             if (dr !== 0 && dc !== 0) return false;
             return isPathClear(from, to);
         }
-        if (type === 'q' || type === 'rb') { // Rebirth moves like Queen
+        if (type === 'q' || type === 'rb') {
             if (dr === 0 || dc === 0 || adr === adc) return isPathClear(from, to);
             return false;
         }
-        if (type === 'k' || type === 'd') { // Death moves like King
+        if (type === 'k' || type === 'd') {
             return adr <= 1 && adc <= 1;
         }
         return false;
@@ -983,7 +788,6 @@
         let c = from.c + dc;
         while (r !== to.r || c !== to.c) {
             if (GameState.board[r][c]) {
-                // Friendly Death can be passed through
                 if (GameState.board[r][c].type === 'd' && GameState.board[r][c].color === GameState.board[from.r][from.c].color) {
                     // Continue checking path
                 } else {
@@ -996,11 +800,6 @@
         return true;
     }
 
-    // ==========================================================================
-    // PROCEDURAL AUDIO LAYER (RADIUS OF RUIN CUE)
-    // Reads only from a Snapshot - never touches GameState directly - to
-    // keep the same engine/UI boundary the Snapshot contract establishes.
-    // ==========================================================================
     function toggleAudio() {
         audioEnabled = !audioEnabled;
         document.getElementById('audio-btn').innerText = audioEnabled ? "Mute Audio Cue" : "Toggle Audio Cue";
@@ -1008,12 +807,11 @@
         if (audioEnabled) {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                // Procedural DSP: Oscillator + Gain. No GenAI involved.
                 osc = audioCtx.createOscillator();
                 gainNode = audioCtx.createGain();
                 osc.type = 'sine';
                 osc.frequency.value = 200;
-                gainNode.gain.value = 0; // Start silent
+                gainNode.gain.value = 0;
                 osc.connect(gainNode);
                 gainNode.connect(audioCtx.destination);
                 osc.start();
@@ -1078,12 +876,9 @@
         gainNode.gain.setValueAtTime(vol, audioCtx.currentTime);
     }
 
-    // ==========================================================================
-    // HELPER FUNCTIONS
-    // ==========================================================================
     function parseSquare(sq) {
         if (sq.length !== 2) return null;
-        let c = sq.charCodeAt(0) - 97; // 'a' = 0
+        let c = sq.charCodeAt(0) - 97;
         let r = 8 - parseInt(sq[1]);
         if (c < 0 || c > 7 || r < 0 || r > 7 || isNaN(r)) return null;
         return { r, c };
@@ -1106,10 +901,6 @@
         }
     }
 
-    // ==========================================================================
-    // UI REFRESH (VISUAL RENDERING, for sighted devs/testers)
-    // Consumes a Snapshot only - never GameState directly.
-    // ==========================================================================
     function renderVisualBoard(snapshot) {
         let container = document.getElementById('visual-board');
         container.innerHTML = '';
@@ -1164,13 +955,6 @@
         }
     }
 
-    // ==========================================================================
-    // AGENT INTERFACE
-    // Same contract as the Duet: Solo build - window.Duet.* for an agent that
-    // can execute JS on the page. This full build has no separate #agent-state
-    // DOM snapshot (Solo added that for a read-only agent path); getState()
-    // covers the equivalent need here for an agent that can run script.
-    // ==========================================================================
     window.Duet = {
         getState() {
             return createSnapshot();
@@ -1202,17 +986,8 @@
         },
     };
 
-    // ==========================================================================
-    // AI OPPONENT
-    // --------------------------------------------------------------------------
-    // Search runs on cloned boards only - it never reads/writes GameState and
-    // never calls announce() mid-search. Once a move is chosen, it's played
-    // through submitPlayerIntent() - the exact same path a human uses - so the
-    // live game (and window.Duet.getState()) always reflects what actually
-    // happened, never a hypothetical.
-    // ==========================================================================
     const AIConfig = {
-        controllers: { w: null, b: null }, // null = human, {depth} = AI-controlled
+        controllers: { w: null, b: null },
         moveDelayMs: 300,
         randomization: 0,
     };
@@ -1222,9 +997,6 @@
     }
 
     const PIECE_VALUES = { p: 100, n: 320, b: 330, r: 500, q: 900, rb: 950, d: 0 };
-    // Death is worth 0 materially - by rule it can never be captured, so it's
-    // never a capture target for the search to weigh. Its value is entirely
-    // positional (Sanctuary), handled in evaluateBoard below.
 
     function cloneBoard(board) {
         return board.map(row => row.map(cell => cell ? { ...cell } : null));
@@ -1287,8 +1059,6 @@
         return false;
     }
 
-    /** All legal moves for `color` on `board`, mirroring the live validate-intent
-     *  rules (Veiled restriction, Death-cannot-be-captured) with no side effects. */
     function generateLegalMoves(board, color) {
         const moves = [];
         for (let r = 0; r < 8; r++) {
@@ -1329,7 +1099,6 @@
         return b;
     }
 
-    /** Mirrors RadiusOfRuinSystem.resolve + VeiledStateSystem.tickDown, but pure. */
     function resolveSystemsOnBoard(board, activeColor) {
         const enemyColor = activeColor === 'w' ? 'b' : 'w';
         let myDeath = null;
@@ -1381,7 +1150,6 @@
         return resolveSystemsOnBoard(applied, color);
     }
 
-    /** Heuristic evaluation of `board` from `forColor`'s perspective. */
     function evaluateBoard(board, forColor) {
         let score = 0;
         let myDeath = null;
@@ -1413,7 +1181,6 @@
         return score;
     }
 
-    /** Minimax with alpha-beta pruning. Returns { score, move }. */
     function minimax(board, depth, alpha, beta, currentColor, aiColor) {
         const moves = generateLegalMoves(board, currentColor);
 
@@ -1447,9 +1214,6 @@
         return { score: bestScore, move: bestMove };
     }
 
-    /** Picks a move for `color` at `depth`. With AIConfig.randomization > 0,
-     *  picks randomly among moves within a small margin of the top score -
-     *  used by spectator mode so repeat games don't play out identically. */
     function chooseMove(board, depth, color) {
         const moves = generateLegalMoves(board, color);
         if (moves.length === 0) return null;
@@ -1525,13 +1289,6 @@
         submitPlayerIntent({ type: 'MOVE', from: fromStr, to: toStr });
     }
 
-    // ==========================================================================
-    // SPECTATOR MODE (agent vs agent)
-    // Both colors become AI-controlled, moves are paced with a visible delay,
-    // and games auto-restart at a ply cap (this engine has no formal end-state
-    // yet, so "the game is over" isn't something it can detect on its own) or
-    // when a side runs out of legal moves.
-    // ==========================================================================
     const SpectatorConfig = {
         enabled: false,
         maxPlies: 120,
@@ -1586,7 +1343,6 @@
         announce('Spectator mode stopped.');
     }
 
-    /** Wired to the single Spectator button - starts if idle, stops if running. */
     function toggleSpectator() {
         if (SpectatorConfig.enabled) {
             stopSpectatorMode();
@@ -1595,17 +1351,19 @@
         }
     }
 
-    // Allow Enter key to trigger command
     document.getElementById('cmd').addEventListener('keypress', function (e) {
         if (e.key === 'Enter') processCommand();
     });
 
-    // Start
     initGame();
 </script>
 
     <footer style="margin-top: 36px; padding-top: 16px; border-top: 1px solid rgba(245,245,247,0.12); font-size: 13px; opacity: 0.6;">
-        <a href="https://github.com/ibloud/duet_engine_architecture" style="color: var(--text-primary);">Source, license &amp; contributing ↗</a>
+        <a href="https://github.com/Loptr-Lab/duet-solo-hackathon" style="color: var(--text-primary);">Hackathon submission repo ↗</a>
+        &nbsp;·&nbsp;
+        <a href="https://github.com/ibloud/duet_engine_architecture" style="color: var(--text-primary);">Original Duet engine ↗</a>
+        &nbsp;·&nbsp;
+        <a href="https://loptrlab.com" style="color: var(--text-primary);">Loptr Lab ↗</a>
     </footer>
 
 </div>
