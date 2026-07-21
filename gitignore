@@ -1,0 +1,57 @@
+# --- Secrets (never commit these) ---
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+service-account*.json
+gcloud-service-key.json
+stripe-secret*
+credentials.json
+
+# --- Google Cloud / gcloud ---
+.gcloud/
+*.tfstate
+*.tfstate.backup
+.terraform/
+
+# --- Node (if the agent/backend is JS/TS) ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+dist/
+build/
+.next/
+.turbo/
+
+# --- Python (if the agent/backend is Python) ---
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# --- Docker ---
+*.pid
+
+# --- Editors / OS ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# --- Logs (unless intentionally kept as submission evidence — see note below) ---
+*.log
+logs/*.tmp
+
+# --- Local test/dev data ---
+*.sqlite
+*.db
+.local/
