@@ -8,7 +8,6 @@ const PORT = process.env.PORT || 8080;
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Helper for structured Cloud Logging
 function logInteraction(payload) {
     console.log(JSON.stringify({
         timestamp: new Date().toISOString(),
@@ -17,7 +16,6 @@ function logInteraction(payload) {
     }));
 }
 
-// Player profile endpoints
 app.get('/api/profile', (req, res) => {
     try {
         const profile = storage.getProfile();
@@ -36,7 +34,6 @@ app.post('/api/profile', (req, res) => {
     }
 });
 
-// Gemini AI Agent Endpoint
 app.post('/api/agent', async (req, res) => {
     const userMessage = req.body.message || '';
     const apiKey = process.env.GEMINI_API_KEY;
