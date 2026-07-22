@@ -6,127 +6,429 @@
     <title>Veiled Dominion: Duet</title>
     <style>
         :root {
-            --bg-base: #0D0C0E;
-            --surface-concrete: #1A191C;
-            --accent-crimson: #9E1B1B;
-            --accent-gold: #D4AF37;
-            --text-primary: #F5F5F7;
+            --black-void: #050505;
+            --black-obsidian: #1a1a1a;
+            --white-pure: #ffffff;
+            --grey-200: #e0e0e0;
+            --text-muted: #666666;
+            --grey-700: #333333;
+            --amber-light: #d4a853;
+            --amber-glow-08: rgba(212,168,83,0.08);
+            --amber-glow-10: rgba(212,168,83,0.10);
+            --amber-glow-30: rgba(212,168,83,0.3);
+            --border-hairline: #1a1a1a;
+            --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --font-mono: 'SF Mono', 'Menlo', 'Consolas', monospace;
         }
         * { box-sizing: border-box; }
         body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background: var(--bg-base);
-            color: var(--text-primary);
+            font-family: var(--font-sans);
+            background: var(--black-void);
+            color: var(--grey-200);
             margin: 0;
         }
         .page {
-            max-width: 780px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 32px 20px 48px;
         }
+
+        /* Hero */
         .hero {
             padding-bottom: 20px;
             margin-bottom: 28px;
-            border-bottom: 1px solid rgba(245, 245, 247, 0.12);
+            border-bottom: 1px solid var(--border-hairline);
+        }
+        .hero-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 16px;
+            flex-wrap: wrap;
         }
         .hero-eyebrow {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 12px;
+            font-size: 12.8px;
             text-transform: uppercase;
-            letter-spacing: 0.12em;
-            color: var(--accent-gold);
-            margin: 0 0 10px 0;
+            letter-spacing: 0.15em;
+            color: var(--amber-light);
+            margin: 0 0 8px 0;
         }
         .hero h1 {
-            font-size: 32px;
-            margin: 0 0 10px 0;
-            letter-spacing: -0.01em;
+            font-size: 3rem;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            color: var(--white-pure);
+            text-shadow: 0 0 20px var(--amber-glow-30);
+            margin: 0;
+        }
+        .hero-meta {
+            text-align: right;
+            font-size: 12px;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            line-height: 1.8;
         }
         .hero p.tagline {
             font-size: 15px;
             line-height: 1.55;
             opacity: 0.85;
-            max-width: 60ch;
-            margin: 0 0 16px 0;
+            max-width: 62ch;
+            margin: 20px 0 16px 0;
         }
         .hero-nav {
             display: flex;
             flex-wrap: wrap;
             gap: 8px 18px;
-            font-family: 'Roboto Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 13px;
         }
         .hero-nav a {
-            color: var(--text-primary);
+            color: var(--grey-200);
             opacity: 0.75;
             text-decoration: none;
             border-bottom: 1px solid transparent;
         }
         .hero-nav a:hover {
             opacity: 1;
-            border-bottom-color: var(--accent-crimson);
+            border-bottom-color: var(--amber-light);
         }
         .quickstart {
-            background: var(--surface-concrete);
-            border-left: 2px solid var(--accent-gold);
+            background: var(--black-obsidian);
+            border-left: 2px solid var(--amber-light);
             padding: 10px 14px;
             font-size: 14px;
             line-height: 1.5;
             margin-top: 16px;
         }
         .quickstart kbd {
-            background: var(--bg-base);
-            border: 1px solid rgba(245, 245, 247, 0.25);
+            background: var(--black-void);
+            border: 1px solid var(--grey-700);
             padding: 1px 6px;
-            font-family: 'Roboto Mono', monospace;
+            font-family: var(--font-mono);
+        }
+
+        /* Toolbar */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-top: 1px solid var(--border-hairline);
+            border-bottom: 1px solid var(--border-hairline);
+            padding: 16px 0;
+            margin-bottom: 32px;
+        }
+        .chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .chip {
+            padding: 10px 20px;
+            font-family: var(--font-sans);
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border: 1px solid var(--border-hairline);
+            background: transparent;
+            color: var(--text-muted);
+            border-radius: 0;
+            cursor: pointer;
+        }
+        .chip:hover {
+            border-color: var(--amber-light);
+            color: var(--amber-light);
+        }
+        .chip.active {
+            border-color: var(--amber-light);
+            background: var(--amber-glow-08);
+            color: var(--amber-light);
+        }
+        .turn-meta {
+            font-family: var(--font-mono);
+            font-size: 15.2px;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+
+        /* Board + sidebar */
+        .board-row {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin-bottom: 32px;
         }
         #visual-board {
             display: grid;
-            grid-template-columns: repeat(8, 40px);
-            grid-template-rows: repeat(8, 40px);
-            gap: 1px;
-            background: var(--surface-concrete);
-            border: 2px solid var(--surface-concrete);
+            grid-template-columns: repeat(8, 46px);
+            grid-template-rows: repeat(8, 46px);
+            gap: 0;
+            border: 1px solid var(--border-hairline);
             width: fit-content;
             max-width: 100%;
-            margin-bottom: 20px;
         }
         .sq {
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            cursor: pointer;
         }
-        @media (max-width: 400px) {
+        @media (max-width: 460px) {
             #visual-board {
-                grid-template-columns: repeat(8, 34px);
-                grid-template-rows: repeat(8, 34px);
+                grid-template-columns: repeat(8, 36px);
+                grid-template-rows: repeat(8, 36px);
             }
-            .sq { font-size: 20px; }
         }
-        .sq.light { background: var(--surface-concrete); color: var(--text-primary); }
-        .sq.dark { background: var(--bg-base); color: var(--text-primary); }
-        .sq.ruin {
-            box-shadow: inset 0 0 0 4px rgba(158, 27, 27, 0.7);
-            outline: 2px dashed rgba(158, 27, 27, 0.9);
-            outline-offset: -8px;
-        }
-        .sq.sanctuary {
-            box-shadow: inset 0 0 0 4px rgba(212, 175, 55, 0.6);
-            outline: 2px dotted rgba(212, 175, 55, 0.9);
-            outline-offset: -8px;
-        }
-        .sq.veiled {
-            background-color: var(--surface-concrete) !important;
+        .sq.light { background: #1f1f1f; }
+        .sq.dark { background: #141414; }
+        .sq.ruin { background: var(--amber-glow-10); }
+        .sq.sanctuary { background: rgba(102,102,102,0.10); }
+        .sq.selected { box-shadow: inset 0 0 0 1px var(--text-muted); }
+        .sq.veiled::before {
+            content: "";
+            position: absolute;
+            inset: 0;
             background-image: repeating-linear-gradient(
                 45deg,
-                rgba(245, 245, 247, 0.08) 0px,
-                rgba(245, 245, 247, 0.08) 2px,
+                rgba(224,224,224,0.08) 0px,
+                rgba(224,224,224,0.08) 2px,
                 transparent 2px,
                 transparent 10px
-            ) !important;
-            color: rgba(245, 245, 247, 0.6) !important;
+            );
+            pointer-events: none;
         }
+        .piece-token {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--border-hairline);
+            background: var(--black-obsidian);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: var(--grey-200);
+            opacity: 0.92;
+        }
+        .piece-token.special { width: 36px; height: 36px; font-size: 16px; }
+        .piece-token.owner-w { border-color: var(--amber-light); }
+        .piece-token.owner-b { border-color: var(--text-muted); }
+        .legal-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--amber-light);
+            opacity: 0.7;
+        }
+
+        .sidebar {
+            flex: 1;
+            min-width: 240px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+        .panel {
+            background: transparent;
+            border: 1px solid var(--border-hairline);
+            padding: 20px;
+            margin: 0;
+            max-width: 640px;
+        }
+        .panel-eyebrow {
+            font-size: 12.8px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--amber-light);
+            margin: 0 0 14px 0;
+            font-weight: 400;
+        }
+        .history-log {
+            max-height: 200px;
+            overflow-y: auto;
+            margin: 0;
+            padding-left: 1.2em;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--grey-200);
+        }
+        .history-log:empty::before {
+            content: "No moves yet.\A Click a piece to begin.";
+            white-space: pre;
+            color: var(--text-muted);
+            font-family: var(--font-sans);
+            display: block;
+            text-align: center;
+            padding: 12px 0;
+        }
+        .history-log li { margin: 2px 0; }
+
+        .legend-key {
+            font-size: 15.2px;
+            line-height: 2;
+            color: var(--text-muted);
+        }
+        .legend-key .swatch {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin-right: 10px;
+        }
+        .ruin-swatch { background: var(--amber-glow-30); border: 1px solid var(--amber-light); }
+        .sanctuary-swatch { border: 1px solid var(--text-muted); background: rgba(102,102,102,0.10); }
+        .selected-swatch { border: 1px solid var(--text-muted); }
+        .legal-swatch { border-radius: 50%; background: var(--amber-light); opacity: 0.7; }
+
+        .help-body {
+            font-size: 15.2px;
+            color: var(--grey-200);
+            line-height: 1.8;
+        }
+        .mono-accent {
+            font-family: var(--font-mono);
+            color: var(--white-pure);
+        }
+
+        /* Command bar */
+        .controls { margin-bottom: 20px; }
+        .command-bar {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .command-bar-field {
+            flex: 1;
+            min-width: 220px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--border-hairline);
+            padding: 12px 16px;
+            font-family: var(--font-mono);
+            font-size: 15.2px;
+            color: var(--text-muted);
+        }
+        .command-bar-field input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--white-pure);
+            font-family: var(--font-mono);
+            font-size: 15.2px;
+            outline: none;
+            padding: 0;
+        }
+        .btn-primary {
+            border: 1px solid var(--amber-light);
+            background: transparent;
+            color: var(--amber-light);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 12px;
+            font-family: var(--font-sans);
+            padding: 13px 28px;
+            cursor: pointer;
+            border-radius: 0;
+        }
+        .btn-primary:hover { background: var(--amber-glow-08); }
+
+        #legend {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: var(--text-muted);
+            margin: 6px 0 14px 0;
+        }
+        #legend kbd {
+            background: var(--black-obsidian);
+            border: 1px solid var(--grey-700);
+            padding: 1px 6px;
+            font-family: inherit;
+        }
+
+        #log {
+            white-space: pre-wrap;
+            background: var(--black-obsidian);
+            color: var(--grey-200);
+            padding: 14px;
+            border: 1px solid var(--border-hairline);
+            border-radius: 0;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: var(--font-mono);
+            font-size: 13px;
+        }
+
+        .panel h2 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-left: 2px solid var(--amber-light);
+            padding-left: 8px;
+            margin: 0 0 10px 0;
+            font-weight: 400;
+        }
+        .panel h3 {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--amber-light);
+            margin: 14px 0 4px 0;
+            font-weight: 400;
+        }
+        .panel p { font-size: 14px; line-height: 1.5; margin: 4px 0; }
+
+        .key-row {
+            display: flex;
+            gap: 16px;
+            margin: 24px 0;
+            flex-wrap: wrap;
+        }
+        .key-panel {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .key-token {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--black-obsidian);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .rebirth-token { border: 2px solid var(--amber-light); }
+        .death-token { border: 2px solid var(--text-muted); }
+        .key-label {
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 15.2px;
+            color: var(--grey-200);
+        }
+
+        input, button, select {
+            font-size: 16px;
+            padding: 5px;
+            background: var(--black-obsidian);
+            color: var(--grey-200);
+            border: 1px solid var(--black-obsidian);
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        button, select { cursor: pointer; }
+
         .sr-only {
             position: absolute;
             width: 1px;
@@ -138,96 +440,24 @@
             white-space: nowrap;
             border: 0;
         }
-        .controls {
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+
+        @media (max-width: 700px) {
+            .board-row { flex-direction: column; }
+            .sidebar { min-width: 0; width: 100%; }
         }
-        .controls-row {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 8px 10px;
-        }
-        input, button, select {
-            font-size: 16px;
-            padding: 5px;
-            background: var(--surface-concrete);
-            color: var(--text-primary);
-            border: 1px solid var(--surface-concrete);
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-        }
-        button, select { cursor: pointer; }
-        button:hover, select:hover { border-color: var(--accent-crimson); }
-        #legend {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 13px;
-            color: var(--text-primary);
-            opacity: 0.85;
-            margin: 6px 0 14px 0;
-        }
-        #legend kbd {
-            background: var(--surface-concrete);
-            border: 1px solid rgba(245, 245, 247, 0.25);
-            padding: 1px 6px;
-            font-family: inherit;
-        }
-        .sq { cursor: pointer; }
-        .sq.selected { box-shadow: inset 0 0 0 3px var(--text-primary); }
-        #log {
-            white-space: pre-wrap;
-            background: var(--surface-concrete);
-            color: var(--text-primary);
-            padding: 10px;
-            border-radius: 0;
-            max-height: 200px;
-            overflow-y: auto;
-            font-family: 'Roboto Mono', monospace;
-        }
-        .history-log {
-            max-height: 200px;
-            overflow-y: auto;
-            margin: 0;
-            padding-left: 1.4em;
-            font-family: 'Roboto Mono', monospace;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-        .history-log li { margin: 2px 0; }
-        .panel {
-            background: var(--surface-concrete);
-            border: 1px solid rgba(245, 245, 247, 0.15);
-            padding: 14px 16px;
-            margin: 16px 0;
-            max-width: 640px;
-        }
-        .panel h2 {
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            border-left: 2px solid var(--accent-crimson);
-            padding-left: 8px;
-            margin: 0 0 10px 0;
-        }
-        .panel h3 {
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--accent-gold);
-            margin: 14px 0 4px 0;
-        }
-        .panel p { font-size: 14px; line-height: 1.5; margin: 4px 0; }
     </style>
 </head>
 <body>
 <div class="page">
 
     <header class="hero">
-        <p class="hero-eyebrow">Veiled Dominion · Duet</p>
-        <h1>Duet</h1>
+        <div class="hero-top">
+            <div>
+                <p class="hero-eyebrow">Veiled Dominion</p>
+                <h1>Duet</h1>
+            </div>
+            <div class="hero-meta">Repo &middot; Engine &middot; Loptr Lab</div>
+        </div>
         <p class="tagline">A standalone, accessibility-first browser demo of Rebirth &amp; Death's Radius of Ruin
         mechanic — one piece of a bigger 4-player asymmetric chess variant. Built screen-reader-first, playable
         by anyone, and small enough to read the whole engine in one sitting.</p>
@@ -243,30 +473,62 @@
 
     <div id="sr-status" class="sr-only" role="status" aria-live="assertive" aria-atomic="true"></div>
 
-    <div id="visual-board" aria-hidden="true"></div>
+    <div class="toolbar">
+        <div class="chip-row" role="group" aria-hidden="true">
+            <button type="button" class="chip" id="audio-btn" onclick="toggleAudio()">Toggle Audio Cue</button>
+            <button type="button" class="chip" id="ds-ai-toggle" onclick="toggleAI()">AI: Off</button>
+            <button type="button" class="chip" data-depth="2" onclick="selectDifficulty(2, this)">Easy</button>
+            <button type="button" class="chip active" data-depth="3" onclick="selectDifficulty(3, this)">Medium</button>
+            <button type="button" class="chip" data-depth="4" onclick="selectDifficulty(4, this)">Hard</button>
+            <button type="button" class="chip" id="spectator-toggle" onclick="toggleSpectator()">Spectate</button>
+        </div>
+        <div class="turn-meta" id="turn-meta" aria-hidden="true">Move 1 &middot; White</div>
+    </div>
+
+    <div class="board-row">
+        <div id="visual-board" aria-hidden="true"></div>
+
+        <aside class="sidebar" aria-hidden="true">
+            <div class="panel">
+                <h3 class="panel-eyebrow">Move History</h3>
+                <ol id="history-log-visual" class="history-log"></ol>
+            </div>
+
+            <div class="legend-key">
+                <div><span class="swatch ruin-swatch"></span>Radius of Ruin</div>
+                <div><span class="swatch sanctuary-swatch"></span>Sanctuary</div>
+                <div><span class="swatch selected-swatch"></span>Selected piece</div>
+                <div><span class="swatch legal-swatch"></span>Legal target</div>
+            </div>
+
+            <div class="panel">
+                <h3 class="panel-eyebrow">Help</h3>
+                <div class="help-body">
+                    <div>Click a piece to select it</div>
+                    <div>Click a target square to move</div>
+                    <div>Or type <span class="mono-accent">e2e4</span> in the command bar</div>
+                    <div>Amber wash = Radius of Ruin</div>
+                    <div>Sanctuary blocks the veil near Death</div>
+                </div>
+            </div>
+        </aside>
+    </div>
 
     <div class="controls">
-        <div class="controls-row">
-            <label for="cmd">Command (e.g., e2e4 or e4 to query):</label>
-            <input type="text" id="cmd" autocomplete="off" aria-describedby="instructions">
-            <button onclick="processCommand()">Execute</button>
-        </div>
-        <div class="controls-row">
-            <button onclick="toggleAudio()" id="audio-btn">Toggle Audio Cue</button>
-            <button id="ds-ai-toggle" onclick="toggleAI()">AI: Off</button>
-            <select onchange="setAIDepth(this.value)" title="AI difficulty (search depth)" aria-label="AI difficulty">
-                <option value="2">Easy</option>
-                <option value="3" selected>Medium</option>
-                <option value="4">Hard</option>
-            </select>
-            <button id="spectator-toggle" onclick="toggleSpectator()">Spectate</button>
+        <div class="controls-row command-bar">
+            <label for="cmd" class="sr-only">Command (e.g., e2e4 or e4 to query):</label>
+            <div class="command-bar-field">
+                <span aria-hidden="true">&rsaquo;</span>
+                <input type="text" id="cmd" autocomplete="off" aria-describedby="instructions" placeholder="e2e4 · move notation">
+            </div>
+            <button class="btn-primary" onclick="processCommand()">Execute</button>
         </div>
         <p id="instructions" class="sr-only">Type a coordinate move like e2e4, or a single square like e4 to query. Press Enter to execute.</p>
     </div>
 
     <p id="legend" aria-hidden="true">
-        Move: <kbd>e2e4</kbd> &nbsp;·&nbsp; Look at a square: <kbd>e4</kbd> &nbsp;·&nbsp; Press Enter
-        &nbsp;·&nbsp; or click two squares on the board below
+        Move: <kbd>e2e4</kbd> &nbsp;&middot;&nbsp; Look at a square: <kbd>e4</kbd> &nbsp;&middot;&nbsp; Press Enter
+        &nbsp;&middot;&nbsp; or click two squares on the board below
     </p>
 
     <div>
@@ -278,6 +540,17 @@
         <h3 id="history-heading">Move &amp; Event History</h3>
         <ol id="history-log" class="history-log"></ol>
     </section>
+
+    <div class="key-row">
+        <div class="panel key-panel">
+            <div class="key-token rebirth-token">&#10022;</div>
+            <span class="key-label">Rebirth</span>
+        </div>
+        <div class="panel key-panel">
+            <div class="key-token death-token">&#9760;</div>
+            <span class="key-label">Death</span>
+        </div>
+    </div>
 
     <section class="panel" aria-labelledby="lore-heading">
         <h2 id="lore-heading">Lore</h2>
@@ -360,9 +633,11 @@
 
         document.getElementById('log').innerText = '';
         document.getElementById('history-log').innerHTML = '';
+        document.getElementById('history-log-visual').innerHTML = '';
 
         announce("New game started. White to move.");
         renderVisualBoard(createSnapshot());
+        updateTurnMeta();
         maybeTriggerAI();
     }
 
@@ -376,6 +651,17 @@
         item.innerText = msg;
         historyLog.appendChild(item);
         historyLog.scrollTop = historyLog.scrollHeight;
+
+        const historyVisual = document.getElementById('history-log-visual');
+        const item2 = document.createElement('li');
+        item2.innerText = msg;
+        historyVisual.appendChild(item2);
+        historyVisual.scrollTop = historyVisual.scrollHeight;
+    }
+
+    function updateTurnMeta() {
+        const el = document.getElementById('turn-meta');
+        if (el) el.innerText = `Move ${GameState.turnNumber} \u00B7 ${GameState.turn === 'w' ? 'White' : 'Black'}`;
     }
 
     function processCommand() {
@@ -436,6 +722,7 @@
         const snapshot = createSnapshot();
         renderVisualBoard(snapshot);
         updateAudio(snapshot);
+        updateTurnMeta();
         maybeTriggerAI();
     }
 
@@ -632,6 +919,37 @@
         return true;
     }
 
+    /* Display-only: mirrors onValidateIntent's movement rules to compute which
+       squares would currently be legal targets for the selected piece. Does not
+       affect actual move validation, which always runs through onValidateIntent. */
+    function computeLegalTargetsForDisplay(sqName) {
+        const from = parseSquare(sqName);
+        if (!from) return [];
+        const piece = GameState.board[from.r][from.c];
+        if (!piece || piece.color !== GameState.turn) return [];
+
+        const targets = [];
+        for (let r = 0; r < 8; r++) {
+            for (let c = 0; c < 8; c++) {
+                if (r === from.r && c === from.c) continue;
+                const to = { r, c };
+                const target = GameState.board[r][c];
+                if (target && target.type === 'd') continue;
+
+                if (piece.veiled) {
+                    if (to.c !== from.c) continue;
+                    const wantRow = piece.color === 'w' ? from.r - 1 : from.r + 1;
+                    if (to.r !== wantRow) continue;
+                    if (target) continue;
+                } else if (!isValidMove(piece, from, to)) {
+                    continue;
+                }
+                targets.push(squareName(r, c));
+            }
+        }
+        return targets;
+    }
+
     function toggleAudio() {
         audioEnabled = !audioEnabled;
         document.getElementById('audio-btn').innerText = audioEnabled ? "Mute Audio Cue" : "Toggle Audio Cue";
@@ -748,6 +1066,8 @@
             }
         }
 
+        const legalTargets = selectedSquare ? computeLegalTargetsForDisplay(selectedSquare) : [];
+
         for (let r = 0; r < 8; r++) {
             for (let c = 0; c < 8; c++) {
                 let div = document.createElement('div');
@@ -777,11 +1097,21 @@
 
                 let p = snapshot.board[r][c];
                 if (p) {
-                    let symbol = p.color === 'w' ? p.type.toUpperCase() : p.type.toLowerCase();
                     const map = { 'p': '♙', 'r': '♖', 'n': '♘', 'b': '♗', 'q': '♕', 'k': '♔', 'rb': '★', 'd': '☠' };
-                    div.innerText = map[p.type] || symbol;
+                    const isSpecial = p.type === 'rb' || p.type === 'd';
+                    const token = document.createElement('div');
+                    token.className = 'piece-token ' + (isSpecial ? 'special ' : '') + 'owner-' + p.color;
+                    token.innerText = map[p.type] || p.type;
+                    div.appendChild(token);
                     if (p.veiled) div.classList.add('veiled');
                 }
+
+                if (legalTargets.includes(sq)) {
+                    const dot = document.createElement('div');
+                    dot.className = 'legal-dot';
+                    div.appendChild(dot);
+                }
+
                 container.appendChild(div);
             }
         }
@@ -1087,6 +1417,12 @@
         }
     }
 
+    function selectDifficulty(depth, el) {
+        document.querySelectorAll('.chip[data-depth]').forEach(chip => chip.classList.remove('active'));
+        el.classList.add('active');
+        setAIDepth(depth, 'b');
+    }
+
     function maybeTriggerAI() {
         if (GameState.gameOver) return;
         if (!isAIControlled(GameState.turn)) return;
@@ -1190,12 +1526,12 @@
     initGame();
 </script>
 
-    <footer style="margin-top: 36px; padding-top: 16px; border-top: 1px solid rgba(245,245,247,0.12); font-size: 13px; opacity: 0.6;">
-        <a href="https://github.com/Loptr-Lab/duet-solo-hackathon" style="color: var(--text-primary);">Hackathon submission repo ↗</a>
-        &nbsp;·&nbsp;
-        <a href="https://github.com/ibloud/duet_engine_architecture" style="color: var(--text-primary);">Original Duet engine ↗</a>
-        &nbsp;·&nbsp;
-        <a href="https://loptrlab.com" style="color: var(--text-primary);">Loptr Lab ↗</a>
+    <footer style="margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--border-hairline); font-size: 13px; opacity: 0.6;">
+        <a href="https://github.com/Loptr-Lab/duet-solo-hackathon" style="color: var(--grey-200);">Hackathon submission repo ↗</a>
+        &nbsp;&middot;&nbsp;
+        <a href="https://github.com/ibloud/duet_engine_architecture" style="color: var(--grey-200);">Original Duet engine ↗</a>
+        &nbsp;&middot;&nbsp;
+        <a href="https://loptrlab.com" style="color: var(--grey-200);">Loptr Lab ↗</a>
     </footer>
 
 </div>
