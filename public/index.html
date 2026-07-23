@@ -2669,32 +2669,4 @@ async function sendAgentMessage() {
         }
     </style>
 </head>
-<body>
-<div class="page" id="front-page">
-
-    <section class="realm-splash">
-        <span class="crack" aria-hidden="true"></span>
-        <svg class="sigil" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Veiled Dominion sigil" aria-hidden="true" onclick="enterRealm()" style="cursor:pointer;"></svg>
-        <p class="signal" aria-hidden="true">signal: open &middot; terrain: veiled</p>
-        <h2>Enter the Obsidian Realm.</h2>
-        <p class="body">Duet is one lesson from a larger world — a board where restraint matters more than reach,
-        where higher ground sees further and costs more, and where the fog only lifts for those willing to move
-        through it. Play the classic duel, or step into Fog Mode and let the terrain decide what you're allowed
-        to know.</p>
-        <button type="button" class="btn-primary" onclick="enterRealm()">Cross the Threshold</button>
-    </section>
-
-    </div>
-
-<div class="page" id="game-screen" style="display:none;"></div>
-
-<script>
-    function enterRealm() {
-        const front = document.getElementById('front-page');
-        const game = document.getElementById('game-screen');
-        if (front) front.style.display = 'none';
-        if (game) game.style.display = '';
-    }
-</script>
-</body>
 </html>
