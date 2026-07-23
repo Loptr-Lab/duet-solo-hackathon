@@ -33,7 +33,6 @@
             padding: 32px 20px 48px;
         }
 
-        /* Hero */
         .hero {
             padding-bottom: 20px;
             margin-bottom: 28px;
@@ -108,7 +107,6 @@
             font-family: var(--font-mono);
         }
 
-        /* Toolbar */
         .toolbar {
             display: flex;
             justify-content: space-between;
@@ -146,6 +144,9 @@
             background: var(--amber-glow-08);
             color: var(--amber-light);
         }
+        .chip.chip-hidden {
+            display: none;
+        }
         .turn-meta {
             font-family: var(--font-mono);
             font-size: 15.2px;
@@ -153,13 +154,13 @@
             letter-spacing: 0.05em;
         }
 
-        /* Board + sidebar */
         .board-row {
             display: flex;
             gap: 40px;
             align-items: flex-start;
             flex-wrap: wrap;
             margin-bottom: 32px;
+            position: relative;
         }
         #visual-board {
             display: grid;
@@ -185,8 +186,26 @@
         }
         .sq.light { background: #1f1f1f; }
         .sq.dark { background: #141414; }
-        .sq.ruin { background: var(--amber-glow-10); }
-        .sq.sanctuary { background: rgba(102,102,102,0.10); }
+        .sq.ruin {
+            background: var(--amber-glow-10);
+            animation: ruin-breathe var(--ruin-duration, 3.2s) ease-in-out infinite;
+        }
+        .sq.sanctuary {
+            background: rgba(102,102,102,0.10);
+            animation: sanctuary-breathe var(--sanctuary-duration, 4.5s) ease-in-out infinite;
+        }
+        @keyframes ruin-breathe {
+            0%, 100% { background-color: var(--amber-glow-10); }
+            50% { background-color: rgba(212,168,83, var(--ruin-peak, 0.18)); }
+        }
+        @keyframes sanctuary-breathe {
+            0%, 100% { background-color: rgba(102,102,102,0.10); }
+            50% { background-color: rgba(102,102,102, var(--sanctuary-peak, 0.14)); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .sq.ruin { animation: none; background: var(--amber-glow-10); }
+            .sq.sanctuary { animation: none; background: rgba(102,102,102,0.10); }
+        }
         .sq.selected { box-shadow: inset 0 0 0 1px var(--text-muted); }
         .sq.veiled::before {
             content: "";
@@ -201,6 +220,32 @@
             );
             pointer-events: none;
         }
+        .sq.elev-0 { border-bottom: 0px solid var(--amber-glow-10); }
+        .sq.elev-1 { border-bottom: 3px solid var(--amber-glow-10); }
+        .sq.elev-2 { border-bottom: 6px solid var(--amber-glow-10); }
+        .sq.elev-3 { border-bottom: 9px solid var(--amber-glow-10); }
+
+        .sq.fog-unexplored {
+            background: #000000 !important;
+            border-bottom-color: transparent !important;
+        }
+        .sq.fog-stale {
+            filter: grayscale(60%) brightness(0.55);
+        }
+        .sq.fog-stale::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                135deg,
+                rgba(0,0,0,0.35) 0px,
+                rgba(0,0,0,0.35) 3px,
+                transparent 3px,
+                transparent 7px
+            );
+            pointer-events: none;
+        }
+
         .piece-token {
             width: 32px;
             height: 32px;
@@ -213,6 +258,7 @@
             font-size: 18px;
             color: var(--grey-200);
             opacity: 0.92;
+            position: relative;
         }
         .piece-token.special { width: 36px; height: 36px; font-size: 16px; }
         .piece-token.owner-w { border-color: var(--amber-light); }
@@ -224,6 +270,16 @@
             border-radius: 50%;
             background: var(--amber-light);
             opacity: 0.7;
+        }
+        .hp-badge {
+            position: absolute;
+            bottom: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: var(--font-mono);
+            font-size: 9px;
+            color: var(--text-muted);
+            white-space: nowrap;
         }
 
         .sidebar {
@@ -295,7 +351,6 @@
             color: var(--white-pure);
         }
 
-        /* Command bar */
         .controls { margin-bottom: 20px; }
         .command-bar {
             display: flex;
@@ -441,14 +496,140 @@
             border: 0;
         }
 
+        .pass-overlay {
+            position: absolute;
+            inset: 0;
+            background: var(--black-void);
+            border: 1px solid var(--border-hairline);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 32px;
+            text-align: center;
+        }
+        .pass-overlay.hidden { display: none; }
+        .pass-overlay p {
+            font-size: 15px;
+            color: var(--text-muted);
+            max-width: 40ch;
+            margin: 0;
+        }
+        .pass-overlay .turn-name {
+            font-size: 1.75rem;
+            font-weight: 300;
+            color: var(--white-pure);
+        }
+
         @media (max-width: 700px) {
             .board-row { flex-direction: column; }
             .sidebar { min-width: 0; width: 100%; }
         }
+
+        /* Obsidian Realm splash — same breathing technique as the Mortis Pulsr page:
+           a slow ease-in-out opacity pulse on an accent bar and on the sigil's core
+           paths, with prefers-reduced-motion respected throughout. */
+        .realm-splash {
+            position: relative;
+            padding: 3rem 1.75rem 3rem 2.25rem;
+            margin-bottom: 40px;
+            background: var(--black-void);
+            border: 1px solid var(--border-hairline);
+            overflow: hidden;
+        }
+        .realm-splash .crack {
+            position: absolute;
+            top: 0; left: 0; bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--amber-light), var(--text-muted) 55%, var(--amber-light));
+            animation: realm-pulse 7s ease-in-out infinite;
+        }
+        @keyframes realm-pulse {
+            0%, 100% { opacity: 0.45; }
+            50% { opacity: 1; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .realm-splash .crack { animation: none; opacity: 0.8; }
+        }
+        .realm-splash .sigil {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.75rem;
+            width: 96px;
+            height: auto;
+        }
+        .realm-splash .sigil .ep {
+            animation: realm-eye-pulse 7s ease-in-out infinite;
+        }
+        @keyframes realm-eye-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .realm-splash .sigil .ep { animation: none; }
+        }
+        .realm-splash .signal {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            text-transform: lowercase;
+            margin: 0 0 16px 0;
+        }
+        .realm-splash h2 {
+            font-family: var(--font-sans);
+            font-weight: 300;
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+            color: var(--white-pure);
+            margin: 0 0 16px 0;
+            max-width: 20ch;
+        }
+        .realm-splash .body {
+            font-size: 15px;
+            color: var(--grey-200);
+            opacity: 0.85;
+            max-width: 46ch;
+            line-height: 1.6;
+            margin: 0 0 28px 0;
+        }
+        #front-page {
+            min-height: calc(100vh - 64px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #front-page .realm-splash {
+            width: 100%;
+        }
     </style>
 </head>
 <body>
-<div class="page">
+<div class="page" id="front-page">
+
+    <section class="realm-splash">
+        <span class="crack" aria-hidden="true"></span>
+        <svg class="sigil" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Veiled Dominion sigil" aria-hidden="true" onclick="enterRealm()" style="cursor:pointer;">
+            <polygon points="50,6 94,50 50,94 6,50" fill="none" stroke="var(--border-hairline)" stroke-width="1.5"/>
+            <polygon points="50,20 80,50 50,80 20,50" fill="none" stroke="var(--text-muted)" stroke-width="1.5"/>
+            <polygon points="50,34 66,50 50,66 34,50" fill="none" stroke="var(--text-muted)" stroke-width="1.5"/>
+            <polygon class="ep" points="50,44 56,50 50,56 44,50" fill="var(--amber-light)"/>
+        </svg>
+        <p class="signal" aria-hidden="true">signal: open &middot; terrain: veiled</p>
+        <h2>Enter the Obsidian Realm.</h2>
+        <p class="body">Duet is one lesson from a larger world — a board where restraint matters more than reach,
+        where higher ground sees further and costs more, and where the fog only lifts for those willing to move
+        through it. Play the classic duel, or step into Fog Mode and let the terrain decide what you're allowed
+        to know.</p>
+        <button type="button" class="btn-primary" onclick="enterRealm()">Enter the Obsidian Realm</button>
+    </section>
+
+    </div>
+
+<div class="page" id="game-screen" style="display:none;">
 
     <header class="hero">
         <div class="hero-top">
@@ -473,7 +654,7 @@
 
     <div id="sr-status" class="sr-only" role="status" aria-live="assertive" aria-atomic="true"></div>
 
-    <div class="toolbar">
+    <div class="toolbar" id="game-area">
         <div class="chip-row" role="group" aria-hidden="true">
             <button type="button" class="chip" id="audio-btn" onclick="toggleAudio()">Toggle Audio Cue</button>
             <button type="button" class="chip" id="ds-ai-toggle" onclick="toggleAI()">AI: Off</button>
@@ -481,12 +662,18 @@
             <button type="button" class="chip active" data-depth="3" onclick="selectDifficulty(3, this)">Medium</button>
             <button type="button" class="chip" data-depth="4" onclick="selectDifficulty(4, this)">Hard</button>
             <button type="button" class="chip" id="spectator-toggle" onclick="toggleSpectator()">Spectate</button>
+            <button type="button" class="chip" id="fog-mode-toggle" onclick="toggleFogMode()">Fog Mode: Off</button>
         </div>
         <div class="turn-meta" id="turn-meta" aria-hidden="true">Move 1 &middot; White</div>
     </div>
 
     <div class="board-row">
         <div id="visual-board" aria-hidden="true"></div>
+        <div id="pass-overlay" class="pass-overlay hidden" aria-hidden="true">
+            <p>Fog Mode is on. Pass the device and look away.</p>
+            <div class="turn-name" id="pass-overlay-name">White's turn</div>
+            <button type="button" class="btn-primary" id="pass-overlay-btn" onclick="dismissPassOverlay()">I'm ready — reveal my view</button>
+        </div>
 
         <aside class="sidebar" aria-hidden="true">
             <div class="panel">
@@ -509,6 +696,11 @@
                     <div>Or type <span class="mono-accent">e2e4</span> in the command bar</div>
                     <div>Amber wash = Radius of Ruin</div>
                     <div>Sanctuary blocks the veil near Death</div>
+                    <div id="fog-help-line" style="display:none; margin-top:8px; padding-top:8px; border-top:1px solid var(--border-hairline);">
+                        <strong style="color:var(--amber-light);">Fog Mode:</strong> terrain rises toward the
+                        center. Higher ground sees farther and hits harder. Querying a hidden square tells you
+                        only what you'd actually know — unexplored, or last-known and possibly stale.
+                    </div>
                 </div>
             </div>
         </aside>
@@ -523,7 +715,7 @@
             </div>
             <button class="btn-primary" onclick="processCommand()">Execute</button>
         </div>
-        <p id="instructions" class="sr-only">Type a coordinate move like e2e4, or a single square like e4 to query. Press Enter to execute.</p>
+        <p id="instructions" class="sr-only">Type a coordinate move like e2e4, or a single square like e4 to query. Press Enter to execute. When Fog Mode is on, querying a square outside your vision reports only what you would actually know: unexplored, or last known and possibly stale.</p>
     </div>
 
     <p id="legend" aria-hidden="true">
@@ -552,6 +744,41 @@
         </div>
     </div>
 
+    <section class="panel" id="fog-rules-section" aria-labelledby="fog-rules-heading" style="display:none;">
+        <h2 id="fog-rules-heading">Fog Mode — Rules</h2>
+        <h3>Terrain</h3>
+        <p>The board rises from a height of 0 on each side's home rank to a height of 3 across the center two
+        ranks, like the terraced board this mode is modeled on. Terrain affects sight and combat, not movement —
+        pieces still move exactly as in classic chess, including Veiled pieces' one-square restriction.</p>
+        <h3>Vision &amp; Fog of War</h3>
+        <p>Each piece sees a radius of squares: 2 for Pawns, 3 for standard pieces, 4 for Rebirth and Death (drops
+        by 1 while Veiled). Standing on higher ground extends that radius by 1 square for every level you're above
+        the target square. Standing on lower ground, you cannot see past a higher square unless it's adjacent to
+        you. Squares are either currently visible, previously seen but stale (shown dimmed — the piece there may
+        have moved since), or unexplored (shown black).</p>
+        <p>Querying a square with the command bar (or asking a screen reader to look) reports only what you'd
+        actually know: the true contents if visible, the last-known contents with a staleness warning if stale, or
+        "unexplored" if you've never seen it. You may still attempt a move into fog — legality is checked against
+        the true board, same as a calculated risk in the dark.</p>
+        <h3>Combat</h3>
+        <p>Moving onto an enemy-occupied square attacks it instead of capturing instantly. Each piece has HP and an
+        attack value:</p>
+        <p style="font-family:var(--font-mono); font-size:13px;">
+            Pawn: 10 HP / 4 dmg &middot; Knight &amp; Bishop: 20 HP / 8 dmg &middot; Rook: 28 HP / 10 dmg &middot;
+            Queen: 40 HP / 14 dmg &middot; Rebirth: 30 HP / 6 dmg &middot; Death: unkillable, cannot attack or be attacked.
+        </p>
+        <p>Attacking from higher ground deals 25% more damage. If the target survives, your piece holds its
+        position — the fight continues over future turns. If the target is reduced to 0 HP, it's removed and your
+        piece moves into the square, same as a classic capture (a promoting Pawn becomes a full-HP Rebirth).</p>
+        <h3>Handoff</h3>
+        <p>Duet is a single shared screen, so Fog Mode uses an honor-system handoff between turns: pass the device
+        and look away until the next player is ready to reveal their view. This isn't enforced by the software —
+        it works the same way a physical hidden-information board game does.</p>
+        <h3>Known limits</h3>
+        <p>The AI opponent and Spectator mode are disabled in Fog Mode — the AI's move selection doesn't yet
+        account for HP combat, so it's human vs. human only for now.</p>
+    </section>
+
     <section class="panel" aria-labelledby="lore-heading">
         <h2 id="lore-heading">Lore</h2>
         <h3>Rebirth</h3>
@@ -579,6 +806,148 @@
     let audioCtx, osc, gainNode;
 
     let selectedSquare = null;
+
+    function enterRealm() {
+        const front = document.getElementById('front-page');
+        const game = document.getElementById('game-screen');
+        if (front) front.style.display = 'none';
+        if (game) game.style.display = '';
+        announce("Entering the Obsidian Realm.");
+        const cmd = document.getElementById('cmd');
+        if (cmd) cmd.focus();
+    }
+
+    const FogMode = { enabled: false };
+    let elevationGrid = null;
+    let visionMaps = { w: new Set(), b: new Set() };
+    let exploredMaps = { w: new Set(), b: new Set() };
+    let lastKnownSnapshot = { w: {}, b: {} };
+    let previousVisible = { w: new Set(), b: new Set() };
+
+    const HP_TABLE = { p: 10, n: 20, b: 20, r: 28, q: 40, rb: 30, d: Infinity };
+    const ATTACK_TABLE = { p: 4, n: 8, b: 8, r: 10, q: 14, rb: 6, d: 0 };
+
+    function computeElevationGrid() {
+        const grid = [];
+        for (let r = 0; r < 8; r++) {
+            const h = Math.min(r, 7 - r);
+            grid.push(Array(8).fill(h));
+        }
+        return grid;
+    }
+
+    function baseVisionRadius(type) {
+        if (type === 'p') return 2;
+        if (type === 'rb' || type === 'd') return 4;
+        return 3;
+    }
+
+    function computeVisionForColor(color) {
+        const visible = new Set();
+        for (let r = 0; r < 8; r++) {
+            for (let c = 0; c < 8; c++) {
+                const p = GameState.board[r][c];
+                if (!p || p.color !== color) continue;
+                let radius = baseVisionRadius(p.type);
+                if (p.veiled) radius = Math.max(1, radius - 1);
+                const viewerElev = elevationGrid[r][c];
+                for (let tr = 0; tr < 8; tr++) {
+                    for (let tc = 0; tc < 8; tc++) {
+                        const dist = Math.max(Math.abs(tr - r), Math.abs(tc - c));
+                        const targetElev = elevationGrid[tr][tc];
+                        const bonus = Math.max(0, viewerElev - targetElev);
+                        const blockedByHeight = targetElev > viewerElev && dist > 1;
+                        if (!blockedByHeight && dist <= radius + bonus) {
+                            visible.add(tr + ',' + tc);
+                        }
+                    }
+                }
+            }
+        }
+        return visible;
+    }
+
+    function refreshFogState() {
+        if (!FogMode.enabled) return;
+        ['w', 'b'].forEach(color => {
+            const visible = computeVisionForColor(color);
+            visionMaps[color] = visible;
+            visible.forEach(key => {
+                exploredMaps[color].add(key);
+                const [r, c] = key.split(',').map(Number);
+                const p = GameState.board[r][c];
+                lastKnownSnapshot[color][key] = p ? { ...p } : null;
+            });
+        });
+    }
+
+    function fogStateFor(color, r, c) {
+        const key = r + ',' + c;
+        if (visionMaps[color].has(key)) return 'visible';
+        if (exploredMaps[color].has(key)) return 'stale';
+        return 'unexplored';
+    }
+
+    function toggleFogMode() {
+        FogMode.enabled = !FogMode.enabled;
+        const btn = document.getElementById('fog-mode-toggle');
+        if (btn) { btn.innerText = FogMode.enabled ? 'Fog Mode: On' : 'Fog Mode: Off'; btn.classList.toggle('active', FogMode.enabled); }
+        const aiChip = document.getElementById('ds-ai-toggle');
+        if (aiChip) aiChip.classList.toggle('chip-hidden', FogMode.enabled);
+        const fogHelp = document.getElementById('fog-help-line');
+        if (fogHelp) fogHelp.style.display = FogMode.enabled ? 'block' : 'none';
+        const fogRules = document.getElementById('fog-rules-section');
+        if (fogRules) fogRules.style.display = FogMode.enabled ? 'block' : 'none';
+        if (FogMode.enabled && isAIControlled('b')) setAIOpponent(false, 'b');
+        announce(FogMode.enabled
+            ? "Fog Mode enabled. Elevation, vision, and HP combat are active. Restarting game. AI opponent is disabled in this mode."
+            : "Fog Mode disabled. Restarting classic game.");
+        initGame();
+    }
+
+    function reportSquareContents(sq, coords, stale, color) {
+        if (stale) {
+            const snap = lastKnownSnapshot[color][coords.r + ',' + coords.c];
+            if (!snap) { announce(`${sq} was last seen empty. It may have changed since.`); return; }
+            const colorName = snap.color === 'w' ? 'White' : 'Black';
+            announce(`${sq} was last seen with ${colorName} ${getPieceName(snap.type)}. This information may be stale.`);
+            return;
+        }
+        let piece = GameState.board[coords.r][coords.c];
+        if (!piece) { announce(`${sq} is empty.`); return; }
+        let colorName = piece.color === 'w' ? 'White' : 'Black';
+        let typeName = getPieceName(piece.type);
+        let status = piece.veiled ? " (Veiled)" : "";
+        let hpInfo = FogMode.enabled && piece.hp !== undefined && piece.hp !== Infinity ? `, ${Math.max(0, piece.hp)}/${piece.maxHp} HP` : "";
+        announce(`${sq} has ${colorName} ${typeName}${status}${hpInfo}.`);
+    }
+
+    function showPassOverlay(color) {
+        const overlay = document.getElementById('pass-overlay');
+        const nameEl = document.getElementById('pass-overlay-name');
+        if (nameEl) nameEl.innerText = (color === 'w' ? "White's" : "Black's") + " turn";
+        if (overlay) overlay.classList.remove('hidden');
+    }
+
+    function dismissPassOverlay() {
+        const overlay = document.getElementById('pass-overlay');
+        if (overlay) overlay.classList.add('hidden');
+        const color = GameState.turn;
+        const prev = previousVisible[color];
+        const now = visionMaps[color];
+        const gained = [...now].filter(k => !prev.has(k));
+        const lost = [...prev].filter(k => !now.has(k));
+        const fmt = keys => keys.slice(0, 6).map(k => { const [r, c] = k.split(',').map(Number); return squareName(r, c); }).join(', ');
+        let msg = (color === 'w' ? 'White' : 'Black') + "'s view. ";
+        if (gained.length) msg += `Newly visible: ${fmt(gained)}${gained.length > 6 ? '…' : ''}. `;
+        if (lost.length) msg += `No longer visible: ${fmt(lost)}${lost.length > 6 ? '…' : ''}.`;
+        if (!gained.length && !lost.length) msg += "No change in vision.";
+        announce(msg);
+        previousVisible[color] = new Set(now);
+        renderVisualBoard(createSnapshot());
+        updateTurnMeta();
+        maybeTriggerAI();
+    }
 
     function handleSquareClick(sq) {
         if (isAIControlled(GameState.turn)) return;
@@ -635,10 +1004,35 @@
         document.getElementById('history-log').innerHTML = '';
         document.getElementById('history-log-visual').innerHTML = '';
 
+        if (FogMode.enabled) {
+            elevationGrid = computeElevationGrid();
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    const p = GameState.board[r][c];
+                    if (p) { p.hp = HP_TABLE[p.type]; p.maxHp = HP_TABLE[p.type]; }
+                }
+            }
+            visionMaps = { w: new Set(), b: new Set() };
+            exploredMaps = { w: new Set(), b: new Set() };
+            lastKnownSnapshot = { w: {}, b: {} };
+            previousVisible = { w: new Set(), b: new Set() };
+            refreshFogState();
+        } else {
+            elevationGrid = null;
+            const overlay = document.getElementById('pass-overlay');
+            if (overlay) overlay.classList.add('hidden');
+        }
+
         announce("New game started. White to move.");
-        renderVisualBoard(createSnapshot());
-        updateTurnMeta();
-        maybeTriggerAI();
+
+        if (FogMode.enabled) {
+            previousVisible = { w: new Set(), b: new Set() };
+            showPassOverlay('w');
+        } else {
+            renderVisualBoard(createSnapshot());
+            updateTurnMeta();
+            maybeTriggerAI();
+        }
     }
 
     function announce(msg) {
@@ -661,7 +1055,7 @@
 
     function updateTurnMeta() {
         const el = document.getElementById('turn-meta');
-        if (el) el.innerText = `Move ${GameState.turnNumber} \u00B7 ${GameState.turn === 'w' ? 'White' : 'Black'}`;
+        if (el) el.innerText = `Move ${GameState.turnNumber} \u00B7 ${GameState.turn === 'w' ? 'White' : 'Black'}` + (FogMode.enabled ? ' \u00B7 Fog Mode' : '');
     }
 
     function processCommand() {
@@ -694,6 +1088,15 @@
     function querySquare(sq) {
         let coords = parseSquare(sq);
         if (!coords) { announce("Invalid square."); return; }
+
+        if (FogMode.enabled) {
+            const state = fogStateFor(GameState.turn, coords.r, coords.c);
+            if (state === 'visible') { reportSquareContents(sq, coords, false, GameState.turn); return; }
+            if (state === 'stale') { reportSquareContents(sq, coords, true, GameState.turn); return; }
+            announce(`${sq} is unexplored. You have no information on it.`);
+            return;
+        }
+
         let piece = GameState.board[coords.r][coords.c];
         if (!piece) {
             announce(`${sq} is empty.`);
@@ -712,18 +1115,55 @@
             return;
         }
 
-        const applyResult = onApplyMove(validation);
-        const captureResult = onResolveCapture(applyResult);
-        onResolveSystems(captureResult);
+        if (FogMode.enabled && validation.target && validation.target.type !== 'd') {
+            resolveFogCombat(validation);
+        } else {
+            const applyResult = onApplyMove(validation);
+            const captureResult = onResolveCapture(applyResult);
+            onResolveSystems(captureResult);
+        }
         onCheckEndState();
 
         advanceTurn();
+        if (FogMode.enabled) refreshFogState();
 
         const snapshot = createSnapshot();
-        renderVisualBoard(snapshot);
         updateAudio(snapshot);
-        updateTurnMeta();
-        maybeTriggerAI();
+
+        if (FogMode.enabled) {
+            showPassOverlay(GameState.turn);
+        } else {
+            renderVisualBoard(snapshot);
+            updateTurnMeta();
+            maybeTriggerAI();
+        }
+    }
+
+    function resolveFogCombat(validated) {
+        const { from, to, piece, target, toStr } = validated;
+        const moverName = GameState.turn === 'w' ? 'White' : 'Black';
+        const elevA = elevationGrid[from.r][from.c];
+        const elevB = elevationGrid[to.r][to.c];
+        let dmg = ATTACK_TABLE[piece.type] || 5;
+        if (elevA > elevB) dmg = Math.round(dmg * 1.25);
+        target.hp -= dmg;
+
+        if (target.hp <= 0) {
+            GameState.board[to.r][to.c] = piece;
+            GameState.board[from.r][from.c] = null;
+            let promoted = false;
+            if (piece.type === 'p' && (to.r === 0 || to.r === 7)) {
+                piece.type = 'rb';
+                piece.hp = HP_TABLE['rb'];
+                piece.maxHp = HP_TABLE['rb'];
+                promoted = true;
+            }
+            announce(`${moverName} ${getPieceName(piece.type)} defeats ${getPieceName(target.type)} on ${toStr} (${dmg} dmg).`);
+            if (promoted) announce(`Pawn promoted to Rebirth on ${toStr}.`);
+        } else {
+            announce(`${moverName} ${getPieceName(piece.type)} attacks ${getPieceName(target.type)} on ${toStr} for ${dmg} damage (${Math.max(0, target.hp)}/${target.maxHp} HP left). ${getPieceName(piece.type)} holds position.`);
+        }
+        onResolveSystems();
     }
 
     function onValidateIntent(intent) {
@@ -763,6 +1203,7 @@
         let promoted = false;
         if (piece.type === 'p' && (to.r === 0 || to.r === 7)) {
             piece.type = 'rb';
+            if (FogMode.enabled) { piece.hp = HP_TABLE['rb']; piece.maxHp = HP_TABLE['rb']; }
             promoted = true;
         }
 
@@ -919,9 +1360,6 @@
         return true;
     }
 
-    /* Display-only: mirrors onValidateIntent's movement rules to compute which
-       squares would currently be legal targets for the selected piece. Does not
-       affect actual move validation, which always runs through onValidateIntent. */
     function computeLegalTargetsForDisplay(sqName) {
         const from = parseSquare(sqName);
         if (!from) return [];
@@ -1066,6 +1504,23 @@
             }
         }
 
+        /* Breathing intensity is driven by the Ruin/Sanctuary auras' real, current
+           effect on the board — not a fixed decorative pulse. */
+        let veiledByRuinCount = 0;
+        let shelteredCount = 0;
+        for (let r = 0; r < 8; r++) {
+            for (let c = 0; c < 8; c++) {
+                const p = snapshot.board[r][c];
+                if (!p || p.color !== snapshot.turn) continue;
+                if (p.veiled) veiledByRuinCount++;
+                if (myDeath && Math.abs(c - myDeath.c) <= 1 && Math.abs(r - myDeath.r) <= 1) shelteredCount++;
+            }
+        }
+        const ruinDuration = Math.max(1.2, 3.2 - veiledByRuinCount * 0.35).toFixed(2) + 's';
+        const ruinPeak = Math.min(0.42, 0.18 + veiledByRuinCount * 0.05).toFixed(2);
+        const sanctuaryDuration = '4.5s';
+        const sanctuaryPeak = Math.min(0.30, 0.14 + shelteredCount * 0.04).toFixed(2);
+
         const legalTargets = selectedSquare ? computeLegalTargetsForDisplay(selectedSquare) : [];
 
         for (let r = 0; r < 8; r++) {
@@ -1085,6 +1540,8 @@
                     let dy = Math.abs(r - enemyRebirth.r);
                     if (dx <= 1 && dy <= 1 && !(dx === 0 && dy === 0)) {
                         div.classList.add('ruin');
+                        div.style.setProperty('--ruin-duration', ruinDuration);
+                        div.style.setProperty('--ruin-peak', ruinPeak);
                     }
                 }
                 if (myDeath) {
@@ -1092,21 +1549,48 @@
                     let dy = Math.abs(r - myDeath.r);
                     if (dx <= 1 && dy <= 1) {
                         div.classList.add('sanctuary');
+                        div.style.setProperty('--sanctuary-duration', sanctuaryDuration);
+                        div.style.setProperty('--sanctuary-peak', sanctuaryPeak);
                     }
                 }
 
-                let p = snapshot.board[r][c];
+                let fogState = 'visible';
+                if (FogMode.enabled) {
+                    div.classList.add('elev-' + elevationGrid[r][c]);
+                    fogState = fogStateFor(snapshot.turn, r, c);
+                    if (fogState === 'unexplored') div.classList.add('fog-unexplored');
+                    if (fogState === 'stale') div.classList.add('fog-stale');
+                }
+
+                if (fogState === 'unexplored') {
+                    container.appendChild(div);
+                    continue;
+                }
+
+                let p;
+                if (fogState === 'stale') {
+                    p = lastKnownSnapshot[snapshot.turn][r + ',' + c];
+                } else {
+                    p = snapshot.board[r][c];
+                }
+
                 if (p) {
                     const map = { 'p': '♙', 'r': '♖', 'n': '♘', 'b': '♗', 'q': '♕', 'k': '♔', 'rb': '★', 'd': '☠' };
                     const isSpecial = p.type === 'rb' || p.type === 'd';
                     const token = document.createElement('div');
                     token.className = 'piece-token ' + (isSpecial ? 'special ' : '') + 'owner-' + p.color;
                     token.innerText = map[p.type] || p.type;
+                    if (FogMode.enabled && p.hp !== undefined && p.hp !== Infinity && fogState === 'visible') {
+                        const hpBadge = document.createElement('div');
+                        hpBadge.className = 'hp-badge';
+                        hpBadge.innerText = `${Math.max(0, p.hp)}/${p.maxHp}`;
+                        token.appendChild(hpBadge);
+                    }
                     div.appendChild(token);
                     if (p.veiled) div.classList.add('veiled');
                 }
 
-                if (legalTargets.includes(sq)) {
+                if (fogState === 'visible' && legalTargets.includes(sq)) {
                     const dot = document.createElement('div');
                     dot.className = 'legal-dot';
                     div.appendChild(dot);
@@ -1145,6 +1629,11 @@
             stop() { stopSpectatorMode(); },
             toggle() { toggleSpectator(); },
             isRunning() { return SpectatorConfig.enabled; },
+        },
+        fogMode: {
+            enable() { if (!FogMode.enabled) toggleFogMode(); },
+            disable() { if (FogMode.enabled) toggleFogMode(); },
+            isEnabled() { return FogMode.enabled; },
         },
     };
 
@@ -1407,6 +1896,7 @@
     }
 
     function toggleAI() {
+        if (FogMode.enabled) { announce("AI opponent is disabled while Fog Mode is on."); return; }
         const color = 'b';
         setAIOpponent(!isAIControlled(color), color, AIConfig.controllers[color]?.depth || 3);
     }
@@ -1467,6 +1957,7 @@
     let _preSpectatorState = null;
 
     function startSpectatorMode(opts = {}) {
+        if (FogMode.enabled) { announce("Spectator mode is disabled while Fog Mode is on."); return; }
         const depthW = opts.depthW || opts.depth || 3;
         const depthB = opts.depthB || opts.depth || 3;
         const moveDelayMs = opts.moveDelayMs || SpectatorConfig.moveDelayMs;
@@ -1534,7 +2025,6 @@
         <a href="https://loptrlab.com" style="color: var(--grey-200);">Loptr Lab ↗</a>
     </footer>
 
-</div>
 <section class="panel" aria-labelledby="agent-heading">
     <h2 id="agent-heading">Need Help?</h2>
     <p>Ask about setup, accessibility, or the game's mechanics.</p>
@@ -1543,6 +2033,8 @@
     <button onclick="sendAgentMessage()">Ask</button>
     <p id="agent-status" role="status" aria-live="polite"></p>
 </section>
+
+</div>
 
 <script>
 async function sendAgentMessage() {
