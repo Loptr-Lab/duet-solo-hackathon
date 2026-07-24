@@ -139,3 +139,17 @@ app.post('/api/webhook', express.raw({ type: 'application/json' }), (req, res) =
     console.error(`Webhook verification failed: ${err.message}`);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
+
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    console.log(
+      `[VERIFIED TRANSACTION] Session ${session.id} Amount: $${(session.amount_total || 0) / 100}`
+    );
+  }
+
+  return res.json({ received: true });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
+});
