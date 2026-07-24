@@ -4,7 +4,7 @@ This is the entry point into your side of the project. Everything below already 
 
 ## Where things stand
 
-Two decks exist in this world: hers (built out in full) and yours (sketched in concept, not yet built into a deck). Duet is where the two of you play each other. Once united, you play together as one kingdom — the 52 Cards of War — against outside kingdoms. When the two of you hit an impasse, you settle it with a simple game of War, deck against deck.
+Two decks exist in this world: hers (built out in full) and yours (sketched in concept, not yet built into a deck). [Duet](https://duet.loptrlab.com/) is where the two of you play each other. Once united, you play together as one kingdom — the 52 Cards of War — against outside kingdoms. When the two of you hit an impasse, you settle it with a simple game of War, deck against deck.
 
 ## What's already in the repo for you
 
