@@ -1244,10 +1244,13 @@
             GameState.board[from.r][from.c] = null;
             let promoted = false;
             if (piece.type === 'p' && (to.r === 0 || to.r === 7)) {
-                piece.type = 'rb';
-                piece.hp = HP_TABLE['rb'];
-                piece.maxHp = HP_TABLE['rb'];
-                promoted = true;
+                const promo = getPromotionType(GameState.board, piece.color);
+                if (promo) {
+                    piece.type = promo;
+                    if (promo === 'rb') { piece.hp = HP_TABLE['rb']; piece.maxHp = HP_TABLE['rb']; }
+                    else { piece.hp = HP_TABLE[promo]; piece.maxHp = HP_TABLE[promo]; }
+                    promoted = true;
+                }
             }
             announce(`${moverName} ${getPieceName(piece.type)} defeats ${getPieceName(target.type)} on ${toStr} (${dmg} dmg).`);
             if (promoted) announce(`Pawn promoted to Rebirth on ${toStr}.`);
@@ -1293,9 +1296,12 @@
 
         let promoted = false;
         if (piece.type === 'p' && (to.r === 0 || to.r === 7)) {
-            piece.type = 'rb';
-            if (FogMode.enabled) { piece.hp = HP_TABLE['rb']; piece.maxHp = HP_TABLE['rb']; }
-            promoted = true;
+            const promo = getPromotionType(GameState.board, piece.color);
+            if (promo) {
+                piece.type = promo;
+                if (FogMode.enabled) { piece.hp = HP_TABLE[promo]; piece.maxHp = HP_TABLE[promo]; }
+                promoted = true;
+            }
         }
 
         return { ...validated, promoted };
@@ -1322,7 +1328,13 @@
     }
 
     function onCheckEndState() {
-        // no-op for Duet's current scope
+        const result = checkLossCondition(GameState.board);
+        if (result.over && !GameState.gameOver) {
+            GameState.gameOver = true;
+            const loserName = result.loser === 'w' ? 'White' : 'Black';
+            const winnerName = result.winner === 'w' ? 'White' : 'Black';
+            announce(`${loserName}'s Rebirth has lost control. ${winnerName} wins.`);
+        }
     }
 
     function advanceTurn() {
@@ -1351,7 +1363,7 @@
             for (let r = 0; r < 8; r++) {
                 for (let c = 0; c < 8; c++) {
                     const p = GameState.board[r][c];
-                    if (!p || p.color !== activeColor || p.type === 'rb') continue;
+                    if (!p || p.color !== activeColor) continue;
 
                     const inRuin = this._within1(r, c, enemyRebirth) && !(r === enemyRebirth.r && c === enemyRebirth.c);
                     const inSanctuary = myDeath ? this._within1(r, c, myDeath) : false;
@@ -1740,6 +1752,46 @@
 
     const PIECE_VALUES = { p: 100, n: 320, b: 330, r: 500, q: 900, rb: 950, d: 0 };
 
+    // Tiered promotion: a pawn reaching the back rank does not automatically
+    // become Rebirth. Only one Rebirth per side is allowed (the birth event);
+    // after that, promotion refills lost Knights, then Bishops, up to the
+    // starting complement of 2 each. Once both are full, promotion is
+    // blocked entirely (returns null) -- this "board overloaded" state is a
+    // deliberate signal, not a bug.
+    function countPieces(board, color, type) {
+        let n = 0;
+        for (let r = 0; r < 8; r++) {
+            for (let c = 0; c < 8; c++) {
+                const p = board[r][c];
+                if (p && p.color === color && p.type === type) n++;
+            }
+        }
+        return n;
+    }
+
+    function getPromotionType(board, color) {
+        if (countPieces(board, color, 'rb') === 0) return 'rb';
+        if (countPieces(board, color, 'n') < 2) return 'n';
+        if (countPieces(board, color, 'b') < 2) return 'b';
+        return null;
+    }
+
+    // A side loses the instant its own Rebirth is veiled -- caught
+    // unprotected next to the enemy Rebirth, with no Sanctuary from its own
+    // Death nearby. Death is uncapturable and irrelevant to winning by
+    // design; this replaces any checkmate-style condition.
+    function checkLossCondition(board) {
+        for (let r = 0; r < 8; r++) {
+            for (let c = 0; c < 8; c++) {
+                const p = board[r][c];
+                if (p && p.type === 'rb' && p.veiled) {
+                    return { over: true, loser: p.color, winner: p.color === 'w' ? 'b' : 'w' };
+                }
+            }
+        }
+        return { over: false, loser: null, winner: null };
+    }
+
     function cloneBoard(board) {
         return board.map(row => row.map(cell => cell ? { ...cell } : null));
     }
@@ -1837,7 +1889,10 @@
         const piece = b[from.r][from.c];
         b[to.r][to.c] = piece;
         b[from.r][from.c] = null;
-        if (piece.type === 'p' && (to.r === 0 || to.r === 7)) piece.type = 'rb';
+        if (piece.type === 'p' && (to.r === 0 || to.r === 7)) {
+            const promo = getPromotionType(b, piece.color);
+            if (promo) piece.type = promo;
+        }
         return b;
     }
 
@@ -1861,7 +1916,7 @@
             for (let r = 0; r < 8; r++) {
                 for (let c = 0; c < 8; c++) {
                     const p = board[r][c];
-                    if (!p || p.color !== activeColor || p.type === 'rb') continue;
+                    if (!p || p.color !== activeColor) continue;
                     const inRuin = within1(r, c, enemyRebirth) && !(r === enemyRebirth.r && c === enemyRebirth.c);
                     const inSanctuary = myDeath ? within1(r, c, myDeath) : false;
                     if (inRuin && !inSanctuary) {
