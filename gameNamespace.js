@@ -8,8 +8,14 @@
  * `rooms` is an in-memory cache for speed -- every mutation is also written
  * through to roomStore so a fresh process (server restart) can reload a
  * room's data from persistence instead of losing it.
+ *
+ * Reconnection is gated by a per-seat token (see `tokens` on the room and
+ * `generateToken()` below) generated on create/join and required on
+ * rejoin_room, so a room code alone is no longer enough to take over a
+ * player's seat.
  */
 
+const crypto = require('crypto');
 const engine = require('./veiled-chess-core-server.js');
 
 const ROOM_CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -19,6 +25,10 @@ function generateRoomCode() {
         code += ROOM_CODE_CHARS[Math.floor(Math.random() * ROOM_CODE_CHARS.length)];
     }
     return code;
+}
+
+function generateToken() {
+    return crypto.randomBytes(16).toString('hex');
 }
 
 function createInitialBoard() {
@@ -73,6 +83,7 @@ function createGameNamespace(io, roomStore) {
                 gameOver: room.gameOver,
                 winner: room.winner,
                 players: room.players,
+                tokens: room.tokens,
                 createdAt: room.createdAt,
             });
         } catch (err) {
@@ -106,12 +117,14 @@ function createGameNamespace(io, roomStore) {
 
         socket.on('create_room', async (_payload, ack) => {
             const roomId = generateRoomCode();
+            const token = generateToken();
             const room = {
                 board: createInitialBoard(),
                 turn: 'w',
                 gameOver: false,
                 winner: null,
                 players: { w: socket.id, b: null },
+                tokens: { w: token, b: null },
                 createdAt: Date.now(),
             };
             rooms[roomId] = room;
@@ -120,7 +133,7 @@ function createGameNamespace(io, roomStore) {
             socket.data.color = 'w';
             await persist(roomId, room);
             if (typeof ack === 'function') {
-                ack({ ok: true, roomId, color: 'w', state: publicRoomState(room) });
+                ack({ ok: true, roomId, color: 'w', reconnectToken: token, state: publicRoomState(room) });
             }
         });
 
@@ -136,25 +149,29 @@ function createGameNamespace(io, roomStore) {
                 return;
             }
 
+            const token = generateToken();
             room.players.b = socket.id;
+            room.tokens = room.tokens || {};
+            room.tokens.b = token;
             socket.join(roomId);
             socket.data.roomId = roomId;
             socket.data.color = 'b';
             await persist(roomId, room);
 
-            if (typeof ack === 'function') ack({ ok: true, roomId, color: 'b', state: publicRoomState(room) });
+            if (typeof ack === 'function') ack({ ok: true, roomId, color: 'b', reconnectToken: token, state: publicRoomState(room) });
             io.to(roomId).emit('opponent_joined', { state: publicRoomState(room) });
         });
 
         // Rejoin after a disconnect/restart: the client remembers its own
-        // roomId + color (localStorage) and offers them back. We re-bind
-        // this socket to that color slot, WITHOUT changing who's assigned
-        // to it, provided the color matches what the client last held or
-        // that slot is currently empty (e.g. the other player hasn't
-        // reconnected yet either).
+        // roomId, color, AND reconnectToken (localStorage). The token --
+        // not the roomId/color alone -- is what proves this client actually
+        // owns that seat, since a room code is only 5 characters and would
+        // otherwise let anyone claim either seat mid-game.
         socket.on('rejoin_room', async (payload, ack) => {
             const roomId = ((payload && payload.roomId) || '').toUpperCase().trim();
             const color = payload && payload.color;
+            const reconnectToken = payload && payload.reconnectToken;
+
             if (color !== 'w' && color !== 'b') {
                 if (typeof ack === 'function') ack({ ok: false, reason: 'Invalid color.' });
                 return;
@@ -164,16 +181,14 @@ function createGameNamespace(io, roomStore) {
                 if (typeof ack === 'function') ack({ ok: false, reason: 'Room not found.' });
                 return;
             }
-            if (room.players[color] && room.players[color] !== socket.id) {
-                // Someone else currently holds that seat's live socket.
-                // Reassign to the reconnecting client anyway -- the old
-                // socket is presumably gone (that's why we're rejoining) --
-                // but flag this as a simplification: there's no proof the
-                // old socket is actually dead versus a duplicate tab.
-                room.players[color] = socket.id;
-            } else {
-                room.players[color] = socket.id;
+
+            const expectedToken = room.tokens && room.tokens[color];
+            if (!expectedToken || expectedToken !== reconnectToken) {
+                if (typeof ack === 'function') ack({ ok: false, reason: 'Invalid or missing reconnect token.' });
+                return;
             }
+
+            room.players[color] = socket.id;
             socket.join(roomId);
             socket.data.roomId = roomId;
             socket.data.color = color;
