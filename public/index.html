@@ -2314,9 +2314,10 @@ async function sendAgentMessage() {
         },
 
         // If a match was in progress when the page closed or the server
-        // restarted, localStorage still has the roomId/color. Try to get
-        // back into it automatically; silently fall back to a normal lobby
-        // if that room no longer exists.
+        // restarted, localStorage still has the roomId/color/reconnectToken.
+        // Try to get back into it automatically; silently fall back to a
+        // normal lobby if that room no longer exists or the token is no
+        // longer valid.
         _attemptAutoRejoin() {
             const saved = RemoteMode._loadSavedMatch();
             if (!saved) return;
@@ -2335,9 +2336,11 @@ async function sendAgentMessage() {
             });
         },
 
-        _saveMatch(roomId, color) {
+        // reconnectToken proves this client actually owns the seat -- the
+        // room code alone is not enough (see gameNamespace.js rejoin_room).
+        _saveMatch(roomId, color, reconnectToken) {
             try {
-                localStorage.setItem('veiledDominionRemoteMatch', JSON.stringify({ roomId, color }));
+                localStorage.setItem('veiledDominionRemoteMatch', JSON.stringify({ roomId, color, reconnectToken }));
             } catch (err) {
                 // Private browsing / storage disabled -- remote play still
                 // works for this session, it just won't survive a refresh.
@@ -2394,7 +2397,7 @@ async function sendAgentMessage() {
                 if (!res.ok) { statusEl.innerText = 'Could not create a match.'; return; }
                 RemoteState.roomId = res.roomId;
                 RemoteState.myColor = res.color;
-                RemoteMode._saveMatch(res.roomId, res.color);
+                RemoteMode._saveMatch(res.roomId, res.color, res.reconnectToken);
                 RemoteMode._applyState(res.state);
                 statusEl.innerText = `Room created: ${res.roomId} — share this code. Waiting for an opponent…`;
                 RemoteMode._enterGameScreen();
@@ -2410,7 +2413,7 @@ async function sendAgentMessage() {
                 if (!res.ok) { statusEl.innerText = res.reason || 'Could not join that match.'; return; }
                 RemoteState.roomId = roomId;
                 RemoteState.myColor = res.color;
-                RemoteMode._saveMatch(roomId, res.color);
+                RemoteMode._saveMatch(roomId, res.color, res.reconnectToken);
                 RemoteMode._applyState(res.state);
                 RemoteMode._enterGameScreen();
             });
