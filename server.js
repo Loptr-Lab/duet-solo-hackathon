@@ -175,6 +175,7 @@ const httpServer = http.createServer(app);
 const io = new Server(httpServer);
 
 const roomStore = createFirestoreRoomStore();
+roomStore.verifyAccess(); // fire-and-forget: logs loudly, never blocks startup
 createGameNamespace(io, roomStore);
 
 httpServer.listen(PORT, () => {
