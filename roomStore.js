@@ -38,6 +38,27 @@ function createFirestoreRoomStore() {
         async deleteRoom(roomId) {
             await db.collection(COLLECTION).doc(roomId).delete();
         },
+
+        // One-time startup diagnostic: confirms the service account actually
+        // has read/write access before any real game depends on it. Logs
+        // loudly either way rather than failing silently -- a missing
+        // roles/datastore.user grant should be obvious in the Cloud Run logs
+        // immediately on boot, not discovered later when a player's first
+        // move quietly fails to persist.
+        async verifyAccess() {
+            try {
+                const ref = db.collection('_healthcheck').doc('ping');
+                await ref.set({ timestamp: Date.now() }, { merge: true });
+                console.log('Firestore read/write permissions verified.');
+                return true;
+            } catch (err) {
+                console.error('Firestore permission check failed:', err.message);
+                if (err.code === 7 || /PERMISSION_DENIED/.test(err.message || '')) {
+                    console.error(`Check that the Cloud Run service account has roles/datastore.user on this project.`);
+                }
+                return false;
+            }
+        },
     };
 }
 
