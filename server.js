@@ -2,12 +2,18 @@ const express = require('express');
 const path = require('path');
 const http = require('http');
 const { Server } = require('socket.io');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
+// Safely initialize Stripe so missing environment variables won't crash boot
+const stripe = process.env.STRIPE_SECRET_KEY
+  ? require('stripe')(process.env.STRIPE_SECRET_KEY)
+  : null;
+
 const { createFirestoreRoomStore } = require('./roomStore.js');
 const { createGameNamespace } = require('./gameNamespace.js');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
+const HOST = '0.0.0.0';
 
 app.use((req, res, next) => {
   if (req.originalUrl === '/api/webhook') return next();
@@ -104,6 +110,11 @@ app.post('/api/agent', async (req, res) => {
 });
 
 app.post('/api/create-checkout-session', async (req, res) => {
+  if (!stripe) {
+    console.warn('Stripe checkout attempt failed: STRIPE_SECRET_KEY is not set.');
+    return res.status(500).json({ error: 'Stripe is not configured on this server.' });
+  }
+
   try {
     const domainUrl = process.env.PUBLIC_URL || `${req.protocol}://${req.get('host')}`;
     const session = await stripe.checkout.sessions.create({
@@ -135,6 +146,10 @@ app.post('/api/create-checkout-session', async (req, res) => {
 });
 
 app.post('/api/webhook', express.raw({ type: 'application/json' }), (req, res) => {
+  if (!stripe) {
+    return res.status(400).send('Stripe is not configured on this server.');
+  }
+
   const sig = req.headers['stripe-signature'];
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
@@ -175,9 +190,16 @@ const httpServer = http.createServer(app);
 const io = new Server(httpServer);
 
 const roomStore = createFirestoreRoomStore();
-roomStore.verifyAccess(); // fire-and-forget: logs loudly, never blocks startup
+
+// Safely invoke roomStore.verifyAccess without crashing process on unhandled promise rejection
+if (roomStore && typeof roomStore.verifyAccess === 'function') {
+  Promise.resolve(roomStore.verifyAccess()).catch((err) => {
+    console.error('⚠️ [roomStore] Non-fatal verification check failure:', err?.message || err);
+  });
+}
+
 createGameNamespace(io, roomStore);
 
-httpServer.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+httpServer.listen(PORT, HOST, () => {
+  console.log(`Server listening on http://${HOST}:${PORT}`);
 });
