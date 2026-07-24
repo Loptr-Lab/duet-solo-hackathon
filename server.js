@@ -1,3 +1,17 @@
+const express = require('express');
+const path = require('path');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
+const app = express();
+const PORT = process.env.PORT || 8080;
+
+app.use((req, res, next) => {
+  if (req.originalUrl === '/api/webhook') return next();
+  return express.json()(req, res, next);
+});
+
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.post('/api/agent', async (req, res) => {
   const userMessage = req.body.message || 'Hello';
   const apiKey = process.env.GEMINI_API_KEY;
@@ -78,3 +92,50 @@ app.post('/api/agent', async (req, res) => {
     });
   }
 });
+
+app.post('/api/create-checkout-session', async (req, res) => {
+  try {
+    const domainUrl = process.env.PUBLIC_URL || `${req.protocol}://${req.get('host')}`;
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: 'Duet: Solo — Accessibility & Supporter Pack',
+              description:
+                'Custom high-contrast themes, enhanced support profile, and supporter badge.'
+            },
+            unit_amount: 499
+          },
+          quantity: 1
+        }
+      ],
+      mode: 'payment',
+      success_url: `${domainUrl}/?payment=success&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${domainUrl}/?payment=cancelled`
+    });
+
+    return res.json({ url: session.url });
+  } catch (err) {
+    console.error('Stripe session error:', err);
+    return res.status(500).json({ error: 'Failed to initialize payment session.' });
+  }
+});
+
+app.post('/api/webhook', express.raw({ type: 'application/json' }), (req, res) => {
+  const sig = req.headers['stripe-signature'];
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+  let event;
+  try {
+    if (webhookSecret) {
+      event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
+    } else {
+      event = JSON.parse(req.body.toString());
+    }
+  } catch (err) {
+    console.error(`Webhook verification failed: ${err.message}`);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
