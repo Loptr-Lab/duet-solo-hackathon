@@ -1,6 +1,10 @@
 const express = require('express');
 const path = require('path');
+const http = require('http');
+const { Server } = require('socket.io');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const { createFirestoreRoomStore } = require('./roomStore.js');
+const { createGameNamespace } = require('./gameNamespace.js');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -11,6 +15,12 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Dumb, dependency-free health check. Deliberately does not touch game state,
+// Gemini, or Stripe, so it can never false-fail a healthy game room.
+app.get('/healthz', (req, res) => {
+  res.status(200).send('ok');
+});
 
 app.post('/api/agent', async (req, res) => {
   const userMessage = req.body.message || 'Hello';
@@ -150,6 +160,23 @@ app.post('/api/webhook', express.raw({ type: 'application/json' }), (req, res) =
   return res.json({ received: true });
 });
 
-app.listen(PORT, () => {
+// ---------------------------------------------------------------------------
+// REMOTE PLAY — new, fully additive. Does not touch /api/agent, /api/create-
+// checkout-session, /api/webhook, or anything the client's existing local
+// play, AI opponent, Spectator mode, or Fog Mode depend on. Base ruleset only
+// (no Fog Mode remotely, per earlier scope decision) — server is the single
+// source of truth for board state, using the same verified veiled-chess-core
+// engine, not a re-implementation. Room/socket logic lives in
+// gameNamespace.js (tested separately -- 12 gameplay tests + 12 restart/
+// durability tests); Firestore persistence lives in roomStore.js.
+// ---------------------------------------------------------------------------
+
+const httpServer = http.createServer(app);
+const io = new Server(httpServer);
+
+const roomStore = createFirestoreRoomStore();
+createGameNamespace(io, roomStore);
+
+httpServer.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
