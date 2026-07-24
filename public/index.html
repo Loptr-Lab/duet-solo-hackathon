@@ -702,9 +702,65 @@
         through it. Play the classic duel, or step into Fog Mode and let the terrain decide what you're allowed
         to know.</p>
         <button type="button" class="btn-primary" onclick="enterRealm()">Cross the Threshold</button>
+        <button type="button" class="btn-primary" style="margin-left: 12px;" onclick="RemoteMode.enterLobby()">Play Remote</button>
+    </section>
+
+    <section class="realm-splash" id="remote-lobby" style="display:none;">
+        <h2>Play Remote</h2>
+        <p class="body">Classic Duet only for now — no Fog Mode, no AI opponent. Create a match and share the
+        code, or join a friend's match below.</p>
+        <div style="display:flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px;">
+            <button type="button" class="btn-primary" onclick="RemoteMode.createMatch()">Create Match</button>
+        </div>
+        <div style="display:flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+            <div class="command-bar-field" style="max-width: 180px;">
+                <input type="text" id="remote-join-code" autocomplete="off" placeholder="ROOM CODE" maxlength="5" style="text-transform:uppercase;">
+            </div>
+            <button type="button" class="btn-primary" onclick="RemoteMode.joinMatch()">Join Match</button>
+        </div>
+        <p id="remote-lobby-status" class="body" style="margin-top:16px;"></p>
+        <button type="button" class="btn-primary" style="margin-top:20px; border-color: var(--text-muted); color: var(--text-muted);" onclick="RemoteMode.backToSplash()">Back</button>
     </section>
 
     </div>
+
+<div class="page" id="remote-game-screen" style="display:none;">
+    <header class="hero">
+        <div class="hero-top">
+            <div>
+                <p class="hero-eyebrow">Veiled Dominion &middot; Remote</p>
+                <h1 id="remote-room-heading">Duet</h1>
+            </div>
+        </div>
+        <p class="tagline" id="remote-status-line">Waiting for an opponent…</p>
+    </header>
+
+    <div id="remote-sr-status" class="sr-only" role="status" aria-live="assertive" aria-atomic="true"></div>
+
+    <div class="toolbar">
+        <div class="turn-meta" id="remote-turn-meta">Waiting…</div>
+    </div>
+
+    <div class="board-row">
+        <div id="remote-board"></div>
+        <aside class="sidebar">
+            <div class="panel">
+                <h3 class="panel-eyebrow">Move History</h3>
+                <ol id="remote-history-log" class="history-log"></ol>
+            </div>
+        </aside>
+    </div>
+
+    <div class="controls">
+        <div class="controls-row command-bar">
+            <div class="command-bar-field">
+                <span aria-hidden="true">&rsaquo;</span>
+                <input type="text" id="remote-cmd" autocomplete="off" placeholder="e2e4 · move notation">
+            </div>
+            <button class="btn-primary" onclick="RemoteMode.submitCommand()">Execute</button>
+        </div>
+    </div>
+</div>
 
 <div class="page" id="game-screen" style="display:none;">
 
@@ -2220,6 +2276,257 @@ async function sendAgentMessage() {
         statusEl.textContent = "Couldn't reach the assistant. Try again.";
     }
 }
+</script>
+
+<!-- ===================================================================
+     REMOTE PLAY — additive only. RemoteMode is a fully separate namespace
+     with its own state (RemoteState), its own board renderer, and its own
+     move-submission path. It does not read or write GameState, does not
+     call renderVisualBoard/computeLegalTargetsForDisplay/handleSquareClick,
+     and does not touch AIConfig, SpectatorConfig, or FogMode. Local play,
+     AI, Spectator, and Fog Mode are unaffected by anything below this line.
+     Server is authoritative -- classic Duet rules only (no Fog Mode remote,
+     per scope decision), enforced by the same veiled-chess-core engine
+     server-side.
+     =================================================================== -->
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const RemoteState = {
+        socket: null,
+        roomId: null,
+        myColor: null,
+        board: null,
+        turn: 'w',
+        gameOver: false,
+        winner: null,
+        selectedSquare: null,
+    };
+
+    const RemoteMode = {
+        enterLobby() {
+            document.getElementById('remote-lobby').style.display = '';
+            if (!RemoteState.socket) {
+                RemoteState.socket = io({ autoConnect: false });
+                RemoteMode._wireSocketEvents();
+            }
+            if (!RemoteState.socket.connected) RemoteState.socket.connect();
+            RemoteMode._attemptAutoRejoin();
+        },
+
+        // If a match was in progress when the page closed or the server
+        // restarted, localStorage still has the roomId/color. Try to get
+        // back into it automatically; silently fall back to a normal lobby
+        // if that room no longer exists.
+        _attemptAutoRejoin() {
+            const saved = RemoteMode._loadSavedMatch();
+            if (!saved) return;
+            const statusEl = document.getElementById('remote-lobby-status');
+            if (statusEl) statusEl.innerText = `Reconnecting to room ${saved.roomId}…`;
+            RemoteState.socket.emit('rejoin_room', saved, (res) => {
+                if (!res.ok) {
+                    RemoteMode._clearSavedMatch();
+                    if (statusEl) statusEl.innerText = '';
+                    return;
+                }
+                RemoteState.roomId = res.roomId;
+                RemoteState.myColor = res.color;
+                RemoteMode._applyState(res.state);
+                RemoteMode._enterGameScreen();
+            });
+        },
+
+        _saveMatch(roomId, color) {
+            try {
+                localStorage.setItem('veiledDominionRemoteMatch', JSON.stringify({ roomId, color }));
+            } catch (err) {
+                // Private browsing / storage disabled -- remote play still
+                // works for this session, it just won't survive a refresh.
+            }
+        },
+
+        _loadSavedMatch() {
+            try {
+                const raw = localStorage.getItem('veiledDominionRemoteMatch');
+                return raw ? JSON.parse(raw) : null;
+            } catch (err) {
+                return null;
+            }
+        },
+
+        _clearSavedMatch() {
+            try {
+                localStorage.removeItem('veiledDominionRemoteMatch');
+            } catch (err) {
+                // nothing to clear
+            }
+        },
+
+        backToSplash() {
+            document.getElementById('remote-lobby').style.display = 'none';
+        },
+
+        _wireSocketEvents() {
+            const s = RemoteState.socket;
+            s.on('connect', () => {
+                RemoteMode._attemptAutoRejoin();
+            });
+            s.on('opponent_joined', ({ state }) => {
+                RemoteMode._applyState(state);
+                RemoteMode._enterGameScreen();
+                RemoteMode._announce('Opponent joined. White to move.');
+            });
+            s.on('state_update', ({ state }) => {
+                RemoteMode._applyState(state);
+                RemoteMode._announce(
+                    state.gameOver
+                        ? `Game over. ${state.winner === 'w' ? 'White' : 'Black'} wins.`
+                        : `It is now ${state.turn === 'w' ? "White's" : "Black's"} turn.`
+                );
+            });
+            s.on('opponent_disconnected', ({ color }) => {
+                RemoteMode._announce(`${color === 'w' ? 'White' : 'Black'} disconnected.`);
+            });
+        },
+
+        createMatch() {
+            const statusEl = document.getElementById('remote-lobby-status');
+            RemoteState.socket.emit('create_room', {}, (res) => {
+                if (!res.ok) { statusEl.innerText = 'Could not create a match.'; return; }
+                RemoteState.roomId = res.roomId;
+                RemoteState.myColor = res.color;
+                RemoteMode._saveMatch(res.roomId, res.color);
+                RemoteMode._applyState(res.state);
+                statusEl.innerText = `Room created: ${res.roomId} — share this code. Waiting for an opponent…`;
+                RemoteMode._enterGameScreen();
+            });
+        },
+
+        joinMatch() {
+            const codeInput = document.getElementById('remote-join-code');
+            const statusEl = document.getElementById('remote-lobby-status');
+            const roomId = codeInput.value.trim().toUpperCase();
+            if (!roomId) { statusEl.innerText = 'Enter a room code first.'; return; }
+            RemoteState.socket.emit('join_room', { roomId }, (res) => {
+                if (!res.ok) { statusEl.innerText = res.reason || 'Could not join that match.'; return; }
+                RemoteState.roomId = roomId;
+                RemoteState.myColor = res.color;
+                RemoteMode._saveMatch(roomId, res.color);
+                RemoteMode._applyState(res.state);
+                RemoteMode._enterGameScreen();
+            });
+        },
+
+        _enterGameScreen() {
+            document.getElementById('front-page').style.display = 'none';
+            document.getElementById('remote-lobby').style.display = 'none';
+            document.getElementById('remote-game-screen').style.display = '';
+            document.getElementById('remote-room-heading').innerText = `Duet — Room ${RemoteState.roomId}`;
+            const cmd = document.getElementById('remote-cmd');
+            if (cmd) cmd.focus();
+        },
+
+        _applyState(state) {
+            RemoteState.board = state.board;
+            RemoteState.turn = state.turn;
+            RemoteState.gameOver = state.gameOver;
+            RemoteState.winner = state.winner;
+            if (state.gameOver) RemoteMode._clearSavedMatch();
+            RemoteMode._render();
+        },
+
+        _announce(msg) {
+            document.getElementById('remote-sr-status').innerText = msg;
+            document.getElementById('remote-status-line').innerText = msg;
+            const log = document.getElementById('remote-history-log');
+            const item = document.createElement('li');
+            item.innerText = msg;
+            log.appendChild(item);
+            log.scrollTop = log.scrollHeight;
+        },
+
+        submitCommand() {
+            const input = document.getElementById('remote-cmd');
+            const cmd = input.value.toLowerCase().trim();
+            input.value = '';
+            if (cmd.length !== 4) {
+                RemoteMode._announce('Use move notation like e2e4.');
+                return;
+            }
+            RemoteMode._submitMove(cmd.substring(0, 2), cmd.substring(2, 4));
+        },
+
+        _submitMove(from, to) {
+            if (RemoteState.gameOver) { RemoteMode._announce('Game is over.'); return; }
+            RemoteState.socket.emit('make_move', { from, to }, (res) => {
+                if (!res.ok) {
+                    RemoteMode._announce(res.reason || 'Invalid move.');
+                    return;
+                }
+                RemoteMode._applyState(res.state);
+            });
+        },
+
+        _handleSquareClick(sq) {
+            if (RemoteState.gameOver) return;
+            if (!RemoteState.selectedSquare) {
+                RemoteState.selectedSquare = sq;
+                RemoteMode._render();
+                return;
+            }
+            if (RemoteState.selectedSquare === sq) {
+                RemoteState.selectedSquare = null;
+                RemoteMode._render();
+                return;
+            }
+            const from = RemoteState.selectedSquare;
+            RemoteState.selectedSquare = null;
+            RemoteMode._submitMove(from, sq);
+        },
+
+        _render() {
+            const container = document.getElementById('remote-board');
+            if (!container || !RemoteState.board) return;
+            container.innerHTML = '';
+            container.style.display = 'grid';
+            container.style.gridTemplateColumns = 'repeat(8, 46px)';
+            container.style.gridTemplateRows = 'repeat(8, 46px)';
+            container.style.border = '1px solid var(--border-hairline)';
+            container.style.width = 'fit-content';
+
+            const turnMetaEl = document.getElementById('remote-turn-meta');
+            if (turnMetaEl) {
+                turnMetaEl.innerText = RemoteState.gameOver
+                    ? `Game over — ${RemoteState.winner === 'w' ? 'White' : 'Black'} wins`
+                    : `${RemoteState.turn === 'w' ? "White" : "Black"} to move` + (RemoteState.myColor ? ` (you are ${RemoteState.myColor === 'w' ? 'White' : 'Black'})` : '');
+            }
+
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    const div = document.createElement('div');
+                    const sq = squareName(r, c);
+                    div.className = 'sq ' + ((r + c) % 2 === 0 ? 'light' : 'dark');
+                    if (RemoteState.selectedSquare === sq) div.classList.add('selected');
+                    div.addEventListener('click', () => RemoteMode._handleSquareClick(sq));
+
+                    const p = RemoteState.board[r][c];
+                    if (p) {
+                        const map = { 'p': '♙', 'r': '♖', 'n': '♘', 'b': '♗', 'q': '♕', 'k': '♔', 'rb': '★', 'd': '☠' };
+                        const isSpecial = p.type === 'rb' || p.type === 'd';
+                        const token = document.createElement('div');
+                        token.className = 'piece-token ' + (isSpecial ? 'special ' : '') + 'owner-' + p.color;
+                        token.innerText = map[p.type] || p.type;
+                        div.appendChild(token);
+                        if (p.veiled) div.classList.add('veiled');
+                    }
+                    container.appendChild(div);
+                }
+            }
+        },
+    };
+
+    document.getElementById('remote-cmd')?.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') RemoteMode.submitCommand();
+    });
 </script>
 </body>
 </html>
