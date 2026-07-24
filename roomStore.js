@@ -4,14 +4,6 @@
  * Wraps Firestore behind a tiny interface (save/load/delete) so the rest of
  * server.js doesn't need to know about Firestore directly, and so this can
  * be swapped for a fake implementation in tests (see roomStore.test.js).
- *
- * Uses Application Default Credentials -- no explicit project ID or key
- * file. On Cloud Run this resolves automatically from the attached service
- * account, matching the existing GCP-native setup for this project. Locally
- * (e.g. testing on a laptop), this requires `gcloud auth application-default
- * login` or a GOOGLE_APPLICATION_CREDENTIALS env var pointing at a service
- * account key -- flagging this now since it's the one part of this file
- * that cannot be verified without a real GCP project to connect to.
  */
 
 const { Firestore } = require('@google-cloud/firestore');
@@ -19,33 +11,55 @@ const { Firestore } = require('@google-cloud/firestore');
 const COLLECTION = 'veiled_dominion_rooms';
 
 function createFirestoreRoomStore() {
-    const db = new Firestore();
+    let db;
+    try {
+        db = new Firestore({
+            projectId: process.env.GOOGLE_CLOUD_PROJECT || process.env.GCP_PROJECT || 'adept-crossing-106819',
+        });
+    } catch (err) {
+        console.error('⚠️ Failed to initialize Firestore client:', err.message);
+        db = null;
+    }
 
     return {
         async saveRoom(roomId, roomData) {
-            await db.collection(COLLECTION).doc(roomId).set({
-                ...roomData,
-                updatedAt: Date.now(),
-            });
+            if (!db) return;
+            try {
+                await db.collection(COLLECTION).doc(roomId).set({
+                    ...roomData,
+                    updatedAt: Date.now(),
+                });
+            } catch (err) {
+                console.error(`Error saving room ${roomId}:`, err.message);
+            }
         },
 
         async loadRoom(roomId) {
-            const snap = await db.collection(COLLECTION).doc(roomId).get();
-            if (!snap.exists) return null;
-            return snap.data();
+            if (!db) return null;
+            try {
+                const snap = await db.collection(COLLECTION).doc(roomId).get();
+                if (!snap.exists) return null;
+                return snap.data();
+            } catch (err) {
+                console.error(`Error loading room ${roomId}:`, err.message);
+                return null;
+            }
         },
 
         async deleteRoom(roomId) {
-            await db.collection(COLLECTION).doc(roomId).delete();
+            if (!db) return;
+            try {
+                await db.collection(COLLECTION).doc(roomId).delete();
+            } catch (err) {
+                console.error(`Error deleting room ${roomId}:`, err.message);
+            }
         },
 
-        // One-time startup diagnostic: confirms the service account actually
-        // has read/write access before any real game depends on it. Logs
-        // loudly either way rather than failing silently -- a missing
-        // roles/datastore.user grant should be obvious in the Cloud Run logs
-        // immediately on boot, not discovered later when a player's first
-        // move quietly fails to persist.
         async verifyAccess() {
+            if (!db) {
+                console.error('Firestore client unavailable during verifyAccess check.');
+                return false;
+            }
             try {
                 const ref = db.collection('_healthcheck').doc('ping');
                 await ref.set({ timestamp: Date.now() }, { merge: true });
@@ -54,7 +68,7 @@ function createFirestoreRoomStore() {
             } catch (err) {
                 console.error('Firestore permission check failed:', err.message);
                 if (err.code === 7 || /PERMISSION_DENIED/.test(err.message || '')) {
-                    console.error(`Check that the Cloud Run service account has roles/datastore.user on this project.`);
+                    console.error('Check that the Cloud Run service account has roles/datastore.user on adept-crossing-106819.');
                 }
                 return false;
             }
