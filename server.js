@@ -3,11 +3,6 @@ const path = require('path');
 const http = require('http');
 const { Server } = require('socket.io');
 
-// Safely initialize Stripe so missing environment variables won't crash boot
-const stripe = process.env.STRIPE_SECRET_KEY
-  ? require('stripe')(process.env.STRIPE_SECRET_KEY)
-  : null;
-
 const { createFirestoreRoomStore } = require('./roomStore.js');
 const { createGameNamespace } = require('./gameNamespace.js');
 
@@ -15,15 +10,12 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 const HOST = '0.0.0.0';
 
-app.use((req, res, next) => {
-  if (req.originalUrl === '/api/webhook') return next();
-  return express.json()(req, res, next);
-});
+app.use(express.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Dumb, dependency-free health check. Deliberately does not touch game state,
-// Gemini, or Stripe, so it can never false-fail a healthy game room.
+// Dumb, dependency-free health check. Deliberately does not touch game state
+// or Gemini, so it can never false-fail a healthy game room.
 app.get('/healthz', (req, res) => {
   res.status(200).send('ok');
 });
@@ -109,76 +101,10 @@ app.post('/api/agent', async (req, res) => {
   }
 });
 
-app.post('/api/create-checkout-session', async (req, res) => {
-  if (!stripe) {
-    console.warn('Stripe checkout attempt failed: STRIPE_SECRET_KEY is not set.');
-    return res.status(500).json({ error: 'Stripe is not configured on this server.' });
-  }
-
-  try {
-    const domainUrl = process.env.PUBLIC_URL || `${req.protocol}://${req.get('host')}`;
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: [
-        {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: 'Duet: Solo — Accessibility & Supporter Pack',
-              description:
-                'Custom high-contrast themes, enhanced support profile, and supporter badge.'
-            },
-            unit_amount: 499
-          },
-          quantity: 1
-        }
-      ],
-      mode: 'payment',
-      success_url: `${domainUrl}/?payment=success&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${domainUrl}/?payment=cancelled`
-    });
-
-    return res.json({ url: session.url });
-  } catch (err) {
-    console.error('Stripe session error:', err);
-    return res.status(500).json({ error: 'Failed to initialize payment session.' });
-  }
-});
-
-app.post('/api/webhook', express.raw({ type: 'application/json' }), (req, res) => {
-  if (!stripe) {
-    return res.status(400).send('Stripe is not configured on this server.');
-  }
-
-  const sig = req.headers['stripe-signature'];
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-
-  let event;
-  try {
-    if (webhookSecret) {
-      event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
-    } else {
-      event = JSON.parse(req.body.toString());
-    }
-  } catch (err) {
-    console.error(`Webhook verification failed: ${err.message}`);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
-  }
-
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object;
-    console.log(
-      `[VERIFIED TRANSACTION] Session ${session.id} Amount: $${(session.amount_total || 0) / 100}`
-    );
-  }
-
-  return res.json({ received: true });
-});
-
 // ---------------------------------------------------------------------------
-// REMOTE PLAY — new, fully additive. Does not touch /api/agent, /api/create-
-// checkout-session, /api/webhook, or anything the client's existing local
-// play, AI opponent, Spectator mode, or Fog Mode depend on. Base ruleset only
+// REMOTE PLAY — new, fully additive. Does not touch /api/agent or anything
+// the client's existing local play, AI opponent, Spectator mode, or Fog Mode
+// depend on. Base ruleset only
 // (no Fog Mode remotely, per earlier scope decision) — server is the single
 // source of truth for board state, using the same verified veiled-chess-core
 // engine, not a re-implementation. Room/socket logic lives in
