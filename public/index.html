@@ -393,6 +393,14 @@
             border-radius: 0;
         }
         .btn-primary:hover { background: var(--amber-glow-08); }
+        .btn-primary:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .btn-primary[aria-pressed="true"] {
+            background: var(--amber-glow-08);
+            box-shadow: 0 0 0 1px var(--amber-light) inset;
+        }
 
         #legend {
             font-family: var(--font-mono);
@@ -841,6 +849,7 @@
                     <div>Click a piece to select it</div>
                     <div>Click a target square to move</div>
                     <div>Or type <span class="mono-accent">e2e4</span> in the command bar</div>
+                    <div>Or tap <span class="mono-accent">Speak Move</span> and say your move aloud</div>
                     <div>Amber wash = Radius of Ruin</div>
                     <div>Sanctuary blocks the veil near Death</div>
                     <div id="fog-help-line" style="display:none; margin-top:8px; padding-top:8px; border-top:1px solid var(--border-hairline);">
@@ -861,13 +870,16 @@
                 <input type="text" id="cmd" autocomplete="off" aria-describedby="instructions" placeholder="e2e4 · move notation">
             </div>
             <button class="btn-primary" onclick="processCommand()">Execute</button>
+            <button type="button" class="btn-primary" id="speak-btn" onclick="SpeechInput.toggle()" aria-pressed="false" aria-describedby="speech-instructions">🎤 Speak Move</button>
         </div>
         <p id="instructions" class="sr-only">Type a coordinate move like e2e4, or a single square like e4 to query. Press Enter to execute. When Fog Mode is on, querying a square outside your vision reports only what you would actually know: unexplored, or last known and possibly stale.</p>
+        <p id="speech-instructions" class="sr-only">Speech input fills the command box with what it heard but never submits a move on its own. Review or edit the text, then press Enter or Execute to confirm.</p>
+        <p id="speech-status" class="sr-only" role="status" aria-live="polite"></p>
     </div>
 
     <p id="legend" aria-hidden="true">
         Move: <kbd>e2e4</kbd> &nbsp;&middot;&nbsp; Look at a square: <kbd>e4</kbd> &nbsp;&middot;&nbsp; Press Enter
-        &nbsp;&middot;&nbsp; or click two squares on the board below
+        &nbsp;&middot;&nbsp; or click two squares on the board below &nbsp;&middot;&nbsp; or tap Speak Move
     </p>
 
     <div>
@@ -2276,6 +2288,158 @@ async function sendAgentMessage() {
         statusEl.textContent = "Couldn't reach the assistant. Try again.";
     }
 }
+</script>
+
+<!-- ===================================================================
+     SPEECH INPUT — additive only. Uses the browser's native
+     SpeechRecognition (Web Speech API), not the jam's old TTS/voice-output
+     ban (that restriction no longer applies anyway, per project decision to
+     leave the hackathon ruleset -- and recognition is a different category
+     from generated voice output regardless). This module never touches
+     GameState directly and never submits a move on its own: it only ever
+     writes into the existing #cmd input, the same box typing and clicking
+     already use, so a misheard word costs nothing more than an edit before
+     pressing Enter/Execute. Screen-reader narration for game events
+     continues to come from announce() -> #sr-status, unchanged.
+     =================================================================== -->
+<script>
+    const SpeechInput = {
+        recognition: null,
+        active: false,
+        supported: !!(window.SpeechRecognition || window.webkitSpeechRecognition),
+
+        init() {
+            const btn = document.getElementById('speak-btn');
+            if (!this.supported) {
+                if (btn) {
+                    btn.disabled = true;
+                    btn.title = 'Speech input is not supported in this browser.';
+                    btn.innerText = '🎤 Speak Move (unavailable)';
+                }
+                this._setStatus('Speech input is not supported in this browser. Typing and clicking still work as usual.');
+                return;
+            }
+
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            this.recognition = new SR();
+            // Single utterance per tap rather than always-listening -- gives the
+            // player a clear start/stop boundary instead of an open mic picking up
+            // background noise indefinitely. interimResults lets us surface a
+            // live "hearing: ..." readout before the utterance is even final.
+            this.recognition.continuous = false;
+            this.recognition.interimResults = true;
+            this.recognition.maxAlternatives = 3;
+            this.recognition.lang = 'en-US';
+
+            this.recognition.onstart = () => {
+                this.active = true;
+                this._setButtonState(true);
+                this._setStatus('Listening. Say a move, like e2 e4, or a square to query.', true);
+            };
+
+            this.recognition.onresult = (event) => {
+                const result = event.results[event.results.length - 1];
+                const transcript = result[0].transcript.trim();
+                if (result.isFinal) {
+                    this._handleFinalTranscript(transcript);
+                } else {
+                    this._setStatus(`Hearing: ${transcript}`, true);
+                }
+            };
+
+            // No hard rejection on low confidence anywhere in this module --
+            // whatever comes back gets shown to the player to confirm or edit,
+            // rather than silently discarded. Errors here are about recognition
+            // failing to start/run at all (no speech detected, mic blocked,
+            // network hiccup for the browser's recognition service), not about
+            // judging whether the speech itself was "clear enough."
+            this.recognition.onerror = (event) => {
+                this.active = false;
+                this._setButtonState(false);
+                if (event.error === 'no-speech') {
+                    this._setStatus("Didn't catch anything that time. Tap Speak Move to try again -- no rush.");
+                } else if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+                    this._setStatus('Microphone access is blocked. Check your browser/site permissions, then tap Speak Move again.');
+                } else if (event.error === 'aborted') {
+                    this._setStatus('Listening stopped.');
+                } else {
+                    this._setStatus(`Speech recognition had a problem (${event.error}). Tap Speak Move to try again.`);
+                }
+            };
+
+            this.recognition.onend = () => {
+                this.active = false;
+                this._setButtonState(false);
+            };
+        },
+
+        toggle() {
+            if (!this.supported) return;
+            if (this.active) {
+                this.recognition.stop();
+                return;
+            }
+            try {
+                this.recognition.start();
+            } catch (err) {
+                this._setStatus('Could not start listening just then. Give it a second and try again.');
+            }
+        },
+
+        _setButtonState(listening) {
+            const btn = document.getElementById('speak-btn');
+            if (!btn) return;
+            btn.setAttribute('aria-pressed', listening ? 'true' : 'false');
+            btn.innerText = listening ? '🎤 Listening… (tap to stop)' : '🎤 Speak Move';
+        },
+
+        _handleFinalTranscript(rawText) {
+            const normalized = this._normalize(rawText);
+            const cmdInput = document.getElementById('cmd');
+            if (cmdInput) cmdInput.value = normalized;
+            this._setStatus(
+                `Heard: "${rawText}". Filled in as "${normalized || '(nothing usable)'}" in the command box. `
+                + `Press Enter or Execute to confirm, or edit it first.`
+            );
+        },
+
+        // Recognition tends to return spoken forms like "e two e four", "E2 to
+        // E4", or "e2 - e4" -- normalize the common patterns into the same
+        // coordinate notation the typed command bar already parses, without
+        // ever guessing past what was actually heard.
+        _normalize(text) {
+            let t = text.toLowerCase().trim();
+            t = t.replace(/\bto\b/g, ' ');
+            t = t
+                .replace(/\bzero\b/g, '0')
+                .replace(/\bone\b/g, '1')
+                .replace(/\btwo\b/g, '2')
+                .replace(/\bthree\b/g, '3')
+                .replace(/\bfour\b/g, '4')
+                .replace(/\bfive\b/g, '5')
+                .replace(/\bsix\b/g, '6')
+                .replace(/\bseven\b/g, '7')
+                .replace(/\beight\b/g, '8');
+            t = t.replace(/[\s\-]+/g, '');
+            return t;
+        },
+
+        // Interim ("hearing: ...") updates go to the visible/sr-only status line
+        // only, so they don't spam an assertive live region mid-utterance.
+        // Final results and errors also push to #sr-status, since those are
+        // exactly the kind of state change a screen-reader user needs announced
+        // the same way game moves already are.
+        _setStatus(msg, interimOnly) {
+            const statusEl = document.getElementById('speech-status');
+            if (statusEl) statusEl.innerText = msg;
+            if (!interimOnly) {
+                const srStatus = document.getElementById('sr-status');
+                if (srStatus) srStatus.innerText = msg;
+            }
+        },
+    };
+
+    SpeechInput.init();
 </script>
 
 <!-- ===================================================================
