@@ -17,6 +17,7 @@
 
 const crypto = require('crypto');
 const engine = require('./veiled-chess-core-server.js');
+const { postMatchResult } = require('./atprotoPoster.js');
 
 const ROOM_CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 function generateRoomCode() {
@@ -243,6 +244,16 @@ function createGameNamespace(io, roomStore) {
 
             if (typeof ack === 'function') ack({ ok: true, state: publicRoomState(room) });
             io.to(roomId).emit('state_update', { state: publicRoomState(room) });
+
+            // AT Proto event posting — additive only, fire-and-forget. This is
+            // the one place a real (server-authoritative) remote match's
+            // gameOver flips from false to true, so it's the correct trigger
+            // for "post a real match result." Not awaited: a slow or failed
+            // post to Bluesky must never delay or affect the ack/emit above,
+            // which have already gone out to the players by this point.
+            if (room.gameOver && room.winner) {
+                postMatchResult({ winner: room.winner });
+            }
         });
 
         socket.on('disconnect', () => {
