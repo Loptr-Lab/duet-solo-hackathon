@@ -696,6 +696,32 @@
             .sigil-loptr-lab .core,
             .sigil-ibloud .core { animation: none; }
         }
+
+        /* Collapsible secondary-content disclosures (Need Help / Lore / Ways
+           to Support) — native <details>/<summary>, collapsed by default.
+           Summary styled to match the existing .panel h2 treatment so it
+           reads the same as the rest of the design system. */
+        details.panel { padding: 0; }
+        details.panel > summary {
+            display: block;
+            cursor: pointer;
+            padding: 20px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-left: 2px solid var(--amber-light);
+            font-weight: 400;
+            color: var(--grey-200);
+            list-style: revert;
+        }
+        details.panel > summary:hover { color: var(--amber-light); }
+        details.panel[open] > summary {
+            border-bottom: 1px solid var(--border-hairline);
+            margin-bottom: 0;
+        }
+        details.panel > .details-body {
+            padding: 20px;
+        }
     </style>
 </head>
 <body>
@@ -799,17 +825,8 @@
                 <span class="hero-meta">Repo &middot; Engine &middot; Loptr Lab</span>
             </a>
         </div>
-        <p class="tagline">A standalone, accessibility-first browser demo of Rebirth &amp; Death's Radius of Ruin
-        mechanic — one piece of a bigger 4-player asymmetric chess variant. Built screen-reader-first, playable
-        by anyone, and small enough to read the whole engine in one sitting.</p>
-        <nav class="hero-nav" aria-label="Project links">
-            <a href="https://github.com/ibloud/duet_engine_architecture">About this project ↗</a>
-            <a href="https://github.com/Loptr-Lab/veiled-dominion-engine">Veiled Dominion engine ↗</a>
-            <a href="https://loptrlab.com">Loptr Lab ↗</a>
-            <a href="https://loptrlab.com/about.html">Meet I.B. Loud ↗</a>
-        </nav>
         <p class="quickstart" aria-hidden="true">
-            👋 New here? Type <kbd>e2e4</kbd> in the box below and press Enter to make your first move.
+            New here? Type <kbd>e2e4</kbd> in the box below and press Enter to make your first move.
         </p>
     </header>
 
@@ -876,7 +893,7 @@
                 <input type="text" id="cmd" autocomplete="off" aria-describedby="instructions" placeholder="e2e4 · move notation">
             </div>
             <button class="btn-primary" onclick="processCommand()">Execute</button>
-            <button type="button" class="btn-primary" id="speak-btn" onclick="SpeechInput.toggle()" aria-pressed="false" aria-describedby="speech-instructions">🎤 Speak Move</button>
+            <button type="button" class="btn-primary" id="speak-btn" onclick="SpeechInput.toggle()" aria-pressed="false" aria-describedby="speech-instructions">Speak Move</button>
         </div>
         <p id="instructions" class="sr-only">Type a coordinate move like e2e4, or a single square like e4 to query. Press Enter to execute. When Fog Mode is on, querying a square outside your vision reports only what you would actually know: unexplored, or last known and possibly stale.</p>
         <p id="speech-instructions" class="sr-only">Speech input fills the command box with what it heard but never submits a move on its own. Review or edit the text, then press Enter or Execute to confirm.</p>
@@ -888,31 +905,33 @@
         &nbsp;&middot;&nbsp; or click two squares on the board below &nbsp;&middot;&nbsp; or tap Speak Move
     </p>
 
-    <div>
+    <div class="sr-only">
         <h3>Game Log (Visual History)</h3>
-        <div id="log" aria-hidden="true"></div>
+        <div id="log"></div>
     </div>
 
-    <section class="panel" aria-labelledby="history-heading">
+    <section class="sr-only" aria-labelledby="history-heading">
         <h3 id="history-heading">Move &amp; Event History</h3>
         <ol id="history-log" class="history-log"></ol>
     </section>
 
-    <section class="panel" aria-labelledby="agent-heading">
-        <h2 id="agent-heading">Need Help?</h2>
-        <p>Ask about setup, accessibility, or the game's mechanics.</p>
-        <label for="agent-input">Your question</label>
-        <input type="text" id="agent-input" autocomplete="off">
-        <button onclick="sendAgentMessage()">Ask</button>
-        <p id="agent-status" role="status" aria-live="polite"></p>
-    </section>
+    <details class="panel" aria-labelledby="agent-heading">
+        <summary id="agent-heading">Need Help?</summary>
+        <div class="details-body">
+            <p>Ask about setup, accessibility, or the game's mechanics.</p>
+            <label for="agent-input">Your question</label>
+            <input type="text" id="agent-input" autocomplete="off">
+            <button onclick="sendAgentMessage()">Ask</button>
+            <p id="agent-status" role="status" aria-live="polite"></p>
+        </div>
+    </details>
 
-    <div class="key-row">
-        <div class="panel key-panel">
+    <div class="panel key-row">
+        <div class="key-panel">
             <div class="key-token rebirth-token">&#10022;</div>
             <span class="key-label">Rebirth</span>
         </div>
-        <div class="panel key-panel">
+        <div class="key-panel">
             <div class="key-token death-token">&#9760;</div>
             <span class="key-label">Death</span>
         </div>
@@ -953,54 +972,58 @@
         account for HP combat, so it's human vs. human only for now.</p>
     </section>
 
-    <section class="panel" aria-labelledby="lore-heading">
-        <h2 id="lore-heading">Lore</h2>
-        <h3>Rebirth</h3>
-        <p>She was made too bright. Formed by Death after a broken law in Heaven, Rebirth carries a power she hasn't
-        learned to carry safely — anything that lingers too close to her, ally or enemy, gets stripped down to its
-        most basic capability. She isn't cruel. She's simply more than the board was built to hold.</p>
-        <h3>Death</h3>
-        <p>Her mentor, and the only stable ground near her. He cannot be captured, cannot be pushed aside, and
-        anything standing close enough to him is shielded from her aura entirely. Not a guardian standing over a
-        weapon — a teacher, still midway through the lesson.</p>
-        <h3>The Radius of Ruin &amp; Sanctuary</h3>
-        <p>Rebirth's presence Veils any piece that ends a turn too close to her — reduced to pawn-like movement for
-        a round. Death's Sanctuary is the one place that effect can't reach.</p>
-    </section>
+    <details class="panel" aria-labelledby="lore-heading">
+        <summary id="lore-heading">Lore</summary>
+        <div class="details-body">
+            <h3>Rebirth</h3>
+            <p>She was made too bright. Formed by Death after a broken law in Heaven, Rebirth carries a power she hasn't
+            learned to carry safely — anything that lingers too close to her, ally or enemy, gets stripped down to its
+            most basic capability. She isn't cruel. She's simply more than the board was built to hold.</p>
+            <h3>Death</h3>
+            <p>Her mentor, and the only stable ground near her. He cannot be captured, cannot be pushed aside, and
+            anything standing close enough to him is shielded from her aura entirely. Not a guardian standing over a
+            weapon — a teacher, still midway through the lesson.</p>
+            <h3>The Radius of Ruin &amp; Sanctuary</h3>
+            <p>Rebirth's presence Veils any piece that ends a turn too close to her — reduced to pawn-like movement for
+            a round. Death's Sanctuary is the one place that effect can't reach.</p>
+        </div>
+    </details>
 
     <!-- WAYS TO SUPPORT - additive, entirely optional. Framed as a menu of
          choices rather than a checkout flow: nothing here is required to
          play, and no single option is presented as the "real" one. Each
          sub-option is independent - remove/reorder freely. -->
-    <section class="panel" aria-labelledby="support-heading">
-        <h2 id="support-heading">Ways to Support</h2>
-        <p>None of this is required - Duet is free to play and always will be. If you'd like to put something
-        toward Loptr Lab's work on Veiled Dominion, here are a couple of no-pressure options. Pick whichever
-        fits, or none at all.</p>
+    <details class="panel" aria-labelledby="support-heading">
+        <summary id="support-heading">Ways to Support</summary>
+        <div class="details-body">
+            <p>None of this is required - Duet is free to play and always will be. If you'd like to put something
+            toward Loptr Lab's work on Veiled Dominion, here are a couple of no-pressure options. Pick whichever
+            fits, or none at all.</p>
 
-        <!-- PayPal - always visible, no wallet or extension required. A plain
-             link, not a checkout embed: no SDK script, no dependency. -->
-        <div class="support-option" aria-labelledby="support-paypal-heading">
-            <h3 id="support-paypal-heading">PayPal</h3>
-            <p>Works for anyone, no crypto wallet needed.</p>
-            <a id="support-paypal-link" href="https://www.paypal.com/paypalme/ibloud" class="btn-primary" style="display:inline-block; text-decoration:none;">Give via PayPal ↗</a>
-        </div>
+            <!-- PayPal - always visible, no wallet or extension required. A plain
+                 link, not a checkout embed: no SDK script, no dependency. -->
+            <div class="support-option" aria-labelledby="support-paypal-heading">
+                <h3 id="support-paypal-heading">PayPal</h3>
+                <p>Works for anyone, no crypto wallet needed.</p>
+                <a id="support-paypal-link" href="https://www.paypal.com/paypalme/ibloud" class="btn-primary" style="display:inline-block; text-decoration:none;">Give via PayPal ↗</a>
+            </div>
 
-        <!-- Lightning tip jar - via WebLN, additive only. Hidden entirely
-             unless a WebLN-capable wallet (e.g. Alby) is detected in the
-             browser - no wallet, no button, no dead UI. No server, no new
-             dependency: WebLN is a browser API a wallet extension injects.
-             See TipJar.LIGHTNING_ADDRESS below. -->
-        <div class="support-option" id="tipjar-panel" aria-labelledby="tipjar-heading" style="display:none;">
-            <h3 id="tipjar-heading">Lightning</h3>
-            <p>A wallet that speaks Lightning was detected in your browser. You can send a few sats
-            directly - no account, no checkout page.</p>
-            <label for="tipjar-amount">Amount (sats)</label>
-            <input type="number" id="tipjar-amount" value="1000" min="1" step="1" inputmode="numeric">
-            <button type="button" class="btn-primary" onclick="TipJar.sendTip()">⚡ Send Tip</button>
-            <p id="tipjar-status" role="status" aria-live="polite"></p>
+            <!-- Lightning tip jar - via WebLN, additive only. Hidden entirely
+                 unless a WebLN-capable wallet (e.g. Alby) is detected in the
+                 browser - no wallet, no button, no dead UI. No server, no new
+                 dependency: WebLN is a browser API a wallet extension injects.
+                 See TipJar.LIGHTNING_ADDRESS below. -->
+            <div class="support-option" id="tipjar-panel" aria-labelledby="tipjar-heading" style="display:none;">
+                <h3 id="tipjar-heading">Lightning</h3>
+                <p>A wallet that speaks Lightning was detected in your browser. You can send a few sats
+                directly - no account, no checkout page.</p>
+                <label for="tipjar-amount">Amount (sats)</label>
+                <input type="number" id="tipjar-amount" value="1000" min="1" step="1" inputmode="numeric">
+                <button type="button" class="btn-primary" onclick="TipJar.sendTip()">Send Tip</button>
+                <p id="tipjar-status" role="status" aria-live="polite"></p>
+            </div>
         </div>
-    </section>
+    </details>
 
 <script>
     const GameState = {
@@ -2299,6 +2322,8 @@
         &nbsp;&middot;&nbsp;
         <a href="https://github.com/ibloud/duet_engine_architecture" style="color: var(--grey-200);">Original Duet engine ↗</a>
         &nbsp;&middot;&nbsp;
+        <a href="https://github.com/Loptr-Lab/veiled-dominion-engine" style="color: var(--grey-200);">Veiled Dominion engine ↗</a>
+        &nbsp;&middot;&nbsp;
         <a href="https://loptrlab.com" style="color: var(--grey-200);">Loptr Lab ↗</a>
         &nbsp;&middot;&nbsp;
         <a href="https://loptrlab.com/about.html" style="color: var(--grey-200);">Meet I.B. Loud ↗</a>
@@ -2354,7 +2379,7 @@ async function sendAgentMessage() {
                 if (btn) {
                     btn.disabled = true;
                     btn.title = 'Speech input is not supported in this browser.';
-                    btn.innerText = '🎤 Speak Move (unavailable)';
+                    btn.innerText = 'Speak Move (unavailable)';
                 }
                 this._setStatus('Speech input is not supported in this browser. Typing and clicking still work as usual.');
                 return;
@@ -2430,7 +2455,7 @@ async function sendAgentMessage() {
             const btn = document.getElementById('speak-btn');
             if (!btn) return;
             btn.setAttribute('aria-pressed', listening ? 'true' : 'false');
-            btn.innerText = listening ? '🎤 Listening… (tap to stop)' : '🎤 Speak Move';
+            btn.innerText = listening ? 'Listening… (tap to stop)' : 'Speak Move';
         },
 
         _handleFinalTranscript(rawText) {
