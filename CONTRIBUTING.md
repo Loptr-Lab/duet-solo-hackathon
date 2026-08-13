@@ -38,3 +38,20 @@ Evaluated the full [lichess-org GitHub](https://github.com/lichess-org) (79 repo
 |---|---|---|
 | `lila` | ❌ Not applicable | Scala monolith built for millions of concurrent users. We're on Node + Cloud Run. |
 | `stockfish-web` | ❌ Not
+
+### Chess.com (`ChessCom`)
+
+Evaluated the [ChessCom GitHub](https://github.com/ChessCom) (92 repositories). Chess.com is a closed, proprietary platform — their public GitHub is almost entirely internal infrastructure, forks of third-party libraries, and peripheral tooling. Their actual game server, matchmaking, and engine code is not public.
+
+| Repo | Verdict | Reason |
+|---|---|---|
+| `stockfish` | ❌ Not applicable | Fork of Stockfish (standard chess engine). Same reason as lichess — no concept of Veil, Rebirth, or Fog Mode. |
+| `android-chessclock` / `ios-chessclock` | ❌ Not applicable | Mobile clock apps. Unrelated to game logic or server architecture. |
+| `browser-extension` | ❌ Not applicable | Chess.com UI customization. Proprietary platform-specific. |
+| `Chess-Game` | ❌ Not applicable | PHP object representing standard chess. Different language, different rules. |
+| `DiagramGenerator` | ❌ Not applicable | PHP tool for generating standard chess board images. No variant support. |
+| `OpenBench` | ❌ Not applicable | Forked distributed SPRT testing framework for benchmarking standard chess engines. Not relevant to our evaluator. |
+| `ccc-configs` | ❌ Not applicable | Docker/config for Chess.com's internal Computer Chess Championship infrastructure. Platform-scale, proprietary context. |
+| Everything else | ❌ Not applicable | Forks of general-purpose libraries (protobuf, webpack plugins, etc.) with no chess-specific relevance. |
+
+**Bottom line:** Chess.com's source code for anything meaningful is proprietary and not public. What they do publish is either standard-chess-specific, PHP/Objective-C mobile tooling, or forks of general open source libraries. Nothing applicable to Duet's Node stack, custom ruleset, or accessibility goals.
