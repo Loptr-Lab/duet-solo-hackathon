@@ -73,7 +73,8 @@ async function createPost(session, text) {
  */
 function postMatchResult({ winner }) {
     const winnerName = winner === 'w' ? 'White' : 'Black';
-    const text = `A Duet match just ended — ${winnerName} takes it on Rebirth control. duet.loptrlab.com`;
+    const siteUrl = process.env.PUBLIC_URL || 'duet.loptrlab.com';
+    const text = `A Duet match just ended — ${winnerName} takes it on Rebirth control. ${siteUrl}`;
 
     createSession()
         .then((session) => createPost(session, text))

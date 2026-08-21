@@ -14,7 +14,7 @@ function createFirestoreRoomStore() {
     let db;
     try {
         db = new Firestore({
-            projectId: process.env.GOOGLE_CLOUD_PROJECT || process.env.GCP_PROJECT || 'adept-crossing-106819',
+            projectId: process.env.GOOGLE_CLOUD_PROJECT || process.env.GCP_PROJECT,
         });
     } catch (err) {
         console.error('⚠️ Failed to initialize Firestore client:', err.message);
@@ -68,7 +68,7 @@ function createFirestoreRoomStore() {
             } catch (err) {
                 console.error('Firestore permission check failed:', err.message);
                 if (err.code === 7 || /PERMISSION_DENIED/.test(err.message || '')) {
-                    console.error('Check that the Cloud Run service account has roles/datastore.user on adept-crossing-106819.');
+                console.error('Check that the Cloud Run service account has the roles/datastore.user role on the configured project.');
                 }
                 return false;
             }
