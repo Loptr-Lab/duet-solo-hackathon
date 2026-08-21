@@ -10,7 +10,6 @@ Duet: Solo is an accessible strategy game experience designed for blind and low-
 The application includes:
 - Accessible game interaction patterns for screen readers
 - A Gemini-powered assistant for onboarding and support
-- Stripe checkout flow for a paid accessibility/supporter pack
 - Cloud Run deployability for judging/demo reliability
 - An "Obsidian Realm" landing screen that leads into two gameplay modes: a classic ruleset, and an experimental Fog Mode (elevation-based vision and HP combat) — both built to the same accessibility standard, with information gated by fog rather than hidden only visually (see below)
 
@@ -34,7 +33,6 @@ This is not a "demo-only chatbot"; it supports real player interaction flows.
   - The Radius of Ruin / Sanctuary auras use a data-driven "breathing" animation (CSS custom properties set per-render from live board state — how many pieces are currently veiled or sheltered) rather than a fixed decorative pulse, with `prefers-reduced-motion` respected throughout.
 - **Backend:** Node.js + Express (`server.js`)
 - **AI endpoint:** `POST /api/agent` (Gemini API)
-- **Payments:** Stripe Checkout (`POST /api/create-checkout-session`) + webhook (`POST /api/webhook`)
 - **Hosting target:** Google Cloud Run
 
 ---
@@ -48,8 +46,6 @@ npm install
 Copy `.env.example` to `.env` and fill values:
 - `PORT`
 - `GEMINI_API_KEY`
-- `STRIPE_SECRET_KEY`
-- `STRIPE_WEBHOOK_SECRET` (optional for local unsigned webhook testing)
 - `PUBLIC_URL` (optional locally, recommended in deploy)
 
 ### 3) Start
@@ -68,9 +64,9 @@ gcloud run deploy duet-solo \
   --source . \
   --region us-central1 \
   --allow-unauthenticated \
-  --set-env-vars GEMINI_API_KEY=...,STRIPE_SECRET_KEY=...,PUBLIC_URL=https://<your-run-url>
+  --set-env-vars GEMINI_API_KEY=...,PUBLIC_URL=https://<your-run-url>
 ```
-3. Add `STRIPE_WEBHOOK_SECRET` once webhook endpoint is configured in Stripe.
+3. Set `BLUESKY_HANDLE` and `BLUESKY_APP_PASSWORD` if you want Bluesky match-result posting enabled.
 
 ---
 
@@ -78,7 +74,6 @@ gcloud run deploy duet-solo \
 This repo demonstrates:
 - Running product on Google Cloud Run
 - Gemini usage in a user-facing onboarding/support path
-- Payment flow integration and transaction capture hooks
 - Accessibility-first UX design choices in gameplay interaction, including an experimental mode (Fog Mode) built to prove the accessibility approach holds up even as gameplay complexity grows, not just in the simplest case
 
 ---

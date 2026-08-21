@@ -23,11 +23,11 @@
  * Cloud Run note: this module uses Firestore, NOT the local filesystem.
  * services/storage.js previously used fs.writeFileSync to a local data/
  * directory — that approach does not survive Cloud Run deployments (ephemeral
- * filesystem). All persistence here goes through Firestore project
- * adept-crossing-106819, the same project used by roomStore.js.
+ * filesystem). All persistence here goes through Firestore, the same project
+ * used by roomStore.js (configured via GOOGLE_CLOUD_PROJECT or GCP_PROJECT).
  */
 
-const { Firestore } = require('@google-cloud/firestore');
+const { Firestore, FieldValue } = require('@google-cloud/firestore');
 
 const MATCH_LOGS_COLLECTION = 'matchLogs';
 const PLAYER_PROFILES_COLLECTION = 'playerProfiles';
@@ -37,8 +37,7 @@ function createPlayerStorage() {
     try {
         db = new Firestore({
             projectId: process.env.GOOGLE_CLOUD_PROJECT ||
-                       process.env.GCP_PROJECT ||
-                       'adept-crossing-106819',
+                       process.env.GCP_PROJECT,
         });
     } catch (err) {
         console.error('⚠️ Failed to initialize Firestore client (storage):', err.message);
@@ -94,7 +93,7 @@ function createPlayerStorage() {
         if (!db) return;
         try {
             await db.collection(MATCH_LOGS_COLLECTION).doc(roomId).update({
-                moves: Firestore.FieldValue.arrayUnion(moveEntry),
+                moves: FieldValue.arrayUnion(moveEntry),
             });
         } catch (err) {
             // If the document doesn't exist yet (race on first move), create it
