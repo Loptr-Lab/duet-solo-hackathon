@@ -5,6 +5,7 @@ const { Server } = require('socket.io');
 
 const { createFirestoreRoomStore } = require('./roomStore.js');
 const { createGameNamespace } = require('./gameNamespace.js');
+const { createPlayerStorage } = require('./services/storage.js');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -116,6 +117,7 @@ const httpServer = http.createServer(app);
 const io = new Server(httpServer);
 
 const roomStore = createFirestoreRoomStore();
+const playerStorage = createPlayerStorage();
 
 // Safely invoke roomStore.verifyAccess without crashing process on unhandled promise rejection
 if (roomStore && typeof roomStore.verifyAccess === 'function') {
@@ -124,7 +126,7 @@ if (roomStore && typeof roomStore.verifyAccess === 'function') {
   });
 }
 
-createGameNamespace(io, roomStore);
+createGameNamespace(io, roomStore, playerStorage);
 
 httpServer.listen(PORT, HOST, () => {
   console.log(`Server listening on http://${HOST}:${PORT}`);
