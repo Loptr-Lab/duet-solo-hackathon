@@ -13,6 +13,13 @@
  * `generateToken()` below) generated on create/join and required on
  * rejoin_room, so a room code alone is no longer enough to take over a
  * player's seat.
+ *
+ * Issue 1 — Player Profile System v1:
+ * Move telemetry is logged to Firestore matchLogs/{roomId} on every confirmed
+ * make_move. playerStorage is passed in from server.js alongside roomStore,
+ * using the same dependency-injection pattern. All logging is fire-and-forget
+ * (not awaited where it would delay the ack/emit to players) and never throws
+ * into the game flow — a logging failure must never affect a live match.
  */
 
 const crypto = require('crypto');
@@ -69,11 +76,43 @@ function publicRoomState(room) {
     };
 }
 
+/**
+ * Detects which opponent squares became newly veiled after a move.
+ * Returns true if any opponent piece transitioned from unveiled to veiled.
+ *
+ * @param {Array} boardBefore  board snapshot before engine.makeMove
+ * @param {Array} boardAfter   board returned by engine.makeMove
+ * @param {string} moverColor  the color that just moved ('w' or 'b')
+ */
+function didVeilOpponent(boardBefore, boardAfter, moverColor) {
+    const opponentColor = moverColor === 'w' ? 'b' : 'w';
+    for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+            const before = boardBefore[r][c];
+            const after = boardAfter[r][c];
+            if (
+                before && before.color === opponentColor && !before.veiled &&
+                after && after.color === opponentColor && after.veiled
+            ) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+/**
+ * Deep-clones a board so the before-snapshot is not mutated by engine.makeMove.
+ */
+function cloneBoard(board) {
+    return board.map(row => row.map(cell => (cell ? { ...cell } : null)));
+}
+
 // `rooms` is created fresh each call -- this is the "server restarted" seam
 // for testing: calling createGameNamespace again with a NEW empty rooms
 // cache but the SAME underlying roomStore simulates a real restart, since
 // nothing survives in memory except what's reloaded from the store.
-function createGameNamespace(io, roomStore) {
+function createGameNamespace(io, roomStore, playerStorage) {
     const rooms = {};
 
     async function persist(roomId, room) {
@@ -127,6 +166,8 @@ function createGameNamespace(io, roomStore) {
                 players: { w: socket.id, b: null },
                 tokens: { w: token, b: null },
                 createdAt: Date.now(),
+                moveCount: 0,
+                lastMoveAt: Date.now(),
             };
             rooms[roomId] = room;
             socket.join(roomId);
@@ -230,13 +271,38 @@ function createGameNamespace(io, roomStore) {
                 return;
             }
 
+            // --- Issue 1: capture pre-move state for telemetry ---
+            const boardBefore = cloneBoard(room.board);
+            const pieceBeforeMove = boardBefore[from.r][from.c];
+            const capturedPiece = boardBefore[to.r][to.c];
+            const evalBefore = engine.evaluateBoard(boardBefore, moverColor);
+            const moveTimestamp = Date.now();
+            const timeSinceLastMove = moveTimestamp - (room.lastMoveAt || moveTimestamp);
+            const isFirstMove = room.moveCount === 0;
+            // -----------------------------------------------------
+
             // Verified by test suite: makeMove must be called with the color
             // that JUST MOVED (moverColor), not the opponent.
             const result = engine.makeMove(room.board, { from, to }, moverColor);
 
+            // --- Issue 1: capture post-move state for telemetry ---
+            const evalAfter = engine.evaluateBoard(result.board, moverColor);
+            const movedPieceAfter = result.board[to.r][to.c];
+            const veiledSelf = !!(movedPieceAfter && movedPieceAfter.veiled);
+            const veiledOpponent = didVeilOpponent(boardBefore, result.board, moverColor);
+            const sacrifice = !capturedPiece && veiledSelf;
+            const promotedTo = (
+                pieceBeforeMove.type === 'p' &&
+                movedPieceAfter &&
+                movedPieceAfter.type !== 'p'
+            ) ? movedPieceAfter.type : null;
+            // -----------------------------------------------------
+
             room.board = result.board;
             room.gameOver = result.gameOver;
             room.winner = result.winner || null;
+            room.moveCount = (room.moveCount || 0) + 1;
+            room.lastMoveAt = moveTimestamp;
             if (!room.gameOver) {
                 room.turn = room.turn === 'w' ? 'b' : 'w';
             }
@@ -244,6 +310,50 @@ function createGameNamespace(io, roomStore) {
 
             if (typeof ack === 'function') ack({ ok: true, state: publicRoomState(room) });
             io.to(roomId).emit('state_update', { state: publicRoomState(room) });
+
+            // --- Issue 1: fire-and-forget match log writes ---
+            // Never awaited — logging must never delay the ack/emit above.
+            // Never throws into game flow — a Firestore failure here is logged
+            // and swallowed, not surfaced to the player.
+            if (playerStorage) {
+                const moveEntry = {
+                    moveNum: room.moveCount,
+                    color: moverColor,
+                    from: payload.from,
+                    to: payload.to,
+                    piece: pieceBeforeMove.type,
+                    capturedPiece: capturedPiece ? capturedPiece.type : null,
+                    evalBefore,
+                    evalAfter,
+                    severity: engine.getSeverityTier(evalBefore, evalAfter, moverColor),
+                    veiled: veiledSelf,
+                    veiledOpponent,
+                    sacrifice,
+                    inversionClause: null,
+                    promotedTo,
+                    timeMs: timeSinceLastMove,
+                    timestamp: moveTimestamp,
+                };
+
+                if (isFirstMove) {
+                    // Both tokens are set by the time the first move is made:
+                    // white token is set at create_room, black at join_room.
+                    playerStorage.createMatchLog(roomId, room.tokens).catch((err) => {
+                        console.error(`[telemetry] createMatchLog failed for ${roomId}:`, err.message);
+                    });
+                }
+
+                playerStorage.appendMove(roomId, moveEntry).catch((err) => {
+                    console.error(`[telemetry] appendMove failed for ${roomId} move ${room.moveCount}:`, err.message);
+                });
+
+                if (room.gameOver && room.winner) {
+                    playerStorage.finalizeMatchLog(roomId, room.winner).catch((err) => {
+                        console.error(`[telemetry] finalizeMatchLog failed for ${roomId}:`, err.message);
+                    });
+                }
+            }
+            // -------------------------------------------------
 
             // AT Proto event posting — additive only, fire-and-forget. This is
             // the one place a real (server-authoritative) remote match's
