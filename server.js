@@ -10,8 +10,45 @@ const { createPlayerStorage } = require('./services/storage.js');
 const app = express();
 const PORT = process.env.PORT || 8080;
 const HOST = '0.0.0.0';
+const JSON_BODY_LIMIT = process.env.JSON_BODY_LIMIT || '16kb';
+const AI_RATE_LIMIT_WINDOW_MS = Number(process.env.AI_RATE_LIMIT_WINDOW_MS) || 10 * 60 * 1000;
+const AI_RATE_LIMIT_MAX = Number(process.env.AI_RATE_LIMIT_MAX) || 30;
+const aiRateBuckets = new Map();
 
-app.use(express.json());
+app.set('trust proxy', 1);
+app.disable('x-powered-by');
+app.use(express.json({ limit: JSON_BODY_LIMIT }));
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'no-referrer');
+  next();
+});
+
+function limitAiRequests(req, res, next) {
+  const now = Date.now();
+  const key = req.ip || req.socket?.remoteAddress || 'unknown';
+
+  for (const [bucketKey, bucket] of aiRateBuckets) {
+    if (bucket.resetAt <= now) aiRateBuckets.delete(bucketKey);
+  }
+
+  const bucket = aiRateBuckets.get(key);
+  if (!bucket || bucket.resetAt <= now) {
+    aiRateBuckets.set(key, { count: 1, resetAt: now + AI_RATE_LIMIT_WINDOW_MS });
+    return next();
+  }
+
+  if (bucket.count >= AI_RATE_LIMIT_MAX) {
+    res.setHeader('Retry-After', Math.ceil((bucket.resetAt - now) / 1000));
+    return res.status(429).json({
+      reply: 'The assistant has reached its temporary request limit. Please try again later.',
+      intent: 'general'
+    });
+  }
+
+  bucket.count += 1;
+  return next();
+}
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -21,8 +58,15 @@ app.get('/healthz', (req, res) => {
   res.status(200).send('ok');
 });
 
-app.post('/api/agent', async (req, res) => {
-  const userMessage = req.body.message || 'Hello';
+app.post('/api/agent', limitAiRequests, async (req, res) => {
+  const submittedMessage = typeof req.body?.message === 'string' ? req.body.message.trim() : '';
+  if (submittedMessage.length > 2000) {
+    return res.status(400).json({
+      reply: 'Please shorten the message to 2,000 characters or fewer.',
+      intent: 'general'
+    });
+  }
+  const userMessage = submittedMessage || 'Hello';
   const apiKey = process.env.GEMINI_API_KEY;
   const model = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
 
@@ -80,9 +124,9 @@ app.post('/api/agent', async (req, res) => {
     const data = await geminiRes.json();
 
     if (!geminiRes.ok) {
-      console.error('Gemini API error:', JSON.stringify(data));
-      return res.status(200).json({
-        reply: `Duet: Solo AI Agent: ${data.error?.message || 'Service active'}`,
+      console.error('Gemini API request failed with status:', geminiRes.status);
+      return res.status(502).json({
+        reply: 'The assistant is temporarily unavailable. Core game controls still work.',
         intent: 'general'
       });
     }
