@@ -58,6 +58,8 @@ Copy `.env.example` to `.env` and fill values:
 - `PORT`
 - `GEMINI_API_KEY`
 - `PUBLIC_URL` (optional locally, recommended in deploy)
+- `AI_RATE_LIMIT_WINDOW_MS` and `AI_RATE_LIMIT_MAX` (keep enabled for public deployments)
+- `GOOGLE_CLOUD_PROJECT` (only when persistent remote play is enabled)
 
 ### 3) Start
 ```bash
@@ -77,7 +79,12 @@ gcloud run deploy duet-solo \
   --allow-unauthenticated \
   --set-env-vars GEMINI_API_KEY=...,PUBLIC_URL=https://<your-run-url>
 ```
-3. Set `BLUESKY_HANDLE` and `BLUESKY_APP_PASSWORD` if you want Bluesky match-result posting enabled.
+3. Set `BLUESKY_HANDLE` and `BLUESKY_APP_PASSWORD` only for a dedicated posting account.
+4. Configure provider quotas, a cloud budget, Firestore least privilege, retention, and your
+   own privacy/security contacts before allowing public traffic.
+
+> A public fork pays for its own Gemini, Cloud Run, Firestore, and posting usage. Do not deploy
+> with Loptr Lab credentials or production services.
 
 ---
 
@@ -103,5 +110,9 @@ See the [contributor wiki](https://github.com/Loptr-Lab/duet-solo-hackathon/wiki
 
 ---
 
-## License
-MIT
+## License and fan forks
+
+Software is available under the [MIT License](LICENSE). Fan forks must use distinct branding
+and must not imply Loptr Lab endorsement or canonical status. Before deploying, read
+[FAN_FORK_GUIDE.md](FAN_FORK_GUIDE.md), [SECURITY.md](SECURITY.md), and
+[docs/DATA_GOVERNANCE.md](docs/DATA_GOVERNANCE.md).
