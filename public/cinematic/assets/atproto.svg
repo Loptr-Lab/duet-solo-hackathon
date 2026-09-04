@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" aria-label="AT Protocol">
+  <!-- Simplified butterfly/AT mark -->
+  <path d="M24 10 C14 10 8 18 8 24 C8 30 14 36 20 34 C18 30 20 26 24 24 C28 26 30 30 28 34 C34 36 40 30 40 24 C40 18 34 10 24 10Z"
+        fill="currentColor"/>
+  <circle cx="24" cy="24" r="4" fill="#000"/>
+  <text x="24" y="44" text-anchor="middle" font-size="10" font-family="sans-serif" fill="currentColor">AT</text>
+</svg>
