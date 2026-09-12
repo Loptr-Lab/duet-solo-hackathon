@@ -31,6 +31,8 @@ const { Firestore, FieldValue } = require('@google-cloud/firestore');
 
 const MATCH_LOGS_COLLECTION = 'matchLogs';
 const PLAYER_PROFILES_COLLECTION = 'playerProfiles';
+const ANONYMOUS_GAMES_COLLECTION = 'anonymousCompletedGames';
+const ANONYMOUS_FEEDBACK_COLLECTION = 'anonymousGameFeedback';
 
 function createPlayerStorage() {
     let db;
@@ -134,6 +136,37 @@ function createPlayerStorage() {
             });
         } catch (err) {
             console.error(`Error finalizing matchLog for room ${roomId}:`, err.message);
+        }
+    }
+
+    /**
+     * Stores one optional, anonymous post-game response. The caller supplies
+     * only contract-approved fields; room codes, reconnect tokens, socket IDs,
+     * DIDs and network addresses must never enter this collection.
+     */
+    async function saveAnonymousFeedback(feedback) {
+        if (!db) return;
+        try {
+            await db.collection(ANONYMOUS_FEEDBACK_COLLECTION).add({
+                ...feedback,
+                expiresAt: new Date(feedback.submittedAt + 30 * 24 * 60 * 60 * 1000),
+            });
+        } catch (err) {
+            console.error('Error saving anonymous post-game feedback:', err.message);
+            throw err;
+        }
+    }
+
+    async function saveAnonymousCompletedGame(summary) {
+        if (!db) return;
+        try {
+            await db.collection(ANONYMOUS_GAMES_COLLECTION).doc(summary.anonymousMatchId).set({
+                ...summary,
+                expiresAt: new Date(summary.completedAt + 30 * 24 * 60 * 60 * 1000),
+            });
+        } catch (err) {
+            console.error('Error saving anonymous completed-game telemetry:', err.message);
+            throw err;
         }
     }
 
@@ -276,6 +309,8 @@ function createPlayerStorage() {
         appendMove,
         finalizeMatchLog,
         getMatchLog,
+        saveAnonymousCompletedGame,
+        saveAnonymousFeedback,
         // Player profiles
         getOrCreatePlayerProfile,
         updatePlayerProfile,
@@ -283,4 +318,10 @@ function createPlayerStorage() {
     };
 }
 
-module.exports = { createPlayerStorage };
+module.exports = {
+    createPlayerStorage,
+    MATCH_LOGS_COLLECTION,
+    PLAYER_PROFILES_COLLECTION,
+    ANONYMOUS_GAMES_COLLECTION,
+    ANONYMOUS_FEEDBACK_COLLECTION,
+};
