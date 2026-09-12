@@ -722,6 +722,20 @@
         details.panel > .details-body {
             padding: 20px;
         }
+        .feedback-panel { margin-top: 24px; }
+        .feedback-panel fieldset { border: 0; padding: 0; margin: 16px 0; }
+        .feedback-panel legend, .feedback-panel label { display: block; margin-bottom: 8px; }
+        .feedback-panel select, .feedback-panel textarea {
+            width: 100%;
+            max-width: 42rem;
+            background: var(--black-soft);
+            color: var(--grey-200);
+            border: 1px solid var(--border-hairline);
+            padding: 10px;
+        }
+        .feedback-panel textarea { min-height: 6rem; resize: vertical; }
+        .feedback-consent { display: flex !important; gap: 10px; align-items: flex-start; }
+        .feedback-consent input { margin-top: 4px; }
     </style>
 </head>
 <body>
@@ -800,6 +814,46 @@
             <button class="btn-primary" onclick="RemoteMode.submitCommand()">Execute</button>
         </div>
     </div>
+
+    <section id="remote-feedback" class="panel feedback-panel" aria-labelledby="remote-feedback-heading" style="display:none;">
+        <h2 id="remote-feedback-heading">Optional playtest feedback</h2>
+        <p>Your response is stored without your name, handle, email address, IP address, room code, or reconnect token. The raw-feedback retention limit is 30 days. You can skip this entirely.</p>
+
+        <label for="feedback-rating">Overall experience (optional)</label>
+        <select id="feedback-rating">
+            <option value="">No rating</option>
+            <option value="5">5 — Excellent</option>
+            <option value="4">4 — Good</option>
+            <option value="3">3 — Mixed</option>
+            <option value="2">2 — Difficult</option>
+            <option value="1">1 — Poor</option>
+        </select>
+
+        <fieldset>
+            <legend id="feedback-question">Post-game question</legend>
+            <label><input type="radio" name="feedback-answer" value="yes"> Yes</label>
+            <label><input type="radio" name="feedback-answer" value="mostly"> Mostly</label>
+            <label><input type="radio" name="feedback-answer" value="no"> No</label>
+            <label><input type="radio" name="feedback-answer" value="not-sure"> Not sure</label>
+        </fieldset>
+
+        <label for="feedback-kind">Comment type (optional)</label>
+        <select id="feedback-kind">
+            <option value="none">No comment</option>
+            <option value="note">Playtest note</option>
+            <option value="bug">Bug report</option>
+        </select>
+        <label for="feedback-comment">Short comment (optional, 600 characters maximum)</label>
+        <textarea id="feedback-comment" maxlength="600" placeholder="Please avoid names or other personal information."></textarea>
+
+        <label class="feedback-consent" for="feedback-consent">
+            <input type="checkbox" id="feedback-consent">
+            <span>I understand this optional response will be stored anonymously for improving the game.</span>
+        </label>
+        <button type="button" class="btn-primary" onclick="RemoteMode.submitFeedback()">Send feedback</button>
+        <button type="button" class="btn-primary" style="border-color: var(--text-muted); color: var(--text-muted);" onclick="RemoteMode.skipFeedback()">Skip</button>
+        <p id="feedback-status" role="status" aria-live="polite"></p>
+    </section>
 </div>
 
 <div class="page" id="game-screen" style="display:none;">
@@ -2641,6 +2695,8 @@ async function sendAgentMessage() {
         gameOver: false,
         winner: null,
         selectedSquare: null,
+        feedback: null,
+        feedbackFinished: false,
     };
 
     const RemoteMode = {
@@ -2734,6 +2790,7 @@ async function sendAgentMessage() {
 
         createMatch() {
             const statusEl = document.getElementById('remote-lobby-status');
+            RemoteMode._resetFeedback();
             RemoteState.socket.emit('create_room', {}, (res) => {
                 if (!res.ok) { statusEl.innerText = 'Could not create a match.'; return; }
                 RemoteState.roomId = res.roomId;
@@ -2750,6 +2807,7 @@ async function sendAgentMessage() {
             const statusEl = document.getElementById('remote-lobby-status');
             const roomId = codeInput.value.trim().toUpperCase();
             if (!roomId) { statusEl.innerText = 'Enter a room code first.'; return; }
+            RemoteMode._resetFeedback();
             RemoteState.socket.emit('join_room', { roomId }, (res) => {
                 if (!res.ok) { statusEl.innerText = res.reason || 'Could not join that match.'; return; }
                 RemoteState.roomId = roomId;
@@ -2774,8 +2832,64 @@ async function sendAgentMessage() {
             RemoteState.turn = state.turn;
             RemoteState.gameOver = state.gameOver;
             RemoteState.winner = state.winner;
+            RemoteState.feedback = state.feedback || null;
             if (state.gameOver) RemoteMode._clearSavedMatch();
             RemoteMode._render();
+            if (state.gameOver && RemoteState.feedback && !RemoteState.feedbackFinished) {
+                RemoteMode._showFeedback();
+            }
+        },
+
+        _showFeedback() {
+            const panel = document.getElementById('remote-feedback');
+            const question = document.getElementById('feedback-question');
+            if (question) question.innerText = RemoteState.feedback.prompt.text;
+            if (panel) panel.style.display = '';
+        },
+
+        _resetFeedback() {
+            RemoteState.feedback = null;
+            RemoteState.feedbackFinished = false;
+            const panel = document.getElementById('remote-feedback');
+            if (panel) panel.style.display = 'none';
+            document.getElementById('feedback-rating').value = '';
+            document.getElementById('feedback-kind').value = 'none';
+            document.getElementById('feedback-comment').value = '';
+            document.getElementById('feedback-consent').checked = false;
+            document.querySelectorAll('input[name="feedback-answer"]').forEach((input) => { input.checked = false; });
+            document.querySelectorAll('#remote-feedback input, #remote-feedback select, #remote-feedback textarea, #remote-feedback button').forEach((control) => { control.disabled = false; });
+            document.getElementById('feedback-status').innerText = '';
+        },
+
+        submitFeedback() {
+            const status = document.getElementById('feedback-status');
+            const selectedAnswer = document.querySelector('input[name="feedback-answer"]:checked');
+            const payload = {
+                consent: document.getElementById('feedback-consent').checked,
+                rating: document.getElementById('feedback-rating').value || null,
+                questionId: RemoteState.feedback?.prompt?.id,
+                answer: selectedAnswer?.value || 'skipped',
+                kind: document.getElementById('feedback-kind').value,
+                comment: document.getElementById('feedback-comment').value,
+            };
+            if (status) status.innerText = 'Sending feedback…';
+            RemoteState.socket.emit('submit_feedback', payload, (res) => {
+                if (!res.ok) {
+                    if (status) status.innerText = res.reason || 'Feedback could not be saved.';
+                    return;
+                }
+                RemoteState.feedbackFinished = true;
+                if (status) status.innerText = 'Thank you. Your anonymous feedback was saved.';
+                const controls = document.querySelectorAll('#remote-feedback input, #remote-feedback select, #remote-feedback textarea, #remote-feedback button');
+                controls.forEach((control) => { control.disabled = true; });
+            });
+        },
+
+        skipFeedback() {
+            RemoteState.feedbackFinished = true;
+            const panel = document.getElementById('remote-feedback');
+            if (panel) panel.style.display = 'none';
+            RemoteMode._announce('Feedback skipped. Nothing was submitted.');
         },
 
         _announce(msg) {

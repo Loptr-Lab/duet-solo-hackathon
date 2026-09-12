@@ -39,6 +39,17 @@ function generateToken() {
     return crypto.randomBytes(16).toString('hex');
 }
 
+const FEEDBACK_QUESTIONS = [
+    { id: 'veil-predictable', text: 'Was the veil behavior predictable?' },
+    { id: 'pace-comfortable', text: 'Did the match pace feel comfortable?' },
+    { id: 'ending-clear', text: 'Was it clear why the match ended?' },
+];
+
+function feedbackPromptFor(anonymousMatchId) {
+    const index = anonymousMatchId.charCodeAt(0) % FEEDBACK_QUESTIONS.length;
+    return FEEDBACK_QUESTIONS[index];
+}
+
 function createInitialBoard() {
     const board = Array(8).fill(null).map(() => Array(8).fill(null));
     for (let i = 0; i < 8; i++) {
@@ -67,13 +78,20 @@ function parseSquare(sq) {
 }
 
 function publicRoomState(room) {
-    return {
+    const state = {
         board: room.board,
         turn: room.turn,
         gameOver: room.gameOver,
         winner: room.winner,
         playersConnected: { w: !!room.players.w, b: !!room.players.b },
     };
+    if (room.gameOver && room.anonymousMatchId) {
+        state.feedback = {
+            anonymousMatchId: room.anonymousMatchId,
+            prompt: feedbackPromptFor(room.anonymousMatchId),
+        };
+    }
+    return state;
 }
 
 /**
@@ -101,6 +119,62 @@ function didVeilOpponent(boardBefore, boardAfter, moverColor) {
     return false;
 }
 
+function countNewlyVeiled(boardBefore, boardAfter) {
+    let count = 0;
+    for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+            const before = boardBefore[r][c];
+            const after = boardAfter[r][c];
+            if (before && !before.veiled && after && after.veiled) count += 1;
+        }
+    }
+    return count;
+}
+
+function isRebirthAdvance(piece, from, to) {
+    if (!piece || piece.type !== 'rb') return false;
+    return piece.color === 'w' ? to.r < from.r : to.r > from.r;
+}
+
+function normalizeFeedback(payload, expectedQuestionId, anonymousMatchId) {
+    const rating = payload?.rating === null || payload?.rating === '' || payload?.rating === undefined
+        ? null
+        : Number(payload.rating);
+    const allowedAnswers = new Set(['yes', 'mostly', 'no', 'not-sure', 'skipped']);
+    const allowedKinds = new Set(['note', 'bug', 'none']);
+    const answer = payload?.answer || 'skipped';
+    const kind = payload?.kind || 'none';
+    const comment = typeof payload?.comment === 'string'
+        ? payload.comment.replace(/[\u0000-\u001F\u007F]/g, ' ').trim()
+        : '';
+
+    if (payload?.consent !== true) return { error: 'Consent is required before submitting.' };
+    if (rating !== null && (!Number.isInteger(rating) || rating < 1 || rating > 5)) {
+        return { error: 'Rating must be a whole number from 1 to 5.' };
+    }
+    if (payload?.questionId !== expectedQuestionId || !allowedAnswers.has(answer)) {
+        return { error: 'Feedback question or answer is invalid.' };
+    }
+    if (!allowedKinds.has(kind)) return { error: 'Feedback type is invalid.' };
+    if (comment.length > 600) return { error: 'Comment must be 600 characters or fewer.' };
+    if (rating === null && answer === 'skipped' && comment.length === 0) {
+        return { error: 'Choose an answer, add a rating, or leave a comment.' };
+    }
+
+    return {
+        value: {
+            schemaVersion: 'anonymous-feedback.v1',
+            anonymousMatchId,
+            submittedAt: Date.now(),
+            rating,
+            questionId: expectedQuestionId,
+            answer,
+            kind: comment ? kind : 'none',
+            comment,
+        },
+    };
+}
+
 /**
  * Deep-clones a board so the before-snapshot is not mutated by engine.makeMove.
  */
@@ -125,6 +199,11 @@ function createGameNamespace(io, roomStore, playerStorage) {
                 players: room.players,
                 tokens: room.tokens,
                 createdAt: room.createdAt,
+                moveCount: room.moveCount,
+                lastMoveAt: room.lastMoveAt,
+                anonymousMatchId: room.anonymousMatchId,
+                anonymousTelemetry: room.anonymousTelemetry,
+                feedbackSubmitted: room.feedbackSubmitted,
             });
         } catch (err) {
             // Persistence failure should not crash a live game -- the room
@@ -168,6 +247,9 @@ function createGameNamespace(io, roomStore, playerStorage) {
                 createdAt: Date.now(),
                 moveCount: 0,
                 lastMoveAt: Date.now(),
+                anonymousMatchId: crypto.randomUUID(),
+                anonymousTelemetry: { veilEvents: 0, promotionEvents: 0, rebirthAdvances: 0 },
+                feedbackSubmitted: { w: false, b: false },
             };
             rooms[roomId] = room;
             socket.join(roomId);
@@ -296,6 +378,7 @@ function createGameNamespace(io, roomStore, playerStorage) {
                 movedPieceAfter &&
                 movedPieceAfter.type !== 'p'
             ) ? movedPieceAfter.type : null;
+            const newlyVeiled = countNewlyVeiled(boardBefore, result.board);
             // -----------------------------------------------------
 
             room.board = result.board;
@@ -303,6 +386,10 @@ function createGameNamespace(io, roomStore, playerStorage) {
             room.winner = result.winner || null;
             room.moveCount = (room.moveCount || 0) + 1;
             room.lastMoveAt = moveTimestamp;
+            room.anonymousTelemetry = room.anonymousTelemetry || { veilEvents: 0, promotionEvents: 0, rebirthAdvances: 0 };
+            room.anonymousTelemetry.veilEvents += newlyVeiled;
+            if (promotedTo) room.anonymousTelemetry.promotionEvents += 1;
+            if (isRebirthAdvance(pieceBeforeMove, from, to)) room.anonymousTelemetry.rebirthAdvances += 1;
             if (!room.gameOver) {
                 room.turn = room.turn === 'w' ? 'b' : 'w';
             }
@@ -335,23 +422,39 @@ function createGameNamespace(io, roomStore, playerStorage) {
                     timestamp: moveTimestamp,
                 };
 
-                if (isFirstMove) {
-                    // Both tokens are set by the time the first move is made:
-                    // white token is set at create_room, black at join_room.
-                    playerStorage.createMatchLog(roomId, room.tokens).catch((err) => {
-                        console.error(`[telemetry] createMatchLog failed for ${roomId}:`, err.message);
-                    });
-                }
+                // Keep writes ordered inside a detached task: create-before-
+                // append on move one, then append-before-finalize at game end.
+                // The task remains fire-and-forget, so storage never delays play.
+                (async () => {
+                    if (isFirstMove) {
+                        // Legacy match logs support the separately governed,
+                        // opt-in player profile roadmap. Anonymous analytics are
+                        // written to a distinct collection below.
+                        await playerStorage.createMatchLog(roomId, room.tokens);
+                    }
+                    await playerStorage.appendMove(roomId, moveEntry);
 
-                playerStorage.appendMove(roomId, moveEntry).catch((err) => {
-                    console.error(`[telemetry] appendMove failed for ${roomId} move ${room.moveCount}:`, err.message);
+                    if (room.gameOver && room.winner) {
+                        const completedAt = Date.now();
+                        const summary = {
+                            schemaVersion: 'anonymous-playtest.v1',
+                            anonymousMatchId: room.anonymousMatchId,
+                            completedAt,
+                            durationMs: Math.max(0, completedAt - room.createdAt),
+                            moveCount: room.moveCount,
+                            fogMode: false,
+                            winner: room.winner,
+                            winCondition: 'rebirth-control-lost',
+                            ...room.anonymousTelemetry,
+                        };
+                        await playerStorage.finalizeMatchLog(roomId, room.winner);
+                        if (typeof playerStorage.saveAnonymousCompletedGame === 'function') {
+                            await playerStorage.saveAnonymousCompletedGame(summary);
+                        }
+                    }
+                })().catch((err) => {
+                    console.error(`[telemetry] ordered write failed for ${roomId}:`, err.message);
                 });
-
-                if (room.gameOver && room.winner) {
-                    playerStorage.finalizeMatchLog(roomId, room.winner).catch((err) => {
-                        console.error(`[telemetry] finalizeMatchLog failed for ${roomId}:`, err.message);
-                    });
-                }
             }
             // -------------------------------------------------
 
@@ -366,6 +469,41 @@ function createGameNamespace(io, roomStore, playerStorage) {
             }
         });
 
+        socket.on('submit_feedback', async (payload, ack) => {
+            const roomId = socket.data.roomId;
+            const color = socket.data.color;
+            const room = roomId && await getRoom(roomId);
+            if (!room || !room.gameOver || (color !== 'w' && color !== 'b') || room.players[color] !== socket.id) {
+                if (typeof ack === 'function') ack({ ok: false, reason: 'Feedback is available after your completed match.' });
+                return;
+            }
+            room.feedbackSubmitted = room.feedbackSubmitted || { w: false, b: false };
+            if (room.feedbackSubmitted[color]) {
+                if (typeof ack === 'function') ack({ ok: false, reason: 'Feedback was already submitted for this match.' });
+                return;
+            }
+            if (!playerStorage || typeof playerStorage.saveAnonymousFeedback !== 'function') {
+                if (typeof ack === 'function') ack({ ok: false, reason: 'Feedback storage is unavailable.' });
+                return;
+            }
+
+            const prompt = feedbackPromptFor(room.anonymousMatchId);
+            const normalized = normalizeFeedback(payload, prompt.id, room.anonymousMatchId);
+            if (normalized.error) {
+                if (typeof ack === 'function') ack({ ok: false, reason: normalized.error });
+                return;
+            }
+
+            try {
+                await playerStorage.saveAnonymousFeedback(normalized.value);
+                room.feedbackSubmitted[color] = true;
+                await persist(roomId, room);
+                if (typeof ack === 'function') ack({ ok: true });
+            } catch (_err) {
+                if (typeof ack === 'function') ack({ ok: false, reason: 'Feedback could not be saved. Your game result is unaffected.' });
+            }
+        });
+
         socket.on('disconnect', () => {
             const roomId = socket.data.roomId;
             const room = roomId && rooms[roomId];
@@ -377,4 +515,10 @@ function createGameNamespace(io, roomStore, playerStorage) {
     return { rooms }; // exposed for tests only (to simulate a restart by discarding it)
 }
 
-module.exports = { createGameNamespace, createInitialBoard, publicRoomState };
+module.exports = {
+    createGameNamespace,
+    createInitialBoard,
+    publicRoomState,
+    feedbackPromptFor,
+    normalizeFeedback,
+};

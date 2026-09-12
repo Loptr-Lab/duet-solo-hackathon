@@ -11,6 +11,7 @@ endorse third-party forks.
 - deck selection, aggregate play statistics, archetype tags, and optional future DIDs
 - messages sent to the Gemini support endpoint
 - optional Bluesky match-result posts
+- optional anonymous post-game ratings, structured answers, notes, and bug reports
 
 Reconnect tokens are credentials for returning to a room. Treat them as secrets even though
 they are not account passwords.
@@ -32,6 +33,13 @@ Before enabling persistent public play, a fork operator must:
 Suggested starting maximums are 24 hours for abandoned rooms and 30 days for raw match logs.
 Profile retention requires an operator-defined purpose and deletion path. These are project
 defaults, not a substitute for checking laws applicable to the operator and players.
+
+Anonymous completed-game summaries use `anonymousCompletedGames`; optional responses use
+`anonymousGameFeedback`. Both include an `expiresAt` timestamp 30 days after creation. Before
+public deployment, enable a Firestore TTL policy on the `expiresAt` field in both collections.
+These records deliberately exclude room codes, reconnect tokens, socket identifiers, DIDs,
+handles, email addresses, and network addresses. Only a socket occupying a seat in the
+completed match may submit, once per seat.
 
 ## AI boundary
 

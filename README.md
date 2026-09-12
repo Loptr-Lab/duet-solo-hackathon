@@ -103,7 +103,21 @@ Duet: Solo expands access to strategy learning/play by centering assistive-techn
 
 ---
 
+## Anonymous playtest feedback
+
+Completed remote games produce a minimal anonymous summary in Firestore, and each player may
+optionally submit one post-game rating, rotating rules question, note, or bug report. The form
+can be skipped, requires explicit consent to submit, and never writes room codes, reconnect
+tokens, DIDs, handles, email addresses, socket identifiers, or network addresses into the
+anonymous collections. Raw records carry a 30-day expiry timestamp.
+
+Before deployment, enable Firestore TTL on the `expiresAt` field for both
+`anonymousCompletedGames` and `anonymousGameFeedback`. The portable schema and privacy boundary
+are maintained in the
+[`veiled-dominion-engine` contract directory](https://github.com/Loptr-Lab/veiled-dominion-engine/tree/main/docs/contracts).
+
 ## Continuing development
+
 This project is under active development beyond the hackathon. The Veiled Dominion ecosystem — 4-player engine, Sealed Deck mechanics, stats-driven playable characters, and live Bluesky match posting via the-rift — is being built in the open.
 
 See the [contributor wiki](https://github.com/Loptr-Lab/duet-solo-hackathon/wiki) for setup, architecture, and how to get involved.
