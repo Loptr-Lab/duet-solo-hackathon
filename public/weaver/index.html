@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Weaver — a documented creative collaboration experiment connecting two systems, two practices, and two jurisdictions.">
+  <title>The Weaver — A Door Between Two Systems</title>
+  <style>
+    :root {
+      --void: #050505;
+      --obsidian: #101010;
+      --panel: #151515;
+      --line: #2a2a2a;
+      --text: #e9e9e9;
+      --muted: #929292;
+      --gold: #d4a853;
+      --gold-soft: rgba(212,168,83,.14);
+      --focus: #f1cc72;
+      --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --mono: "SF Mono", Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: radial-gradient(circle at 50% 12%, #181818 0, var(--void) 42%); color: var(--text); font-family: var(--sans); line-height: 1.6; }
+    a { color: var(--gold); }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
+    .shell { width: min(980px, calc(100% - 36px)); margin: 0 auto; }
+    header { min-height: 78vh; display: grid; place-items: center; padding: 72px 0 56px; }
+    .hero { text-align: center; max-width: 760px; }
+    .eyebrow { color: var(--gold); font: 12px/1.4 var(--mono); letter-spacing: .2em; text-transform: uppercase; }
+    h1 { margin: 18px 0 8px; font-size: clamp(3.4rem, 10vw, 7rem); line-height: .92; font-weight: 200; letter-spacing: -.045em; color: #fff; text-shadow: 0 0 36px rgba(212,168,83,.2); }
+    .subtitle { margin: 22px auto 34px; max-width: 54ch; color: #c8c8c8; font-size: clamp(1.05rem, 2.3vw, 1.35rem); }
+    .door { display: inline-flex; align-items: center; justify-content: center; min-width: 190px; min-height: 58px; padding: 14px 28px; border: 1px solid var(--gold); background: linear-gradient(180deg, rgba(212,168,83,.18), rgba(212,168,83,.05)); color: #fff; text-decoration: none; text-transform: uppercase; letter-spacing: .16em; font: 13px var(--mono); transition: transform .2s ease, background .2s ease; }
+    .door:hover { transform: translateY(-2px); background: var(--gold-soft); }
+    .meta { margin-top: 28px; color: var(--muted); font: 11px/1.8 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    main { padding-bottom: 120px; }
+    section { border-top: 1px solid var(--line); padding: 62px 0; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px; }
+    .card { border: 1px solid var(--line); background: rgba(21,21,21,.72); padding: 26px; }
+    .card h2, section > h2 { margin: 0 0 14px; font-weight: 350; color: #fff; }
+    section > h2 { font-size: clamp(1.8rem, 4vw, 2.5rem); }
+    .card p, section > p { color: #b8b8b8; max-width: 72ch; }
+    .label { color: var(--gold); font: 11px var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+    .chain { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 26px; }
+    .node { padding: 10px 13px; border: 1px solid var(--line); background: #0b0b0b; font: 12px var(--mono); color: #ddd; }
+    .arrow { color: var(--gold); }
+    .status { display: grid; gap: 10px; margin-top: 24px; }
+    .status-row { display: flex; justify-content: space-between; gap: 20px; padding: 12px 0; border-bottom: 1px solid #222; }
+    .status-row span:last-child { color: var(--gold); font: 11px var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+    .questions { counter-reset: q; list-style: none; padding: 0; margin: 26px 0 0; }
+    .questions li { counter-increment: q; padding: 17px 0 17px 44px; border-bottom: 1px solid #222; position: relative; color: #d0d0d0; }
+    .questions li::before { content: counter(q, decimal-leading-zero); position: absolute; left: 0; top: 17px; color: var(--gold); font: 11px var(--mono); }
+    .response { margin-top: 28px; padding: 28px; border: 1px solid var(--gold); background: linear-gradient(135deg, var(--gold-soft), rgba(0,0,0,.1)); }
+    .response h3 { margin: 0 0 8px; font-weight: 400; }
+    .response p { color: #c6c6c6; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+    button, .link-button { appearance: none; border: 1px solid #444; background: #0b0b0b; color: #eee; padding: 12px 16px; font: 12px var(--mono); text-transform: uppercase; letter-spacing: .08em; cursor: pointer; text-decoration: none; }
+    button:hover, .link-button:hover { border-color: var(--gold); }
+    .pixie { position: fixed; right: 20px; bottom: 20px; z-index: 5; }
+    .pixie button { border-color: var(--gold); border-radius: 999px; padding: 11px 15px; background: #0b0b0b; box-shadow: 0 0 24px rgba(212,168,83,.12); }
+    .pixie-panel { display: none; width: min(340px, calc(100vw - 40px)); margin-bottom: 10px; padding: 18px; border: 1px solid var(--gold); background: #0b0b0b; box-shadow: 0 12px 50px rgba(0,0,0,.55); }
+    .pixie-panel.open { display: block; }
+    .pixie-panel strong { color: var(--gold); font: 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+    .pixie-panel p { margin: 10px 0 0; color: #c8c8c8; font-size: 14px; }
+    footer { border-top: 1px solid var(--line); padding: 30px 0 70px; color: var(--muted); font-size: 12px; }
+    footer nav { display: flex; flex-wrap: wrap; gap: 18px; margin-bottom: 16px; }
+    @media (max-width: 680px) { .grid { grid-template-columns: 1fr; } header { min-height: 72vh; } .status-row { align-items: flex-start; flex-direction: column; gap: 4px; } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .door { transition: none; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="hero">
+        <div class="eyebrow">Loptr Lab / documented experiment</div>
+        <h1>The Weaver</h1>
+        <p class="subtitle">A door between two systems.<br>Two people. Two creative practices. Two jurisdictions. One proposed collaboration.</p>
+        <a class="door" href="#enter">Enter</a>
+        <div class="meta">Creative authorship · collaboration · rights · jurisdiction · documentation · consent</div>
+      </div>
+    </header>
+
+    <main id="enter">
+      <section>
+        <div class="grid">
+          <article class="card">
+            <div class="label">What this is</div>
+            <h2>A documented experiment</h2>
+            <p>The Weaver began with a proposed collaboration. It asks what happens when two independent creative systems try to work together without either person disappearing into the other's ownership, identity, jurisdiction, or legacy.</p>
+          </article>
+          <article class="card">
+            <div class="label">What this is not</div>
+            <h2>A finished agreement</h2>
+            <p>This documentation records a creative and research process. It is not a contract, license, assignment, partnership agreement, legal opinion, or determination of ownership.</p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <div class="label">The provenance</div>
+        <h2>How the door got here</h2>
+        <p>The project preserves its history rather than rewriting the beginning as inevitable. A proposed collaboration came first; the creative systems and game experiments developed through subsequent work.</p>
+        <div class="chain" aria-label="Project provenance chain">
+          <span class="node">COLLABORATION PROPOSAL</span><span class="arrow">→</span>
+          <span class="node">THE WEAVER</span><span class="arrow">→</span>
+          <span class="node">DUET</span><span class="arrow">→</span>
+          <span class="node">52 CARDS OF WAR</span><span class="arrow">→</span>
+          <span class="node">VEILED DOMINION</span>
+        </div>
+      </section>
+
+      <section>
+        <div class="label">The two histories</div>
+        <h2>There may be more than one beginning</h2>
+        <p>A shared artifact can have different meanings to the people who encountered it. The Weaver does not require those memories to match. It makes room for the overlap, the disagreement, and the parts that remain unresolved.</p>
+        <div class="grid">
+          <article class="card"><div class="label">One account</div><p><strong>My memory of how this began:</strong><br>The originating collaborator can describe the beginning in their own words.</p></article>
+          <article class="card"><div class="label">Another account</div><p><strong>Your memory of how this began:</strong><br>The other person can describe what they remember, without being given a “correct” answer.</p></article>
+        </div>
+      </section>
+
+      <section>
+        <div class="label">The questions</div>
+        <h2>Questions for the collaborator</h2>
+        <p>These questions were developed in connection with the proposed collaboration. They are also available as an open framework for people who want to explore the underlying questions from their own perspective.</p>
+        <ol class="questions">
+          <li>What does a fair collaboration actually require?</li>
+          <li>What happens when two people bring unequal things to the table?</li>
+          <li>How should ownership and authorship be separated?</li>
+          <li>What happens when the collaboration crosses jurisdictions?</li>
+          <li>What happens if the relationship changes?</li>
+          <li>What happens to the work after one of us dies?</li>
+          <li>What does independence look like inside collaboration?</li>
+          <li>What am I failing to see?</li>
+          <li>What would you build?</li>
+        </ol>
+        <div class="response">
+          <h3>An independent response is still independent.</h3>
+          <p>Other people can answer these questions. Their answers do not become a response on behalf of the original collaborator, and answering does not establish agreement with the premises.</p>
+          <div class="actions">
+            <button type="button" id="responseType">I want to explore them</button>
+            <a class="link-button" href="../../docs/design/WEAVER_START_HERE.md">Read the design entry point</a>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="label">Participation</div>
+        <h2>Two doors into the archive</h2>
+        <div class="grid">
+          <article class="card">
+            <h2>Original collaborator</h2>
+            <p>The original invitation has its own provenance. A future response should enter through a private invitation pathway rather than by self-identifying on this public page.</p>
+            <p class="label">Status: invitation pathway not yet opened</p>
+          </article>
+          <article class="card">
+            <h2>Independent respondent</h2>
+            <p>Anyone can explore the questions from their own perspective. The archive should preserve who actually submitted a response and whether AI assistance was used.</p>
+            <p class="label">Status: open framework</p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <div class="label">Documentation status</div>
+        <h2>What is known, proposed, and unresolved</h2>
+        <div class="status">
+          <div class="status-row"><span>Creative work and design artifacts</span><span>Documented</span></div>
+          <div class="status-row"><span>Proposed collaboration structure</span><span>Proposed</span></div>
+          <div class="status-row"><span>Cross-border questions</span><span>Unresolved</span></div>
+          <div class="status-row"><span>Participant responses</span><span>Open / versioned</span></div>
+          <div class="status-row"><span>Legal conclusions</span><span>Not established here</span></div>
+        </div>
+      </section>
+
+      <section>
+        <div class="label">Where the door leads</div>
+        <h2>The Weaver is connected to the game.</h2>
+        <p>Duet is the accessibility-built experimental artifact. In the larger system, two decks can become one kingdom — 52 Cards of War — while conflicts between systems can be settled through play. The Weaver is the human and creative layer that asks what it means for those systems to coexist.</p>
+        <div class="actions">
+          <a class="link-button" href="/">Return to Duet: Solo</a>
+          <a class="link-button" href="https://github.com/Loptr-Lab/duet-solo-hackathon">View the repository</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <nav aria-label="Project links">
+        <a href="../../docs/design/WEAVER_START_HERE.md">Weaver design</a>
+        <a href="../../docs/design/dueling-systems.md">Dueling systems</a>
+        <a href="../../docs/design/prompts-for-the-weaver-systems-quartet.md">Systems Quartet prompts</a>
+        <a href="https://github.com/Loptr-Lab/duet-solo-hackathon">GitHub</a>
+      </nav>
+      <div>This page documents a creative/research process. Questions concerning law, jurisdiction, intellectual property, tax, estate interests, or enforceability require appropriate professional review.</div>
+    </footer>
+  </div>
+
+  <aside class="pixie" aria-label="PIXIE assistant">
+    <div class="pixie-panel" id="pixiePanel" role="status" aria-live="polite">
+      <strong>PIXIE · Door Guide</strong>
+      <p>I'm here to help you understand the door. The Weaver separates the creative record from unresolved legal questions, and it preserves disagreement instead of silently turning it into agreement.</p>
+    </div>
+    <button type="button" id="pixieButton" aria-expanded="false" aria-controls="pixiePanel">PIXIE</button>
+  </aside>
+
+  <script>
+    const pixieButton = document.getElementById('pixieButton');
+    const pixiePanel = document.getElementById('pixiePanel');
+    pixieButton.addEventListener('click', () => {
+      const open = pixiePanel.classList.toggle('open');
+      pixieButton.setAttribute('aria-expanded', String(open));
+      if (open) pixiePanel.querySelector('p').focus?.();
+    });
+    document.getElementById('responseType').addEventListener('click', () => {
+      alert('The open-response archive is the next layer: your response can be preserved as an independent, versioned artifact rather than presented as the original collaborator’s answer.');
+    });
+  </script>
+</body>
+</html>
