@@ -3,6 +3,7 @@ const { Agent } = require('@atproto/api');
 const { JoseKey } = require('@atproto/jwk-jose');
 const { NodeOAuthClient } = require('@atproto/oauth-client-node');
 const { createDomainVerifier } = require('./domainVerification.js');
+const { createInvitationService } = require('./invitations.js');
 
 const SESSION_COOKIE = 'duet_at_session';
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 30;
@@ -46,6 +47,7 @@ async function createAtprotoAuth({ db }) {
   const collection = db.collection('duet_auth');
   const profiles = db.collection('verified_profiles');
   const domainVerifier = createDomainVerifier(collection);
+  const invitations = createInvitationService(collection);
 
   const stateStore = {
     async set(key, value) {
@@ -134,14 +136,19 @@ async function createAtprotoAuth({ db }) {
   async function emailEvidence(session) {
     const agent = new Agent(session);
     const account = await agent.com.atproto.server.getSession();
-    return {
-      status: account.data.emailConfirmed ? 'verified' : 'unverified',
-      verifiedAt: account.data.emailConfirmed ? Date.now() : null,
-    };
+    return { status: account.data.emailConfirmed ? 'verified' : 'unverified', verifiedAt: account.data.emailConfirmed ? Date.now() : null };
   }
 
   async function getBrowserIdentity(req) {
     return getIdentity(parseCookie(req.headers.cookie, SESSION_COOKIE));
+  }
+
+  function requireVerified(identity) {
+    if (!identity?.verified?.status || identity.verified.status !== 'VERIFIED PROFILE') {
+      const error = new Error('verified_profile_required');
+      error.statusCode = 403;
+      throw error;
+    }
   }
 
   function routes(app) {
@@ -155,9 +162,7 @@ async function createAtprotoAuth({ db }) {
         const state = crypto.randomBytes(24).toString('base64url');
         const url = await client.authorize(handle, { state, scope: 'atproto' });
         res.redirect(url);
-      } catch (err) {
-        next(err);
-      }
+      } catch (err) { next(err); }
     });
 
     app.get('/auth/email/start', async (req, res, next) => {
@@ -169,20 +174,17 @@ async function createAtprotoAuth({ db }) {
         const state = `email:${crypto.randomBytes(24).toString('base64url')}`;
         const url = await client.authorize(profile.data.handle, { state, scope: 'atproto transition:email' });
         res.redirect(url);
-      } catch (err) {
-        next(err);
-      }
+      } catch (err) { next(err); }
     });
 
     app.get('/auth/domain/start', async (req, res, next) => {
       try {
         const identity = await getBrowserIdentity(req);
         if (!identity) return res.status(401).json({ error: 'authentication_required' });
+        requireVerified(identity);
         const challenge = await domainVerifier.start(identity.did, req.query.domain);
         res.json({ ...challenge, instructions: 'Create this TXT record, then call /auth/domain/verify?domain=YOUR_DOMAIN.' });
-      } catch (err) {
-        next(err);
-      }
+      } catch (err) { next(err); }
     });
 
     app.get('/auth/domain/verify', async (req, res, next) => {
@@ -196,9 +198,7 @@ async function createAtprotoAuth({ db }) {
         const profile = await saveVerifiedProfile(identity.did, { methods: [...methods], domain: result.domain, domainVerifiedAt: result.verifiedAt });
         await collection.doc(`browser_${parseCookie(req.headers.cookie, SESSION_COOKIE)}`).set({ verified: { status: 'VERIFIED PROFILE', methods: profile.methods } }, { merge: true });
         res.json({ status: 'VERIFIED PROFILE', methods: profile.methods });
-      } catch (err) {
-        next(err);
-      }
+      } catch (err) { next(err); }
     });
 
     app.get('/auth/atproto/callback', async (req, res, next) => {
@@ -217,9 +217,7 @@ async function createAtprotoAuth({ db }) {
         }
         await attachIdentity(res, session.did, verified);
         res.redirect('/weaver/?auth=success');
-      } catch (err) {
-        next(err);
-      }
+      } catch (err) { next(err); }
     });
 
     app.get('/auth/me', async (req, res, next) => {
@@ -228,16 +226,36 @@ async function createAtprotoAuth({ db }) {
         if (!identity) return res.status(401).json({ authenticated: false });
         const agent = new Agent(identity.session);
         const profile = await agent.getProfile({ actor: identity.did });
-        return res.json({
-          authenticated: true,
-          did: identity.did,
-          handle: profile.data.handle,
-          displayName: profile.data.displayName || null,
-          verification: identity.verified || { status: 'UNVERIFIED', methods: [] },
-        });
-      } catch (err) {
-        next(err);
-      }
+        const invitation = await invitations.get(identity.did);
+        return res.json({ authenticated: true, did: identity.did, handle: profile.data.handle, displayName: profile.data.displayName || null, verification: identity.verified || { status: 'UNVERIFIED', methods: [] }, invitation: invitation || { status: 'none' } });
+      } catch (err) { next(err); }
+    });
+
+    app.post('/auth/invitation/request', async (req, res, next) => {
+      try {
+        const identity = await getBrowserIdentity(req);
+        if (!identity) return res.status(401).json({ error: 'authentication_required' });
+        requireVerified(identity);
+        res.status(201).json(await invitations.request(identity.did));
+      } catch (err) { next(err); }
+    });
+
+    app.get('/auth/invitation/status', async (req, res, next) => {
+      try {
+        const identity = await getBrowserIdentity(req);
+        if (!identity) return res.status(401).json({ error: 'authentication_required' });
+        res.json(await invitations.get(identity.did) || { status: 'none' });
+      } catch (err) { next(err); }
+    });
+
+    app.post('/auth/invitation/decide', async (req, res, next) => {
+      try {
+        const identity = await getBrowserIdentity(req);
+        if (!identity) return res.status(401).json({ error: 'authentication_required' });
+        const approver = process.env.INVITATION_APPROVER_DID;
+        if (!approver || identity.did !== approver) return res.status(403).json({ error: 'invitation_approval_forbidden' });
+        res.json(await invitations.decide(req.body?.did, req.body?.status, identity.did));
+      } catch (err) { next(err); }
     });
 
     app.post('/auth/logout', async (req, res, next) => {
@@ -246,9 +264,7 @@ async function createAtprotoAuth({ db }) {
         if (sessionId) await collection.doc(`browser_${sessionId}`).delete().catch(() => {});
         clearSessionCookie(res);
         res.status(204).end();
-      } catch (err) {
-        next(err);
-      }
+      } catch (err) { next(err); }
     });
   }
 
