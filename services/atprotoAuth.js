@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const { Agent } = require('@atproto/api');
 const { JoseKey } = require('@atproto/jwk-jose');
 const { NodeOAuthClient } = require('@atproto/oauth-client-node');
+const { createDomainVerifier } = require('./domainVerification.js');
 
 const SESSION_COOKIE = 'duet_at_session';
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 30;
@@ -43,6 +44,8 @@ async function createAtprotoAuth({ db }) {
   const privateKey = requireEnv('ATPROTO_OAUTH_PRIVATE_KEY');
   const keyset = [await JoseKey.fromImportable(privateKey, process.env.ATPROTO_OAUTH_KEY_ID || 'duet-key-1')];
   const collection = db.collection('duet_auth');
+  const profiles = db.collection('verified_profiles');
+  const domainVerifier = createDomainVerifier(collection);
 
   const stateStore = {
     async set(key, value) {
@@ -104,22 +107,34 @@ async function createAtprotoAuth({ db }) {
     return { did: data.did, session, verified: data.verified || null };
   }
 
+  async function saveVerifiedProfile(did, patch) {
+    const ref = profiles.doc(did);
+    await ref.set({ did, ...patch, updatedAt: Date.now() }, { merge: true });
+    const snap = await ref.get();
+    return snap.data();
+  }
+
+  async function getVerifiedProfile(did) {
+    const snap = await profiles.doc(did).get();
+    return snap.exists ? snap.data() : null;
+  }
+
   async function attachIdentity(res, did, verified = null) {
+    const profile = verified ? await saveVerifiedProfile(did, verified) : await getVerifiedProfile(did);
     const sessionId = crypto.randomBytes(32).toString('base64url');
     await collection.doc(`browser_${sessionId}`).set({
       did,
-      verified,
+      verified: profile ? { status: 'VERIFIED PROFILE', methods: profile.methods || [] } : null,
       createdAt: Date.now(),
       expiresAt: Date.now() + SESSION_TTL_MS,
     });
     setSessionCookie(res, sessionId);
   }
 
-  async function emailEvidence(did, session) {
+  async function emailEvidence(session) {
     const agent = new Agent(session);
     const account = await agent.com.atproto.server.getSession();
     return {
-      email: account.data.email || null,
       status: account.data.emailConfirmed ? 'verified' : 'unverified',
       verifiedAt: account.data.emailConfirmed ? Date.now() : null,
     };
@@ -159,15 +174,45 @@ async function createAtprotoAuth({ db }) {
       }
     });
 
+    app.get('/auth/domain/start', async (req, res, next) => {
+      try {
+        const identity = await getBrowserIdentity(req);
+        if (!identity) return res.status(401).json({ error: 'authentication_required' });
+        const challenge = await domainVerifier.start(identity.did, req.query.domain);
+        res.json({ ...challenge, instructions: 'Create this TXT record, then call /auth/domain/verify?domain=YOUR_DOMAIN.' });
+      } catch (err) {
+        next(err);
+      }
+    });
+
+    app.get('/auth/domain/verify', async (req, res, next) => {
+      try {
+        const identity = await getBrowserIdentity(req);
+        if (!identity) return res.status(401).json({ error: 'authentication_required' });
+        const result = await domainVerifier.verify(identity.did, req.query.domain);
+        const existing = await getVerifiedProfile(identity.did);
+        const methods = new Set(existing?.methods || []);
+        methods.add('DOMAIN VERIFIED');
+        const profile = await saveVerifiedProfile(identity.did, { methods: [...methods], domain: result.domain, domainVerifiedAt: result.verifiedAt });
+        await collection.doc(`browser_${parseCookie(req.headers.cookie, SESSION_COOKIE)}`).set({ verified: { status: 'VERIFIED PROFILE', methods: profile.methods } }, { merge: true });
+        res.json({ status: 'VERIFIED PROFILE', methods: profile.methods });
+      } catch (err) {
+        next(err);
+      }
+    });
+
     app.get('/auth/atproto/callback', async (req, res, next) => {
       try {
         const params = new URLSearchParams(req.url.split('?')[1] || '');
         const { session, state } = await client.callback(params);
         let verified = null;
         if (typeof state === 'string' && state.startsWith('email:')) {
-          const evidence = await emailEvidence(session.did, session);
+          const evidence = await emailEvidence(session);
           if (evidence.status === 'verified') {
-            verified = { status: 'VERIFIED PROFILE', methods: ['EMAIL VERIFIED'], emailVerifiedAt: evidence.verifiedAt };
+            const existing = await getVerifiedProfile(session.did);
+            const methods = new Set(existing?.methods || []);
+            methods.add('EMAIL VERIFIED');
+            verified = { methods: [...methods], emailVerifiedAt: evidence.verifiedAt };
           }
         }
         await attachIdentity(res, session.did, verified);
