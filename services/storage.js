@@ -19,14 +19,15 @@ const DEFAULT_GCP_PROJECT_ID = 'adept-crossing-106819';
 
 function createPlayerStorage() {
     let db;
-    try {
+     try {
         db = new Firestore({
             projectId: process.env.GOOGLE_CLOUD_PROJECT ||
                        process.env.GCP_PROJECT ||
                        DEFAULT_GCP_PROJECT_ID,
+            databaseId: process.env.FIRESTORE_DATABASE || '(default)',
         });
     } catch (err) {
-        console.error('⚠️ Failed to initialize Firestore client (storage):', err.message);
+       console.error('⚠️ Failed to initialize Firestore client (storage):', err.message);
         db = null;
     }
 
