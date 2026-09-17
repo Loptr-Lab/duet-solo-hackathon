@@ -22,6 +22,7 @@ function createFirestoreRoomStore() {
     }
 
     return {
+        db,
         async saveRoom(roomId, roomData) {
             if (!db) return;
             try {
@@ -68,7 +69,7 @@ function createFirestoreRoomStore() {
             } catch (err) {
                 console.error('Firestore permission check failed:', err.message);
                 if (err.code === 7 || /PERMISSION_DENIED/.test(err.message || '')) {
-                console.error('Check that the Cloud Run service account has the roles/datastore.user role on the configured project.');
+                    console.error('Check that the Cloud Run service account has the roles/datastore.user role on the configured project.');
                 }
                 return false;
             }
