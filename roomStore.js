@@ -9,12 +9,15 @@
 const { Firestore } = require('@google-cloud/firestore');
 
 const COLLECTION = 'veiled_dominion_rooms';
+const DEFAULT_GCP_PROJECT_ID = 'adept-crossing-106819';
 
 function createFirestoreRoomStore() {
     let db;
     try {
         db = new Firestore({
-            projectId: process.env.GOOGLE_CLOUD_PROJECT || process.env.GCP_PROJECT,
+            projectId: process.env.GOOGLE_CLOUD_PROJECT ||
+                       process.env.GCP_PROJECT ||
+                       DEFAULT_GCP_PROJECT_ID,
         });
     } catch (err) {
         console.error('⚠️ Failed to initialize Firestore client:', err.message);
