@@ -9,12 +9,15 @@
 const { Firestore } = require('@google-cloud/firestore');
 
 const COLLECTION = 'veiled_dominion_rooms';
+const DEFAULT_GCP_PROJECT_ID = 'adept-crossing-106819';
 
 function createFirestoreRoomStore() {
     let db;
     try {
         db = new Firestore({
-            projectId: process.env.GOOGLE_CLOUD_PROJECT || process.env.GCP_PROJECT,
+            projectId: process.env.GOOGLE_CLOUD_PROJECT ||
+                       process.env.GCP_PROJECT ||
+                       DEFAULT_GCP_PROJECT_ID,
         });
     } catch (err) {
         console.error('⚠️ Failed to initialize Firestore client:', err.message);
@@ -22,6 +25,7 @@ function createFirestoreRoomStore() {
     }
 
     return {
+        db,
         async saveRoom(roomId, roomData) {
             if (!db) return;
             try {
@@ -68,7 +72,7 @@ function createFirestoreRoomStore() {
             } catch (err) {
                 console.error('Firestore permission check failed:', err.message);
                 if (err.code === 7 || /PERMISSION_DENIED/.test(err.message || '')) {
-                console.error('Check that the Cloud Run service account has the roles/datastore.user role on the configured project.');
+                    console.error('Check that the Cloud Run service account has the roles/datastore.user role on the configured project.');
                 }
                 return false;
             }

@@ -5,10 +5,13 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "check": "node --check server.js && node --check gameNamespace.js && node --check roomStore.js && node --check services/storage.js && node --check atprotoPoster.js",
+    "check": "node --check server.js && node --check gameNamespace.js && node --check roomStore.js && node --check services/storage.js && node --check atprotoPoster.js && node --check services/verifiedProfile.js && node --check services/atprotoAuth.js",
     "test": "node --test"
   },
   "dependencies": {
+    "@atproto/api": "^0.20.44",
+    "@atproto/jwk-jose": "^0.2.4",
+    "@atproto/oauth-client-node": "^0.5.3",
     "@google-cloud/firestore": "^7.7.0",
     "express": "^4.19.2",
     "socket.io": "^4.7.5"
