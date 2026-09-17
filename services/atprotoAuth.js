@@ -4,6 +4,7 @@ const { JoseKey } = require('@atproto/jwk-jose');
 const { NodeOAuthClient } = require('@atproto/oauth-client-node');
 const { createDomainVerifier } = require('./domainVerification.js');
 const { createInvitationService } = require('./invitations.js');
+const { createWeaverIdentityHistory } = require('./weaverIdentityHistory.js');
 
 const SESSION_COOKIE = 'duet_at_session';
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 30;
@@ -48,6 +49,7 @@ async function createAtprotoAuth({ db }) {
   const profiles = db.collection('verified_profiles');
   const domainVerifier = createDomainVerifier(collection);
   const invitations = createInvitationService(collection);
+  const identityHistory = createWeaverIdentityHistory(collection);
 
   const stateStore = {
     async set(key, value) {
@@ -121,7 +123,7 @@ async function createAtprotoAuth({ db }) {
     return snap.exists ? snap.data() : null;
   }
 
-  async function attachIdentity(res, did, verified = null) {
+  async function attachIdentity(res, did, verified = null, handle = null) {
     const profile = verified ? await saveVerifiedProfile(did, verified) : await getVerifiedProfile(did);
     const sessionId = crypto.randomBytes(32).toString('base64url');
     await collection.doc(`browser_${sessionId}`).set({
@@ -130,6 +132,7 @@ async function createAtprotoAuth({ db }) {
       createdAt: Date.now(),
       expiresAt: Date.now() + SESSION_TTL_MS,
     });
+    await identityHistory.recordAuthentication(did, handle);
     setSessionCookie(res, sessionId);
   }
 
@@ -198,6 +201,7 @@ async function createAtprotoAuth({ db }) {
         const methods = new Set(existing?.methods || []);
         methods.add('DOMAIN VERIFIED');
         const profile = await saveVerifiedProfile(identity.did, { methods: [...methods], domain: result.domain, domainVerifiedAt: result.verifiedAt });
+        await identityHistory.recordDomainVerification(identity.did, result.domain, result.verifiedAt);
         await collection.doc(`browser_${parseCookie(req.headers.cookie, SESSION_COOKIE)}`).set({ verified: { status: 'VERIFIED PROFILE', methods: profile.methods } }, { merge: true });
         res.json({ status: 'VERIFIED PROFILE', methods: profile.methods });
       } catch (err) { next(err); }
@@ -217,7 +221,9 @@ async function createAtprotoAuth({ db }) {
             verified = { methods: [...methods], emailVerifiedAt: evidence.verifiedAt };
           }
         }
-        await attachIdentity(res, session.did, verified);
+        const agent = new Agent(session);
+        const profile = await agent.getProfile({ actor: session.did });
+        await attachIdentity(res, session.did, verified, profile.data.handle);
         res.redirect('/weaver/?auth=success');
       } catch (err) { next(err); }
     });
