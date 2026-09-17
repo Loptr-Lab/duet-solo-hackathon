@@ -25,10 +25,7 @@ function appendSetCookie(res, value) {
 }
 
 function setSessionCookie(res, token) {
-  appendSetCookie(
-    res,
-    `${SESSION_COOKIE}=${encodeURIComponent(token)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${SESSION_TTL_MS / 1000}`
-  );
+  appendSetCookie(res, `${SESSION_COOKIE}=${encodeURIComponent(token)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${SESSION_TTL_MS / 1000}`);
 }
 
 function clearSessionCookie(res) {
@@ -45,8 +42,8 @@ async function createAtprotoAuth({ db }) {
   const baseUrl = baseUrlFromEnv();
   const privateKey = requireEnv('ATPROTO_OAUTH_PRIVATE_KEY');
   const keyset = [await JoseKey.fromImportable(privateKey, process.env.ATPROTO_OAUTH_KEY_ID || 'duet-key-1')];
-
   const collection = db.collection('duet_auth');
+
   const stateStore = {
     async set(key, value) {
       await collection.doc(`state_${key}`).set({ value, expiresAt: Date.now() + STATE_TTL_MS });
@@ -118,6 +115,20 @@ async function createAtprotoAuth({ db }) {
     setSessionCookie(res, sessionId);
   }
 
+  async function emailEvidence(did, session) {
+    const agent = new Agent(session);
+    const account = await agent.com.atproto.server.getSession();
+    return {
+      email: account.data.email || null,
+      status: account.data.emailConfirmed ? 'verified' : 'unverified',
+      verifiedAt: account.data.emailConfirmed ? Date.now() : null,
+    };
+  }
+
+  async function getBrowserIdentity(req) {
+    return getIdentity(parseCookie(req.headers.cookie, SESSION_COOKIE));
+  }
+
   function routes(app) {
     app.get('/client-metadata.json', (req, res) => res.json(client.clientMetadata));
     app.get('/jwks.json', (req, res) => res.json(client.jwks));
@@ -134,11 +145,32 @@ async function createAtprotoAuth({ db }) {
       }
     });
 
+    app.get('/auth/email/start', async (req, res, next) => {
+      try {
+        const identity = await getBrowserIdentity(req);
+        if (!identity) return res.status(401).json({ error: 'authentication_required' });
+        const agent = new Agent(identity.session);
+        const profile = await agent.getProfile({ actor: identity.did });
+        const state = `email:${crypto.randomBytes(24).toString('base64url')}`;
+        const url = await client.authorize(profile.data.handle, { state, scope: 'atproto transition:email' });
+        res.redirect(url);
+      } catch (err) {
+        next(err);
+      }
+    });
+
     app.get('/auth/atproto/callback', async (req, res, next) => {
       try {
         const params = new URLSearchParams(req.url.split('?')[1] || '');
-        const { session } = await client.callback(params);
-        await attachIdentity(res, session.did);
+        const { session, state } = await client.callback(params);
+        let verified = null;
+        if (typeof state === 'string' && state.startsWith('email:')) {
+          const evidence = await emailEvidence(session.did, session);
+          if (evidence.status === 'verified') {
+            verified = { status: 'VERIFIED PROFILE', methods: ['EMAIL VERIFIED'], emailVerifiedAt: evidence.verifiedAt };
+          }
+        }
+        await attachIdentity(res, session.did, verified);
         res.redirect('/weaver/?auth=success');
       } catch (err) {
         next(err);
@@ -147,7 +179,7 @@ async function createAtprotoAuth({ db }) {
 
     app.get('/auth/me', async (req, res, next) => {
       try {
-        const identity = await getIdentity(parseCookie(req.headers.cookie, SESSION_COOKIE));
+        const identity = await getBrowserIdentity(req);
         if (!identity) return res.status(401).json({ authenticated: false });
         const agent = new Agent(identity.session);
         const profile = await agent.getProfile({ actor: identity.did });
