@@ -181,7 +181,9 @@ async function createAtprotoAuth({ db }) {
       try {
         const identity = await getBrowserIdentity(req);
         if (!identity) return res.status(401).json({ error: 'authentication_required' });
-        requireVerified(identity);
+        // Domain verification is itself one of the two verification methods.
+        // Do not require an already-verified profile here or the DOMAIN path could
+        // never establish the first verified-profile credential.
         const challenge = await domainVerifier.start(identity.did, req.query.domain);
         res.json({ ...challenge, instructions: 'Create this TXT record, then call /auth/domain/verify?domain=YOUR_DOMAIN.' });
       } catch (err) { next(err); }
