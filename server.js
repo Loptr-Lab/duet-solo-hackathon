@@ -6,6 +6,7 @@ const { Server } = require('socket.io');
 const { createFirestoreRoomStore } = require('./roomStore.js');
 const { createGameNamespace } = require('./gameNamespace.js');
 const { createPlayerStorage } = require('./services/storage.js');
+const { createAtprotoAuth } = require('./services/atprotoAuth.js');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -52,8 +53,6 @@ function limitAiRequests(req, res, next) {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Dumb, dependency-free health check. Deliberately does not touch game state
-// or Gemini, so it can never false-fail a healthy game room.
 app.get('/healthz', (req, res) => {
   res.status(200).send('ok');
 });
@@ -85,12 +84,7 @@ app.post('/api/agent', limitAiRequests, async (req, res) => {
     "Always return strict JSON matching the required schema.";
 
   const requestBody = {
-    contents: [
-      {
-        role: 'user',
-        parts: [{ text: `${systemInstruction}\n\nUser message: ${userMessage}` }]
-      }
-    ],
+    contents: [{ role: 'user', parts: [{ text: `${systemInstruction}\n\nUser message: ${userMessage}` }] }],
     generationConfig: {
       temperature: 0.7,
       topP: 0.9,
@@ -101,10 +95,7 @@ app.post('/api/agent', limitAiRequests, async (req, res) => {
         type: 'OBJECT',
         properties: {
           reply: { type: 'STRING' },
-          intent: {
-            type: 'STRING',
-            enum: ['general', 'rules', 'controls', 'accessibility', 'gameplay']
-          }
+          intent: { type: 'STRING', enum: ['general', 'rules', 'controls', 'accessibility', 'gameplay'] }
         },
         required: ['reply', 'intent']
       }
@@ -114,23 +105,13 @@ app.post('/api/agent', limitAiRequests, async (req, res) => {
   try {
     const geminiRes = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestBody)
-      }
+      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(requestBody) }
     );
-
     const data = await geminiRes.json();
-
     if (!geminiRes.ok) {
       console.error('Gemini API request failed with status:', geminiRes.status);
-      return res.status(502).json({
-        reply: 'The assistant is temporarily unavailable. Core game controls still work.',
-        intent: 'general'
-      });
+      return res.status(502).json({ reply: 'The assistant is temporarily unavailable. Core game controls still work.', intent: 'general' });
     }
-
     const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
     try {
       return res.json(JSON.parse(rawText));
@@ -139,39 +120,42 @@ app.post('/api/agent', limitAiRequests, async (req, res) => {
     }
   } catch (err) {
     console.error('Server error:', err);
-    return res.status(200).json({
-      reply: 'PIXIE is standing by. How can I help with screen reader controls?',
-      intent: 'general'
-    });
+    return res.status(200).json({ reply: 'PIXIE is standing by. How can I help with screen reader controls?', intent: 'general' });
   }
 });
 
-// ---------------------------------------------------------------------------
-// REMOTE PLAY — new, fully additive. Does not touch /api/agent or anything
-// the client's existing local play, AI opponent, Spectator mode, or Fog Mode
-// depend on. Base ruleset only
-// (no Fog Mode remotely, per earlier scope decision) — server is the single
-// source of truth for board state, using the same verified veiled-chess-core
-// engine, not a re-implementation. Room/socket logic lives in
-// gameNamespace.js (tested separately -- 12 gameplay tests + 12 restart/
-// durability tests); Firestore persistence lives in roomStore.js.
-// ---------------------------------------------------------------------------
-
 const httpServer = http.createServer(app);
 const io = new Server(httpServer);
-
 const roomStore = createFirestoreRoomStore();
 const playerStorage = createPlayerStorage();
 
-// Safely invoke roomStore.verifyAccess without crashing process on unhandled promise rejection
 if (roomStore && typeof roomStore.verifyAccess === 'function') {
   Promise.resolve(roomStore.verifyAccess()).catch((err) => {
     console.error('⚠️ [roomStore] Non-fatal verification check failure:', err?.message || err);
   });
 }
 
-createGameNamespace(io, roomStore, playerStorage);
+async function startServer() {
+  if (roomStore.db && process.env.ATPROTO_BASE_URL && process.env.ATPROTO_OAUTH_PRIVATE_KEY) {
+    try {
+      const atprotoAuth = await createAtprotoAuth({ db: roomStore.db });
+      atprotoAuth.routes(app);
+      console.log('AT Protocol OAuth BFF enabled.');
+    } catch (err) {
+      console.error('⚠️ AT Protocol OAuth initialization failed:', err.message);
+      console.error('The game server will continue without OAuth until configuration is corrected.');
+    }
+  } else {
+    console.log('AT Protocol OAuth is not configured; gameplay remains available.');
+  }
 
-httpServer.listen(PORT, HOST, () => {
-  console.log(`Server listening on http://${HOST}:${PORT}`);
+  createGameNamespace(io, roomStore, playerStorage);
+  httpServer.listen(PORT, HOST, () => {
+    console.log(`Server listening on http://${HOST}:${PORT}`);
+  });
+}
+
+startServer().catch((err) => {
+  console.error('Fatal server startup error:', err);
+  process.exit(1);
 });
