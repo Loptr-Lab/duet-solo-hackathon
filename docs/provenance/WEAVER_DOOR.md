@@ -4,7 +4,7 @@
 
 The Weaver public door is the accessible entry point into the documented creative/research process connecting the proposed collaboration, Duet, 52 Cards of War, and Veiled Dominion.
 
-The originating collaboration letter has been sent. This public door is now prepared for independent comment and professional review, including legal review if the invited reviewers choose to participate.
+The originating collaboration letter has been sent. This public door is prepared for controlled participation and professional review, including legal review if invited reviewers choose to participate.
 
 The page is intentionally a door rather than a legal memo. It introduces the creative history, the questions, the provenance model, and unresolved areas without converting any unresolved question into a conclusion.
 
@@ -21,7 +21,8 @@ The project distinguishes:
 - **Original Collaborator** — the person to whom the originating invitation was delivered.
 - **Independent Respondent** — another participant answering from their own perspective.
 - **AI-Assisted Response** — a human response articulated or edited with AI assistance.
-- **Anonymous Response** — a response whose public attribution is intentionally withheld.
+
+There is no anonymous response category. Public visitors may read the repository, but participation requires registration for an invitation and a separately issued invitation before a response pathway opens.
 
 A response's content does not authenticate its author. Authentication and content are separate layers.
 
@@ -29,13 +30,31 @@ A response's content does not authenticate its author. Authentication and conten
 
 The originating invitation has already been delivered privately. The public page does not expose the recipient's private contact information and does not allow a visitor to self-assign the `Original Collaborator` role.
 
-If a private response pathway is implemented later, it should use a unique non-public invitation token and preserve the resulting response through a versioned GitHub artifact or Issue/PR workflow.
+The original collaborator's response, if any, should enter through a protected private invitation pathway. The pathway must establish provenance through the authenticated invitation/session channel rather than asking the respondent to prove identity by answering questions about the shared history.
 
 Recommended provenance chain:
 
 `Invitation → private pathway → authenticated submission provenance → response artifact → discussion → explicit decision → possible incorporation`
 
 The system should record what pathway produced a response, not ask the public to prove a real-world identity by answering trivia.
+
+### Everyone-else pathway
+
+Other participants may register for an invitation. Registration is not anonymous and does not itself grant participation. A human invitation decision is required before the response pathway opens.
+
+Independent responses remain independent responses. One person's answer must never be represented as the original collaborator's answer or as a universal male perspective.
+
+## Verification boundary
+
+The application may establish a **Verified Profile** from an existing AT Protocol identity plus validated email and/or domain evidence.
+
+Verification is not legal identity, authorship, employment, ownership, consent, invitation, or a legal conclusion. It is an application-level provenance signal used before controlled participation.
+
+The current implementation supports:
+
+`EXISTING AT IDENTITY → AUTHENTICATE → VERIFY EMAIL AND/OR DOMAIN → REQUEST INVITATION → HUMAN DECISION → INVITED RESPONSE PATH`
+
+Domain verification is independently capable of establishing the first verified-profile credential; it must not require a profile to be verified before the domain challenge can begin.
 
 ## Memory prompts
 
