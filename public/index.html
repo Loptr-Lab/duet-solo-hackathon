@@ -1043,39 +1043,15 @@
         </div>
     </details>
 
-    <!-- WAYS TO SUPPORT - additive, entirely optional. Framed as a menu of
-         choices rather than a checkout flow: nothing here is required to
-         play, and no single option is presented as the "real" one. Each
-         sub-option is independent - remove/reorder freely. -->
+    <!-- Financial support is intentionally paused while Loptr Lab completes its
+         entity, benefits, housing, and payment-rail compliance review. -->
     <details class="panel" aria-labelledby="support-heading">
-        <summary id="support-heading">Ways to Support</summary>
+        <summary id="support-heading">Project Support Status</summary>
         <div class="details-body">
-            <p>None of this is required - Duet is free to play and always will be. If you'd like to put something
-            toward Loptr Lab's work on Veiled Dominion, here are a couple of no-pressure options. Pick whichever
-            fits, or none at all.</p>
-
-            <!-- PayPal - always visible, no wallet or extension required. A plain
-                 link, not a checkout embed: no SDK script, no dependency. -->
-            <div class="support-option" aria-labelledby="support-paypal-heading">
-                <h3 id="support-paypal-heading">PayPal</h3>
-                <p>Works for anyone, no crypto wallet needed.</p>
-                <a id="support-paypal-link" href="https://www.paypal.com/paypalme/ibloud" class="btn-primary" style="display:inline-block; text-decoration:none;">Give via PayPal ↗</a>
-            </div>
-
-            <!-- Lightning tip jar - via WebLN, additive only. Hidden entirely
-                 unless a WebLN-capable wallet (e.g. Alby) is detected in the
-                 browser - no wallet, no button, no dead UI. No server, no new
-                 dependency: WebLN is a browser API a wallet extension injects.
-                 See TipJar.LIGHTNING_ADDRESS below. -->
-            <div class="support-option" id="tipjar-panel" aria-labelledby="tipjar-heading" style="display:none;">
-                <h3 id="tipjar-heading">Lightning</h3>
-                <p>A wallet that speaks Lightning was detected in your browser. You can send a few sats
-                directly - no account, no checkout page.</p>
-                <label for="tipjar-amount">Amount (sats)</label>
-                <input type="number" id="tipjar-amount" value="1000" min="1" step="1" inputmode="numeric">
-                <button type="button" class="btn-primary" onclick="TipJar.sendTip()">Send Tip</button>
-                <p id="tipjar-status" role="status" aria-live="polite"></p>
-            </div>
+            <p>Duet remains free to play. Financial contributions are temporarily paused while Loptr Lab completes
+            its legal-entity and financial-compliance review. No payment is requested or accepted through this page.</p>
+            <p>You can still support the project without sending money by playing, reporting accessibility issues,
+            and reviewing the open-source work through the repository link below.</p>
         </div>
     </details>
 
@@ -2559,118 +2535,6 @@ async function sendAgentMessage() {
     };
 
     SpeechInput.init();
-</script>
-
-<!-- ===================================================================
-     TIP JAR - Lightning via WebLN, additive only. Never touches GameState,
-     RemoteState, or the engine. The panel stays hidden (display:none, set
-     in markup above) unless window.webln is actually present - detected
-     here, not assumed - so visitors without a Lightning wallet extension
-     never see a dead button. No new dependency: uses webln.lnurl() where
-     the provider supports it, and falls back to a manual LNURL-pay flow
-     (fetch the .well-known callback, get an invoice, webln.sendPayment)
-     for providers that don't.
-     =================================================================== -->
-<script>
-    const TipJar = {
-        LIGHTNING_ADDRESS: 'lovingphenomenon908720@getalby.com',
-
-        init() {
-            this._checkAndReveal();
-            // Some wallet extensions inject window.webln slightly after
-            // page load rather than synchronously - re-check a couple of
-            // times instead of assuming a single check at parse time is
-            // enough.
-            window.addEventListener('load', () => this._checkAndReveal());
-            setTimeout(() => this._checkAndReveal(), 500);
-            setTimeout(() => this._checkAndReveal(), 1500);
-        },
-
-        _checkAndReveal() {
-            const panel = document.getElementById('tipjar-panel');
-            if (!panel) return;
-            if (window.webln) {
-                panel.style.display = '';
-            }
-        },
-
-        async sendTip() {
-            const statusEl = document.getElementById('tipjar-status');
-            const setStatus = (msg) => { if (statusEl) statusEl.innerText = msg; };
-
-            if (!window.webln) {
-                setStatus('No Lightning wallet detected in this browser.');
-                return;
-            }
-
-            const amountInput = document.getElementById('tipjar-amount');
-            const sats = Math.max(1, parseInt(amountInput.value, 10) || 0);
-            if (!sats) {
-                setStatus('Enter an amount in sats first.');
-                return;
-            }
-
-            try {
-                await window.webln.enable();
-                setStatus('Requesting invoice...');
-
-                // Preferred path: some WebLN providers implement lnurl()
-                // directly and can resolve a Lightning Address themselves.
-                // This API isn't guaranteed on every provider, hence the
-                // feature check rather than assuming it exists.
-                if (typeof window.webln.lnurl === 'function') {
-                    const result = await window.webln.lnurl(this.LIGHTNING_ADDRESS);
-                    if (result && result.status === 'ERROR') {
-                        throw new Error(result.reason || 'Wallet reported an error.');
-                    }
-                    setStatus(`Tip sent - thank you! (${sats} sats requested via wallet's LNURL flow)`);
-                    return;
-                }
-
-                // Fallback: resolve the Lightning Address into its LNURL-pay
-                // endpoint ourselves, request an invoice for the exact
-                // amount, then hand that invoice to the wallet.
-                const invoice = await this._resolveLightningAddressInvoice(this.LIGHTNING_ADDRESS, sats);
-                const response = await window.webln.sendPayment(invoice);
-                setStatus(response && response.preimage
-                    ? 'Tip sent - thank you!'
-                    : 'Payment submitted.');
-            } catch (err) {
-                setStatus(`Tip not sent: ${err.message || 'something went wrong.'}`);
-            }
-        },
-
-        // Lightning Address (user@domain) is just LNURL-pay under a
-        // well-known path: fetch the pay endpoint's metadata, then call its
-        // callback with the amount (in millisats) to get a BOLT11 invoice.
-        async _resolveLightningAddressInvoice(address, sats) {
-            const [user, domain] = address.split('@');
-            if (!user || !domain) throw new Error('Lightning Address is malformed.');
-
-            const metaRes = await fetch(`https://${domain}/.well-known/lnurlp/${user}`);
-            if (!metaRes.ok) throw new Error('Could not reach that Lightning Address.');
-            const meta = await metaRes.json();
-            if (meta.status === 'ERROR') throw new Error(meta.reason || 'Address rejected the request.');
-
-            const millisats = sats * 1000;
-            if (meta.minSendable && millisats < meta.minSendable) {
-                throw new Error(`Minimum tip is ${Math.ceil(meta.minSendable / 1000)} sats.`);
-            }
-            if (meta.maxSendable && millisats > meta.maxSendable) {
-                throw new Error(`Maximum tip is ${Math.floor(meta.maxSendable / 1000)} sats.`);
-            }
-
-            const sep = meta.callback.includes('?') ? '&' : '?';
-            const invoiceRes = await fetch(`${meta.callback}${sep}amount=${millisats}`);
-            const invoiceData = await invoiceRes.json();
-            if (invoiceData.status === 'ERROR' || !invoiceData.pr) {
-                throw new Error(invoiceData.reason || 'Could not get an invoice.');
-            }
-            return invoiceData.pr;
-        },
-    };
-
-    TipJar.init();
 </script>
 
 <!-- ===================================================================
