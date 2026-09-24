@@ -27,6 +27,9 @@ The current `submit_feedback` path uses `ITransport.request()` directly rather t
 
 M1 intentionally documents this as an exception because feedback is outside the core gameplay contract. The path is to move it behind `DuetClient` before or during the M3 hardening work.
 
+### Connection-event reach-through
+The browser lobby currently listens to the transport's `connect` event through `RemoteState.client.transport` so it can trigger the existing auto-rejoin flow. This is a **temporary DuetClient boundary reach-through**, not a direct Socket.IO dependency. M3 should expose connection state through `DuetClient`/the normative transport contract and remove this reach-through.
+
 ### Reconnection
 M1 does not define a normative reconnect lifecycle. The current Socket.IO adapter retains its existing behavior. Ownership of connection state, reconnect attempts, replay/rejoin, and error propagation remains provisional until M3.
 
