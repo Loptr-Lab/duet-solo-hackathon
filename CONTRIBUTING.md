@@ -59,6 +59,16 @@ Evaluated the [ChessCom GitHub](https://github.com/ChessCom) (92 repositories). 
 
 ---
 
+### M0-A evidence discipline
+
+For Xbox/Godot feasibility work, record evidence rather than conclusions:
+
+- Use **UNKNOWN**, **UNVERIFIED**, **VERIFIED**, or **CONTRADICTED** for the state of an evidence item.
+- Record the Evidence ID, capture date, source type/owner, exact value or statement, environment, result, reproducibility, evidence location, and open questions.
+- Treat Microsoft/Xbox and W4 Games statements as authoritative for their respective controlled systems, but do not treat a vendor statement as physical hardware proof.
+- Keep external blockers explicit and separate from project implementation status.
+- Do not mark M0-A complete until the documented PASS criteria in `docs/DEVELOPMENT_STATUS.md` have been demonstrated and recorded.
+
 ## MCP-assisted contribution
 
 MCP (Model Context Protocol) tools may be used to inspect repository state, research technical questions, organize evidence, and assist with implementation or documentation. They do not override repository governance.
