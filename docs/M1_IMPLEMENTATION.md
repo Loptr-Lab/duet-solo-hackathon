@@ -1,6 +1,6 @@
 # M1 Implementation
 
-**Status:** In progress — M1.1 review closure
+**Status:** Complete — merged into `main`
 
 ## Goal
 Extract a platform-neutral client boundary from the existing DUET implementation without changing gameplay behavior.
@@ -33,15 +33,17 @@ The implementation review identified four follow-ups. They are intentionally doc
 
 These are tracked architecture follow-ups, not silent assumptions. M1 does not expand into M3 merely to resolve them.
 
-## M1 closure work
-1. Add contract tests for create/join/rejoin/move/state-update/error flows.
-2. Run the existing web regression suite.
-3. Inspect and resolve M1 test failures without changing the server authority model.
-4. Confirm the web client can complete a full match through DuetClient.
-5. Record the resulting verification status here before merging PR #47.
+## M1 closure
+M1 exit criteria were satisfied and PR #47 was merged into `main`.
 
-## Gate
-M1 is complete when the existing web client can play a complete match while core game/UI code no longer directly depends on Socket.IO, the contract tests pass, and the existing regression suite is green or any pre-existing failures are explicitly accounted for.
+- Merge commit: `6942575be02cadd23152818b93e727d41dd42158`
+- Final pre-merge head: `019ea579676c221e06f474d6add26ff4c4c0fe77`
+- Final-head CI: CI #119 passed
+- Contract tests: passing
+- Web regression suite: passing
+- Server authority model: unchanged
+
+M1 is closed. The known exceptions below remain explicit follow-ups for M3 rather than open M1 work.
 
 ## Boundary for M3
 M3 is the milestone where ITransport becomes load-bearing for a second implementation. Reconnection semantics, request timeouts/error behavior, and module single-sourcing are therefore deferred there rather than smuggled into M1.
