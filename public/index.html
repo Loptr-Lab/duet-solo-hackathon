@@ -2738,7 +2738,7 @@ async function sendAgentMessage() {
                 comment: document.getElementById('feedback-comment').value,
             };
             if (status) status.innerText = 'Sending feedback…';
-            RemoteState.socket.emit('submit_feedback', payload, (res) => {
+            RemoteState.transport.request('submit_feedback', payload).then((res) => {
                 if (!res.ok) {
                     if (status) status.innerText = res.reason || 'Feedback could not be saved.';
                     return;
@@ -2780,7 +2780,7 @@ async function sendAgentMessage() {
 
         _submitMove(from, to) {
             if (RemoteState.gameOver) { RemoteMode._announce('Game is over.'); return; }
-            RemoteState.socket.emit('make_move', { from, to }, (res) => {
+            RemoteState.client.sendMove({ from, to }).then((res) => {
                 if (!res.ok) {
                     RemoteMode._announce(res.reason || 'Invalid move.');
                     return;
