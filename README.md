@@ -116,6 +116,12 @@ Before deployment, enable Firestore TTL on the `expiresAt` field for both
 are maintained in the
 [`veiled-dominion-engine` contract directory](https://github.com/Loptr-Lab/veiled-dominion-engine/tree/main/docs/contracts).
 
+## Development status
+
+The current milestone state, completed M1 verification, M0 Xbox/Godot feasibility gate, deferred scope, and contributor review questions are maintained in [`docs/DEVELOPMENT_STATUS.md`](docs/DEVELOPMENT_STATUS.md).
+
+Contributors are invited to review and comment on that document, particularly the M0-A/M0-B evidence gates and the platform-neutral client boundary.
+
 ## Continuing development
 
 This project is under active development beyond the hackathon. The Veiled Dominion ecosystem — 4-player engine, Sealed Deck mechanics, stats-driven playable characters, and live Bluesky match posting via the-rift — is being built in the open.
