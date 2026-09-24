@@ -1,0 +1,84 @@
+/**
+ * Platform-neutral DUET client orchestration.
+ * Game rules remain server-authoritative.
+ */
+class DuetClient {
+  constructor({ transport, identity = null } = {}) {
+    if (!transport) throw new Error('DuetClient requires a transport');
+    this.transport = transport;
+    this.identity = identity;
+    this.snapshot = null;
+    this.roomCode = null;
+    this.color = null;
+    this.reconnectToken = null;
+    this.listeners = { state_update: new Set(), opponent_joined: new Set(), opponent_disconnected: new Set(), error: new Set() };
+
+    this.transport.on('state_update', ({ state }) => this._state(state));
+    this.transport.on('opponent_joined', ({ state }) => {
+      this._state(state);
+      this._emit('opponent_joined', state);
+    });
+    this.transport.on('opponent_disconnected', (payload) => this._emit('opponent_disconnected', payload));
+  }
+
+  connect() { return this.transport.connect(); }
+
+  async createRoom() {
+    const result = await this.transport.request('create_room', {});
+    return this._handleRoomResult(result);
+  }
+
+  async joinRoom(roomCode) {
+    const result = await this.transport.request('join_room', { roomId: roomCode });
+    return this._handleRoomResult(result);
+  }
+
+  async rejoinRoom(roomCode, color, reconnectToken) {
+    const result = await this.transport.request('rejoin_room', {
+      roomId: roomCode,
+      color,
+      reconnectToken,
+    });
+    return this._handleRoomResult(result);
+  }
+
+  async sendMove(intent) {
+    const result = await this.transport.request('make_move', intent);
+    if (!result || result.ok !== true) this._emit('error', result || { ok: false, reason: 'Move rejected.' });
+    if (result?.state) this._state(result.state);
+    return result;
+  }
+
+  onStateUpdate(handler) { return this.on('state_update', handler); }
+  onError(handler) { return this.on('error', handler); }
+  on(event, handler) {
+    if (!this.listeners[event]) this.listeners[event] = new Set();
+    this.listeners[event].add(handler);
+    return () => this.listeners[event].delete(handler);
+  }
+
+  disconnect() { return this.transport.disconnect(); }
+
+  _handleRoomResult(result) {
+    if (!result || result.ok !== true) {
+      this._emit('error', result || { ok: false, reason: 'Room request failed.' });
+      return result;
+    }
+    this.roomCode = result.roomId;
+    this.color = result.color;
+    this.reconnectToken = result.reconnectToken || this.reconnectToken;
+    if (result.state) this._state(result.state);
+    return result;
+  }
+
+  _state(snapshot) {
+    this.snapshot = snapshot;
+    this._emit('state_update', snapshot);
+  }
+
+  _emit(event, value) {
+    for (const handler of this.listeners[event] || []) handler(value);
+  }
+}
+
+module.exports = { DuetClient };

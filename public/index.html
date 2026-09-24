@@ -2549,9 +2549,14 @@ async function sendAgentMessage() {
      server-side.
      =================================================================== -->
 <script src="/socket.io/socket.io.js"></script>
+<script src="/client/ITransport.js"></script>
+<script src="/client/SocketTransport.js"></script>
+<script src="/client/DuetClient.js"></script>
 <script>
     const RemoteState = {
         socket: null,
+        transport: null,
+        client: null,
         roomId: null,
         myColor: null,
         board: null,
@@ -2568,9 +2573,11 @@ async function sendAgentMessage() {
             document.getElementById('remote-lobby').style.display = '';
             if (!RemoteState.socket) {
                 RemoteState.socket = io({ autoConnect: false });
-                RemoteMode._wireSocketEvents();
+                RemoteState.transport = new SocketTransport(RemoteState.socket);
+                RemoteState.client = new DuetClient({ transport: RemoteState.transport });
+                RemoteMode._wireClientEvents();
             }
-            if (!RemoteState.socket.connected) RemoteState.socket.connect();
+            if (!RemoteState.transport.isConnected()) RemoteState.transport.connect();
             RemoteMode._attemptAutoRejoin();
         },
 
@@ -2584,7 +2591,7 @@ async function sendAgentMessage() {
             if (!saved) return;
             const statusEl = document.getElementById('remote-lobby-status');
             if (statusEl) statusEl.innerText = `Reconnecting to room ${saved.roomId}…`;
-            RemoteState.socket.emit('rejoin_room', saved, (res) => {
+            RemoteState.client.rejoinRoom(saved.roomId, saved.color, saved.reconnectToken).then((res) => {
                 if (!res.ok) {
                     RemoteMode._clearSavedMatch();
                     if (statusEl) statusEl.innerText = '';
@@ -2629,17 +2636,17 @@ async function sendAgentMessage() {
             document.getElementById('remote-lobby').style.display = 'none';
         },
 
-        _wireSocketEvents() {
-            const s = RemoteState.socket;
-            s.on('connect', () => {
-                RemoteMode._attemptAutoRejoin();
-            });
-            s.on('opponent_joined', ({ state }) => {
+        _wireClientEvents() {
+            RemoteState.client.transport.on('connect', () => RemoteMode._attemptAutoRejoin());
+            RemoteState.client.on('opponent_joined', (state) => {
                 RemoteMode._applyState(state);
                 RemoteMode._enterGameScreen();
                 RemoteMode._announce('Opponent joined. White to move.');
             });
-            s.on('state_update', ({ state }) => {
+            RemoteState.client.on('opponent_disconnected', ({ color }) => {
+                RemoteMode._announce((color === 'w' ? 'White' : 'Black') + ' disconnected.');
+            });
+            RemoteState.client.onStateUpdate((state) => {
                 RemoteMode._applyState(state);
                 RemoteMode._announce(
                     state.gameOver
@@ -2647,15 +2654,12 @@ async function sendAgentMessage() {
                         : `It is now ${state.turn === 'w' ? "White's" : "Black's"} turn.`
                 );
             });
-            s.on('opponent_disconnected', ({ color }) => {
-                RemoteMode._announce(`${color === 'w' ? 'White' : 'Black'} disconnected.`);
-            });
         },
 
         createMatch() {
             const statusEl = document.getElementById('remote-lobby-status');
             RemoteMode._resetFeedback();
-            RemoteState.socket.emit('create_room', {}, (res) => {
+            RemoteState.client.createRoom().then((res) => {
                 if (!res.ok) { statusEl.innerText = 'Could not create a match.'; return; }
                 RemoteState.roomId = res.roomId;
                 RemoteState.myColor = res.color;
@@ -2672,7 +2676,7 @@ async function sendAgentMessage() {
             const roomId = codeInput.value.trim().toUpperCase();
             if (!roomId) { statusEl.innerText = 'Enter a room code first.'; return; }
             RemoteMode._resetFeedback();
-            RemoteState.socket.emit('join_room', { roomId }, (res) => {
+            RemoteState.client.joinRoom(roomId).then((res) => {
                 if (!res.ok) { statusEl.innerText = res.reason || 'Could not join that match.'; return; }
                 RemoteState.roomId = roomId;
                 RemoteState.myColor = res.color;
@@ -2737,7 +2741,7 @@ async function sendAgentMessage() {
                 comment: document.getElementById('feedback-comment').value,
             };
             if (status) status.innerText = 'Sending feedback…';
-            RemoteState.socket.emit('submit_feedback', payload, (res) => {
+            RemoteState.transport.request('submit_feedback', payload).then((res) => {
                 if (!res.ok) {
                     if (status) status.innerText = res.reason || 'Feedback could not be saved.';
                     return;
@@ -2779,7 +2783,7 @@ async function sendAgentMessage() {
 
         _submitMove(from, to) {
             if (RemoteState.gameOver) { RemoteMode._announce('Game is over.'); return; }
-            RemoteState.socket.emit('make_move', { from, to }, (res) => {
+            RemoteState.client.sendMove({ from, to }).then((res) => {
                 if (!res.ok) {
                     RemoteMode._announce(res.reason || 'Invalid move.');
                     return;
