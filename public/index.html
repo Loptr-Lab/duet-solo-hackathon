@@ -2643,6 +2643,9 @@ async function sendAgentMessage() {
                 RemoteMode._enterGameScreen();
                 RemoteMode._announce('Opponent joined. White to move.');
             });
+            RemoteState.client.on('opponent_disconnected', ({ color }) => {
+                RemoteMode._announce((color === 'w' ? 'White' : 'Black') + ' disconnected.');
+            });
             RemoteState.client.onStateUpdate((state) => {
                 RemoteMode._applyState(state);
                 RemoteMode._announce(
