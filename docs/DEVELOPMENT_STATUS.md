@@ -1,0 +1,215 @@
+# DUET Development Status
+
+**Status:** Active development — M1 complete; M0-A frozen pending external facts  
+**Updated:** 2026-09-24  
+**Purpose:** Contributor review and comment
+
+## Current state
+
+DUET's platform-neutral client boundary has been implemented and merged into `main`.
+
+**M1: Platform-neutral client contract — COMPLETE**
+
+```
+DuetClient → ITransport → authoritative DUET server
+```
+
+The existing web client is the known-good reference implementation. The authoritative Node/Socket.IO server remains unchanged.
+
+### M1 verification
+
+- PR #47 merged into `main`.
+- Merge commit: `6942575be02cadd23152818b93e727d41dd42158`.
+- Final pre-merge head: `019ea579676c221e06f474d6add26ff4c4c0fe77`.
+- Final-head CI #119 passed.
+- Client contract tests passed.
+- Existing web regression coverage passed.
+- Direct Socket.IO calls were removed from the web game's core client/UI path.
+- M1 review exceptions and M3 follow-ups are documented rather than silently expanded into M1.
+- The server authority model was preserved.
+
+M1 is closed. No additional M1 implementation work is required.
+
+## Next gate: M0
+
+M0 is a feasibility gate for the Xbox/Godot proving ground. It does **not** invalidate or reopen M1.
+
+### M0-A — Godot → Xbox hardware feasibility
+
+Demonstrate the documented and applicable Godot console path in DUET's actual development environment:
+
+- confirm the applicable GDK version;
+- confirm the required Godot version and W4 Games console fork;
+- confirm the applicable console-development/dev-kit configuration;
+- obtain/provision the required Xbox development access and hardware;
+- build/export the Microsoft Godot/Xbox sample for Xbox Series X|S;
+- deploy that sample to an Xbox dev kit;
+- verify controller input and Xbox services on hardware.
+
+**M0-A exit condition:** all PASS criteria below are satisfied and the evidence package is auditable.
+
+Documentation alone, PC-only deployment, or partner confirmation does not satisfy M0-A.
+
+#### M0-A evidence states
+
+Use these states for individual evidence items:
+
+- **UNKNOWN** — the fact has not yet been established.
+- **UNVERIFIED** — evidence or a claim exists, but the required verification step has not occurred.
+- **VERIFIED** — the defined verification step succeeded and evidence was captured.
+- **CONTRADICTED** — credible evidence conflicts; resolution is required.
+
+Do not treat UNKNOWN or UNVERIFIED as implied support. Do not convert a contradiction into an assumption.
+
+#### M0-A evidence record schema
+
+Each material evidence item should record:
+
+| Field | Required content |
+|---|---|
+| Evidence ID | Stable identifier, e.g. `M0A-E01` |
+| Date captured | Date the evidence was collected |
+| Source type | Microsoft/Xbox, W4, local installation, hardware, repository, etc. |
+| Source owner | Organization or responsible source |
+| Exact value/statement | Verbatim version, status, result, or relevant statement |
+| Environment | Host/tool/dev-kit context applicable to the evidence |
+| Result | What the check actually produced |
+| Reproducibility | Whether another contributor can repeat the check |
+| Evidence location | Screenshot, export, log, release page, support response, or private evidence reference |
+| Open questions | Remaining uncertainty or follow-up required |
+
+#### M0-A PASS criteria
+
+M0-A is **PASS** only when all of the following have been demonstrated and recorded:
+
+1. The environment/version matrix is complete enough to reproduce the test environment.
+2. Required Microsoft/Xbox access and provisioning are established.
+3. Required W4 Games console middleware and supported toolchain are identified.
+4. The Microsoft Godot/Xbox sample builds successfully.
+5. The sample packages successfully.
+6. The sample deploys to an Xbox development kit.
+7. The sample launches successfully on physical Xbox hardware.
+8. Controller input is verified on hardware.
+9. Required Xbox services function on hardware.
+10. The intended network path is verified where it is part of the deployment chain.
+11. Evidence is captured with sufficient detail for another contributor to audit the result.
+
+A successful documentation review or vendor response may establish **DOCUMENTED** or **VENDOR CONFIRMED** evidence, but it does not satisfy hardware-gated criteria by itself.
+
+#### M0-A blocker register
+
+External and project blockers should be tracked explicitly rather than inferred from the milestone label:
+
+| ID | Owner | Question / blocker | Current state |
+|---|---|---|---|
+| M0A-B01 | Microsoft/Xbox | Partner/GDK/GDKx access, entitlement, and provisioning status | UNKNOWN — awaiting authoritative response |
+| M0A-B02 | W4 Games | Exact Xbox fork plus supported Godot/GDK/toolchain tuple | UNKNOWN — awaiting authoritative response |
+| M0A-B03 | Project | Physical Xbox dev-kit deployment | UNVERIFIED — hardware proof not started |
+| M0A-B04 | Project | DUET-specific network path | UNVERIFIED — requires the applicable test chain |
+
+The blocker register should be updated when authoritative responses or test results arrive. A blocker changing from UNKNOWN to VENDOR CONFIRMED does not by itself make a hardware-gated item VERIFIED.
+
+If M0-A cannot be established, stop Xbox/Godot implementation. M1 and the platform-neutral client architecture remain valid and reusable for other clients/platforms.
+
+### M0-B — Controller and TV/10-foot interaction
+
+Evaluate DUET on the console interaction model:
+
+- D-pad board navigation;
+- cursor/focus movement;
+- command-bar interaction using controller/virtual keyboard;
+- selection and cancellation;
+- visible focus state;
+- 10-foot readability;
+- Xbox Narrator interaction;
+- clear turn/status comprehension.
+
+The existing 46px browser grid is not treated as an Xbox visual specification.
+
+Accessibility is load-bearing: compare DUET's screen-reader-first interaction model with the Xbox accessibility stack and record any product-level conflicts or required decisions.
+
+## What is deliberately deferred
+
+Until M0 is demonstrated, do not expand the Xbox implementation into:
+
+- Xbox Store submission;
+- achievements/Gamerscore;
+- Play Anywhere;
+- Xbox-native matchmaking, invitations, shell joinability;
+- PlayFab Party;
+- replacing DUET identity with Xbox identity;
+- four-player console implementation;
+- production art;
+- Fog Mode;
+- Gemini/PIXIE;
+- unrelated persistence changes.
+
+These remain later milestones or production decisions, not M0 prerequisites unless the feasibility work shows otherwise.
+
+## Architectural invariant
+
+The Xbox effort is a proving ground for the client abstraction, not a reason to rebuild DUET.
+
+```
+platform client
+      ↓
+DuetClient
+      ↓
+ITransport
+      ↓
+authoritative DUET server
+```
+
+The client contract must remain platform-neutral. Xbox/Godot, Socket.IO, PlayFab, Xbox services, and AT Protocol are implementation details behind the appropriate boundaries.
+
+The server remains authoritative for gameplay.
+
+## Contributor review focus
+
+Contributors are invited to review and comment specifically on:
+
+1. Whether the M1 boundary is sufficiently platform-neutral for a second client.
+2. Whether M0-A identifies the minimum evidence needed to prove the Godot → Xbox hardware path.
+3. Whether M0-B adequately captures controller, TV-distance, and accessibility concerns.
+4. Any concrete contradiction between the current repository architecture and the documented M0 plan.
+5. Risks that should be recorded before Xbox/Godot implementation begins.
+
+Please distinguish **documented capability**, **team-demonstrated capability**, and **production readiness** in review comments.
+
+## MCP-assisted contribution and evidence
+
+MCP-assisted research and repository work is permitted within the same contribution controls as any other workflow. MCP does not establish authority by itself.
+
+For M0-A, contributors should use the evidence states **DOCUMENTED**, **LOCALLY VERIFIED**, **VENDOR CONFIRMED**, **HARDWARE VERIFIED**, and **NOT YET VERIFIED**. Record exact values, sources, dates, and evidence rather than compatibility assumptions.
+
+Do not publish confidential Microsoft/Xbox or W4 Games material, credentials, tokens, or other restricted evidence. Summarize the relevant public fact and retain restricted evidence in the appropriate private location.
+
+MCP must not be used to bypass repository protections, required review, or maintainer authorization. Do not expand Xbox/Godot implementation while the environment facts remain unresolved.
+
+See [MCP contribution guidance](MCP_CONTRIBUTION_GUIDANCE.md) for the detailed restrictions and review practice.
+
+### M0-A call to action
+
+**Current state: FROZEN / PENDING EXTERNAL FACTS.**
+
+Contributors are invited to comment on the evidence chain and identify concrete contradictions or missing fields. The next milestone movement is:
+
+**Microsoft/Xbox or W4 Games response → capture exact environment facts → build compatibility matrix → identify remaining unknowns → physical dev-kit proof.**
+
+DUET remains **M1 COMPLETE** while this evidence-gathering work is pending.
+
+## Source documents
+
+- [M1 implementation](M1_IMPLEMENTATION.md)
+- [Client contract](CLIENT_CONTRACT.md)
+- [Transport contract](TRANSPORT.md)
+- [Identity contract](IDENTITY_CONTRACT.md)
+- [DUET protocol](DUET_PROTOCOL.md)
+- [Architecture decisions](DECISIONS.md)
+- [Test plan](TEST_PLAN.md)
+
+## Change discipline
+
+M0 should prove feasibility before implementation expands.
+
+Do not convert an unresolved feasibility question into an architectural assumption. When evidence changes, update this status document and the relevant decision/contract document rather than silently changing the milestone definition.

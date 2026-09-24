@@ -55,3 +55,35 @@ Evaluated the [ChessCom GitHub](https://github.com/ChessCom) (92 repositories). 
 | Everything else | ❌ Not applicable | Forks of general-purpose libraries (protobuf, webpack plugins, etc.) with no chess-specific relevance. |
 
 **Bottom line:** Chess.com's source code for anything meaningful is proprietary and not public. What they do publish is either standard-chess-specific, PHP/Objective-C mobile tooling, or forks of general open source libraries. Nothing applicable to Duet's Node stack, custom ruleset, or accessibility goals.
+
+
+---
+
+### M0-A evidence discipline
+
+For Xbox/Godot feasibility work, record evidence rather than conclusions:
+
+- Use **UNKNOWN**, **UNVERIFIED**, **VERIFIED**, or **CONTRADICTED** for the state of an evidence item.
+- Record the Evidence ID, capture date, source type/owner, exact value or statement, environment, result, reproducibility, evidence location, and open questions.
+- Treat Microsoft/Xbox and W4 Games statements as authoritative for their respective controlled systems, but do not treat a vendor statement as physical hardware proof.
+- Keep external blockers explicit and separate from project implementation status.
+- Do not mark M0-A complete until the documented PASS criteria in `docs/DEVELOPMENT_STATUS.md` have been demonstrated and recorded.
+
+## MCP-assisted contribution
+
+MCP (Model Context Protocol) tools may be used to inspect repository state, research technical questions, organize evidence, and assist with implementation or documentation. They do not override repository governance.
+
+When using MCP or other AI-assisted tooling:
+
+- Treat tool output as evidence to inspect, not as automatic authority.
+- Do not bypass branch protection, required review, or the pull-request workflow.
+- Do not write directly to `main` where a PR is required.
+- Do not merge without maintainer authorization.
+- Never expose or commit secrets, credentials, tokens, private keys, personal data, or confidential partner material.
+- Do not present AI inference as a Microsoft/Xbox, W4 Games, or other vendor statement.
+- Record exact versions and source evidence for compatibility claims.
+- Distinguish **DOCUMENTED**, **LOCALLY VERIFIED**, **VENDOR CONFIRMED**, and **HARDWARE VERIFIED** states.
+- Do not turn "looks compatible," "probably supported," or "should work" into project facts.
+- For hardware-gated work, documentation and partner confirmation do not substitute for the required physical test.
+
+For detailed MCP restrictions, evidence handling, review-comment guidance, and the current M0-A call to action, see [`docs/MCP_CONTRIBUTION_GUIDANCE.md`](docs/MCP_CONTRIBUTION_GUIDANCE.md).
