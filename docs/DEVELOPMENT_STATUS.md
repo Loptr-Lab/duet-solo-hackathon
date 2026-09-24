@@ -1,6 +1,6 @@
 # DUET Development Status
 
-**Status:** Active development — M1 complete; M0 next  
+**Status:** Active development — M1 complete; M0-A frozen pending external facts  
 **Updated:** 2026-09-24  
 **Purpose:** Contributor review and comment
 
@@ -46,9 +46,68 @@ Demonstrate the documented and applicable Godot console path in DUET's actual de
 - deploy that sample to an Xbox dev kit;
 - verify controller input and Xbox services on hardware.
 
-**M0-A exit condition:** a Godot project runs on an Xbox dev kit with controller input and Xbox services functioning.
+**M0-A exit condition:** all PASS criteria below are satisfied and the evidence package is auditable.
 
 Documentation alone, PC-only deployment, or partner confirmation does not satisfy M0-A.
+
+#### M0-A evidence states
+
+Use these states for individual evidence items:
+
+- **UNKNOWN** — the fact has not yet been established.
+- **UNVERIFIED** — evidence or a claim exists, but the required verification step has not occurred.
+- **VERIFIED** — the defined verification step succeeded and evidence was captured.
+- **CONTRADICTED** — credible evidence conflicts; resolution is required.
+
+Do not treat UNKNOWN or UNVERIFIED as implied support. Do not convert a contradiction into an assumption.
+
+#### M0-A evidence record schema
+
+Each material evidence item should record:
+
+| Field | Required content |
+|---|---|
+| Evidence ID | Stable identifier, e.g. `M0A-E01` |
+| Date captured | Date the evidence was collected |
+| Source type | Microsoft/Xbox, W4, local installation, hardware, repository, etc. |
+| Source owner | Organization or responsible source |
+| Exact value/statement | Verbatim version, status, result, or relevant statement |
+| Environment | Host/tool/dev-kit context applicable to the evidence |
+| Result | What the check actually produced |
+| Reproducibility | Whether another contributor can repeat the check |
+| Evidence location | Screenshot, export, log, release page, support response, or private evidence reference |
+| Open questions | Remaining uncertainty or follow-up required |
+
+#### M0-A PASS criteria
+
+M0-A is **PASS** only when all of the following have been demonstrated and recorded:
+
+1. The environment/version matrix is complete enough to reproduce the test environment.
+2. Required Microsoft/Xbox access and provisioning are established.
+3. Required W4 Games console middleware and supported toolchain are identified.
+4. The Microsoft Godot/Xbox sample builds successfully.
+5. The sample packages successfully.
+6. The sample deploys to an Xbox development kit.
+7. The sample launches successfully on physical Xbox hardware.
+8. Controller input is verified on hardware.
+9. Required Xbox services function on hardware.
+10. The intended network path is verified where it is part of the deployment chain.
+11. Evidence is captured with sufficient detail for another contributor to audit the result.
+
+A successful documentation review or vendor response may establish **DOCUMENTED** or **VENDOR CONFIRMED** evidence, but it does not satisfy hardware-gated criteria by itself.
+
+#### M0-A blocker register
+
+External and project blockers should be tracked explicitly rather than inferred from the milestone label:
+
+| ID | Owner | Question / blocker | Current state |
+|---|---|---|---|
+| M0A-B01 | Microsoft/Xbox | Partner/GDK/GDKx access, entitlement, and provisioning status | UNKNOWN — awaiting authoritative response |
+| M0A-B02 | W4 Games | Exact Xbox fork plus supported Godot/GDK/toolchain tuple | UNKNOWN — awaiting authoritative response |
+| M0A-B03 | Project | Physical Xbox dev-kit deployment | UNVERIFIED — hardware proof not started |
+| M0A-B04 | Project | DUET-specific network path | UNVERIFIED — requires the applicable test chain |
+
+The blocker register should be updated when authoritative responses or test results arrive. A blocker changing from UNKNOWN to VENDOR CONFIRMED does not by itself make a hardware-gated item VERIFIED.
 
 If M0-A cannot be established, stop Xbox/Godot implementation. M1 and the platform-neutral client architecture remain valid and reusable for other clients/platforms.
 
