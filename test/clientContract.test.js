@@ -187,3 +187,15 @@ test('listener unsubscribe stops client callbacks', () => {
 
   assert.deepEqual(states, []);
 });
+
+
+test('opponent_disconnected events flow through DuetClient', () => {
+  const transport = new FakeTransport();
+  const client = new DuetClient({ transport });
+  const events = [];
+  client.on('opponent_disconnected', (payload) => events.push(payload));
+
+  transport.emit('opponent_disconnected', { color: 'b' });
+
+  assert.deepEqual(events, [{ color: 'b' }]);
+});
