@@ -7,12 +7,13 @@ window.DuetClient = class DuetClient {
     this.roomCode = null;
     this.color = null;
     this.reconnectToken = null;
-    this.listeners = { state_update: new Set(), opponent_joined: new Set(), error: new Set() };
+    this.listeners = { state_update: new Set(), opponent_joined: new Set(), opponent_disconnected: new Set(), error: new Set() };
     this.transport.on('state_update', ({ state }) => this._state(state));
     this.transport.on('opponent_joined', ({ state }) => {
       this._state(state);
       this._emit('opponent_joined', state);
     });
+    this.transport.on('opponent_disconnected', (payload) => this._emit('opponent_disconnected', payload));
   }
   connect() { return this.transport.connect(); }
   async createRoom() { return this._handleRoomResult(await this.transport.request('create_room', {})); }
