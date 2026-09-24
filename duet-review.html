@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DUET — Break This</title>
+<meta name="description" content="An open technical review of DUET's platform-neutral client architecture and proposed Xbox/Godot proving ground.">
+<style>
+:root{color-scheme:dark;--bg:#0d0f12;--panel:#15191e;--text:#f2f4f7;--muted:#aab2bd;--line:#303740;--accent:#d8ff4f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:18px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+main{max-width:860px;margin:0 auto;padding:72px 24px 96px}h1{font-size:clamp(48px,9vw,86px);line-height:.95;margin:0 0 24px;letter-spacing:-.04em}
+h2{font-size:26px;margin:48px 0 12px}p{max-width:720px}a{color:var(--accent)}.lede{font-size:25px;line-height:1.35;color:var(--muted);max-width:720px}
+.callout{border:1px solid var(--line);background:var(--panel);padding:24px;margin:32px 0;border-radius:10px}
+pre{overflow:auto;background:#090b0d;border:1px solid var(--line);padding:20px;border-radius:8px;font-size:16px}
+ul{padding-left:24px}.state{font-weight:700;letter-spacing:.02em}.ask{font-size:24px;font-weight:650}
+small{color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+<p><small>DUET · OPEN TECHNICAL REVIEW</small></p>
+<h1>Try to break this.</h1>
+<p class="lede">DUET is a two-player accessible strategy game. The web game works. The next question is whether its client architecture can survive a real Xbox/Godot client without rebuilding the game.</p>
+
+<div class="callout">
+<p class="state">CURRENT STATE</p>
+<p><strong>M1 — COMPLETE</strong><br>
+<strong>M0-A — FROZEN / PENDING EXTERNAL FACTS</strong></p>
+<p>We are deliberately not building the Xbox implementation yet.</p>
+</div>
+
+<h2>What we're testing</h2>
+<pre>platform client
+      ↓
+  DuetClient
+      ↓
+  ITransport
+      ↓
+authoritative DUET server</pre>
+
+<p>The existing web client is the reference implementation. The server remains authoritative. Xbox/Godot is the proving ground for the platform boundary—not a reason to duplicate the game or create a second authority.</p>
+
+<h2>The challenge</h2>
+<p class="ask">Don't validate the architecture. Try to break it.</p>
+<ul>
+<li>What assumption have we not actually proved?</li>
+<li>Where does the abstraction leak?</li>
+<li>What Xbox/Godot constraint could invalidate it?</li>
+<li>What networking, identity, controller, TV, or accessibility issue are we overlooking?</li>
+<li>What should be tested before implementation moves forward?</li>
+</ul>
+
+<h2>What is known — and what isn't</h2>
+<p>Microsoft documents a Godot/Xbox development path. W4 Games provides Xbox console tooling for Godot. Those facts are not the same thing as proving that <em>this</em> project can build, package, deploy, and run successfully on <em>this</em> development environment and hardware.</p>
+
+<p>That distinction is intentional:</p>
+<div class="callout">
+<p><strong>Documentation can reduce uncertainty.</strong></p>
+<p><strong>Physical Xbox deployment establishes runtime evidence.</strong></p>
+</div>
+
+<h2>What happens next</h2>
+<p>M0-A is waiting on the external facts needed to build the actual compatibility matrix:</p>
+<ul>
+<li>Microsoft/Xbox partner access, GDK/GDKx, entitlement and provisioning</li>
+<li>W4 Games Xbox fork and supported Godot/GDK/toolchain tuple</li>
+<li>Physical dev-kit deployment and hardware validation</li>
+</ul>
+
+<p>Until those facts arrive, DUET implementation stays frozen at M1.</p>
+
+<h2>How to review</h2>
+<p>Bring evidence, not vibes. If you think something is wrong, point to the assumption, constraint, documentation, test, or failure mode that supports the objection.</p>
+
+<p><a href="https://github.com/Loptr-Lab/duet-solo-hackathon">DUET repository</a> · <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/pull/48">Current development-state review</a></p>
+
+<p><small>This page is an invitation to technical scrutiny. It is not a claim that Xbox deployment has been demonstrated.</small></p>
+</main>
+</body>
+</html>
