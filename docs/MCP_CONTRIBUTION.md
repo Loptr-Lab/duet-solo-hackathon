@@ -60,7 +60,7 @@ Comments and documentation should distinguish:
 
 Avoid unsupported language such as "should work," "looks compatible," or "is certified."
 
-For M0-A, record exact versions, access status, source, collection date, and available evidence before constructing a compatibility conclusion.
+For M0-A, use the evidence schema in `docs/DEVELOPMENT_STATUS.md`: Evidence ID, capture date, source type, source owner, exact value/statement, environment, result, reproducibility, evidence location, and open questions. Use **UNKNOWN**, **UNVERIFIED**, **VERIFIED**, or **CONTRADICTED** for the evidence state. Record external blockers separately from project implementation status before constructing a compatibility conclusion.
 
 ### 4. Protect credentials and private platform material
 
