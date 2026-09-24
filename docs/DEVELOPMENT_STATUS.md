@@ -117,6 +117,28 @@ Contributors are invited to review and comment specifically on:
 
 Please distinguish **documented capability**, **team-demonstrated capability**, and **production readiness** in review comments.
 
+## MCP-assisted contribution and evidence
+
+MCP-assisted research and repository work is permitted within the same contribution controls as any other workflow. MCP does not establish authority by itself.
+
+For M0-A, contributors should use the evidence states **DOCUMENTED**, **LOCALLY VERIFIED**, **VENDOR CONFIRMED**, **HARDWARE VERIFIED**, and **NOT YET VERIFIED**. Record exact values, sources, dates, and evidence rather than compatibility assumptions.
+
+Do not publish confidential Microsoft/Xbox or W4 Games material, credentials, tokens, or other restricted evidence. Summarize the relevant public fact and retain restricted evidence in the appropriate private location.
+
+MCP must not be used to bypass repository protections, required review, or maintainer authorization. Do not expand Xbox/Godot implementation while the environment facts remain unresolved.
+
+See [MCP contribution guidance](MCP_CONTRIBUTION_GUIDANCE.md) for the detailed restrictions and review practice.
+
+### M0-A call to action
+
+**Current state: FROZEN / PENDING EXTERNAL FACTS.**
+
+Contributors are invited to comment on the evidence chain and identify concrete contradictions or missing fields. The next milestone movement is:
+
+**Microsoft/Xbox or W4 Games response → capture exact environment facts → build compatibility matrix → identify remaining unknowns → physical dev-kit proof.**
+
+DUET remains **M1 COMPLETE** while this evidence-gathering work is pending.
+
 ## Source documents
 
 - [M1 implementation](M1_IMPLEMENTATION.md)
