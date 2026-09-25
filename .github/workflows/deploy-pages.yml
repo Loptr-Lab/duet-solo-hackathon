@@ -29,21 +29,7 @@ jobs:
         run: |
           rm -rf _site
           mkdir -p _site
-          cat > _site/index.html <<'EOF'
-          <!doctype html>
-          <html lang="en">
-          <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <meta http-equiv="refresh" content="0; url=https://github.com/Loptr-Lab/duet-solo-hackathon/blob/main/duet-review.html">
-            <title>DUET — Open Technical Review</title>
-          </head>
-          <body>
-            <p>DUET — Open Technical Review</p>
-            <p><a href="https://github.com/Loptr-Lab/duet-solo-hackathon/blob/main/duet-review.html">Open the technical review on GitHub</a></p>
-          </body>
-          </html>
-          EOF
+          cp duet-review.html _site/index.html
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
