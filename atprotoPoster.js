@@ -86,4 +86,26 @@ function postMatchResult({ winner }) {
         });
 }
 
-module.exports = { postMatchResult };
+/**
+ * Publish a verified project milestone. The public UI never receives Bluesky
+ * credentials. In production, prefer the made-sick.org posting gateway by
+ * setting MADE_SICK_BSKY_WEBHOOK_URL. The gateway owns the account/session.
+ */
+async function postMilestone({ title, evidenceUrl, readiness }) {
+    const gateway = process.env.MADE_SICK_BSKY_WEBHOOK_URL;
+    const text = `DUET // ${title} — Halloween 2026 release target: ${readiness}% ready. Evidence: ${evidenceUrl}`;
+
+    if (gateway) {
+        const res = await fetch(gateway, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text, source: 'duet-solo-hackathon', milestone: title, readiness, evidenceUrl }),
+        });
+        if (!res.ok) throw new Error(`made-sick.org milestone gateway failed (${res.status})`);
+        return res.json().catch(() => ({ ok: true }));
+    }
+
+    return createSession().then((session) => createPost(session, text));
+}
+
+module.exports = { postMatchResult, postMilestone };
