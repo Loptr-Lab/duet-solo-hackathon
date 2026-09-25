@@ -107,7 +107,32 @@
             font-family: var(--font-mono);
         }
 
-                /* Community ownership / Xbox proof layer */
+        
+        /* Halloween 2026 release mission control */
+        .release-section{margin:40px 0;border:1px solid var(--border-hairline);padding:28px;background:linear-gradient(180deg,rgba(212,168,83,.07),transparent)}
+        .release-kicker{font:11px var(--font-mono);color:var(--amber-light);letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+        .release-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-end;flex-wrap:wrap}
+        .release-section h2{color:var(--white-pure);font-size:clamp(1.7rem,4vw,2.6rem);font-weight:300;margin:0 0 8px;letter-spacing:-.02em}
+        .release-date{font:700 clamp(1.2rem,3vw,1.8rem) var(--font-mono);color:var(--white-pure);white-space:nowrap}
+        .release-lead{max-width:70ch;line-height:1.7;color:var(--grey-200);opacity:.9;margin:12px 0 20px}
+        .release-countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0 24px}
+        .countdown-cell{border:1px solid var(--border-hairline);padding:14px;background:rgba(255,255,255,.015);text-align:center}
+        .countdown-cell strong{display:block;font:300 1.7rem var(--font-mono);color:var(--white-pure)}
+        .countdown-cell span{display:block;margin-top:4px;color:var(--text-muted);font:10px var(--font-mono);text-transform:uppercase;letter-spacing:.1em}
+        .readiness-title{display:flex;justify-content:space-between;gap:12px;font:12px var(--font-mono);text-transform:uppercase;letter-spacing:.1em;color:var(--amber-light)}
+        .readiness-track{height:7px;background:var(--black-obsidian);margin:8px 0 20px;border:1px solid var(--border-hairline)}
+        .readiness-track span{display:block;height:100%;width:0;background:var(--amber-light);transition:width .35s ease}
+        .gate-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+        .gate{display:grid;grid-template-columns:28px 1fr;gap:10px;border:1px solid var(--border-hairline);padding:12px;background:rgba(255,255,255,.012)}
+        .gate input{margin-top:2px;width:18px;height:18px;accent-color:var(--amber-light)}
+        .gate strong{display:block;color:var(--white-pure);font-size:13px;font-weight:400}
+        .gate small{display:block;color:var(--text-muted);line-height:1.4;margin-top:3px}
+        .release-note{margin-top:18px;padding:13px;border-left:2px solid var(--amber-light);background:var(--black-obsidian);color:var(--text-muted);font-size:12px;line-height:1.6}
+        .broadcast-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:20px;padding-top:18px;border-top:1px solid var(--border-hairline)}
+        .broadcast-status{font:12px var(--font-mono);color:var(--text-muted)}
+        @media(max-width:700px){.release-section{padding:20px}.release-countdown{grid-template-columns:repeat(2,1fr)}.gate-list{grid-template-columns:1fr}}
+
+        /* Community ownership / Xbox proof layer */
         .power-section{margin:40px 0;border:1px solid var(--border-hairline);padding:28px;background:linear-gradient(180deg,rgba(212,168,83,.045),transparent)}
         .power-section .power-kicker{font:11px var(--font-mono);color:var(--amber-light);letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
         .power-section h2{color:var(--white-pure);font-size:clamp(1.7rem,4vw,2.6rem);font-weight:300;margin:0 0 12px;letter-spacing:-.02em}
@@ -799,7 +824,44 @@
 
     <div id="remote-sr-status" class="sr-only" role="status" aria-live="assertive" aria-atomic="true"></div>
 
-    <section class="power-section" id="community-power" aria-labelledby="community-power-title"><div class="power-kicker">COMMUNITY OWNERSHIP / XBOX PROOF</div><h2 id="community-power-title">Take your power back.</h2><p class="lead">DUET is not asking a community to applaud a finished product. We are building an evidence trail: players test it, challenge it, improve accessibility, contribute ideas, and help determine what gets built next. This is how we show a platform partner that the project has an active community around it.</p><div class="power-grid" aria-label="Community proof metrics"><div class="power-metric"><span class="num" id="power-players">0</span><span class="label">players who want to play</span></div><div class="power-metric"><span class="num" id="power-testers">0</span><span class="label">playtesters</span></div><div class="power-metric"><span class="num" id="power-access">0</span><span class="label">accessibility testers</span></div><div class="power-metric"><span class="num" id="power-design">0</span><span class="label">design contributors</span></div><div class="power-metric"><span class="num" id="power-creators">0</span><span class="label">creative contributors</span></div><div class="power-metric"><span class="num" id="power-community">0</span><span class="label">community organizers</span></div></div><h3>Show us what you want to take back.</h3><div class="power-actions"><label class="power-action"><input type="checkbox" value="play"><span><strong>I want to play.</strong><small>Join the player/test cohort.</small></span></label><label class="power-action"><input type="checkbox" value="test"><span><strong>I want to test.</strong><small>Break builds and report evidence.</small></span></label><label class="power-action"><input type="checkbox" value="design"><span><strong>I want to design.</strong><small>Propose mechanics, rules, or world ideas.</small></span></label><label class="power-action"><input type="checkbox" value="accessibility"><span><strong>I want to make it more accessible.</strong><small>Test captions, input, UI, motion, audio, and navigation.</small></span></label><label class="power-action"><input type="checkbox" value="create"><span><strong>I want to create.</strong><small>Art, music, writing, video, documentation, or tools.</small></span></label><label class="power-action"><input type="checkbox" value="community"><span><strong>I want to help the community.</strong><small>Organize playtests, discussion, or moderation.</small></span></label></div><div class="power-submit"><button class="btn-primary" type="button" id="claim-power">Claim your place</button><span class="power-status" id="power-status" role="status" aria-live="polite">No claim submitted yet.</span></div><div class="power-proof"><h3>Community proof — visible, attributable, auditable</h3><div class="proof-row"><span>Want to play</span><div class="proof-bar"><span id="bar-play"></span></div><span class="proof-count" id="count-play">0</span></div><div class="proof-row"><span>Playtest / break it</span><div class="proof-bar"><span id="bar-test"></span></div><span class="proof-count" id="count-test">0</span></div><div class="proof-row"><span>Design contributions</span><div class="proof-bar"><span id="bar-design"></span></div><span class="proof-count" id="count-design">0</span></div><div class="proof-row"><span>Accessibility testing</span><div class="proof-bar"><span id="bar-accessibility"></span></div><span class="proof-count" id="count-accessibility">0</span></div><div class="proof-row"><span>Creative contributions</span><div class="proof-bar"><span id="bar-create"></span></div><span class="proof-count" id="count-create">0</span></div><div class="proof-row"><span>Community work</span><div class="proof-bar"><span id="bar-community"></span></div><span class="proof-count" id="count-community">0</span></div></div><div class="power-note"><strong>Our rule:</strong> community input is evidence, not decoration. When a player request changes the build, we record the request, the decision, the test, and the result. These counters are intentionally local until a community data service is connected; they do not pretend to be Xbox approval, sales, or guaranteed demand.</div></section><div class="toolbar">
+    <section class="power-section" id="community-power" aria-labelledby="community-power-title"><div class="power-kicker">COMMUNITY OWNERSHIP / XBOX PROOF</div><h2 id="community-power-title">Take your power back.</h2><p class="lead">DUET is not asking a community to applaud a finished product. We are building an evidence trail: players test it, challenge it, improve accessibility, contribute ideas, and help determine what gets built next. This is how we show a platform partner that the project has an active community around it.</p><div class="power-grid" aria-label="Community proof metrics"><div class="power-metric"><span class="num" id="power-players">0</span><span class="label">players who want to play</span></div><div class="power-metric"><span class="num" id="power-testers">0</span><span class="label">playtesters</span></div><div class="power-metric"><span class="num" id="power-access">0</span><span class="label">accessibility testers</span></div><div class="power-metric"><span class="num" id="power-design">0</span><span class="label">design contributors</span></div><div class="power-metric"><span class="num" id="power-creators">0</span><span class="label">creative contributors</span></div><div class="power-metric"><span class="num" id="power-community">0</span><span class="label">community organizers</span></div></div><h3>Show us what you want to take back.</h3><div class="power-actions"><label class="power-action"><input type="checkbox" value="play"><span><strong>I want to play.</strong><small>Join the player/test cohort.</small></span></label><label class="power-action"><input type="checkbox" value="test"><span><strong>I want to test.</strong><small>Break builds and report evidence.</small></span></label><label class="power-action"><input type="checkbox" value="design"><span><strong>I want to design.</strong><small>Propose mechanics, rules, or world ideas.</small></span></label><label class="power-action"><input type="checkbox" value="accessibility"><span><strong>I want to make it more accessible.</strong><small>Test captions, input, UI, motion, audio, and navigation.</small></span></label><label class="power-action"><input type="checkbox" value="create"><span><strong>I want to create.</strong><small>Art, music, writing, video, documentation, or tools.</small></span></label><label class="power-action"><input type="checkbox" value="community"><span><strong>I want to help the community.</strong><small>Organize playtests, discussion, or moderation.</small></span></label></div><div class="power-submit"><button class="btn-primary" type="button" id="claim-power">Claim your place</button><span class="power-status" id="power-status" role="status" aria-live="polite">No claim submitted yet.</span></div><div class="power-proof"><h3>Community proof — visible, attributable, auditable</h3><div class="proof-row"><span>Want to play</span><div class="proof-bar"><span id="bar-play"></span></div><span class="proof-count" id="count-play">0</span></div><div class="proof-row"><span>Playtest / break it</span><div class="proof-bar"><span id="bar-test"></span></div><span class="proof-count" id="count-test">0</span></div><div class="proof-row"><span>Design contributions</span><div class="proof-bar"><span id="bar-design"></span></div><span class="proof-count" id="count-design">0</span></div><div class="proof-row"><span>Accessibility testing</span><div class="proof-bar"><span id="bar-accessibility"></span></div><span class="proof-count" id="count-accessibility">0</span></div><div class="proof-row"><span>Creative contributions</span><div class="proof-bar"><span id="bar-create"></span></div><span class="proof-count" id="count-create">0</span></div><div class="proof-row"><span>Community work</span><div class="proof-bar"><span id="bar-community"></span></div><span class="proof-count" id="count-community">0</span></div></div><div class="power-note"><strong>Our rule:</strong> community input is evidence, not decoration. When a player request changes the build, we record the request, the decision, the test, and the result. These counters are intentionally local until a community data service is connected; they do not pretend to be Xbox approval, sales, or guaranteed demand.</div></section>
+<section class="release-section" id="halloween-release" aria-labelledby="halloween-title">
+  <div class="release-kicker">Halloween 2026 / Release Mission Control</div>
+  <div class="release-head">
+    <div>
+      <h2 id="halloween-title">MAKE IT RELEASE-WORTHY.</h2>
+      <p class="release-lead">Our internal finish line is Halloween. By October 31, DUET should be something people can play, experience, test, share, and judge — not merely a pitch. This is our target, not an Xbox-imposed deadline.</p>
+    </div>
+    <div class="release-date">10.31.26</div>
+  </div>
+  <div class="release-countdown" aria-label="Countdown to Halloween release target">
+    <div class="countdown-cell"><strong id="days-left">—</strong><span>Days</span></div>
+    <div class="countdown-cell"><strong id="hours-left">—</strong><span>Hours</span></div>
+    <div class="countdown-cell"><strong id="minutes-left">—</strong><span>Minutes</span></div>
+    <div class="countdown-cell"><strong id="seconds-left">—</strong><span>Seconds</span></div>
+  </div>
+  <div class="readiness-title"><span>Halloween Release Readiness</span><span id="release-percent">0%</span></div>
+  <div class="readiness-track" aria-label="Halloween release readiness"><span id="release-bar"></span></div>
+  <div class="gate-list" id="release-gates">
+    <label class="gate"><input type="checkbox" data-gate="playable"><span><strong>PLAYABLE</strong><small>Core experience runs from start to finish.</small></span></label>
+    <label class="gate"><input type="checkbox" data-gate="fun"><span><strong>CORE EXPERIENCE</strong><small>The central loop is demonstrable, coherent, and playtested.</small></span></label>
+    <label class="gate"><input type="checkbox" data-gate="controller"><span><strong>CONTROLLER / INPUT</strong><small>Primary play controls are tested and documented.</small></span></label>
+    <label class="gate"><input type="checkbox" data-gate="accessible"><span><strong>ACCESSIBLE</strong><small>Keyboard, screen-reader, motion, contrast, and other relevant accessibility paths are tested.</small></span></label>
+    <label class="gate"><input type="checkbox" data-gate="tested"><span><strong>COMMUNITY TESTED</strong><small>Real testers have exercised the release candidate and feedback is recorded.</small></span></label>
+    <label class="gate"><input type="checkbox" data-gate="polished"><span><strong>POLISHED</strong><small>Known release-blocking bugs and rough edges are resolved or documented.</small></span></label>
+    <label class="gate"><input type="checkbox" data-gate="evidence"><span><strong>PROOF PACKAGE</strong><small>Build, screenshots, trailer/demo, feedback, and contribution receipts are assembled.</small></span></label>
+    <label class="gate"><input type="checkbox" data-gate="rc"><span><strong>RELEASE CANDIDATE</strong><small>A tagged build exists that the team is willing to put in public hands.</small></span></label>
+    <label class="gate"><input type="checkbox" data-gate="xbox"><span><strong>XBOX PACKAGE</strong><small>Xbox-facing materials and technical information are ready for review.</small></span></label>
+    <label class="gate"><input type="checkbox" data-gate="final"><span><strong>FINAL REVIEW</strong><small>Community/company review confirms the release package is ready to publish.</small></span></label>
+  </div>
+  <div class="release-note"><strong style="color:var(--grey-200)">Two clocks, one finish line:</strong> October 31 is our release target. Xbox submission is a separate evaluation gate; reaching 100% here does not imply Xbox approval.</div>
+  <div class="broadcast-row">
+    <span class="broadcast-status" id="broadcast-status">Milestone broadcasting: waiting for verified release evidence.</span>
+    <button class="btn-primary" id="broadcast-milestone" type="button" disabled>Prepare Milestone</button>
+  </div>
+</section>
+
+        <div class="toolbar">
         <div class="turn-meta" id="remote-turn-meta">Waiting…</div>
     </div>
 
@@ -2862,5 +2924,55 @@ async function sendAgentMessage() {
         if (e.key === 'Enter') RemoteMode.submitCommand();
     });
 </script>
-<script>(()=>{const key="duetCommunityPowerV1",d={play:0,test:0,design:0,accessibility:0,create:0,community:0};let t;try{t=Object.assign({},d,JSON.parse(localStorage.getItem(key)||"{}"))}catch(_){t={...d}}const ids={play:"power-players",test:"power-testers",design:"power-design",accessibility:"power-access",create:"power-creators",community:"power-community"};function render(){const m=Math.max(1,...Object.values(t));Object.keys(t).forEach(k=>{let n=t[k]||0,e=document.getElementById(ids[k]),c=document.getElementById("count-"+k),b=document.getElementById("bar-"+k);if(e)e.textContent=n;if(c)c.textContent=n;if(b)b.style.width=Math.round(n/m*100)+"%"})}document.querySelectorAll(".power-action input").forEach(i=>i.addEventListener("change",()=>i.closest(".power-action").classList.toggle("selected",i.checked)));document.getElementById("claim-power")?.addEventListener("click",()=>{let s=[...document.querySelectorAll(".power-action input:checked")].map(i=>i.value),o=document.getElementById("power-status");if(!s.length){o.textContent="Choose at least one way to participate.";return}s.forEach(k=>t[k]=(t[k]||0)+1);try{localStorage.setItem(key,JSON.stringify(t))}catch(_){}document.querySelectorAll(".power-action input").forEach(i=>{i.checked=false;i.closest(".power-action").classList.remove("selected")});o.textContent="Claim recorded on this device. Connect a community data service to make aggregate proof public.";render()});render()})();</script></body>
+<script>(()=>{const key="duetCommunityPowerV1",d={play:0,test:0,design:0,accessibility:0,create:0,community:0};let t;try{t=Object.assign({},d,JSON.parse(localStorage.getItem(key)||"{}"))}catch(_){t={...d}}const ids={play:"power-players",test:"power-testers",design:"power-design",accessibility:"power-access",create:"power-creators",community:"power-community"};function render(){const m=Math.max(1,...Object.values(t));Object.keys(t).forEach(k=>{let n=t[k]||0,e=document.getElementById(ids[k]),c=document.getElementById("count-"+k),b=document.getElementById("bar-"+k);if(e)e.textContent=n;if(c)c.textContent=n;if(b)b.style.width=Math.round(n/m*100)+"%"})}document.querySelectorAll(".power-action input").forEach(i=>i.addEventListener("change",()=>i.closest(".power-action").classList.toggle("selected",i.checked)));document.getElementById("claim-power")?.addEventListener("click",()=>{let s=[...document.querySelectorAll(".power-action input:checked")].map(i=>i.value),o=document.getElementById("power-status");if(!s.length){o.textContent="Choose at least one way to participate.";return}s.forEach(k=>t[k]=(t[k]||0)+1);try{localStorage.setItem(key,JSON.stringify(t))}catch(_){}document.querySelectorAll(".power-action input").forEach(i=>{i.checked=false;i.closest(".power-action").classList.remove("selected")});o.textContent="Claim recorded on this device. Connect a community data service to make aggregate proof public.";render()});render()})();</script>
+<script>
+(() => {
+  const TARGET = new Date('2026-10-31T23:59:59-05:00');
+  const KEY = 'duetHalloweenReadinessV1';
+  const defaults = {playable:false,fun:false,controller:false,accessible:false,tested:false,polished:false,evidence:false,rc:false,xbox:false,final:false};
+  let state = {...defaults};
+  try { state = {...defaults, ...JSON.parse(localStorage.getItem(KEY) || '{}')}; } catch (_) {}
+  const gates = [...document.querySelectorAll('#release-gates input[data-gate]')];
+  function render() {
+    const done = gates.filter(i => state[i.dataset.gate]).length;
+    const pct = Math.round(done / gates.length * 100);
+    document.getElementById('release-percent').textContent = pct + '%';
+    document.getElementById('release-bar').style.width = pct + '%';
+    gates.forEach(i => { i.checked = !!state[i.dataset.gate]; });
+    const ready = pct === 100;
+    const status = document.getElementById('broadcast-status');
+    const button = document.getElementById('broadcast-milestone');
+    if (ready) {
+      status.textContent = 'XBOX PACKAGE + HALLOWEEN RELEASE CANDIDATE: READY FOR FINAL HUMAN REVIEW.';
+      button.disabled = false;
+    } else {
+      status.textContent = done + ' of ' + gates.length + ' release gates complete. Broadcasting stays locked until the evidence is verified.';
+      button.disabled = true;
+    }
+  }
+  gates.forEach(i => i.addEventListener('change', () => {
+    state[i.dataset.gate] = i.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (_) {}
+    render();
+  }));
+  document.getElementById('broadcast-milestone')?.addEventListener('click', () => {
+    document.getElementById('broadcast-status').textContent = 'Milestone prepared. Connect the approved made-sick.org posting endpoint to publish it to Bluesky.';
+  });
+  function tick() {
+    const remaining = Math.max(0, TARGET.getTime() - Date.now());
+    const totalSeconds = Math.floor(remaining / 1000);
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor(totalSeconds % 86400 / 3600);
+    const minutes = Math.floor(totalSeconds % 3600 / 60);
+    const seconds = totalSeconds % 60;
+    document.getElementById('days-left').textContent = days;
+    document.getElementById('hours-left').textContent = String(hours).padStart(2,'0');
+    document.getElementById('minutes-left').textContent = String(minutes).padStart(2,'0');
+    document.getElementById('seconds-left').textContent = String(seconds).padStart(2,'0');
+  }
+  tick(); setInterval(tick, 1000); render();
+})();
+</script>
+
+</body>
 </html>
