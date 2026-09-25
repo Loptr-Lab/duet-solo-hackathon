@@ -168,6 +168,20 @@
         @media(max-width:850px){.launch-steps{grid-template-columns:repeat(2,minmax(0,1fr))}.project-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
         @media(max-width:600px){.launch-board,.project-board{padding:20px}.launch-steps,.project-grid{grid-template-columns:1fr}}
 
+
+        .media-atmosphere{margin:40px 0;border:1px solid var(--border-hairline);padding:28px;background:rgba(255,255,255,.012)}
+        .media-atmosphere h2{color:var(--white-pure);font-size:clamp(1.7rem,4vw,2.4rem);font-weight:300;margin:0 0 8px}
+        .media-atmosphere .lead{max-width:72ch;line-height:1.7;color:var(--grey-200);opacity:.9}
+        .media-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:14px;margin-top:20px}
+        .video-frame{aspect-ratio:16/9;width:100%;border:1px solid var(--border-hairline);background:#000}
+        .media-card{border:1px solid var(--border-hairline);padding:18px;background:var(--black-obsidian)}
+        .media-card h3{font-size:14px;color:var(--white-pure);font-weight:400;margin:0 0 7px}
+        .media-card p{font-size:12px;line-height:1.6;color:var(--text-muted);margin:0 0 12px}
+        .media-links{display:flex;gap:8px;flex-wrap:wrap}.media-links a{border:1px solid var(--border-hairline);padding:8px 10px;color:var(--grey-200);font:10px var(--font-mono);text-decoration:none;text-transform:uppercase}.media-links a:hover{border-color:var(--amber-light);color:var(--amber-light)}
+        .bridge{margin-top:20px;border:1px solid var(--amber-light);padding:20px;background:rgba(212,168,83,.05)}
+        .bridge h3{font-size:14px;color:var(--amber-light);font-weight:400;margin:0 0 8px}.bridge-flow{font:11px var(--font-mono);line-height:1.9;color:var(--grey-200);overflow:auto;white-space:nowrap;padding:12px;border:1px solid var(--border-hairline);background:var(--black-obsidian)}
+        @media(max-width:750px){.media-grid{grid-template-columns:1fr}.media-atmosphere{padding:20px}}
+
         /* Community ownership / Xbox proof layer */
         .power-section{margin:40px 0;border:1px solid var(--border-hairline);padding:28px;background:linear-gradient(180deg,rgba(212,168,83,.045),transparent)}
         .power-section .power-kicker{font:11px var(--font-mono);color:var(--amber-light);letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
@@ -3027,7 +3041,41 @@ async function sendAgentMessage() {
   <div class="choice-note"><strong>IMPORTANT:</strong> The current DUET browser build is proof and architecture work. It is not itself an Xbox package. Physical Xbox deployment, GDK access, provisioning, and certification evidence are separate gates.</div>
 </section>
 
-<section class="project-board" id="choose-your-build">
+
+<section class="media-atmosphere" id="atmosphere-and-community">
+  <div class="launch-kicker">The Atmosphere · Music · Community · Communication</div>
+  <h2>THE WORLD AROUND THE BUILD</h2>
+  <p class="lead">The game is only one part of the experience. Watch the source material, support the music ecosystem, explore PIXIE to find other worlds, and keep community conversations available outside the Xbox-facing surface.</p>
+  <div class="media-grid">
+    <div>
+      <iframe class="video-frame" src="https://www.youtube.com/embed/SnysmGissKw" title="The Big Push / Ren video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+    <div class="media-card">
+      <h3>THE BIG PUSH</h3>
+      <p>Go deeper into the music and behind-the-scenes ecosystem through The Big Push's Patreon.</p>
+      <div class="media-links"><a href="https://www.patreon.com/cw/TheBigPush" target="_blank" rel="noopener">Support / Explore</a><a href="https://www.youtube.com/watch?v=SnysmGissKw" target="_blank" rel="noopener">Watch on YouTube</a></div>
+    </div>
+  </div>
+  <div class="media-grid">
+    <div class="media-card">
+      <h3>PIXIE · EXPLORE THE ATMOSPHERE</h3>
+      <p>PIXIE is the main OS/discovery layer: use it to move from this project into other experiments, communities, games, and strange little worlds.</p>
+      <div class="media-links"><a href="https://ibloud.github.io/50-ways-to-leave-another/pixie/demo/index.html" target="_blank" rel="noopener">Enter PIXIE</a></div>
+    </div>
+    <div class="media-card">
+      <h3>GERM · BEYOND THE PUBLIC LAYER</h3>
+      <p>Germ can provide private, consent-oriented communication outside the public Xbox-facing surface. Its current app supports private AT Protocol messaging and voice notes with end-to-end encryption.</p>
+      <div class="media-links"><a href="https://landing.ger.mx/newUser/web/#did:plc:o6kuv3yieti2vqrb7ckmd5vg+did:plc:b5uem672ci23lqrbz6j6bs2c" target="_blank" rel="noopener">Open Germ handoff</a><a href="https://apps.apple.com/us/app/germ-dm/id6446882771" target="_blank" rel="noopener">Germ DM</a></div>
+    </div>
+  </div>
+  <div class="bridge">
+    <h3>GERM BRIDGE · PROPOSED ARCHITECTURE</h3>
+    <p class="lead">We can build a bridge, but it should be an explicit community service—not pretend that Xbox is directly integrated with Germ. The clean boundary is:</p>
+    <div class="bridge-flow">XBOX GAME / PARTNER CENTER → PUBLIC COMMUNITY SURFACE → OPT-IN HANDOFF → GER.MX / GERＭ DM → PRIVATE ATProto CONVERSATION</div>
+    <p class="lead" style="margin-top:12px">A future bridge could issue an opt-in project/community invitation, carry a non-sensitive project or session identifier, and let the participant authenticate or open a Germ conversation. It should not export Xbox account data, private messages, credentials, or moderation data into Germ. Until that service exists and is tested, this page presents it as a proposed bridge rather than a working integration.</p>
+  </div>
+</section>
+\n<section class="project-board" id="choose-your-build">
   <div class="launch-kicker">Choose Your Build</div>
   <h2>WHICH PROJECT SHOULD GO TO XBOX?</h2>
   <p class="lead">DUET is the current architecture proving ground, but it is not the only candidate. Pick the project that matches the kind of playable vertical slice you want to build. Each card gives players a way to play, inspect the repository, or join the build.</p>
