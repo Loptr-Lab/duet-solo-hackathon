@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DUET — Break This</title>
+<title>DUET — Mission Control</title>
 <meta name="description" content="An open technical review of DUET's platform-neutral client architecture and proposed Xbox/Godot proving ground.">
 <style>
 :root{color-scheme:dark;--bg:#0d0f12;--panel:#15191e;--text:#f2f4f7;--muted:#aab2bd;--line:#303740;--accent:#d8ff4f}
@@ -14,6 +14,8 @@ h2{font-size:26px;margin:48px 0 12px}p{max-width:720px}a{color:var(--accent)}.le
 pre{overflow:auto;background:#090b0d;border:1px solid var(--line);padding:20px;border-radius:8px;font-size:16px}
 ul{padding-left:24px}.state{font-weight:700;letter-spacing:.02em}.ask{font-size:24px;font-weight:650}
 small{color:var(--muted)}
+.video-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;margin:32px 0;border-radius:10px}
+.video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
 </style>
 </head>
 <body>
@@ -73,6 +75,41 @@ authoritative DUET server</pre>
 <p>Bring evidence, not vibes. If you think something is wrong, point to the assumption, constraint, documentation, test, or failure mode that supports the objection.</p>
 
 <p><a href="https://github.com/Loptr-Lab/duet-solo-hackathon">DUET repository</a> · <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/pull/48">Current development-state review</a></p>
+
+<hr style="border:none;border-top:1px solid var(--line);margin:64px 0 48px">
+
+<h2>🎬 The Big Push</h2>
+<p>The full vision — where DUET is going and why it matters.</p>
+<div class="video-wrap">
+  <iframe src="https://www.youtube.com/embed/SnysmGissKw" allowfullscreen title="The Big Push"></iframe>
+</div>
+<p><a href="https://www.patreon.com/cw/LoptrLab">Support on Patreon →</a></p>
+
+<h2>🌌 PIXIE — Explore the Atmosphere</h2>
+<p>PIXIE is the discovery and OS layer for the DUET ecosystem — not just another project, but the broader surface through which everything connects.</p>
+<p><a href="https://ibloud.github.io/50-ways-to-leave-another/pixie/demo/index.html">Enter PIXIE →</a></p>
+
+<h2>🔐 Germ — Beyond the Public Layer</h2>
+<p>Germ is an opt-in private communication layer that lives outside the public Xbox-facing surface. It is not integrated with Xbox — it is a handoff destination for people who want to go deeper.</p>
+<p><a href="https://landing.ger.mx">Get Germ / DM on Germ →</a></p>
+
+<h2>🌉 Germ Bridge — Proposed Architecture</h2>
+<p>The distinction is explicit: Xbox is not integrated with Germ. A real bridge could eventually:</p>
+<ul>
+<li>Generate an opt-in community invitation</li>
+<li>Carry a non-sensitive project or session identifier</li>
+<li>Let someone authenticate and open a Germ conversation</li>
+<li>Keep Xbox account credentials, private messages, and moderation data out of the Germ layer</li>
+</ul>
+<pre>XBOX GAME / PARTNER CENTER
+      ↓
+PUBLIC COMMUNITY SURFACE
+      ↓
+OPT-IN HANDOFF
+      ↓
+GER.MX / GERM DM
+      ↓
+PRIVATE ATProto CONVERSATION</pre>
 
 <p><small>This page is an invitation to technical scrutiny. It is not a claim that Xbox deployment has been demonstrated.</small></p>
 </main>
