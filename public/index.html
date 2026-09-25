@@ -139,6 +139,49 @@
         .portfolio-lane{margin-top:12px;padding:13px;border-left:2px solid var(--amber-light);color:var(--grey-200);font-size:12px;line-height:1.6}.portfolio-lane strong{color:var(--white-pure)}
         @media(max-width:700px){.platform-grid{grid-template-columns:1fr}}
 
+
+        /* Platform launch board */
+        .launch-board{margin:40px 0;border:1px solid var(--amber-light);padding:28px;background:linear-gradient(180deg,rgba(212,168,83,.09),rgba(255,255,255,.01))}
+        .launch-board h2{color:var(--white-pure);font-size:clamp(1.8rem,4vw,2.7rem);font-weight:300;margin:0 0 8px}
+        .launch-kicker{font:11px var(--font-mono);color:var(--amber-light);letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+        .launch-deadline{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin:18px 0;padding:16px;border:1px solid var(--border-hairline);background:var(--black-obsidian)}
+        .launch-deadline strong{font:700 15px var(--font-mono);color:var(--white-pure);letter-spacing:.06em}
+        .launch-deadline span{font:12px var(--font-mono);color:var(--text-muted)}
+        .launch-steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:18px 0 22px}
+        .launch-step{border:1px solid var(--border-hairline);padding:14px;min-height:125px;background:rgba(255,255,255,.012)}
+        .launch-step b{display:block;font:700 11px var(--font-mono);color:var(--amber-light);margin-bottom:7px}
+        .launch-step strong{display:block;color:var(--white-pure);font-size:13px;font-weight:400;margin-bottom:5px}
+        .launch-step small{display:block;color:var(--text-muted);font-size:11px;line-height:1.45}
+        .project-board{margin:40px 0;border:1px solid var(--border-hairline);padding:28px;background:rgba(255,255,255,.012)}
+        .project-board h2{color:var(--white-pure);font-size:clamp(1.7rem,4vw,2.4rem);font-weight:300;margin:0 0 8px}
+        .project-board .lead{max-width:70ch;line-height:1.7;color:var(--grey-200);opacity:.9}
+        .project-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:20px}
+        .project-card{border:1px solid var(--border-hairline);padding:16px;min-height:205px;display:flex;flex-direction:column;background:var(--black-obsidian)}
+        .project-card.featured{border-color:var(--amber-light)}
+        .project-card .type{font:10px var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--amber-light);margin-bottom:8px}
+        .project-card h3{font-size:15px;color:var(--white-pure);font-weight:400;margin:0 0 7px}
+        .project-card p{font-size:12px;line-height:1.55;color:var(--text-muted);margin:0 0 12px}
+        .project-card .project-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto}
+        .project-card a{border:1px solid var(--border-hairline);padding:7px 9px;color:var(--grey-200);font:10px var(--font-mono);text-decoration:none;text-transform:uppercase;letter-spacing:.05em}
+        .project-card a:hover{border-color:var(--amber-light);color:var(--amber-light)}
+        .choice-note{margin-top:18px;padding:13px;border-left:2px solid var(--amber-light);color:var(--text-muted);font-size:12px;line-height:1.6}
+        @media(max-width:850px){.launch-steps{grid-template-columns:repeat(2,minmax(0,1fr))}.project-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        @media(max-width:600px){.launch-board,.project-board{padding:20px}.launch-steps,.project-grid{grid-template-columns:1fr}}
+
+
+        .media-atmosphere{margin:40px 0;border:1px solid var(--border-hairline);padding:28px;background:rgba(255,255,255,.012)}
+        .media-atmosphere h2{color:var(--white-pure);font-size:clamp(1.7rem,4vw,2.4rem);font-weight:300;margin:0 0 8px}
+        .media-atmosphere .lead{max-width:72ch;line-height:1.7;color:var(--grey-200);opacity:.9}
+        .media-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:14px;margin-top:20px}
+        .video-frame{aspect-ratio:16/9;width:100%;border:1px solid var(--border-hairline);background:#000}
+        .media-card{border:1px solid var(--border-hairline);padding:18px;background:var(--black-obsidian)}
+        .media-card h3{font-size:14px;color:var(--white-pure);font-weight:400;margin:0 0 7px}
+        .media-card p{font-size:12px;line-height:1.6;color:var(--text-muted);margin:0 0 12px}
+        .media-links{display:flex;gap:8px;flex-wrap:wrap}.media-links a{border:1px solid var(--border-hairline);padding:8px 10px;color:var(--grey-200);font:10px var(--font-mono);text-decoration:none;text-transform:uppercase}.media-links a:hover{border-color:var(--amber-light);color:var(--amber-light)}
+        .bridge{margin-top:20px;border:1px solid var(--amber-light);padding:20px;background:rgba(212,168,83,.05)}
+        .bridge h3{font-size:14px;color:var(--amber-light);font-weight:400;margin:0 0 8px}.bridge-flow{font:11px var(--font-mono);line-height:1.9;color:var(--grey-200);overflow:auto;white-space:nowrap;padding:12px;border:1px solid var(--border-hairline);background:var(--black-obsidian)}
+        @media(max-width:750px){.media-grid{grid-template-columns:1fr}.media-atmosphere{padding:20px}}
+
         /* Community ownership / Xbox proof layer */
         .power-section{margin:40px 0;border:1px solid var(--border-hairline);padding:28px;background:linear-gradient(180deg,rgba(212,168,83,.045),transparent)}
         .power-section .power-kicker{font:11px var(--font-mono);color:var(--amber-light);letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
@@ -2982,7 +3025,74 @@ async function sendAgentMessage() {
 </script>
 
 
-<section class="platform-roadmap" id="publishing-career-path">
+
+<section class="launch-board" id="xbox-submission">
+  <div class="launch-kicker">Mission Control · Xbox Path</div>
+  <h2>FROM PLAYABLE PROOF → XBOX SUBMISSION</h2>
+  <p class="release-lead">The site now treats Xbox as an explicit production path. <strong>October 31, 2026 is our internal Halloween production target — not an Xbox deadline.</strong> Microsoft does not publish a universal Xbox submission deadline for this project; the actual Xbox gates are partner onboarding, concept approval, GDK/product setup, certification, and release.</p>
+  <div class="launch-deadline"><strong>INTERNAL TARGET · OCTOBER 31, 2026</strong><span>HALLOWEEN RELEASE / SUBMISSION-READY CHECKPOINT</span></div>
+  <div class="launch-steps">
+    <div class="launch-step"><b>01 · BUILD</b><strong>Choose the game</strong><small>Select a project below and produce a playable vertical slice/release candidate.</small></div>
+    <div class="launch-step"><b>02 · ONBOARD</b><strong>Xbox Partner + ID@Xbox</strong><small>Register as an Xbox partner, enroll in Partner Center, then submit the game concept to ID@Xbox.</small></div>
+    <div class="launch-step"><b>03 · APPROVE</b><strong>Concept + agreements</strong><small>Xbox reviews the concept. If approved, complete the required TLA/GDK agreements and onboarding.</small></div>
+    <div class="launch-step"><b>04 · PACKAGE</b><strong>GDK + Partner Center</strong><small>Create the Xbox product, enable the appropriate services, build/package the game, and prepare certification materials.</small></div>
+    <div class="launch-step"><b>05 · CERTIFY</b><strong>Certification → release</strong><small>Submit the package through Partner Center certification, resolve requirements, then configure and publish the release.</small></div>
+  </div>
+  <div class="choice-note"><strong>IMPORTANT:</strong> The current DUET browser build is proof and architecture work. It is not itself an Xbox package. Physical Xbox deployment, GDK access, provisioning, and certification evidence are separate gates.</div>
+</section>
+
+
+<section class="media-atmosphere" id="atmosphere-and-community">
+  <div class="launch-kicker">The Atmosphere · Music · Community · Communication</div>
+  <h2>THE WORLD AROUND THE BUILD</h2>
+  <p class="lead">The game is only one part of the experience. Watch the source material, support the music ecosystem, explore PIXIE to find other worlds, and keep community conversations available outside the Xbox-facing surface.</p>
+  <div class="media-grid">
+    <div>
+      <iframe class="video-frame" src="https://www.youtube.com/embed/SnysmGissKw" title="The Big Push / Ren video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+    <div class="media-card">
+      <h3>THE BIG PUSH</h3>
+      <p>Go deeper into the music and behind-the-scenes ecosystem through The Big Push's Patreon.</p>
+      <div class="media-links"><a href="https://www.patreon.com/cw/TheBigPush" target="_blank" rel="noopener">Support / Explore</a><a href="https://www.youtube.com/watch?v=SnysmGissKw" target="_blank" rel="noopener">Watch on YouTube</a></div>
+    </div>
+  </div>
+  <div class="media-grid">
+    <div class="media-card">
+      <h3>PIXIE · EXPLORE THE ATMOSPHERE</h3>
+      <p>PIXIE is the main OS/discovery layer: use it to move from this project into other experiments, communities, games, and strange little worlds.</p>
+      <div class="media-links"><a href="https://ibloud.github.io/50-ways-to-leave-another/pixie/demo/index.html" target="_blank" rel="noopener">Enter PIXIE</a></div>
+    </div>
+    <div class="media-card">
+      <h3>GERM · BEYOND THE PUBLIC LAYER</h3>
+      <p>Germ can provide private, consent-oriented communication outside the public Xbox-facing surface. Its current app supports private AT Protocol messaging and voice notes with end-to-end encryption.</p>
+      <div class="media-links"><a href="https://landing.ger.mx/newUser/web/#did:plc:o6kuv3yieti2vqrb7ckmd5vg+did:plc:b5uem672ci23lqrbz6j6bs2c" target="_blank" rel="noopener">Open Germ handoff</a><a href="https://apps.apple.com/us/app/germ-dm/id6446882771" target="_blank" rel="noopener">Germ DM</a></div>
+    </div>
+  </div>
+  <div class="bridge">
+    <h3>GERM BRIDGE · PROPOSED ARCHITECTURE</h3>
+    <p class="lead">We can build a bridge, but it should be an explicit community service—not pretend that Xbox is directly integrated with Germ. The clean boundary is:</p>
+    <div class="bridge-flow">XBOX GAME / PARTNER CENTER → PUBLIC COMMUNITY SURFACE → OPT-IN HANDOFF → GER.MX / GERＭ DM → PRIVATE ATProto CONVERSATION</div>
+    <p class="lead" style="margin-top:12px">A future bridge could issue an opt-in project/community invitation, carry a non-sensitive project or session identifier, and let the participant authenticate or open a Germ conversation. It should not export Xbox account data, private messages, credentials, or moderation data into Germ. Until that service exists and is tested, this page presents it as a proposed bridge rather than a working integration.</p>
+  </div>
+</section>
+\n<section class="project-board" id="choose-your-build">
+  <div class="launch-kicker">Choose Your Build</div>
+  <h2>WHICH PROJECT SHOULD GO TO XBOX?</h2>
+  <p class="lead">DUET is the current architecture proving ground, but it is not the only candidate. Pick the project that matches the kind of playable vertical slice you want to build. Each card gives players a way to play, inspect the repository, or join the build.</p>
+  <div class="project-grid">
+    <article class="project-card featured"><div class="type">Current Xbox proving ground</div><h3>DUET · Veiled Dominion</h3><p>Two-player accessible strategy game. The current site is testing the client/transport/server boundary before an Xbox/Godot implementation.</p><div class="project-actions"><a href="https://github.com/Loptr-Lab/duet-solo-hackathon">Repo</a><a href="#xbox-submission">Xbox path</a><a href="https://github.com/Loptr-Lab/duet-solo-hackathon/blob/community-power-xbox/CONTRIBUTING.md">Contribute</a></div></article>
+    <article class="project-card"><div class="type">Halloween / horror candidate</div><h3>VIOLET'S REVENGE</h3><p>Browser horror/game prototype. A natural candidate for a supervised vertical slice, playtest, QA, and later platform adaptation work.</p><div class="project-actions"><a href="https://github.com/ibloud/violets-revenge">Repo</a><a href="https://github.com/ibloud/violets-revenge/fork">Fork</a><a href="https://github.com/ibloud/violets-revenge/issues">Issues</a></div></article>
+    <article class="project-card"><div class="type">Music / UEFN candidate</div><h3>REN RHAPSODY</h3><p>Music-driven adventure and parkour concept with a documented UEFN path, rights research, and a growing playtest package.</p><div class="project-actions"><a href="https://github.com/ibloud/ren-rhapsody">Repo</a><a href="https://ibloud.github.io/ren-rhapsody/">Play / inspect</a><a href="https://github.com/ibloud/ren-rhapsody/issues">Issues</a></div></article>
+    <article class="project-card"><div class="type">Rhythm game</div><h3>REN TAP TAP REVENGE</h3><p>Three-lane rhythm prototype with taps, holds, swipes, combo scoring, and an inspectable build path.</p><div class="project-actions"><a href="https://github.com/ibloud/ren-tap-tap-revenge">Repo</a><a href="https://github.com/ibloud/ren-tap-tap-revenge/fork">Fork</a></div></article>
+    <article class="project-card"><div class="type">Rhythm / chart project</div><h3>TARANTULA · CLONE HERO</h3><p>Community custom-chart experiment built around the Tarantula track, useful for charting, tooling, QA, and music-game experimentation.</p><div class="project-actions"><a href="https://github.com/ibloud/tarantula-clone-hero">Repo</a><a href="https://github.com/ibloud/tarantula-clone-hero/fork">Fork</a></div></article>
+    <article class="project-card"><div class="type">Interactive narrative</div><h3>LIVING ROOM POETRY</h3><p>Small interactive text-adventure prototype that can serve as a lightweight narrative/game vertical slice.</p><div class="project-actions"><a href="https://github.com/ibloud/living-room-poetry">Repo</a><a href="https://github.com/ibloud/living-room-poetry/fork">Fork</a></div></article>
+    <article class="project-card"><div class="type">Action / experimental</div><h3>BATTLE THE BEAST</h3><p>An additional experimental game repository available for players and contributors to inspect when choosing a build direction.</p><div class="project-actions"><a href="https://github.com/ibloud/battle-the-beast">Repo</a><a href="https://github.com/ibloud/battle-the-beast/fork">Fork</a></div></article>
+    <article class="project-card"><div class="type">Game research / community</div><h3>AWESOME OPEN-SOURCE GAMES</h3><p>A discovery and reference lane for open-source game projects and possible collaborators, rather than an Xbox submission candidate itself.</p><div class="project-actions"><a href="https://github.com/ibloud/awesome-open-source-games">Explore</a></div></article>
+    <article class="project-card"><div class="type">Discovery / OS layer</div><h3>PIXIE</h3><p>The main OS/discovery layer for finding other worlds, projects, experiments, and communities across the broader ecosystem.</p><div class="project-actions"><a href="https://ibloud.github.io/50-ways-to-leave-another/pixie/demo/index.html">Enter PIXIE</a><a href="https://github.com/ibloud/pixie-holdings">Holdings repo</a></div></article>
+  </div>
+  <div class="choice-note"><strong>PLAYER → BUILDER:</strong> You do not have to choose the “official” project. Pick a repo you can actually contribute to: playtest it, document a bug, improve accessibility, make a design contribution, build a prototype, open an issue, or fork it where the project permits.</div>
+</section>
+\n<section class="platform-roadmap" id="publishing-career-path">
   <h2>FROM PROOF TO PUBLISHING — AND A PORTFOLIO</h2>
   <p class="release-lead">The Halloween target is the production milestone. Publishing is a separate platform path: the prototype becomes a shippable game build, then enters the platform's actual developer, submission, certification, and release workflow.</p>
   <div class="platform-grid">
