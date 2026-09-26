@@ -28,7 +28,7 @@ These are relationships between artifacts, not a claim that each proposal was ac
 
 ## How to use 52 Aces
 
-The [reading list](https://52aces.com/reading-list/) is curated by **Ace Eddleman**. Cite the list as an external discovery source, then read and cite the underlying book or paper when making a substantive design claim. Suggested starting points:
+The [52 Aces reading list](https://52aces.com/reading-list/) is credited to **Ace Eddleman**; the site's footer links to [his site](https://aceeddleman.com/), which lists 52 Aces writing among his work. Cite the list as an external discovery source, then read and cite the underlying book or paper when making a substantive design claim. Suggested starting points:
 
 | Question in this project | Reading-list section and examples | Practical use |
 | --- | --- | --- |
