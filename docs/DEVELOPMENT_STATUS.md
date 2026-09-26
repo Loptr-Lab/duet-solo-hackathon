@@ -186,7 +186,7 @@ Do not publish confidential Microsoft/Xbox or W4 Games material, credentials, to
 
 MCP must not be used to bypass repository protections, required review, or maintainer authorization. Do not expand Xbox/Godot implementation while the environment facts remain unresolved.
 
-See [MCP contribution guidance](MCP_CONTRIBUTION_GUIDANCE.md) for the detailed restrictions and review practice.
+See [MCP contribution guidance](MCP_CONTRIBUTION.md) for the detailed restrictions and review practice.
 
 ### M0-A call to action
 
