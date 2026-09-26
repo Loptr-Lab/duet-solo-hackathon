@@ -12,6 +12,7 @@ Duet remains a separate two-player, 8×8 experimental mechanics lab. The canonic
 
 - See [`docs/RESEARCH_ALIGNMENT.md`](docs/RESEARCH_ALIGNMENT.md) for the research role and evidence practices.
 - See [`docs/CANONICAL_DIVERGENCES.md`](docs/CANONICAL_DIVERGENCES.md) for the mechanics boundary.
+- See [`docs/PROJECT_BIBLE.md`](docs/PROJECT_BIBLE.md) for the Weaver, PIXIE, deck, game, and external reading hierarchy.
 
 ---
 

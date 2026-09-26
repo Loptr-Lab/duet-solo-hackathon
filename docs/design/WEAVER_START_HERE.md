@@ -1,5 +1,7 @@
 # Start Here — The Weaver
 
+For the cross-project hierarchy and the credited 52 Aces research reference, see [the project bible](../PROJECT_BIBLE.md). The public [Weaver door](https://duet.loptrlab.com/weaver/) records the invitation and participation boundaries; this design handoff does not establish the collaborator's acceptance.
+
 This is the entry point into your side of the project. Everything below already exists in this repo or the public site — this doc just compiles it in one place so you're not hunting for it.
 
 ## Where things stand
