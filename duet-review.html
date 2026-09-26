@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DUET — Mission Control</title>
-<meta name="description" content="An open technical review of DUET's platform-neutral client architecture and proposed Xbox/Godot proving ground.">
+<title>Break This Build | DUET and Ren Rhapsody</title>
+<meta name="description" content="Choose DUET or Ren Rhapsody. Break the build, learn a skill, and follow Loptr Lab’s Halloween 2026 milestones.">
 <style>
 :root{color-scheme:dark;--bg:#0d0f12;--panel:#15191e;--text:#f2f4f7;--muted:#aab2bd;--line:#303740;--accent:#d8ff4f}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:18px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-main{max-width:860px;margin:0 auto;padding:72px 24px 96px}h1{font-size:clamp(48px,9vw,86px);line-height:.95;margin:0 0 24px;letter-spacing:-.04em}
+main{max-width:920px;margin:0 auto;padding:48px 24px 96px}h1{font-size:clamp(48px,9vw,86px);line-height:.95;margin:0 0 24px;letter-spacing:-.04em}
 h2{font-size:26px;margin:48px 0 12px}p{max-width:720px}a{color:var(--accent)}.lede{font-size:25px;line-height:1.35;color:var(--muted);max-width:720px}
 .callout{border:1px solid var(--line);background:var(--panel);padding:24px;margin:32px 0;border-radius:10px}
 pre{overflow:auto;background:#090b0d;border:1px solid var(--line);padding:20px;border-radius:8px;font-size:16px}
@@ -16,22 +16,40 @@ ul{padding-left:24px}.state{font-weight:700;letter-spacing:.02em}.ask{font-size:
 small{color:var(--muted)}
 .video-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;margin:32px 0;border-radius:10px}
 .video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+.paths{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:30px 0}.path{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:24px}.path h2{font-size:26px;margin:0 0 12px}.path p{margin:0 0 18px}.path .tag{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700}.path a.action{display:inline-block;padding:11px 15px;border:1px solid var(--accent);border-radius:5px;text-decoration:none;font-weight:700;margin:4px 8px 4px 0}.path a.action:hover,.path a.action:focus-visible{background:var(--accent);color:var(--bg)}.milestones{list-style:none;padding:0;display:grid;gap:10px}.milestones li{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:15px 18px;display:grid;grid-template-columns:135px 1fr;gap:12px}.milestones time{font-weight:700;color:var(--accent)}.examples{display:flex;gap:10px;flex-wrap:wrap}.examples a{border:1px solid var(--line);border-radius:6px;padding:8px 12px;color:var(--text);text-decoration:none}.examples a:hover,.examples a:focus-visible{border-color:var(--accent);color:var(--accent)}:focus-visible{outline:3px solid var(--accent);outline-offset:3px}@media(max-width:650px){.paths,.milestones li{grid-template-columns:1fr}main{padding:32px 18px 64px}}
 </style>
 </head>
 <body>
 <main>
-<p><small>DUET · OPEN TECHNICAL REVIEW</small></p>
-<h1>Try to break this.</h1>
-<p class="lede">DUET is a two-player accessible strategy game. The web game works. The next question is whether its client architecture can survive a real Xbox/Godot client without rebuilding the game.</p>
+<p><small>LOPTR LAB · TWO EXPERIENCES · OPEN DEVELOPMENT</small></p>
+<h1>Break this build.</h1>
+<p class="lede">Choose DUET or Ren Rhapsody. Play what exists, challenge our assumptions, and help make the next build stronger. The other projects below are examples for learning game development skills.</p>
+<div class="paths" aria-label="Choose an experience">
+  <article class="path"><p class="tag">01 · Playable web game</p><h2>DUET</h2><p>A two-player, accessible strategy game. Play the browser build, test a remote match, or report a problem with keyboard and screen-reader play. DUET is the lead concept for an ID@Xbox pitch.</p><a class="action" href="https://duet.loptrlab.com/">Play DUET</a><a href="https://github.com/Loptr-Lab/duet-solo-hackathon/issues">Report a problem</a></article>
+  <article class="path"><p class="tag">02 · Music and movement concept</p><h2>Ren Rhapsody</h2><p>Explore the fan-made musical journey and its UEFN development plan. A playable Fortnite island and the rights to protected music remain work to complete before any public island release.</p><a class="action" href="https://ibloud.github.io/ren-rhapsody/">Explore Ren Rhapsody</a><a href="https://github.com/ibloud/ren-rhapsody/issues">Review the work</a></article>
+</div>
+<p><small>Both experiences are independent Loptr Lab projects. Platform approval, artist endorsement, and a published Fortnite island are not claimed here.</small></p>
 
 <div class="callout">
 <p class="state">CURRENT STATE</p>
-<p><strong>M1 — COMPLETE</strong><br>
-<strong>M0-A — FROZEN / PENDING EXTERNAL FACTS</strong></p>
-<p>We are deliberately not building the Xbox implementation yet.</p>
+<p><strong>DUET web build — ACTIVE DEVELOPMENT</strong><br>
+<strong>M1 client contract — COMPLETE</strong><br>
+<strong>M0-A Xbox hardware proof — FROZEN / PENDING EXTERNAL FACTS</strong></p>
+<p>The Xbox/Godot implementation waits for the required access and hardware evidence. Web playtests and the DUET concept can progress now.</p>
 </div>
 
-<h2>What we're testing</h2>
+<h2 id="halloween-plan">Halloween 2026: work we can finish</h2>
+<p>October 31 is our internal target for a tested DUET web release candidate, an auditable environment and cost record, and an ID@Xbox concept submission if onboarding permits. It is not a console release date. Ren Rhapsody follows its separate UEFN and music-rights path.</p>
+<ol class="milestones">
+<li><time datetime="2026-10-03">October 3</time><span><strong>Record the environment.</strong> Capture the live build, hosting, Gemini and Firestore use, costs, rights, and a baseline for room codes created versus joined.</span></li>
+<li><time datetime="2026-10-10">October 10</time><span><strong>Complete remote matches.</strong> Test code creation, a second player joining, match completion, disconnect, and rejoin.</span></li>
+<li><time datetime="2026-10-17">October 17</time><span><strong>Test accessibility.</strong> Include keyboard and screen-reader players, record failures, and check whether players understand and use PIXIE's in-game suggestions.</span></li>
+<li><time datetime="2026-10-24">October 24</time><span><strong>Review the candidate.</strong> Resolve blocking bugs and prepare gameplay footage, accessibility findings, provenance, and the DUET-led Xbox concept.</span></li>
+<li><time datetime="2026-10-31">October 31</time><span><strong>Publish web evidence.</strong> Release the tested browser candidate and submit the ID@Xbox concept if account setup allows. Xbox approval and hardware deployment have no promised date.</span></li>
+</ol>
+<p><small>These are proposed internal checkpoints, not statements that the work has been completed. The game PIXIE can test one-suggestion UX; the separate iOS assistant still needs its own Files permissions and recovery tests.</small></p>
+
+<h2>What we're testing in DUET</h2>
 <pre>platform client
       ↓
   DuetClient
@@ -69,12 +87,22 @@ authoritative DUET server</pre>
 <li>Physical dev-kit deployment and hardware validation</li>
 </ul>
 
-<p>Until those facts arrive, DUET implementation stays frozen at M1.</p>
+<p>Until those facts arrive, <strong>Xbox/Godot implementation</strong> stays frozen at M1. DUET web development and accessible playtesting continue.</p>
+
+<h2>Learn by breaking a smaller example</h2>
+<p>These repositories are skills practice and research examples. They are not extra choices for this release. Pick one issue you can reproduce, document what you expected, and share the steps or a focused fix.</p>
+<div class="examples">
+<a href="https://github.com/ibloud/violets-revenge">Violet's Revenge · browser QA</a>
+<a href="https://github.com/ibloud/ren-tap-tap-revenge">Ren Tap Tap Revenge · rhythm mechanics</a>
+<a href="https://github.com/ibloud/living-room-poetry">Living Room Poetry · narrative</a>
+<a href="https://github.com/ibloud/awesome-open-source-games">Open source games · research</a>
+<a href="https://github.com/ibloud/narrative-provenance">Narrative provenance · documentation</a>
+</div>
 
 <h2>How to review</h2>
 <p>Bring evidence, not vibes. If you think something is wrong, point to the assumption, constraint, documentation, test, or failure mode that supports the objection.</p>
 
-<p><a href="https://github.com/Loptr-Lab/duet-solo-hackathon">DUET repository</a> · <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/pull/48">Current development-state review</a></p>
+<p><a href="https://github.com/Loptr-Lab/duet-solo-hackathon">DUET repository</a> · <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/blob/main/docs/DEVELOPMENT_STATUS.md">Current development status</a> · <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/issues">Share a reproducible issue</a></p>
 
 <hr style="border:none;border-top:1px solid var(--line);margin:64px 0 48px">
 
