@@ -86,4 +86,4 @@ When using MCP or other AI-assisted tooling:
 - Do not turn "looks compatible," "probably supported," or "should work" into project facts.
 - For hardware-gated work, documentation and partner confirmation do not substitute for the required physical test.
 
-For detailed MCP restrictions, evidence handling, review-comment guidance, and the current M0-A call to action, see [`docs/MCP_CONTRIBUTION_GUIDANCE.md`](docs/MCP_CONTRIBUTION_GUIDANCE.md).
+For detailed MCP restrictions, evidence handling, review-comment guidance, and the current M0-A call to action, see [`docs/MCP_CONTRIBUTION.md`](docs/MCP_CONTRIBUTION.md).
