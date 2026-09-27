@@ -22,6 +22,6 @@ The browser game's accessible command path and screen-reader announcements do no
 
 ## Training use
 
-This is a **turn-based software-to-hardware design analysis**: draw a system boundary, map one Duet state transition to input, LED, and audio feedback, and write a test against the multiplayer app's server-authoritative state. The separate `ibloud/duet_engine_architecture` lab can inform reusable contracts but is not the parity oracle for this exercise. Deliver a diagram, state/announcement table, and a risk and provenance log. No hardware is needed for the first exercise. The proposed maker index is tracked in [Loptr-Lab/training PR #34](https://github.com/Loptr-Lab/training/pull/34).
+This is a **turn-based software-to-hardware design analysis**: draw a system boundary, map one Duet state transition to input, LED, and audio feedback, and write a test against the multiplayer app's server-authoritative state. The separate `ibloud/duet_engine_architecture` lab can inform reusable contracts but is not the parity oracle for this exercise. Deliver a diagram, state/announcement table, and a risk and provenance log. No hardware is needed for the first exercise. The proposed maker index is tracked in [Loptr Lab maker pathway index](https://github.com/Loptr-Lab/training/blob/main/docs/tracks/maker-game-systems.md).
 
 Duet's production and accessibility owners must review any implementation. The canonical four-player Veiled Dominion rules remain in the separate engine repository; this study grants no rights to third-party build assets or artist material.
