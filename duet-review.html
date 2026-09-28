@@ -49,6 +49,17 @@ small{color:var(--muted)}
 </ol>
 <p><small>These are proposed internal checkpoints, not statements that the work has been completed. The game PIXIE can test one-suggestion UX; the separate iOS assistant still needs its own Files permissions and recovery tests.</small></p>
 
+<h2 id="fire-tv-challenge">Fire TV and accessibility challenge</h2>
+<p>We are evaluating DUET for Amazon Build, Ship, Shape using the same web build targeted for Halloween. By October 4, we need evidence that a board renders, D-pad focus moves, one legal move works, and VoiceView describes enough board state to play. This is a test gate, not a claim that Fire TV support is complete. If the path fails, the October 31 web work continues without a Fire TV submission.</p>
+<ul>
+<li>Can you play using only a remote or D-pad? Does focus become lost or trapped?</li>
+<li>Does VoiceView identify the selected square, piece, turn, and result of a move clearly enough to finish a match?</li>
+<li>Can you reload, disconnect, rejoin, and finish without losing an accessible route through the board?</li>
+<li>Does TV work make keyboard, touch, or screen-reader play on the web worse?</li>
+<li>Does PIXIE answer DUET questions while every off-topic message gets the same fixed response, without sending raw text to the model?</li>
+</ul>
+<p><strong>Hackathon constraint:</strong> each submitted change must also improve DUET accessibility, controller support, game assistant boundaries, or release quality. Report the device or simulator, VoiceView setting, exact steps, expected result, and observed result in a <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/issues">DUET issue</a>. Amazon tooling problems can also become friction-log evidence.</p>
+
 <h2>What we're testing in DUET</h2>
 <pre>platform client
       ↓

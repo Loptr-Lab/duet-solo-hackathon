@@ -43,6 +43,14 @@ completed match may submit, once per seat.
 
 ## AI boundary
 
-Messages sent to `/api/agent` are transmitted to the configured Gemini service. Do not
-invite users to submit sensitive information. Core gameplay must remain usable when Gemini
-is disabled or unavailable.
+`/api/agent` applies a deterministic game scope gate before any model call. Off-topic
+messages receive one fixed response and are not sent to Gemini. In-scope messages are
+mapped to fixed DUET questions; raw user text is never sent to Gemini. This gate does
+not classify distress or establish a crisis protocol. A neutral Outside Support page
+is always available without using the agent. Do not invite users to submit sensitive
+information. Core gameplay must remain usable when Gemini is disabled or unavailable.
+
+`GEMINI_MODEL` must be explicitly configured; the obsolete `gemini-1.5-flash` fallback
+has been removed. Review Google provider retention and Cloud Run request logging
+separately before deployment. The in-process rate limiter still keys requests by IP
+for ten minutes; no content or per-user help event is written by this route.

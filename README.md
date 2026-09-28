@@ -44,7 +44,7 @@ This is not a "demo-only chatbot"; it supports real player interaction flows.
   - Fog Mode's accessibility design gates *information*, not just visuals: querying a square via the command bar or screen reader returns only what a sighted player would actually see (visible, last-known/stale, or unexplored) — fog is a fairness mechanic, not an accessibility gap.
   - The Radius of Ruin / Sanctuary auras use a data-driven "breathing" animation (CSS custom properties set per-render from live board state — how many pieces are currently veiled or sheltered) rather than a fixed decorative pulse, with `prefers-reduced-motion` respected throughout.
 - **Backend:** Node.js + Express (`server.js`)
-- **AI endpoint:** `POST /api/agent` (Gemini API)
+- **AI endpoint:** `POST /api/agent` (deterministic DUET question gate before optional Gemini; configure `GEMINI_MODEL` explicitly)
 - **Hosting target:** Google Cloud Run
 
 ---
