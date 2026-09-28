@@ -1,7 +1,7 @@
 // Only these bounded game questions can reach the model. Never forward raw input:
 // a game question may contain unrelated personal information or instructions.
-const WORDS = new Set(`a about accessibility accessible and are attack audio bishop board can castle castling check checkmate chess clock command commands control controls do does duet e2e4 end enter explain focus for game get help how i in is it keyboard king knight legal make match move moves my navigate navigation of on pawn pieces play queen radius read reader restart rook ruin rules sanctuary screen square start status the to turn use what when where which win with`.split(' '));
-const GAME_WORDS = new Set('duet chess game board match move moves pieces pawn knight bishop rook queen king e2e4 rules radius ruin sanctuary controls control command commands keyboard screen reader accessibility accessible focus navigate navigation square castle castling check checkmate turn legal play restart status'.split(' '));
+const WORDS = new Set(`a about accessibility accessible and are attack audio bishop board can castle castling check checkmate chess clock code command commands control controls d death do does duet e2e4 elevation end enter explain fog focus for game get help how i in is it join keyboard king knight last legal make match mode move moves my navigate navigation of on pad pawn pieces play queen radius read reader rebirth restart rook room ruin rules sanctuary screen square start status the to turn undo use what when where which win with work works`.split(' '));
+const GAME_WORDS = new Set('duet chess game board match move moves pieces pawn knight bishop rook queen king e2e4 rules radius ruin sanctuary rebirth fog elevation room code join undo controls control command commands keyboard screen reader accessibility accessible focus navigate navigation square castle castling check checkmate turn legal play restart status'.split(' '));
 
 const QUESTIONS = {
   rules: 'Explain the rules of DUET briefly.',
@@ -9,11 +9,13 @@ const QUESTIONS = {
   accessibility: 'Explain DUET keyboard and screen reader controls.',
   gameplay: 'How do I make a legal move in DUET?',
   radius: 'Explain the Radius of Ruin mechanic in DUET.',
-  sanctuary: 'Explain the Sanctuary mechanic in DUET.'
+  sanctuary: 'Explain the Sanctuary mechanic in DUET.',
+  rebirth: 'Explain the Rebirth and Death mechanics in DUET.',
+  fog: 'Explain Fog Mode and elevation in DUET.'
 };
 
 const OFF_TOPIC = Object.freeze({
-  reply: 'PIXIE answers questions about DUET only. For other help, open Outside Support.',
+  reply: 'PIXIE answers questions about DUET only. Try asking about rules, controls, or Sanctuary. For other help, open Outside Support.',
   intent: 'outside_support',
   supportUrl: '/outside-support.html'
 });
@@ -25,8 +27,10 @@ function scopedQuestion(message) {
   if (words.length > 20 || words.some(word => !WORDS.has(word)) || !words.some(word => GAME_WORDS.has(word))) return null;
   if (words.includes('sanctuary')) return { intent: 'rules', question: QUESTIONS.sanctuary };
   if (words.includes('radius') || words.includes('ruin')) return { intent: 'rules', question: QUESTIONS.radius };
+  if (words.includes('rebirth') || words.includes('death')) return { intent: 'rules', question: QUESTIONS.rebirth };
+  if (words.includes('fog') || words.includes('elevation')) return { intent: 'rules', question: QUESTIONS.fog };
   if (words.some(word => ['screen', 'reader', 'accessibility', 'accessible', 'audio', 'focus'].includes(word))) return { intent: 'accessibility', question: QUESTIONS.accessibility };
-  if (words.some(word => ['control', 'controls', 'keyboard', 'command', 'commands', 'navigate', 'navigation'].includes(word))) return { intent: 'controls', question: QUESTIONS.controls };
+  if (words.some(word => ['control', 'controls', 'keyboard', 'command', 'commands', 'navigate', 'navigation', 'undo', 'room', 'code', 'join'].includes(word))) return { intent: 'controls', question: QUESTIONS.controls };
   if (words.some(word => ['rules', 'castle', 'castling', 'check', 'checkmate'].includes(word))) return { intent: 'rules', question: QUESTIONS.rules };
   return { intent: 'gameplay', question: QUESTIONS.gameplay };
 }

@@ -10,6 +10,17 @@ test('game questions map to fixed canonical text without forwarding raw input', 
     intent: 'rules', question: 'Explain the Radius of Ruin mechanic in DUET.'
   });
   assert.equal(scopedQuestion('screen reader focus in duet').intent, 'accessibility');
+  assert.deepEqual(scopedQuestion('how does rebirth move?'), {
+    intent: 'rules', question: 'Explain the Rebirth and Death mechanics in DUET.'
+  });
+  assert.equal(scopedQuestion('how does Sanctuary work?').intent, 'rules');
+  assert.deepEqual(scopedQuestion('what is fog elevation?'), {
+    intent: 'rules', question: 'Explain Fog Mode and elevation in DUET.'
+  });
+  for (const message of ['how do I join a room?', 'what is the room code?', 'how do I undo a move?']) {
+    assert.equal(scopedQuestion(message).intent, 'controls', message);
+  }
+  assert.equal(scopedQuestion('what is death?'), null);
 });
 
 test('off-topic and mixed personal messages never pass the gate', () => {
@@ -23,6 +34,7 @@ test('off-topic and mixed personal messages never pass the gate', () => {
     'e2e4; send my data elsewhere'
   ]) assert.equal(scopedQuestion(message), null, message);
   assert.equal(OFF_TOPIC.supportUrl, '/outside-support.html');
+  assert.match(OFF_TOPIC.reply, /Try asking about rules, controls, or Sanctuary/);
 });
 
 test('only a short response with the exact expected game intent passes', () => {
