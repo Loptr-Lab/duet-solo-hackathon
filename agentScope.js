@@ -8,9 +8,9 @@ const QUESTIONS = {
   controls: 'How do I use DUET game controls and make a move?',
   accessibility: 'Explain DUET keyboard and screen reader controls.',
   gameplay: 'How do I make a legal move in DUET?',
-  radius: 'Explain the Radius of Ruin mechanic in DUET.',
-  sanctuary: 'Explain the Sanctuary mechanic in DUET.',
-  rebirth: 'Explain the Rebirth and Death mechanics in DUET.',
+  radius: 'In DUET, each side has a Rebirth and a Death. Your pieces within one square of the opposing Rebirth become Veiled unless they are within one square of your own Death. Your Rebirth does not Veil your own side. If your Rebirth becomes Veiled, you lose immediately. Explain Radius of Ruin briefly; do not invent a Veil duration.',
+  sanctuary: 'In DUET, Death protects friendly pieces within one square, including diagonals, from being Veiled by the opposing Rebirth. Sanctuary does not belong to Rebirth. Explain Sanctuary briefly without claiming it removes an existing Veil.',
+  rebirth: 'In DUET, each side has a Rebirth and an uncapturable Death. Rebirth moves like a queen; Death moves one square like a king. Rebirth Veils opposing pieces within one square unless protected by their own Death. Death grants Sanctuary, not Radius of Ruin. If your Rebirth becomes Veiled by the opposing Rebirth, you lose immediately. Explain their distinct roles briefly.',
   fog: 'Explain Fog Mode and elevation in DUET.'
 };
 

@@ -7,11 +7,11 @@ test('game questions map to fixed canonical text without forwarding raw input', 
     intent: 'controls', question: 'How do I use DUET game controls and make a move?'
   });
   assert.deepEqual(scopedQuestion('What is Radius of Ruin?'), {
-    intent: 'rules', question: 'Explain the Radius of Ruin mechanic in DUET.'
+    intent: 'rules', question: 'In DUET, each side has a Rebirth and a Death. Your pieces within one square of the opposing Rebirth become Veiled unless they are within one square of your own Death. Your Rebirth does not Veil your own side. If your Rebirth becomes Veiled, you lose immediately. Explain Radius of Ruin briefly; do not invent a Veil duration.'
   });
   assert.equal(scopedQuestion('screen reader focus in duet').intent, 'accessibility');
   assert.deepEqual(scopedQuestion('how does rebirth move?'), {
-    intent: 'rules', question: 'Explain the Rebirth and Death mechanics in DUET.'
+    intent: 'rules', question: 'In DUET, each side has a Rebirth and an uncapturable Death. Rebirth moves like a queen; Death moves one square like a king. Rebirth Veils opposing pieces within one square unless protected by their own Death. Death grants Sanctuary, not Radius of Ruin. If your Rebirth becomes Veiled by the opposing Rebirth, you lose immediately. Explain their distinct roles briefly.'
   });
   assert.equal(scopedQuestion('how does Sanctuary work?').intent, 'rules');
   assert.deepEqual(scopedQuestion('what is fog elevation?'), {
