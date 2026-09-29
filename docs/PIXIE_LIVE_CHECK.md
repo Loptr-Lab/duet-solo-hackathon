@@ -20,28 +20,19 @@ review. It does not need the Gemini key; the staging service holds that key.
 
 ## Operator setup in Cloud Shell
 
-The repository documents Google Cloud project `adept-crossing-106819`, service
-`duet-solo`, and region `us-central1`. Confirm those names in Cloud Run before
-using these commands. In the service's **Containers → Variables & Secrets**,
-check that `GEMINI_API_KEY` is available through an existing secret reference;
-do not copy the key into a command or a chat. Choose a supported model name
-for `GEMINI_MODEL`.
+The observed Google Cloud project is `adept-crossing-106819`, service
+`duet-solo-hackathon`, region `us-central1`. The September 28 production revision
+was missing both Gemini entries. Read [OPERATIONS_HANDOFF.md](OPERATIONS_HANDOFF.md)
+and verify current configuration and the deployment trigger before staging.
 
-```sh
-gcloud config set project adept-crossing-106819
-git clone --branch pixie/scope-gate --single-branch https://github.com/Loptr-Lab/duet-solo-hackathon.git
-cd duet-solo-hackathon
-gcloud run deploy duet-solo --source . --region us-central1 \
-  --no-traffic --tag pixie-check \
-  --update-env-vars GEMINI_MODEL=YOUR-SUPPORTED-MODEL
-```
-
-This creates a tagged revision of the PR source with no ordinary traffic.
-Use its **tagged URL** as `PIXIE_BASE_URL` in the runner above. The tag URL
-may still be reachable directly, so do not send personal test messages.
-After recording the results, remove the tag in Cloud Run. Do not use
-`--set-env-vars`: it can remove other configured variables. If the key is not
-already configured, attach it through Secret Manager before this deployment.
+With an operator-approved configuration, attach `GEMINI_API_KEY` through Secret
+Manager and set a supported `GEMINI_MODEL` on a **no-traffic PR revision** or an
+isolated staging service. Preserve all other required entries and do not put the
+key into a command or a chat. The tagged test URL may still be reachable directly;
+send only game test inputs. Use that URL as `PIXIE_BASE_URL` in the runner above.
+Remove any temporary revision tag after recording results. Avoid partial
+`--set-env-vars` commands, which can remove omitted entries. Do not route ordinary
+production traffic to the PR revision just to conduct this check.
 
 Record the model name, date, response intent, character count, and accuracy for each
 case. The response must have the listed intent and a nonempty `reply` of at most 500
