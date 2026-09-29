@@ -5,6 +5,13 @@ model call. Use this sheet to review the player-facing text against DUET's
 implementation before merging and after any rules change. Every response must
 be at most 500 characters and use the intent returned by `gameReply`.
 
+**External review hold:** Keep PR #67 in draft until qualified people with
+game-rules and screen-reader game experience have commented and their findings
+are resolved or recorded with reasons in [issue #69](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/69).
+Record actual hands-on full-match and Fire TV/VoiceView results in
+[issue #70](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/70).
+CI and the simulated match test do not substitute for these observations.
+
 | Answer | Source in the DUET code | Reviewer | Date |
 | --- | --- | --- | --- |
 | **Rules:** DUET is a two-player chess variant. Each side has a Rebirth and a Death. The opposing Rebirth can Veil your nearby pieces, restricting how they move; your Death protects nearby friendly pieces. If your Rebirth is Veiled, you lose. | `public/index.html` game intro; `RadiusOfRuinSystem.resolve`; `checkLossCondition` in `veiled-chess-core-server.js` | Pending | Pending |
