@@ -79,9 +79,11 @@ against the active revision and deployment trigger before deploying. Do not use 
 `--set-env-vars` command or put an API key on the command line.
 
 **Do not restore `GEMINI_API_KEY` to production code on `main`:** its current PIXIE
-endpoint sends raw player text to Gemini when configured. Stage and verify the
-scope gate in draft PR #67 with the key first; then deploy code and key together
-after review.
+endpoint sends raw player text to Gemini when configured. The `main` merge trigger
+automatically deploys and routes all traffic. Merge the reviewed scope gate with
+the key absent; only after the gated code is confirmed live, add the key to a
+tagged no-traffic revision, verify it, and route traffic. An isolated staging
+service is the option for testing with a key before merge.
 
 For a separate deployment, enable Google Cloud project billing, configure provider quotas,
 a cloud budget, Firestore least privilege, retention, and privacy/security contacts before
