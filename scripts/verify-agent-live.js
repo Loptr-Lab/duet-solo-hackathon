@@ -12,8 +12,7 @@ const cases = [
   ['Fog Mode', 'What is Fog Mode?', 'rules']
 ];
 
-async function main() {
-  const base = process.env.PIXIE_BASE_URL;
+function resolveTestUrl(base) {
   if (!base) throw new Error('Set PIXIE_BASE_URL to a gated tagged or isolated staging URL.');
   const url = new URL('/api/agent', base);
   if (url.protocol !== 'https:' && url.hostname !== 'localhost' && url.hostname !== '127.0.0.1') {
@@ -24,7 +23,11 @@ async function main() {
   if (url.hostname === 'duet.loptrlab.com' || productionRunAppUrl) {
     throw new Error('Do not test the ordinary production endpoint. Use a gated tagged revision or isolated staging URL.');
   }
+  return url;
+}
 
+async function main() {
+  const url = resolveTestUrl(process.env.PIXIE_BASE_URL);
   console.log(`UTC: ${new Date().toISOString()}`);
   console.log(`Model recorded by operator: ${process.env.PIXIE_MODEL_NAME || '(enter from Cloud Run configuration)'}`);
   console.log(`Endpoint: ${url.origin}`);
@@ -53,7 +56,11 @@ async function main() {
   if (failed) process.exitCode = 1;
 }
 
-main().catch(error => {
-  console.error(error.message);
-  process.exitCode = 1;
-});
+if (require.main === module) {
+  main().catch(error => {
+    console.error(error.message);
+    process.exitCode = 1;
+  });
+}
+
+module.exports = { resolveTestUrl };
