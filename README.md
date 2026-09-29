@@ -1,6 +1,6 @@
 # Duet: Solo
-Screen-reader-first, accessibility-built chess variant with a Gemini-powered onboarding/support agent.
-Built for **Build with Gemini XPRIZE (Education & Human Potential)**.
+Screen-reader-first, accessibility-built chess variant with PIXIE's fixed DUET game help.
+The earlier **Build with Gemini XPRIZE** planning files are historical drafts, not current product claims.
 
 ---
 
@@ -21,19 +21,18 @@ Duet: Solo is an accessible strategy game experience designed for blind and low-
 
 The application includes:
 - Accessible game interaction patterns for screen readers
-- A Gemini-powered assistant for onboarding and support
+- PIXIE game help: eight reviewed answers for rules, controls, and accessibility
 - Cloud Run deployability for judging/demo reliability
 - An "Obsidian Realm" landing screen that leads into two gameplay modes: a classic ruleset, and an experimental Fog Mode (elevation-based vision and HP combat) — both built to the same accessibility standard, with information gated by fog rather than hidden only visually (see below)
 
 ---
 
-## Why Gemini
-Gemini is used for operational product work inside the app:
-- onboarding new users,
-- answering accessibility and gameplay support questions,
-- handling support-style intent triage in structured JSON responses.
-
-This is not a "demo-only chatbot"; it supports real player interaction flows.
+## PIXIE game help
+The server selects one of eight fixed answers from a bounded DUET question gate.
+Mixed and off-topic messages get one Outside Support card. Player questions do not
+leave the server through a model API. The separate `pixie/gemini-experiment`
+branch preserves the previous experimental model path; it is not deployed by
+this branch and needs its own review before any use.
 
 ---
 
@@ -44,7 +43,7 @@ This is not a "demo-only chatbot"; it supports real player interaction flows.
   - Fog Mode's accessibility design gates *information*, not just visuals: querying a square via the command bar or screen reader returns only what a sighted player would actually see (visible, last-known/stale, or unexplored) — fog is a fairness mechanic, not an accessibility gap.
   - The Radius of Ruin / Sanctuary auras use a data-driven "breathing" animation (CSS custom properties set per-render from live board state — how many pieces are currently veiled or sheltered) rather than a fixed decorative pulse, with `prefers-reduced-motion` respected throughout.
 - **Backend:** Node.js + Express (`server.js`)
-- **AI endpoint:** `POST /api/agent` (deterministic DUET question gate before optional Gemini; configure `GEMINI_MODEL` explicitly)
+- **Game-help endpoint:** `POST /api/agent` (deterministic DUET question gate and fixed answers; no model call)
 - **Hosting target:** Google Cloud Run
 
 ---
@@ -57,9 +56,7 @@ npm install
 ### 2) Configure environment
 Copy `.env.example` to `.env` and fill values:
 - `PORT`
-- `GEMINI_API_KEY`
 - `PUBLIC_URL` (optional locally, recommended in deploy)
-- `AI_RATE_LIMIT_WINDOW_MS` and `AI_RATE_LIMIT_MAX` (keep enabled for public deployments)
 - `GOOGLE_CLOUD_PROJECT` (only when persistent remote play is enabled)
 
 ### 3) Start
@@ -77,18 +74,17 @@ The observed service is `duet-solo-hackathon` in `us-central1`; production confi
 currently requires investigation. Review all environment variables and secret references
 against the active revision and deployment trigger before deploying. Do not use a partial
 `--set-env-vars` command or put an API key on the command line.
-Do not restore `GEMINI_API_KEY` to a production revision running the ungated `main`
-PIXIE endpoint. The `main` merge trigger automatically deploys and routes all traffic.
-Merge the reviewed scope gate with the key absent; only after the gated code is
-confirmed live, add the key to a tagged no-traffic revision, verify it, and route traffic.
-An isolated staging service is the option for testing with a key before merge.
+The `main` merge trigger automatically deploys and routes all traffic. Keep
+`GEMINI_API_KEY` off this production service: current game help needs no key,
+and the older `main` code sends raw player text to Gemini if a key is attached.
+After each merge, confirm the serving revision, its configuration, and the game path.
 
 For a separate deployment, enable Google Cloud project billing, configure provider quotas,
 a cloud budget, Firestore least privilege, retention, and privacy/security contacts before
 allowing public traffic. Use `BLUESKY_HANDLE` and `BLUESKY_APP_PASSWORD` only for a dedicated
 posting account.
 
-> A public fork pays for its own Gemini, Cloud Run, Firestore, and posting usage. Do not deploy
+> A public fork pays for its own Cloud Run, Firestore, and posting usage. Do not deploy
 > with Loptr Lab credentials or production services.
 
 ---
@@ -96,15 +92,18 @@ posting account.
 ## Evidence for judges
 This repo demonstrates:
 - Running product on Google Cloud Run
-- Gemini usage in a user-facing onboarding/support path
+- PIXIE's fixed, screen-reader-friendly DUET help and Outside Support boundary
 - Accessibility-first UX design choices in gameplay interaction, including an experimental mode (Fog Mode) built to prove the accessibility approach holds up even as gameplay complexity grows, not just in the simplest case
 
 ---
 
 ## Hackathon alignment
-Category: **Education & Human Potential**
+Earlier Gemini XPRIZE planning is retained in archival documents. The current
+Fire TV accessibility challenge and ID@Xbox concept are described in
+[`duet-review.html`](duet-review.html) and the project documentation.
 
-Duet: Solo expands access to strategy learning/play by centering assistive-technology users and reducing onboarding friction with AI guidance.
+Duet: Solo expands access to strategy play by centering assistive-technology
+users and reducing onboarding friction with reviewed, fixed game help.
 
 ---
 

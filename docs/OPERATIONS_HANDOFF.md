@@ -1,45 +1,68 @@
 # DUET operations handoff
 
 **Updated:** 2026-09-28 (America/Chicago)
-**Scope:** Production Cloud Run configuration and PIXIE live verification. This is an evidence record, not an incident attribution.
+**Scope:** Cloud Run deployment and PIXIE fixed game help. This is an evidence
+record, not an attribution of a past configuration change.
 
-## Confirmed production context
+## Observed service and trigger
 
-- Google Cloud project ID shown in the container image path: `adept-crossing-106819`.
-- Cloud Run service: `duet-solo-hackathon`, region `us-central1`. The older `duet-solo` deploy example in this repository was not the observed service name.
-- On September 28, the Cloud Run Revision History screen showed `duet-solo-hackathon-00137-c98` receiving **100%** of ordinary traffic. The console labeled it deployed **2 days ago**; an exact deployment timestamp has not been recorded.
-- That revision's Containers view showed **two** configured entries: `FIRESTORE_DATABASE` and a Secret Manager reference named `ATPROTO_OAUTH_PRIVATE_KEY`. No `GEMINI_API_KEY` or `GEMINI_MODEL` entry appeared.
-- An older revision, `duet-solo-hackathon-00116-hkn`, showed **eight** environment variables, including `GEMINI_MODEL`. Its values are not reproduced here. We have not identified the first revision where the other entries ceased to appear.
-- Revision `00137-c98` displayed “Deployed by Default Compute SA (logs, trigger) using gcloud.” [GitHub's Google Cloud Build check](https://github.com/Loptr-Lab/duet-solo-hackathon/runs/108528888007) for `main` commit `6d8a287` links build `5acbe976-681c-401a-8683-bfd2afd6a763` and trigger `rmgpgab-duet-solo-hackathon-us-central1-Loptr-Lab-duet-solo-nlb` (`e75073d5-c44f-4dfe-a0a2-191c84af1c36`). Its Build, Push, and Deploy steps succeeded on September 26 CDT and ended by routing **100%** of traffic to `00137-c98`. The build log does not show the deploy flags. The Cloud Run Admin Activity audit record has **not** been examined. This confirms an automated build produced this revision, not why the Gemini entries disappeared or who configured the trigger.
-- On September 28, the owner opened that trigger's inline YAML. Its Deploy step runs `gcloud run services update $_SERVICE_NAME` with `--image`, `--labels`, `--region`, and `--quiet`; it has **no** `--set-env-vars`, `--update-env-vars`, `--env-vars-file`, or `--update-secrets`. The current definition therefore does not explicitly replace environment entries. This does not establish what the definition contained at earlier deploys or which other operation changed the service. The Cloud Run Admin Activity audit record remains unexamined.
-- The owner reported that **DUET spectate still works**. This is an owner observation, not a full live game regression test. The current production PIXIE Gemini path has not been successfully verified. The code reads `GEMINI_API_KEY` and `GEMINI_MODEL` from process environment before calling Gemini, so it cannot use those missing settings on that revision.
-- Draft PR #67 (`pixie/scope-gate`) is the scope gate under review. It has not been established as the code running on production. The local branch and its passing tests do not establish production behavior.
+- Project `adept-crossing-106819`, Cloud Run service `duet-solo-hackathon`, region
+  `us-central1`. The old `duet-solo` deploy example named a different service.
+- On September 28, revision `duet-solo-hackathon-00137-c98` served 100% of
+  traffic. Its Containers view showed `FIRESTORE_DATABASE` and a Secret Manager
+  reference named `ATPROTO_OAUTH_PRIVATE_KEY`; the Gemini key and model were absent.
+  Earlier revision `00116-hkn` had eight entries. No values are recorded here.
+- [The Cloud Build check for `6d8a287`](https://github.com/Loptr-Lab/duet-solo-hackathon/runs/108528888007)
+  confirms the `main` push trigger built, pushed, and deployed `00137-c98`, then
+  routed 100% traffic. A merge to `main` therefore creates a production revision.
+- On September 28 the owner inspected the trigger's inline YAML. Its Deploy
+  command is `gcloud run services update` with image, labels, region, and quiet
+  arguments. It has no environment or secret flags. This rules out the current
+  trigger definition explicitly setting those values; it does not explain every
+  historical update. The [trigger definition](https://console.cloud.google.com/cloud-build/triggers/edit/e75073d5-c44f-4dfe-a0a2-191c84af1c36?project=adept-crossing-106819)
+  should be rechecked before a merge.
+- The owner reported that spectate works. A full match, room join, and Fire TV
+  VoiceView test have not been recorded. No Cloud Run change was made here.
 
-## Critical ordering rule
+## PIXIE decision and key boundary
 
-**Do not restore `GEMINI_API_KEY` to the production service while it runs ungated `main` code.** On `main`, `/api/agent` returns a canned response when the key is missing; when a key is present, that version includes raw player input in the Gemini request and accepts `general` replies. The missing key currently prevents that code path from calling Gemini. A model name alone does not enable it. PR #67 changes the input and output boundary, but remains a draft and has not been verified live. A no-traffic revision with the key on the **same production service** is unsafe before that merge: [Cloud Run configuration normally carries into subsequent revisions](https://docs.cloud.google.com/run/docs/configuring/services/environment-variables), and the `main` trigger deploys a new revision with 100% traffic. Use a separate staging service for pre-merge key testing, or merge the gate with the key absent and test a tagged revision only afterward.
+The current `main` code sends raw player text to Gemini **if** `GEMINI_API_KEY`
+is attached. Its missing key keeps that path inactive on the observed revision.
+**Do not attach the key to the production service.** PR #67 replaces the model
+path with eight reviewed, fixed answers selected by a deterministic game gate.
+After that version is live, PIXIE does not need `GEMINI_API_KEY` or
+`GEMINI_MODEL`. The earlier model implementation is retained separately on
+`pixie/gemini-experiment`, not as a production fallback.
 
-The evidence was captured in the owner's September 28 conversation screenshots (`IMG_2343.png` through `IMG_2346.png`). Screenshots may contain sensitive values; do not copy them into the public repository or issue tracker.
+## Next operator steps
 
-## Open questions and next checks
+1. Recheck the current traffic revision, environment and secret-reference
+   **names**, and trigger YAML before either merge. Preserve required Firestore
+   and AT Protocol settings. Historical configuration changes can be examined
+   separately; do not copy audit payloads or secret values into this public repo.
+2. Review and merge [docs-only PR #68](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/68)
+   while the key is absent. Its `main` push deploys automatically. Confirm the
+   new revision's image, traffic, and required configuration.
+3. Rebase [PR #67](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/67)
+   onto the new `main`, resolving the overlapping README and handoff changes.
+   Review the [eight fixed answers](PIXIE_LIVE_CHECK.md) against the game code.
+   Merge with the key absent, then confirm the new serving revision has the
+   expected source commit and still has no Gemini key. Test all eight game
+   questions plus mixed and off-topic messages at `/api/agent`.
+4. Check the home page, create and join a room, spectate, and finish one match.
+   Separately validate D-pad focus and VoiceView on Fire TV hardware or emulator
+   before a hackathon submission decision.
 
-1. **Trigger inspection complete (September 28).** The [Cloud Build trigger definition](https://console.cloud.google.com/cloud-build/triggers/edit/e75073d5-c44f-4dfe-a0a2-191c84af1c36?project=adept-crossing-106819) uses inline YAML. Its Deploy step updates the service image and labels in `us-central1` with no environment or secret flags. The earlier partial `--set-env-vars` explanation is unconfirmed and is **not** present in this definition. Preserve the current YAML as evidence; inspect historical audit records to locate when the settings changed. Do not infer an attacker or responsible person from the service account name alone.
-2. Use Cloud Run Admin Activity audit logs to identify the deployment principal and the sequence of revisions that changed the environment entries. Record timestamps and revision IDs, without copying secret values. Compare the latest revision with the last known revision containing the settings.
-3. **Before merging either PR**, confirm the trigger definition is still the reviewed inline YAML and the Gemini key is still absent from the serving service. Its recent run built and routed a revision to 100% traffic; a docs-only merge can therefore deploy too. Record the current traffic revision and configuration before and after any merge.
-4. Check whether the historical Gemini key still exists in the intended Google AI Studio project or Secret Manager. A key existing there does not mean Cloud Run has it attached. **Do not attach it to the ungated production revision.** Never paste a key into a chat, GitHub issue, command history, or screenshot.
-5. Verify the production game's basic path separately: home page, room creation/join, spectate, and PIXIE's actual response to a game question. Record what was tested and what was observed. Do not describe the entire game as down based only on the PIXIE configuration.
-6. After the trigger is understood, merge [docs-only PR #68](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/68) **with the key still absent**. Check the automatically created revision and confirm its code, traffic, and environment. Both PRs edit `README.md` and add this handoff; rebase #67 onto the new `main` and resolve that overlap, preserving the latest verified facts.
-7. Review and merge **rebased PR #67 with the key still absent**. Its `main` push will automatically build and route a new revision. Confirm that the serving revision contains the gate and continues to have no key; check off-topic and in-scope fallback behavior. If pre-merge live Gemini verification is required, use a **separate staging service** with the PR code and key, never a tagged revision of the ungated production service.
-8. Once gated code is confirmed live, choose a supported model and attach the Gemini key through Secret Manager to a **tagged, no-traffic revision** of that gated production service. Preserve Firestore and AT Protocol settings and verify the exact source commit. The tag URL can still be reached directly; send only fixed game test messages. Hold other merges while this is tested.
-9. Run the eight live prompts against that tagged revision using [PIXIE_LIVE_CHECK.md](PIXIE_LIVE_CHECK.md); inspect factual accuracy and confirm provider calls in that revision's logs. A canned fallback can have the right intent and length. Only after all eight pass should traffic shift to a revision verified to contain both gate and key. Fix any trigger behavior that drops required configuration before further merges. Do not roll back to an old revision merely to recover its environment values.
-10. Test home page, create/join room, spectate, and one completed match before recruiting testers. Fire TV with VoiceView remains a separate hackathon device gate.
+Do not use a partial `--set-env-vars` deployment: it can remove omitted
+settings. A later experimental model feature would require a new review and
+separate privacy and deployment decision; the static branch has no live-model
+test or key-restoration step.
 
-**Current status:** cause of the configuration change **unknown**; no evidence of compromise from the screenshots alone. No Cloud Run changes or live Gemini verification were performed in this handoff. New operators should verify the current traffic revision again because it may change after this record.
+## Rule authority
 
-## Deployment guardrail
-
-Cloud Run configurations are revision-specific. Do not copy the historical key value from a revision into a public document. Do not use `gcloud run deploy ... --set-env-vars` as a partial update: it can remove environment variables omitted from that flag. Use a reviewed deployment configuration and preserve required secret references. Confirm the actual service, project, region, traffic, and secret attachment before every deployment.
-
-## Rule source for PIXIE answers
-
-The DUET movement implementation in `veiled-chess-core-server.js` (`isValidMove`) and `public/index.html` (`isValidMove`) treats `rb` like `q`: straight lines or diagonals with a clear path. It treats `d` like `k`: at most one square in each direction. A **Veiled** piece uses the separate one-square-forward restriction. The Rebirth/Death fixed question in PR #67 matches the normal movement code; inspect the actual answer for this distinction. This rule comes from DUET's implementation, not the four-player rulebook.
+DUET's two-player code is the answer source. `public/index.html` contains the
+gameplay, accessible controls, Fog Mode, and Radius/Sanctuary behavior;
+`veiled-chess-core-server.js` confirms movement and loss rules. The four-player
+Veiled Dominion lore is distinct. Veil duration remains under wording review:
+the code uses `DURATION_TURNS: 2` with refresh behavior, while older page copy
+says “for a round.” No static answer states a duration until reconciled.

@@ -1,5 +1,9 @@
 # Devpost Project Details — Paste-Ready Draft
 
+> Archived draft for the earlier Build with Gemini concept. Do not paste this
+> into a current application: DUET's PIXIE help now uses eight static answers,
+> and the payment and AI claims below do not describe the current product.
+
 ## Project Title
 Duet: Solo — Screen-Reader-First Accessible Chess with Gemini Onboarding
 

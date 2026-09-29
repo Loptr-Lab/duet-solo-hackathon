@@ -1,6 +1,10 @@
 # Duet: Solo — Build with Gemini XPRIZE
 ### Build Plan (solo execution, no Pulsr/PAW dependency)
 
+> Historical planning record for the earlier Gemini XPRIZE concept. This is
+> not the current DUET implementation or a live submission plan. PIXIE now
+> serves fixed game answers; see `README.md` and `docs/PIXIE_LIVE_CHECK.md`.
+
 **Deadline:** Aug 17, 2026 @ 1:00pm PDT
 **Category:** Education & Human Potential
 **Starting point:** Duet exists today, hosted on GitHub Pages, no AI layer, no Google Cloud presence, no payment processing.

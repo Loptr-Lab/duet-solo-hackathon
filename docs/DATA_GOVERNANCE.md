@@ -9,7 +9,7 @@ endorse third-party forks.
 - room identifiers and reconnect tokens
 - move history, timing, evaluation values, and match outcomes
 - deck selection, aggregate play statistics, archetype tags, and optional future DIDs
-- messages sent to the Gemini support endpoint
+- game-help questions sent to DUET's server for fixed-answer selection; the route does not persist their text
 - optional Bluesky match-result posts
 - optional anonymous post-game ratings, structured answers, notes, and bug reports
 
@@ -27,7 +27,7 @@ Before enabling persistent public play, a fork operator must:
 5. avoid collecting names, email addresses, disability information, or research-participant
    records unless a separate reviewed process explicitly requires them;
 6. use synthetic data and throwaway accounts in development;
-7. never log API keys, reconnect tokens, full Gemini prompts, or Firestore credentials;
+7. never log API keys, reconnect tokens, game-help question text, or Firestore credentials;
 8. obtain appropriate consent before public posting or research use.
 
 Suggested starting maximums are 24 hours for abandoned rooms and 30 days for raw match logs.
@@ -41,16 +41,13 @@ These records deliberately exclude room codes, reconnect tokens, socket identifi
 handles, email addresses, and network addresses. Only a socket occupying a seat in the
 completed match may submit, once per seat.
 
-## AI boundary
+## PIXIE game-help boundary
 
-`/api/agent` applies a deterministic game scope gate before any model call. Off-topic
-messages receive one fixed response and are not sent to Gemini. In-scope messages are
-mapped to fixed DUET questions; raw user text is never sent to Gemini. This gate does
-not classify distress or establish a crisis protocol. A neutral Outside Support page
-is always available without using the agent. Do not invite users to submit sensitive
-information. Core gameplay must remain usable when Gemini is disabled or unavailable.
-
-`GEMINI_MODEL` must be explicitly configured; the obsolete `gemini-1.5-flash` fallback
-has been removed. Review Google provider retention and Cloud Run request logging
-separately before deployment. The in-process rate limiter still keys requests by IP
-for ten minutes; no content or per-user help event is written by this route.
+`/api/agent` receives a question on the DUET server and applies a deterministic
+game scope gate. In-scope questions select one of eight fixed, reviewed answers;
+off-topic and mixed messages receive the same Outside Support card. The server
+does not call a model or third-party help provider, persist question text, or
+write a per-user help event. The gate does not detect distress or establish a
+crisis protocol. A neutral Outside Support page is also available directly.
+Do not invite players to submit sensitive information. Review Cloud Run request
+logging separately before deployment.

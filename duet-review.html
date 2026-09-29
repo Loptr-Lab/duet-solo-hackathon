@@ -41,7 +41,7 @@ small{color:var(--muted)}
 <h2 id="halloween-plan">Halloween 2026: work we can finish</h2>
 <p>October 31 is our internal target for a tested DUET web release candidate, an auditable environment and cost record, and an ID@Xbox concept submission if onboarding permits. It is not a console release date. Ren Rhapsody follows its separate UEFN and music-rights path.</p>
 <ol class="milestones">
-<li><time datetime="2026-10-03">October 3</time><span><strong>Record the environment.</strong> Capture the live build, hosting, Gemini and Firestore use, costs, rights, and a baseline for room codes created versus joined.</span></li>
+<li><time datetime="2026-10-03">October 3</time><span><strong>Record the environment.</strong> Capture the live build, hosting, PIXIE's fixed-answer behavior, Firestore use, costs, rights, and a baseline for room codes created versus joined.</span></li>
 <li><time datetime="2026-10-10">October 10</time><span><strong>Complete remote matches.</strong> Test code creation, a second player joining, match completion, disconnect, and rejoin.</span></li>
 <li><time datetime="2026-10-17">October 17</time><span><strong>Test accessibility.</strong> Include keyboard and screen-reader players, record failures, and check whether players understand and use PIXIE's in-game suggestions.</span></li>
 <li><time datetime="2026-10-24">October 24</time><span><strong>Review the candidate.</strong> Resolve blocking bugs and prepare gameplay footage, accessibility findings, provenance, and the DUET-led Xbox concept.</span></li>
@@ -56,7 +56,7 @@ small{color:var(--muted)}
 <li>Does VoiceView identify the selected square, piece, turn, and result of a move clearly enough to finish a match?</li>
 <li>Can you reload, disconnect, rejoin, and finish without losing an accessible route through the board?</li>
 <li>Does TV work make keyboard, touch, or screen-reader play on the web worse?</li>
-<li>Does PIXIE answer DUET questions while every off-topic message gets the same fixed response, without sending raw text to the model?</li>
+<li>Does PIXIE return the right fixed DUET answer while every off-topic or mixed message gets the same Outside Support card?</li>
 </ul>
 <p><strong>Hackathon constraint:</strong> each submitted change must also improve DUET accessibility, controller support, game assistant boundaries, or release quality. Report the device or simulator, VoiceView setting, exact steps, expected result, and observed result in a <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/issues">DUET issue</a>. Amazon tooling problems can also become friction-log evidence.</p>
 

@@ -8,8 +8,8 @@ advisory if enabled. Operators of fan forks must publish their own security cont
 
 ## Deployment warnings
 
-- A public `/api/agent` endpoint spends the operator's Gemini quota. Keep the included rate
-  limit enabled and add an upstream Cloud Run/API Gateway budget or quota control.
+- `/api/agent` selects one of eight fixed responses in the server; it does not
+  use a provider key. Keep ordinary Cloud Run request and budget monitoring enabled.
 - Never commit `.env`, service-account JSON, application passwords, or cloud credentials.
 - Use a dedicated Bluesky app password, not an account password, and rotate it after exposure.
 - Restrict Firestore service-account permissions and configure retention before public use.
