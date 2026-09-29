@@ -1092,7 +1092,7 @@
     <details class="panel" aria-labelledby="agent-heading">
         <summary id="agent-heading">Need Help?</summary>
         <div class="details-body">
-            <p>Ask about DUET controls, accessibility, or game mechanics. Other messages are not sent to the game assistant.</p>
+            <p>PIXIE has eight fixed answers about DUET rules, controls, and accessibility. A question with other words receives the same Outside Support card. Please do not enter personal information.</p>
             <label for="agent-input">Your question</label>
             <input type="text" id="agent-input" autocomplete="off">
             <button onclick="sendAgentMessage()">Ask</button>
@@ -2489,7 +2489,7 @@ async function sendAgentMessage() {
     const message = input.value.trim();
     if (!message) return;
 
-    statusEl.textContent = 'Thinking...';
+    statusEl.textContent = 'Finding DUET help...';
     input.value = '';
 
     try {
@@ -2507,7 +2507,7 @@ async function sendAgentMessage() {
             statusEl.append(' ', link);
         }
     } catch (err) {
-        statusEl.textContent = "Couldn't reach the assistant. Try again.";
+        statusEl.textContent = "Couldn't reach DUET game help. Try again.";
     }
 }
 </script>
