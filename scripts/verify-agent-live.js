@@ -19,7 +19,9 @@ async function main() {
   if (url.protocol !== 'https:' && url.hostname !== 'localhost' && url.hostname !== '127.0.0.1') {
     throw new Error('Use an HTTPS staging URL (or localhost).');
   }
-  if (url.hostname === 'duet.loptrlab.com' || /^duet-solo-hackathon-\d+\.us-central1\.run\.app$/.test(url.hostname)) {
+  const productionRunAppUrl = /^duet-solo-hackathon-\d+\.us-central1\.run\.app$/.test(url.hostname) ||
+    /^duet-solo-hackathon-[a-z0-9-]+-uc\.a\.run\.app$/.test(url.hostname);
+  if (url.hostname === 'duet.loptrlab.com' || productionRunAppUrl) {
     throw new Error('Do not test the ordinary production endpoint. Use a gated tagged revision or isolated staging URL.');
   }
 
