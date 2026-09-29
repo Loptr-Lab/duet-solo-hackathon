@@ -78,12 +78,13 @@ currently requires investigation. Review all environment variables and secret re
 against the active revision and deployment trigger before deploying. Do not use a partial
 `--set-env-vars` command or put an API key on the command line.
 
-**Do not restore `GEMINI_API_KEY` to production code on `main`:** its current PIXIE
-endpoint sends raw player text to Gemini when configured. The `main` merge trigger
-automatically deploys and routes all traffic. Merge the reviewed scope gate with
-the key absent; only after the gated code is confirmed live, add the key to a
-tagged no-traffic revision, verify it, and route traffic. An isolated staging
-service is the option for testing with a key before merge.
+**Keep `GEMINI_API_KEY` off this production service.** Current `main` can send raw
+player text to Gemini when a key is present. Draft [PR #67](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/67)
+replaces that path with fixed game help and needs no model setting or key. The
+`main` trigger deploys and routes all traffic on every merge. Review and merge
+this docs-only PR, inspect the resulting revision, then rebase, review, and merge
+#67 without restoring the key. These README sections describe the older `main`
+code until #67 is merged.
 
 For a separate deployment, enable Google Cloud project billing, configure provider quotas,
 a cloud budget, Firestore least privilege, retention, and privacy/security contacts before
