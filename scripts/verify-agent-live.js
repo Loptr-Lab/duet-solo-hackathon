@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// Run only against a deployment of this PR branch. No Gemini key is needed on
-// the client: the staging server must already have its model and key configured.
+// Run against a tagged revision with gated code or an isolated staging service.
+// No Gemini key is needed on the client: the target holds its model and key.
 const cases = [
   ['Rules', 'What are the DUET rules?', 'rules'],
   ['Controls', 'How do I use the controls?', 'controls'],
@@ -14,13 +14,13 @@ const cases = [
 
 async function main() {
   const base = process.env.PIXIE_BASE_URL;
-  if (!base) throw new Error('Set PIXIE_BASE_URL to the PR staging URL.');
+  if (!base) throw new Error('Set PIXIE_BASE_URL to a gated tagged or isolated staging URL.');
   const url = new URL('/api/agent', base);
   if (url.protocol !== 'https:' && url.hostname !== 'localhost' && url.hostname !== '127.0.0.1') {
     throw new Error('Use an HTTPS staging URL (or localhost).');
   }
-  if (url.hostname === 'duet.loptrlab.com') {
-    throw new Error('The public main endpoint does not verify this PR. Use its staging URL.');
+  if (url.hostname === 'duet.loptrlab.com' || /^duet-solo-hackathon-\d+\.us-central1\.run\.app$/.test(url.hostname)) {
+    throw new Error('Do not test the ordinary production endpoint. Use a gated tagged revision or isolated staging URL.');
   }
 
   console.log(`UTC: ${new Date().toISOString()}`);

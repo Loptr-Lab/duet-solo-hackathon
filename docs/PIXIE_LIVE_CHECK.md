@@ -1,44 +1,53 @@
 # PIXIE live check for PR #67
 
-Run this against a local or staging deployment of the **PR branch**, with `GEMINI_MODEL`
-set to a supported `generateContent` model and a valid `GEMINI_API_KEY`. Testing the
-current production `main` endpoint does not verify the scope gate in this PR. Do not
-paste API keys, full provider requests, or personal messages into the public record.
+The production service has a `main` push trigger that automatically routes a new
+revision to 100% traffic. **Do not attach a Gemini key to that service until the
+scope-gated PR #67 code is confirmed live.** With the key absent, review and merge
+the gate, confirm its source commit and behavior, then add `GEMINI_MODEL` and a
+Secret Manager key reference to a tagged **no-traffic** revision of the now-gated
+service. An isolated staging service can be used to test the PR with a key before
+merge. Never use a no-traffic tagged revision on the still-ungated production
+service for key testing: a later deploy may inherit its key and route it to 100%.
+Do not paste API keys, full provider requests, or personal messages into the
+public record.
 
-From a terminal with Node.js 18+ (Cloud Shell is one option), use the tagged PR
-staging URL, not the production domain:
+From a terminal with Node.js 18+ (Cloud Shell is one option), use the tagged
+gated revision URL or the isolated staging service URL, not the production domain:
 
 ```sh
-PIXIE_BASE_URL=https://YOUR-PR-STAGING-URL \
+PIXIE_BASE_URL=https://YOUR-TAGGED-OR-ISOLATED-URL \
 PIXIE_MODEL_NAME=YOUR-CONFIGURED-MODEL \
 node scripts/verify-agent-live.js
 ```
 
-The runner sends the eight fixed game inputs to the staging `/api/agent` route,
+The runner sends the eight fixed game inputs to the gated `/api/agent` route,
 checks HTTP status, intent, and reply length, and prints each answer for manual
 review. It also fails known canned unavailable responses. Confirm the model
-request succeeded in staging logs, because response shape alone cannot prove
+request succeeded in that revision's logs, because response shape alone cannot prove
 Gemini was called. The runner does not need the Gemini key; the staging
-service holds that key.
+service revision holds that key.
 
 ## Operator setup in Cloud Shell
 
 The observed Google Cloud project is `adept-crossing-106819`, service
 `duet-solo-hackathon`, region `us-central1`. The September 28 production revision
 was missing both Gemini entries. Read [OPERATIONS_HANDOFF.md](OPERATIONS_HANDOFF.md)
-and verify current configuration and the deployment trigger before staging.
-Never attach the Gemini key to the ungated production `main` revision: that code
-sends raw player text to Gemini when configured. Key and scope gate must be
-present together on the PR staging revision.
+and inspect the Cloud Build trigger's Deploy step before merging. GitHub's
+Cloud Build check for commit `6d8a287` shows that its `main` push built revision
+`00137-c98` and routed 100% of traffic there; it does not show deploy flags.
+Never attach the Gemini key to ungated production `main`: that code sends raw
+player text to Gemini when configured.
 
-With an operator-approved configuration, attach `GEMINI_API_KEY` through Secret
-Manager and set a supported `GEMINI_MODEL` on a **no-traffic PR revision** or an
-isolated staging service. Preserve all other required entries and do not put the
-key into a command or a chat. The tagged test URL may still be reachable directly;
-send only game test inputs. Use that URL as `PIXIE_BASE_URL` in the runner above.
-Remove any temporary revision tag after recording results. Avoid partial
-`--set-env-vars` commands, which can remove omitted entries. Do not route ordinary
-production traffic to the PR revision just to conduct this check.
+After the gated code is verified on `main` **with no key**, attach
+`GEMINI_API_KEY` through Secret Manager and set a supported `GEMINI_MODEL` on
+a no-traffic tagged revision. Preserve all other required entries and do not
+put the key into a command or a chat. Hold other merges during the test. The
+tagged URL remains directly reachable; send only fixed game inputs. Use it as
+`PIXIE_BASE_URL` in the runner above. Check the deployed source commit and
+provider logs, then route ordinary traffic only after all eight answers pass.
+Remove the temporary tag when no longer needed. Avoid partial `--set-env-vars`
+commands, which can remove omitted entries. For a pre-merge live test, create
+a **separate** staging service instead of changing the production template.
 
 Record the model name, date, response intent, character count, and accuracy for each
 case. The response must have the listed intent and a nonempty `reply` of at most 500
