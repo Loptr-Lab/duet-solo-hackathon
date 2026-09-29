@@ -70,19 +70,23 @@ Open `http://localhost:8080`
 
 ---
 
-## Cloud Run deploy (quick path)
-1. Ensure Google Cloud project + billing are enabled.
-2. Build and deploy container:
-```bash
-gcloud run deploy duet-solo \
-  --source . \
-  --region us-central1 \
-  --allow-unauthenticated \
-  --set-env-vars GEMINI_API_KEY=...,PUBLIC_URL=https://<your-run-url>
-```
-3. Set `BLUESKY_HANDLE` and `BLUESKY_APP_PASSWORD` only for a dedicated posting account.
-4. Configure provider quotas, a cloud budget, Firestore least privilege, retention, and your
-   own privacy/security contacts before allowing public traffic.
+## Cloud Run deployment
+
+Before changing the Loptr Lab service, read the [operations handoff](docs/OPERATIONS_HANDOFF.md).
+The observed service is `duet-solo-hackathon` in `us-central1`; production configuration
+currently requires investigation. Review all environment variables and secret references
+against the active revision and deployment trigger before deploying. Do not use a partial
+`--set-env-vars` command or put an API key on the command line.
+
+**Do not restore `GEMINI_API_KEY` to production code on `main`:** its current PIXIE
+endpoint sends raw player text to Gemini when configured. Stage and verify the
+scope gate in draft PR #67 with the key first; then deploy code and key together
+after review.
+
+For a separate deployment, enable Google Cloud project billing, configure provider quotas,
+a cloud budget, Firestore least privilege, retention, and privacy/security contacts before
+allowing public traffic. Use `BLUESKY_HANDLE` and `BLUESKY_APP_PASSWORD` only for a dedicated
+posting account.
 
 > A public fork pays for its own Gemini, Cloud Run, Firestore, and posting usage. Do not deploy
 > with Loptr Lab credentials or production services.
