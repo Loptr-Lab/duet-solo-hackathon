@@ -16,7 +16,10 @@ node scripts/verify-agent-live.js
 
 The runner sends the eight fixed game inputs to the staging `/api/agent` route,
 checks HTTP status, intent, and reply length, and prints each answer for manual
-review. It does not need the Gemini key; the staging service holds that key.
+review. It also fails known canned unavailable responses. Confirm the model
+request succeeded in staging logs, because response shape alone cannot prove
+Gemini was called. The runner does not need the Gemini key; the staging
+service holds that key.
 
 ## Operator setup in Cloud Shell
 
@@ -24,6 +27,9 @@ The observed Google Cloud project is `adept-crossing-106819`, service
 `duet-solo-hackathon`, region `us-central1`. The September 28 production revision
 was missing both Gemini entries. Read [OPERATIONS_HANDOFF.md](OPERATIONS_HANDOFF.md)
 and verify current configuration and the deployment trigger before staging.
+Never attach the Gemini key to the ungated production `main` revision: that code
+sends raw player text to Gemini when configured. Key and scope gate must be
+present together on the PR staging revision.
 
 With an operator-approved configuration, attach `GEMINI_API_KEY` through Secret
 Manager and set a supported `GEMINI_MODEL` on a **no-traffic PR revision** or an

@@ -77,6 +77,9 @@ The observed service is `duet-solo-hackathon` in `us-central1`; production confi
 currently requires investigation. Review all environment variables and secret references
 against the active revision and deployment trigger before deploying. Do not use a partial
 `--set-env-vars` command or put an API key on the command line.
+Do not restore `GEMINI_API_KEY` to a production revision running the ungated `main`
+PIXIE endpoint. Stage and verify the scope gate in draft PR #67 with the key first;
+then deploy code and key together after review.
 
 For a separate deployment, enable Google Cloud project billing, configure provider quotas,
 a cloud budget, Firestore least privilege, retention, and privacy/security contacts before

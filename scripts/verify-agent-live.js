@@ -36,9 +36,11 @@ async function main() {
       });
       const data = await response.json();
       const length = typeof data.reply === 'string' ? [...data.reply].length : -1;
-      const pass = response.ok && data.intent === expectedIntent && length > 0 && length <= 500;
+      const fallback = typeof data.reply === 'string' &&
+        /temporarily unavailable|could not answer|API key not configured/i.test(data.reply);
+      const pass = response.ok && data.intent === expectedIntent && length > 0 && length <= 500 && !fallback;
       if (!pass) failed = true;
-      console.log(`\n${pass ? 'PASS' : 'FAIL'} ${name}: HTTP ${response.status}, intent ${JSON.stringify(data.intent)} (expected ${expectedIntent}), ${length} characters`);
+      console.log(`\n${pass ? 'PASS' : 'FAIL'} ${name}: HTTP ${response.status}, intent ${JSON.stringify(data.intent)} (expected ${expectedIntent}), ${length} characters${fallback ? ', canned fallback' : ''}`);
       console.log(`Reply: ${JSON.stringify(data.reply)}`);
     } catch (error) {
       failed = true;
