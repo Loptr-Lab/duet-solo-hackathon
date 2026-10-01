@@ -1,4 +1,8 @@
-# Devpost Project Details — Paste-Ready Draft
+# Devpost Project Details — Historical Draft
+
+> Archived Gemini-era planning copy, not a current submission or verified product claim. The current help route retains Gemini code; a key was absent on the last inspected production revision. Fixed help is pending qualified external review in draft PR #67. Accessibility acceptance remains open in #70. No accessibility pack is sold by this implementation.
+
+Loptr Lab is a pre-seed, people-over-profit, accessibility-first venture working toward a self-sustaining model within a capitalist economy. Money sustains the work; meaningful change for people is its purpose. We accept funding only on terms that keep people and accessibility first. Our long-term vision includes universal basic income. We aim to bring change to life and leave a transparent record of what we tried, what worked, and what failed so others can carry it forward. This mission governs our projects, funding decisions, and partnerships; it is not a temporary marketing position.
 
 ## Project Title
 Duet: Solo — Screen-Reader-First Accessible Chess with Gemini Onboarding
@@ -11,13 +15,12 @@ Duet: Solo provides an accessible strategy game experience where assistive-techn
 The app includes:
 - accessible interaction design for gameplay,
 - a Gemini-powered support/onboarding agent,
-- and a Stripe-backed supporter/accessibility pack checkout flow.
+- optional supporter information; accessibility features are included in the game and are not sold as an add-on.
 
 ## How we built it
 - Frontend: HTML/CSS/JavaScript
 - Backend: Node.js + Express
 - AI: Gemini API (`/api/agent`)
-- Payments: Stripe Checkout + webhook
 - Deployment target: Google Cloud Run
 
 The Gemini assistant is integrated into real product operations: onboarding users, answering support questions, and guiding usage in a structured, reliable JSON response flow.
@@ -38,7 +41,7 @@ This kept the experience understandable for first-time users while preserving ac
 ## Accomplishments we’re proud of
 - Centered blind/low-vision usability from the start
 - Integrated Gemini in a real user-support role
-- Built a deployable app path with payment flow and transaction hooks
+- Built a deployable Cloud Run path; payments are not implemented in the current main server.
 - Created a submission-ready architecture under hackathon timelines
 
 ## What we learned

@@ -1,5 +1,16 @@
 # Duet: Solo
-Screen-reader-first, accessibility-built chess variant with a Gemini-powered onboarding/support agent.
+
+## Loptr Lab mission and participation
+
+Loptr Lab is a pre-seed, people-over-profit, accessibility-first venture working toward a self-sustaining model within a capitalist economy. Money sustains the work; meaningful change for people is its purpose. We accept funding only on terms that keep people and accessibility first. Our long-term vision includes universal basic income. We aim to bring change to life and leave a transparent record of what we tried, what worked, and what failed so others can carry it forward. This mission governs our projects, funding decisions, and partnerships; it is not a temporary marketing position.
+
+Current open review and contribution opportunities are voluntary and unpaid. Before work begins, agree in writing on scope, time, what will be public, credit preferences, and an exit path. You can stop at any point. Participation does not promise employment, ownership, revenue share, academic credit, or future pay. Any paid commission or other formal arrangement requires a separate signed agreement before work begins. External assistance or benefits belong to the participant and are not compensation from Loptr Lab.
+
+Financial support is optional and sustains infrastructure, maintenance, accessibility work, and documented development. Paying does not buy contributor status, canon authority, approvals, ownership, or employment. Participation and accessibility are not sponsorship rewards. Project-specific licenses and existing signed agreements continue to apply.
+
+[Full mission and participation terms](https://github.com/ibloud/ibloud.github.io/blob/main/MISSION.md).
+
+Screen-reader-first chess variant in active development. The current server retains a Gemini-based help route, with no model key on the last inspected production revision. A fixed-answer replacement is pending external review in [draft PR #67](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/67); browser and Fire TV/VoiceView acceptance checks remain open in [#70](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/70).
 Built for **Build with Gemini XPRIZE (Education & Human Potential)**.
 
 ---
