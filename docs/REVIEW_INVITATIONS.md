@@ -4,6 +4,19 @@
 
 Current open review and contribution opportunities are voluntary and unpaid. Before work begins, agree in writing on scope, time, what will be public, credit preferences, and an exit path. You can stop at any point. Participation does not promise employment, ownership, revenue share, academic credit, or future pay. Any paid commission or other formal arrangement requires a separate signed agreement before work begins. External assistance or benefits belong to the participant and are not compensation from Loptr Lab.
 
+## Version-pinned review packet — 2026-10-03
+
+- Proposed #67 source commit: `d2d5c0b49fd11aba7ca05ba336062e8391e2d475`.
+- [Exact answer sheet](https://github.com/Loptr-Lab/duet-solo-hackathon/blob/d2d5c0b49fd11aba7ca05ba336062e8391e2d475/docs/PIXIE_LIVE_CHECK.md), blob `99037f9c353a6784db648dfe8b18ebf67e31e4ba`.
+- [Two-player server rules](https://github.com/Loptr-Lab/duet-solo-hackathon/blob/d2d5c0b49fd11aba7ca05ba336062e8391e2d475/veiled-chess-core-server.js), [web implementation](https://github.com/Loptr-Lab/duet-solo-hackathon/blob/d2d5c0b49fd11aba7ca05ba336062e8391e2d475/public/index.html), and [proposed help gate](https://github.com/Loptr-Lab/duet-solo-hackathon/blob/d2d5c0b49fd11aba7ca05ba336062e8391e2d475/agentScope.js).
+- Repository branch implementation is proposed; this packet does not assert production deployment or completed external review.
+- Before a gameplay session, record the independently observed production source/build, client versions, scope/time, publication and credit preferences, consent, and exit path. Do not substitute this proposed commit for an unverified serving build.
+- Reissue the packet if source or answer-sheet contents change, including after rebase. Record actual reviewer/date entries only after review. Do not send invitations without separate outreach authorization.
+
+Return one verdict per answer (correct, incorrect, ambiguous), reasoning, relevant experience, release blockers, and the separate Veil/Sanctuary/Radius turn-by-turn trace. Record hands-on speech, focus, recovery, and fallback observations only against the build actually tested. Browser checks do not certify Fire TV.
+
+**External-review hold:** Keep #68, #67, and #71 in draft until qualified rules and screen-reader feedback has been received and triaged under [#69](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/69). Hands-on observations remain tracked in [#70](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/70). CI, AI review, recruitment, and the October 16 checkpoint do not waive the gate. Eventual order: #68, then rebased/reviewed #67, then rebased/reviewed #71. No merge or production deployment is authorized by these documentation changes.
+
 ## Rules review — issue #69
 
 We are looking for a person with experience reviewing game rules; shipped design work helps but is not required. Review eight short DUET help answers against the two-player implementation at the packet's source commit. Mark each correct, incorrect, or ambiguous, with reasoning.
