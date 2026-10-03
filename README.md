@@ -1,5 +1,5 @@
 # Duet: Solo
-Screen-reader-first, accessibility-built chess variant with PIXIE's fixed DUET game help.
+Screen-reader-first chess variant in active development. This draft branch implements PIXIE's eight fixed DUET answers; production deployment and accessibility acceptance remain unverified.
 The earlier **Build with Gemini XPRIZE** planning files are historical drafts, not current product claims.
 
 ---
@@ -21,7 +21,7 @@ Duet: Solo is an accessible strategy game experience designed for blind and low-
 
 The application includes:
 - Accessible game interaction patterns for screen readers
-- PIXIE game help: eight reviewed answers for rules, controls, and accessibility
+- PIXIE game help: eight proposed answers pending qualified external review for rules, controls, and accessibility
 - Cloud Run deployability for judging/demo reliability
 - An "Obsidian Realm" landing screen that leads into two gameplay modes: a classic ruleset, and an experimental Fog Mode (elevation-based vision and HP combat) — both built to the same accessibility standard, with information gated by fog rather than hidden only visually (see below)
 
@@ -69,15 +69,19 @@ Open `http://localhost:8080`
 
 ## Cloud Run deployment
 
+On September 29, the owner [reported enabling Cloud Build approval](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/68#issuecomment-5890922219) and rejecting a manual build while it awaited approval; nothing deployed. Reconfirm this setting before acting. A main push does not authorize deployment: owner build approval is separate from qualified external review, and an approved deployment can route 100% traffic.
+
+**External-review hold:** Keep #68, #67, and #71 in draft until qualified rules and screen-reader feedback has been received and triaged under [#69](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/69). Hands-on observations remain tracked in [#70](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/70). CI, AI review, recruitment, and the October 16 checkpoint do not waive the gate. Eventual order: #68, then rebased/reviewed #67, then rebased/reviewed #71. No merge or production deployment is authorized by these documentation changes.
+
 Before changing the Loptr Lab service, read the [operations handoff](docs/OPERATIONS_HANDOFF.md).
 The observed service is `duet-solo-hackathon` in `us-central1`; production configuration
 currently requires investigation. Review all environment variables and secret references
 against the active revision and deployment trigger before deploying. Do not use a partial
 `--set-env-vars` command or put an API key on the command line.
-The `main` merge trigger automatically deploys and routes all traffic. Keep
+Production deployment requires separate owner build approval; reconfirm the trigger. Keep
 `GEMINI_API_KEY` off this production service: current game help needs no key,
 and the older `main` code sends raw player text to Gemini if a key is attached.
-After each merge, confirm the serving revision, its configuration, and the game path.
+After an approved deployment, confirm the serving revision, its configuration, and the game path.
 
 For a separate deployment, enable Google Cloud project billing, configure provider quotas,
 a cloud budget, Firestore least privilege, retention, and privacy/security contacts before
@@ -92,7 +96,7 @@ posting account.
 ## Evidence for judges
 This repo demonstrates:
 - Running product on Google Cloud Run
-- PIXIE's fixed, screen-reader-friendly DUET help and Outside Support boundary
+- Proposed fixed DUET help and Outside Support boundary on this draft branch; production and usability verification remain open
 - Accessibility-first UX design choices in gameplay interaction, including an experimental mode (Fog Mode) built to prove the accessibility approach holds up even as gameplay complexity grows, not just in the simplest case
 
 ---
@@ -103,7 +107,7 @@ Fire TV accessibility challenge and ID@Xbox concept are described in
 [`duet-review.html`](duet-review.html) and the project documentation.
 
 Duet: Solo expands access to strategy play by centering assistive-technology
-users and reducing onboarding friction with reviewed, fixed game help.
+users and reducing onboarding friction with proposed fixed game help awaiting external review.
 
 ---
 
