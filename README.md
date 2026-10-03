@@ -72,6 +72,10 @@ Open `http://localhost:8080`
 
 ## Cloud Run deployment
 
+On September 29, the owner [reported enabling Cloud Build approval](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/68#issuecomment-5890922219) and rejecting a manual build while it awaited approval; nothing deployed. Reconfirm this setting before acting. A main push does not authorize deployment: owner build approval is separate from qualified external review, and an approved deployment can route 100% traffic.
+
+**External-review hold:** Keep #68, #67, and #71 in draft until qualified rules and screen-reader feedback has been received and triaged under [#69](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/69). Hands-on observations remain tracked in [#70](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/70). CI, AI review, recruitment, and the October 16 checkpoint do not waive the gate. Eventual order: #68, then rebased/reviewed #67, then rebased/reviewed #71. No merge or production deployment is authorized by these documentation changes.
+
 Before changing the Loptr Lab service, read the [operations handoff](docs/OPERATIONS_HANDOFF.md).
 The observed service is `duet-solo-hackathon` in `us-central1`; production configuration
 currently requires investigation. Review all environment variables and secret references
@@ -80,10 +84,8 @@ against the active revision and deployment trigger before deploying. Do not use 
 
 **Keep `GEMINI_API_KEY` off this production service.** Current `main` can send raw
 player text to Gemini when a key is present. Draft [PR #67](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/67)
-replaces that path with fixed game help and needs no model setting or key. The
-`main` trigger deploys and routes all traffic on every merge. Review and merge
-this docs-only PR, inspect the resulting revision, then rebase, review, and merge
-#67 without restoring the key. These README sections describe the older `main`
+replaces that path with fixed game help and needs no model setting or key. After the external-review gate is satisfied, reconcile #68 first, then rebase
+and review #67, then rebase and review #71. Keep the key absent throughout. These README sections describe the older `main`
 code until #67 is merged.
 
 For a separate deployment, enable Google Cloud project billing, configure provider quotas,
