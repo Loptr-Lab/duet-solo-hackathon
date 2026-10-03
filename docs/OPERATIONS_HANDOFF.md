@@ -1,68 +1,35 @@
 # DUET operations handoff
 
-**Updated:** 2026-09-28 (America/Chicago)
-**Scope:** Cloud Run deployment and PIXIE fixed game help. This is an evidence
-record, not an attribution of a past configuration change.
+**Updated:** 2026-10-03 (America/Chicago)
+**Scope:** Review and deployment ordering for fixed DUET help.
 
-## Observed service and trigger
+## Recorded evidence
 
-- Project `adept-crossing-106819`, Cloud Run service `duet-solo-hackathon`, region
-  `us-central1`. The old `duet-solo` deploy example named a different service.
-- On September 28, revision `duet-solo-hackathon-00137-c98` served 100% of
-  traffic. Its Containers view showed `FIRESTORE_DATABASE` and a Secret Manager
-  reference named `ATPROTO_OAUTH_PRIVATE_KEY`; the Gemini key and model were absent.
-  Earlier revision `00116-hkn` had eight entries. No values are recorded here.
-- [The Cloud Build check for `6d8a287`](https://github.com/Loptr-Lab/duet-solo-hackathon/runs/108528888007)
-  confirms the `main` push trigger built, pushed, and deployed `00137-c98`, then
-  routed 100% traffic. A merge to `main` therefore creates a production revision.
-- On September 28 the owner inspected the trigger's inline YAML. Its Deploy
-  command is `gcloud run services update` with image, labels, region, and quiet
-  arguments. It has no environment or secret flags. This rules out the current
-  trigger definition explicitly setting those values; it does not explain every
-  historical update. The [trigger definition](https://console.cloud.google.com/cloud-build/triggers/edit/e75073d5-c44f-4dfe-a0a2-191c84af1c36?project=adept-crossing-106819)
-  should be rechecked before a merge.
-- The owner reported that spectate works. A full match, room join, and Fire TV
-  VoiceView test have not been recorded. No Cloud Run change was made here.
+Existing historical observations do not establish the currently serving source or configuration. Preserve operational evidence privately. Historical audit records did not establish operator intent.
 
-## PIXIE decision and key boundary
+On September 29, the owner [reported enabling Cloud Build approval](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/68#issuecomment-5890922219) and rejecting a manual build while it awaited approval; nothing deployed. Reconfirm this setting before acting. A main push does not authorize deployment: owner build approval is separate from qualified external review, and an approved deployment can route 100% traffic.
 
-The current `main` code sends raw player text to Gemini **if** `GEMINI_API_KEY`
-is attached. Its missing key keeps that path inactive on the observed revision.
-**Do not attach the key to the production service.** PR #67 replaces the model
-path with eight reviewed, fixed answers selected by a deterministic game gate.
-After that version is live, PIXIE does not need `GEMINI_API_KEY` or
-`GEMINI_MODEL`. The earlier model implementation is retained separately on
-`pixie/gemini-experiment`, not as a production fallback.
+**External-review hold:** Keep #68, #67, and #71 in draft until qualified rules and screen-reader feedback has been received and triaged under [#69](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/69). Hands-on observations remain tracked in [#70](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/70). CI, AI review, recruitment, and the October 16 checkpoint do not waive the gate. Eventual order: #68, then rebased/reviewed #67, then rebased/reviewed #71. No merge or production deployment is authorized by these documentation changes.
 
-## Next operator steps
+## Key and configuration boundary
 
-1. Recheck the current traffic revision, environment and secret-reference
-   **names**, and trigger YAML before either merge. Preserve required Firestore
-   and AT Protocol settings. Historical configuration changes can be examined
-   separately; do not copy audit payloads or secret values into this public repo.
-2. Review and merge [docs-only PR #68](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/68)
-   while the key is absent. Its `main` push deploys automatically. Confirm the
-   new revision's image, traffic, and required configuration.
-3. Rebase [PR #67](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/67)
-   onto the new `main`, resolving the overlapping README and handoff changes.
-   Review the [eight fixed answers](PIXIE_LIVE_CHECK.md) against the game code.
-   Merge with the key absent, then confirm the new serving revision has the
-   expected source commit and still has no Gemini key. Test all eight game
-   questions plus mixed and off-topic messages at `/api/agent`.
-4. Check the home page, create and join a room, spectate, and finish one match.
-   Separately validate D-pad focus and VoiceView on Fire TV hardware or emulator
-   before a hackathon submission decision.
+Keep `GEMINI_API_KEY` absent. Existing main can send raw player text to Gemini when a key is attached. Draft #67 replaces this route with eight proposed fixed answers and needs neither a model key nor a live-model test. The earlier experiment is not a production fallback.
 
-Do not use a partial `--set-env-vars` deployment: it can remove omitted
-settings. A later experimental model feature would require a new review and
-separate privacy and deployment decision; the static branch has no live-model
-test or key-restoration step.
+Before any merge or build approval, reconfirm the serving source, traffic, environment and secret-reference names, and trigger settings privately. Preserve required Firestore and AT Protocol configuration. Do not publish secret values, audit payloads, room codes, or reconnect tokens. Avoid partial `--set-env-vars` updates or rollback solely to recover historical values.
 
-## Rule authority
+## Eventual reconciliation order
 
-DUET's two-player code is the answer source. `public/index.html` contains the
-gameplay, accessible controls, Fog Mode, and Radius/Sanctuary behavior;
-`veiled-chess-core-server.js` confirms movement and loss rules. The four-player
-Veiled Dominion lore is distinct. Veil duration remains under wording review:
-the code uses `DURATION_TURNS: 2` with refresh behavior, while older page copy
-says “for a round.” No static answer states a duration until reconciled.
+1. Obtain qualified external rules and screen-reader feedback and record its disposition under #69. Record hands-on results under #70; CI and simulated matches cannot substitute.
+2. Reconcile and review docs-only #68 first. A main push may queue an approval-gated build. Merging does not authorize owner build approval.
+3. Rebase/review #67 onto the resulting main, preserving this handoff and resolving README overlap. Check latest-head CI, exact answer text, and reviewer/date entries before an owner merge decision.
+4. Deployment requires separate owner approval. After an approved #67 deployment, verify the serving source, all eight answers, mixed/off-topic fallback, and absence of the model key.
+5. Rebase/review docs-only #71 last. Preserve mission and participation terms; consolidate README and Devpost wording against the actual implementation and verified serving state.
+6. Reissue the version-pinned review packet whenever its reviewed contents change. Production gameplay review and proposed answer-sheet review are separate. Coordinate consent before production matches because completion may publicly post a result.
+
+## Remaining verification
+
+Home page, create/join, spectate, a completed real-client match, announcements, focus/recovery, and Fire TV D-pad/VoiceView require observed results. The owner previously reported spectate working; this does not close acceptance.
+
+DUET's two-player implementation is the rule authority. Review the exact eight answers against it. Veil duration and the already-Veiled piece entering Sanctuary while within opposing Radius need a move-by-move trace. No answer should assert a duration before reconciliation. Four-player Veiled Dominion lore is a separate authority.
+
+**Status:** All three PRs remain drafts. This document records no new production inspection, merge, deployment, external approval, or acceptance result.
