@@ -17,7 +17,7 @@ Duet is MIT-licensed and may be copied, modified, and redistributed under the te
 
 1. Read [SECURITY.md](SECURITY.md) and [docs/DATA_GOVERNANCE.md](docs/DATA_GOVERNANCE.md).
 2. Create a separate cloud project with budgets and alerts.
-3. Keep Gemini optional; set request limits and provider quotas.
+3. Review the eight fixed PIXIE answers against any forked rules; no model key is needed.
 4. Configure Firestore least privilege, retention, and a deletion contact.
 5. Use a dedicated Bluesky test account if posting is enabled.
 6. Test locally with synthetic profiles and throwaway tokens.

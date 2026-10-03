@@ -13,6 +13,7 @@ The rules authority is `Loptr-Lab/veiled-dominion-engine`, whose current target 
 | Area | Duet behavior | Canonical four-player position | Status |
 | --- | --- | --- | --- |
 | Board and players | Two players on an 8×8 board | Four players on a 14×14 cross-shaped board | Experimental adaptation |
+| Radius of Ruin targets | Each Rebirth Veils only opposing pieces within one square; the opponent's Death can protect its nearby pieces | The single Rebirth Veils any non-immune adjacent piece, including her own faction's pieces; newly Veiling her own counts toward a five-strike loss | Known divergence; DUET game code is authoritative for DUET |
 | Veiled duration | `DURATION_TURNS: 2`, ticked for the color that just moved | Until the start of the affected piece owner's next turn | Known divergence |
 | Rebirth immunity | Rebirth may become Veiled | `docs/RULEBOOK_v0.1` currently says Rebirth is immune; the contradiction remains unresolved | Experimental |
 | Loss of control | A Veiled Rebirth immediately returns `rebirth_lost_control` game over | No equivalent canonical four-player rule has been approved | Experimental |
