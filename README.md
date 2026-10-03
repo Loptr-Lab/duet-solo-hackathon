@@ -70,19 +70,28 @@ Open `http://localhost:8080`
 
 ---
 
-## Cloud Run deploy (quick path)
-1. Ensure Google Cloud project + billing are enabled.
-2. Build and deploy container:
-```bash
-gcloud run deploy duet-solo \
-  --source . \
-  --region us-central1 \
-  --allow-unauthenticated \
-  --set-env-vars GEMINI_API_KEY=...,PUBLIC_URL=https://<your-run-url>
-```
-3. Set `BLUESKY_HANDLE` and `BLUESKY_APP_PASSWORD` only for a dedicated posting account.
-4. Configure provider quotas, a cloud budget, Firestore least privilege, retention, and your
-   own privacy/security contacts before allowing public traffic.
+## Cloud Run deployment
+
+On September 29, the owner [reported enabling Cloud Build approval](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/68#issuecomment-5890922219) and rejecting a manual build while it awaited approval; nothing deployed. Reconfirm this setting before acting. A main push does not authorize deployment: owner build approval is separate from qualified external review, and an approved deployment can route 100% traffic.
+
+**External-review hold:** Keep #68, #67, and #71 in draft until qualified rules and screen-reader feedback has been received and triaged under [#69](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/69). Hands-on observations remain tracked in [#70](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/70). CI, AI review, recruitment, and the October 16 checkpoint do not waive the gate. Eventual order: #68, then rebased/reviewed #67, then rebased/reviewed #71. No merge or production deployment is authorized by these documentation changes.
+
+Before changing the Loptr Lab service, read the [operations handoff](docs/OPERATIONS_HANDOFF.md).
+The observed service is `duet-solo-hackathon` in `us-central1`; production configuration
+currently requires investigation. Review all environment variables and secret references
+against the active revision and deployment trigger before deploying. Do not use a partial
+`--set-env-vars` command or put an API key on the command line.
+
+**Keep `GEMINI_API_KEY` off this production service.** Current `main` can send raw
+player text to Gemini when a key is present. Draft [PR #67](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/67)
+replaces that path with fixed game help and needs no model setting or key. After the external-review gate is satisfied, reconcile #68 first, then rebase
+and review #67, then rebase and review #71. Keep the key absent throughout. These README sections describe the older `main`
+code until #67 is merged.
+
+For a separate deployment, enable Google Cloud project billing, configure provider quotas,
+a cloud budget, Firestore least privilege, retention, and privacy/security contacts before
+allowing public traffic. Use `BLUESKY_HANDLE` and `BLUESKY_APP_PASSWORD` only for a dedicated
+posting account.
 
 > A public fork pays for its own Gemini, Cloud Run, Firestore, and posting usage. Do not deploy
 > with Loptr Lab credentials or production services.
