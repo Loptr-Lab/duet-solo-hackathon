@@ -1,6 +1,17 @@
 # Duet: Solo
-Screen-reader-first, accessibility-built chess variant with a Gemini-powered onboarding/support agent.
-Built for **Build with Gemini XPRIZE (Education & Human Potential)**.
+
+## Loptr Lab mission and participation
+
+Loptr Lab is a pre-seed, people-over-profit, accessibility-first venture working toward a self-sustaining model within a capitalist economy. Money sustains the work; meaningful change for people is its purpose. We accept funding only on terms that keep people and accessibility first. Our long-term vision includes universal basic income. We aim to bring change to life and leave a transparent record of what we tried, what worked, and what failed so others can carry it forward. This mission governs our projects, funding decisions, and partnerships; it is not a temporary marketing position.
+
+Current open review and contribution opportunities are voluntary and unpaid. Before work begins, agree in writing on scope, time, what will be public, credit preferences, and an exit path. You can stop at any point. Participation does not promise employment, ownership, revenue share, academic credit, or future pay. Any paid commission or other formal arrangement requires a separate signed agreement before work begins. External assistance or benefits belong to the participant and are not compensation from Loptr Lab.
+
+Financial support is optional and sustains infrastructure, maintenance, accessibility work, and documented development. Paying does not buy contributor status, canon authority, approvals, ownership, or employment. Participation and accessibility are not sponsorship rewards. Project-specific licenses and existing signed agreements continue to apply.
+
+[Full mission and participation terms](https://github.com/ibloud/ibloud.github.io/blob/main/MISSION.md).
+
+Screen-reader-first chess variant in active development. The current server retains a Gemini-based help route, with no model key on the last inspected production revision. A fixed-answer replacement is pending external review in [draft PR #67](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/67); browser and Fire TV/VoiceView acceptance checks remain open in [#70](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/70).
+The earlier **Build with Gemini XPRIZE** planning files are historical drafts, not current product claims.
 
 ---
 
@@ -70,19 +81,28 @@ Open `http://localhost:8080`
 
 ---
 
-## Cloud Run deploy (quick path)
-1. Ensure Google Cloud project + billing are enabled.
-2. Build and deploy container:
-```bash
-gcloud run deploy duet-solo \
-  --source . \
-  --region us-central1 \
-  --allow-unauthenticated \
-  --set-env-vars GEMINI_API_KEY=...,PUBLIC_URL=https://<your-run-url>
-```
-3. Set `BLUESKY_HANDLE` and `BLUESKY_APP_PASSWORD` only for a dedicated posting account.
-4. Configure provider quotas, a cloud budget, Firestore least privilege, retention, and your
-   own privacy/security contacts before allowing public traffic.
+## Cloud Run deployment
+
+On September 29, the owner [reported enabling Cloud Build approval](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/68#issuecomment-5890922219) and rejecting a manual build while it awaited approval; nothing deployed. Reconfirm this setting before acting. A main push does not authorize deployment: owner build approval is separate from qualified external review, and an approved deployment can route 100% traffic.
+
+**External-review hold:** Keep #68, #67, and #71 in draft until qualified rules and screen-reader feedback has been received and triaged under [#69](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/69). Hands-on observations remain tracked in [#70](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/70). CI, AI review, recruitment, and the October 16 checkpoint do not waive the gate. Eventual order: #68, then rebased/reviewed #67, then rebased/reviewed #71. No merge or production deployment is authorized by these documentation changes.
+
+Before changing the Loptr Lab service, read the [operations handoff](docs/OPERATIONS_HANDOFF.md).
+The observed service is `duet-solo-hackathon` in `us-central1`; production configuration
+currently requires investigation. Review all environment variables and secret references
+against the active revision and deployment trigger before deploying. Do not use a partial
+`--set-env-vars` command or put an API key on the command line.
+
+**Keep `GEMINI_API_KEY` off this production service.** Current `main` can send raw
+player text to Gemini when a key is present. Draft [PR #67](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/67)
+replaces that path with fixed game help and needs no model setting or key. After the external-review gate is satisfied, reconcile #68 first, then rebase
+and review #67, then rebase and review #71. Keep the key absent throughout. These README sections describe the older `main`
+code until #67 is merged.
+
+For a separate deployment, enable Google Cloud project billing, configure provider quotas,
+a cloud budget, Firestore least privilege, retention, and privacy/security contacts before
+allowing public traffic. Use `BLUESKY_HANDLE` and `BLUESKY_APP_PASSWORD` only for a dedicated
+posting account.
 
 > A public fork pays for its own Gemini, Cloud Run, Firestore, and posting usage. Do not deploy
 > with Loptr Lab credentials or production services.

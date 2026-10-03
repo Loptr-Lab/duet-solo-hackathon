@@ -1,4 +1,12 @@
-# Devpost Project Details — Paste-Ready Draft
+# Devpost Project Details — Historical Draft
+
+> Historical Gemini-era planning copy only. Do not use the text below as a current submission or verified product claim. Draft #67 implements eight fixed answers; merge, external review, accessibility acceptance (#69/#70), and production verification remain pending. Existing main retains the Gemini route; the key was absent on the September 28 inspected revision. No Stripe payment flow or paid accessibility pack is implemented by the current main server.
+
+Loptr Lab is a pre-seed, people-over-profit, accessibility-first venture working toward a self-sustaining model within a capitalist economy. Money sustains the work; meaningful change for people is its purpose. We accept funding only on terms that keep people and accessibility first. Our long-term vision includes universal basic income. We aim to bring change to life and leave a transparent record of what we tried, what worked, and what failed so others can carry it forward. This mission governs our projects, funding decisions, and partnerships; it is not a temporary marketing position.
+
+## Archived proposal text — not current product evidence
+
+The Gemini title, pitch, operational claims, and future plans below record an earlier proposal. They do not establish live model use, verified accessibility, submission readiness, or authorization for support analytics/personalization.
 
 ## Project Title
 Duet: Solo — Screen-Reader-First Accessible Chess with Gemini Onboarding
@@ -11,13 +19,12 @@ Duet: Solo provides an accessible strategy game experience where assistive-techn
 The app includes:
 - accessible interaction design for gameplay,
 - a Gemini-powered support/onboarding agent,
-- and a Stripe-backed supporter/accessibility pack checkout flow.
+- optional supporter information; accessibility features are included in the game and are not sold as an add-on.
 
 ## How we built it
 - Frontend: HTML/CSS/JavaScript
 - Backend: Node.js + Express
 - AI: Gemini API (`/api/agent`)
-- Payments: Stripe Checkout + webhook
 - Deployment target: Google Cloud Run
 
 The Gemini assistant is integrated into real product operations: onboarding users, answering support questions, and guiding usage in a structured, reliable JSON response flow.
@@ -38,7 +45,7 @@ This kept the experience understandable for first-time users while preserving ac
 ## Accomplishments we’re proud of
 - Centered blind/low-vision usability from the start
 - Integrated Gemini in a real user-support role
-- Built a deployable app path with payment flow and transaction hooks
+- Built a deployable Cloud Run path; payments are not implemented in the current main server.
 - Created a submission-ready architecture under hackathon timelines
 
 ## What we learned
