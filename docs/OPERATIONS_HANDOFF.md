@@ -1,33 +1,35 @@
 # DUET operations handoff
 
-**Updated:** 2026-09-29 (UTC)  
-**Scope:** Production Cloud Run configuration and the transition to fixed PIXIE help. This is an evidence record, not an incident attribution.
+**Updated:** 2026-10-03 (America/Chicago)
+**Scope:** Review and deployment ordering for fixed DUET help.
 
-## Confirmed production context
+## Recorded evidence
 
-- Project: `adept-crossing-106819`; Cloud Run service: `duet-solo-hackathon` in `us-central1`. The old `duet-solo` deploy example was not the observed service.
-- On September 28, revision `duet-solo-hackathon-00137-c98` served 100% of ordinary traffic. Its configuration showed `FIRESTORE_DATABASE` and the `ATPROTO_OAUTH_PRIVATE_KEY` Secret Manager reference; no `GEMINI_API_KEY` or `GEMINI_MODEL`. A prior revision, `00116-hkn`, showed eight entries. Do not copy values from historical revisions into public records.
-- The [GitHub Cloud Build check](https://github.com/Loptr-Lab/duet-solo-hackathon/runs/108528888007) for `main` commit `6d8a287` built and deployed `00137-c98`, routing 100% traffic. The owner inspected the [trigger's inline YAML](https://console.cloud.google.com/cloud-build/triggers/edit/e75073d5-c44f-4dfe-a0a2-191c84af1c36?project=adept-crossing-106819): the Deploy step uses `gcloud run services update` with image, labels, region, and quiet flags. It contains no explicit environment or secret update flags in the reviewed definition.
-- The owner later provided September 17 Admin Activity records of service updates from an interactive Cloud Shell session. The requests carried templates without environment entries. These records help locate the configuration transition but do not establish the operator's intent or explain why that command was run. The current trigger definition does not account for every historical update.
-- The owner reports that spectate works. Home page, create/join room, one completed match, and Fire TV with VoiceView remain separate checks. Production PIXIE has not been verified against a real model; the serving revision has no model key configured.
-- Draft [PR #67](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/67) replaces the Gemini route with eight static answers selected by the scope gate. It is not yet running on production. The former Gemini experiment is preserved on `pixie/gemini-experiment`.
+Existing historical observations do not establish the currently serving source or configuration. Preserve operational evidence privately. Historical audit records did not establish operator intent.
 
-## Critical ordering rule
+On September 29, the owner [reported enabling Cloud Build approval](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/68#issuecomment-5890922219) and rejecting a manual build while it awaited approval; nothing deployed. Reconfirm this setting before acting. A main push does not authorize deployment: owner build approval is separate from qualified external review, and an approved deployment can route 100% traffic.
 
-**Keep the Gemini key off this production service.** The current `main` endpoint would send raw player text to Gemini if the key were attached. PR #67 needs neither a model key nor live Gemini testing; its answer text needs human review against the two-player game code. No tagged keyed revision or traffic shift is part of the static PIXIE plan.
+**External-review hold:** Keep #68, #67, and #71 in draft until qualified rules and screen-reader feedback has been received and triaged under [#69](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/69). Hands-on observations remain tracked in [#70](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/70). CI, AI review, recruitment, and the October 16 checkpoint do not waive the gate. Eventual order: #68, then rebased/reviewed #67, then rebased/reviewed #71. No merge or production deployment is authorized by these documentation changes.
 
-Screenshots and audit payloads may contain sensitive values. Do not copy them into this repository or issue tracker.
+## Key and configuration boundary
 
-## Next steps
+Keep `GEMINI_API_KEY` absent. Existing main can send raw player text to Gemini when a key is attached. Draft #67 replaces this route with eight proposed fixed answers and needs neither a model key nor a live-model test. The earlier experiment is not a production fallback.
 
-1. Before either merge, reconfirm the serving revision, its environment and secret names, and the trigger's Deploy step. Preserve the reviewed trigger YAML and logs as private evidence.
-2. Review and merge this **docs-only PR #68 with no Gemini key**. The `main` trigger deploys even for documentation changes and routes a new revision to 100% traffic. Check that revision's source, traffic, and required Firestore/AT Protocol configuration.
-3. Rebase PR #67 onto the resulting `main`, resolve its overlapping README and handoff edits, and review the [fixed-answer sheet](https://github.com/Loptr-Lab/duet-solo-hackathon/blob/pixie/scope-gate/docs/PIXIE_LIVE_CHECK.md). Reviewer and date entries are still open. The answer does not assert a Veil duration because the displayed wording needs a decision.
-4. Merge PR #67 with **no Gemini key**. Confirm the serving revision's source commit, eight fixed answers, mixed/off-topic Outside Support response, and absence of the key. Check the full game path and Fire TV with VoiceView before recruiting testers.
-5. Investigate and restore any other required settings only after determining their actual service use and validating the resulting revision. Avoid a partial `--set-env-vars` update, which can remove omitted variables. Do not roll back solely to recover old values.
+Before any merge or build approval, reconfirm the serving source, traffic, environment and secret-reference names, and trigger settings privately. Preserve required Firestore and AT Protocol configuration. Do not publish secret values, audit payloads, room codes, or reconnect tokens. Avoid partial `--set-env-vars` updates or rollback solely to recover historical values.
 
-**Current status:** Neither PR has been merged; the old `main` code remains the production baseline. The audit records narrow the transition to an interactive service update but do not establish why it happened. Verify the current traffic revision again before acting.
+## Eventual reconciliation order
 
-## Rule source for fixed answers
+1. Obtain qualified external rules and screen-reader feedback and record its disposition under #69. Record hands-on results under #70; CI and simulated matches cannot substitute.
+2. Reconcile and review docs-only #68 first. A main push may queue an approval-gated build. Merging does not authorize owner build approval.
+3. Rebase/review #67 onto the resulting main, preserving this handoff and resolving README overlap. Check latest-head CI, exact answer text, and reviewer/date entries before an owner merge decision.
+4. Deployment requires separate owner approval. After an approved #67 deployment, verify the serving source, all eight answers, mixed/off-topic fallback, and absence of the model key.
+5. Rebase/review docs-only #71 last. Preserve mission and participation terms; consolidate README and Devpost wording against the actual implementation and verified serving state.
+6. Reissue the version-pinned review packet whenever its reviewed contents change. Production gameplay review and proposed answer-sheet review are separate. Coordinate consent before production matches because completion may publicly post a result.
 
-DUET's movement validators in `veiled-chess-core-server.js` and `public/index.html` treat ordinary Rebirth (`rb`) as queen-line movement and Death (`d`) as one-square movement. Veiled movement uses a separate restriction. Judge PIXIE's exact answer text against DUET's implementation and record reviewer/date in the sheet.
+## Remaining verification
+
+Home page, create/join, spectate, a completed real-client match, announcements, focus/recovery, and Fire TV D-pad/VoiceView require observed results. The owner previously reported spectate working; this does not close acceptance.
+
+DUET's two-player implementation is the rule authority. Review the exact eight answers against it. Veil duration and the already-Veiled piece entering Sanctuary while within opposing Radius need a move-by-move trace. No answer should assert a duration before reconciliation. Four-player Veiled Dominion lore is a separate authority.
+
+**Status:** All three PRs remain drafts. This document records no new production inspection, merge, deployment, external approval, or acceptance result.
