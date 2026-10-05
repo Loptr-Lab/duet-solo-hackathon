@@ -162,7 +162,9 @@ and must not imply Loptr Lab endorsement or canonical status. Before deploying, 
 Player-PDS game storage is required next implementation work, not current functionality.
 See [PDS requirements](docs/PLAYER_PDS_STORAGE.md) and the
 [Roomy tester/training setup](docs/ROOMY_ENVIRONMENT.md).
-Roomy provisioning and its invite URL remain pending owner authorization.
+The existing Loptr Lab Roomy community now has [DUET tester instructions](https://roomy.space/did:plc:f62tthd7cmjpfvtlet2crpsq/01M45Y6MA3S2M1ER3V3BD9KPNY)
+and [training onboarding](https://roomy.space/did:plc:f62tthd7cmjpfvtlet2crpsq/01M45YA3TCEK75WZTFB86M5HQJ). Joining is invite-only; the owner admits
+testers. Normal-participant and accessibility checks remain pending.
 
 ## Long-term development direction
 

@@ -1,42 +1,46 @@
 # Loptr Lab Roomy environment
-Prepared October 5, 2026. Requested environment: **Loptr Lab — Build, Play & Learn**.
+Verified October 5, 2026. The existing **Loptr Lab** community was reused.
 
-## Provisioning status
-- Roomy app: https://roomy.space/
-- Setup account: selected privately by the owner; no identifier published here.
-- Environment, channels, invite URL and moderation configuration: NOT CREATED / UNVERIFIED.
-- Current blocker: owner authorization/provisioning has not been completed.
-  Verify requested application permissions privately before accepting access.
-- Second administrator: not confirmed. Do not invent or grant another administrator.
-- This file is a copy-ready setup packet, not proof of an operating community.
-- No Discord bridge, bot migration, automatic GitHub sync or PDS game storage is configured.
+## Verified setup and access
+- [Community](https://roomy.space/did:plc:f62tthd7cmjpfvtlet2crpsq); the owner-authorized Roomy sign-in completed.
+- Twelve new channels and their initial instructions/templates were created.
+  Saved messages were checked after navigation/reload.
+- Existing channels were retained. New channels were created with member Read & Write.
+- General settings show **Invite only** joining and **Admins only** invite creation.
+  These settings were retained. An existing invite is present; its code is not
+  published here. The confirmed owner should use Roomy's Invite control to admit testers.
+- Second administrator: not confirmed; no additional administrator was granted.
+- Category headings DUET Playtesting and Loptr Lab Training were created, but
+  channel placement remains under GENERAL. The channel prefixes and links below
+  provide the two areas; category grouping is unfinished.
+- Normal-participant joining/posting and keyboard/screen-reader onboarding remain
+  untested. Owner-session access is not proof that an uninvited tester can join.
+- No automatic GitHub sync, new Discord bridge or PDS game storage was implemented.
 
-## Space structure
-Use one community with DUET and training areas. If the current UI has no categories,
-use the prefixes below as channel names. Prefer channels/pages supported by the UI;
-do not claim unsupported roles, private channels or wiki features.
+## Created channels
+Links are member destinations, not invitation links.
 
-| Area | Channel/page | Purpose and initial content |
-| --- | --- | --- |
-| Welcome | start-here | Scope, public-data notice, participation rules, production testing packet |
-| Welcome | announcements | Serving revision, changed behavior, known issues, testing rounds |
-| DUET | duet-find-a-player | Arrange paired tests; share room codes privately rather than in the feed |
-| DUET | duet-playtest-results | Case reports from the production packet; link to issue #70 |
-| DUET | duet-bugs | Reproduction steps, expected/actual behavior, severity and GitHub issue link |
-| DUET | duet-accessibility | Keyboard, VoiceOver, VoiceView and other input/announcement findings |
-| DUET | duet-pixie-rules-review | Eight proposed help answers, qualified review and issue #69 |
-| Training | lab-training-start-here | Pick a project, learning goal, issue and mentor/reviewer if available |
-| Training | lab-project-work | One thread per project/task, repo/PR links and scope |
-| Training | lab-help-and-pairing | Ask for help, pair on an issue, arrange a review |
-| Training | lab-show-and-tell | Demonstration, evidence, feedback and the next learning step |
-| Operations | community-requests | Report moderation/access problems; no credentials or sensitive case details |
+| Channel | Purpose |
+| --- | --- |
+| [duet-start-here](https://roomy.space/did:plc:f62tthd7cmjpfvtlet2crpsq/01M45Y6MA3S2M1ER3V3BD9KPNY) | Welcome and production instructions |
+| [duet-announcements](https://roomy.space/did:plc:f62tthd7cmjpfvtlet2crpsq/01M45Y95NEDJRJ536V23KDXVM0) | Release-card template and testing rounds |
+| [duet-find-a-player](https://roomy.space/did:plc:f62tthd7cmjpfvtlet2crpsq/01M45Y96N5YPF95ZW6XJTSBQZP) | Paired remote testing |
+| [duet-playtest-results](https://roomy.space/did:plc:f62tthd7cmjpfvtlet2crpsq/01M45Y97FBDQ51YWHQWSJGX6WJ) | Results and issue #70 |
+| [duet-bugs](https://roomy.space/did:plc:f62tthd7cmjpfvtlet2crpsq/01M45Y9H3AAEB2KAV6HGQ5ATWM) | Reproduction and GitHub issue links |
+| [duet-accessibility](https://roomy.space/did:plc:f62tthd7cmjpfvtlet2crpsq/01M45Y9J1V7MZT7JZXM8NWE9FD) | Keyboard and screen-reader findings |
+| [duet-pixie-rules-review](https://roomy.space/did:plc:f62tthd7cmjpfvtlet2crpsq/01M45Y9JYWHKHTDADH08Q3WTD9) | Qualified review and issue #69 |
+| [lab-training-start-here](https://roomy.space/did:plc:f62tthd7cmjpfvtlet2crpsq/01M45YA3TCEK75WZTFB86M5HQJ) | Project and learning-goal onboarding |
+| [lab-project-work](https://roomy.space/did:plc:f62tthd7cmjpfvtlet2crpsq/01M45YA4RVK777Y5QJ7QJRTJ6V) | Project/task template |
+| [lab-help-and-pairing](https://roomy.space/did:plc:f62tthd7cmjpfvtlet2crpsq/01M45YA5J5Z92FHBSSFBTQGYBT) | Help, pairing and review |
+| [lab-show-and-tell](https://roomy.space/did:plc:f62tthd7cmjpfvtlet2crpsq/01M45YAFWR2BHME19YQ55QW66W) | Demonstrations and next learning steps |
+| [community-requests](https://roomy.space/did:plc:f62tthd7cmjpfvtlet2crpsq/01M45YAGWAMW21TKR4KF8JZ9W6) | Access and moderation requests |
 
 Training projects can include DUET, PIXIE Creator OS/device stewardship, narrative
-provenance, Violet's Revenge and other linked Loptr Lab repositories. Joining this
-space does not grant repository write access, professional oversight or admin status.
+provenance, Violet's Revenge and other linked Loptr Lab repositories. Membership
+does not grant repository write access, professional oversight or admin status.
 
 ## Copy-ready welcome
-Welcome to Loptr Lab — Build, Play & Learn. We build in public.
+Welcome to Loptr Lab. We build, play and learn together. We build in public.
 
 DUET players: use the current production testing packet, find a partner, complete
 a real remote match and report what happened. Include the serving revision,
@@ -81,22 +85,18 @@ No deadline or successful test result is implied by an empty field.
 - Next step:
 - Mentor/reviewer (only if agreed):
 
-## Provisioning and verification
-1. After authorized sign-in, inspect existing spaces before creating a duplicate.
-   Reuse a suitable owner-approved Loptr Lab space; otherwise create the requested
-   space with the supported UI.
-2. Create the welcome, DUET and training channels/pages above. Add the templates
-   and links. State visibility explicitly after checking the actual setting.
-3. Verify owner moderation access, member posting and invitation behavior. Keep
-   admin access with the confirmed owner; no second admin is required to draft
-   instructions or run tester rounds.
-4. Test onboarding as a normal participant and keyboard/screen-reader navigation.
-   Check whether a tester can reach instructions, find a partner and submit a report.
-5. Record the verified space/invite URL here and in README/review-page links only
-   after observing the created environment. Do not publish session-bound OAuth URLs.
-6. Keep GitHub as the source of code/release evidence and issue resolution. Roomy
-   is the discussion/onboarding layer; copying a report is manual until a bridge
-   is separately implemented and tested.
+## Remaining verification
+1. The owner sends an existing invite privately to a designated tester.
+2. That tester joins with a normal participant account and checks the DUET and
+   training instructions, member posting and report submission.
+3. Test keyboard and screen-reader navigation; record failures rather than
+   claiming accessibility acceptance from the channel setup.
+4. Finish sidebar category placement if the Roomy UI supports reliable grouping.
+5. Complete the production release card before announcing a testing round.
+   Report hands-on evidence in GitHub #70 and qualified review in #69.
+6. Keep GitHub as the source of code/release evidence and issue resolution.
+   Copying actionable Roomy findings to GitHub remains manual.
+7. Keep the existing #67/#68/#71 external-review holds and owner release gates.
 
 ## Storage and privacy boundary
 Roomy's official site says data storage is transitioning to AT Proto as permissioned

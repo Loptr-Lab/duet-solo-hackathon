@@ -133,7 +133,9 @@ Player-PDS saving is required implementation work and remains unimplemented.
 See [the PDS contract and acceptance checklist](PLAYER_PDS_STORAGE.md). Current production
 testers should record this gap, not expect an existing save-to-PDS control.
 
-The [Roomy setup packet](ROOMY_ENVIRONMENT.md) defines DUET tester/feedback channels
-and a Loptr Lab training-project area. Environment and invite URL are pending
-owner authorization/provisioning. Until verified, report to the GitHub issues
-above; no automatic Roomy/GitHub/PDS bridge is claimed.
+The existing Loptr Lab Roomy community has [DUET tester instructions](https://roomy.space/did:plc:f62tthd7cmjpfvtlet2crpsq/01M45Y6MA3S2M1ER3V3BD9KPNY)
+and [training onboarding](https://roomy.space/did:plc:f62tthd7cmjpfvtlet2crpsq/01M45YA3TCEK75WZTFB86M5HQJ), with saved templates and topic channels.
+Joining is invite-only; the owner sends invitations. A normal-participant join,
+posting and accessibility check remains pending. See [setup status](ROOMY_ENVIRONMENT.md).
+Copy actionable findings into the GitHub issues above; no automatic
+Roomy/GitHub/PDS bridge is configured.
