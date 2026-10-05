@@ -1,5 +1,5 @@
 # Duet: Solo
-Screen-reader-first, accessibility-built chess variant with a Gemini-powered onboarding/support agent.
+Screen-reader-first, accessibility-built chess variant with an experimental onboarding/support path.
 Built for **Build with Gemini XPRIZE (Education & Human Potential)**.
 
 ---
@@ -21,19 +21,21 @@ Duet: Solo is an accessible strategy game experience designed for blind and low-
 
 The application includes:
 - Accessible game interaction patterns for screen readers
-- A Gemini-powered assistant for onboarding and support
+- An experimental Gemini support endpoint in the current source; live model availability is unverified
 - Cloud Run deployability for judging/demo reliability
 - An "Obsidian Realm" landing screen that leads into two gameplay modes: a classic ruleset, and an experimental Fog Mode (elevation-based vision and HP combat) — both built to the same accessibility standard, with information gated by fog rather than hidden only visually (see below)
 
 ---
 
-## Why Gemini
-Gemini is used for operational product work inside the app:
-- onboarding new users,
-- answering accessibility and gameplay support questions,
-- handling support-style intent triage in structured JSON responses.
+## Support implementation and verification
+The current `main` source includes a Gemini experiment for onboarding and gameplay
+questions, with structured JSON responses. Code presence does not establish a
+configured or functioning live model. Keep the Gemini key absent during the existing
+review hold.
 
-This is not a "demo-only chatbot"; it supports real player interaction flows.
+[PR #67](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/67) proposes fixed game
+help and an Outside Support response. It remains a draft under external review;
+that proposed behavior is not the current production claim.
 
 ---
 
@@ -44,7 +46,7 @@ This is not a "demo-only chatbot"; it supports real player interaction flows.
   - Fog Mode's accessibility design gates *information*, not just visuals: querying a square via the command bar or screen reader returns only what a sighted player would actually see (visible, last-known/stale, or unexplored) — fog is a fairness mechanic, not an accessibility gap.
   - The Radius of Ruin / Sanctuary auras use a data-driven "breathing" animation (CSS custom properties set per-render from live board state — how many pieces are currently veiled or sheltered) rather than a fixed decorative pulse, with `prefers-reduced-motion` respected throughout.
 - **Backend:** Node.js + Express (`server.js`)
-- **AI endpoint:** `POST /api/agent` (Gemini API)
+- **Support endpoint in current source:** `POST /api/agent` (Gemini experiment; live availability unverified)
 - **Hosting target:** Google Cloud Run
 
 ---
@@ -57,7 +59,7 @@ npm install
 ### 2) Configure environment
 Copy `.env.example` to `.env` and fill values:
 - `PORT`
-- `GEMINI_API_KEY`
+- `GEMINI_API_KEY` (leave absent during the review hold)
 - `PUBLIC_URL` (optional locally, recommended in deploy)
 - `AI_RATE_LIMIT_WINDOW_MS` and `AI_RATE_LIMIT_MAX` (keep enabled for public deployments)
 - `GOOGLE_CLOUD_PROJECT` (only when persistent remote play is enabled)
@@ -70,39 +72,29 @@ Open `http://localhost:8080`
 
 ---
 
-## Cloud Run deployment
+## Deployment evidence and approval
+Cloud Run is the hosting target. A reachable page does not establish the serving
+commit, provider configuration, Firestore access, or functioning model/posting services.
 
-On September 29, the owner [reported enabling Cloud Build approval](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/68#issuecomment-5890922219) and rejecting a manual build while it awaited approval; nothing deployed. Reconfirm this setting before acting. A main push does not authorize deployment: owner build approval is separate from qualified external review, and an approved deployment can route 100% traffic.
+Read [the operations handoff](docs/OPERATIONS_HANDOFF.md) before changing production.
+Verify serving source, traffic, trigger and required configuration privately and
+reconfirm the owner's build-approval setting. Keep the Gemini key absent.
 
-**External-review hold:** Keep #68, #67, and #71 in draft until qualified rules and screen-reader feedback has been received and triaged under [#69](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/69). Hands-on observations remain tracked in [#70](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/70). CI, AI review, recruitment, and the October 16 checkpoint do not waive the gate. Eventual order: #68, then rebased/reviewed #67, then rebased/reviewed #71. No merge or production deployment is authorized by these documentation changes.
+On October 5, 2026 at 07:55 America/Chicago, the owner explicitly authorized an exception to the merge hold on #68/#67/#71 and requested the changes needed to continue development. This waives the merge prerequisite; it does not establish completed external review, accessibility acceptance, Xbox approval or a production deployment. Review evidence remains pending under #69 and hands-on results under #70.
+See [release status and remaining work](docs/RELEASE_STATUS.md).
 
-Before changing the Loptr Lab service, read the [operations handoff](docs/OPERATIONS_HANDOFF.md).
-The observed service is `duet-solo-hackathon` in `us-central1`; production configuration
-currently requires investigation. Review all environment variables and secret references
-against the active revision and deployment trigger before deploying. Do not use a partial
-`--set-env-vars` command or put an API key on the command line.
-
-**Keep `GEMINI_API_KEY` off this production service.** Current `main` can send raw
-player text to Gemini when a key is present. Draft [PR #67](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/67)
-replaces that path with fixed game help and needs no model setting or key. After the external-review gate is satisfied, reconcile #68 first, then rebase
-and review #67, then rebase and review #71. Keep the key absent throughout. These README sections describe the older `main`
-code until #67 is merged.
-
-For a separate deployment, enable Google Cloud project billing, configure provider quotas,
-a cloud budget, Firestore least privilege, retention, and privacy/security contacts before
-allowing public traffic. Use `BLUESKY_HANDLE` and `BLUESKY_APP_PASSWORD` only for a dedicated
-posting account.
-
-> A public fork pays for its own Gemini, Cloud Run, Firestore, and posting usage. Do not deploy
-> with Loptr Lab credentials or production services.
+A public fork supplies and pays for its own services. Follow
+[FAN_FORK_GUIDE.md](FAN_FORK_GUIDE.md), [SECURITY.md](SECURITY.md), and
+[docs/DATA_GOVERNANCE.md](docs/DATA_GOVERNANCE.md); do not use Loptr Lab credentials.
 
 ---
 
 ## Evidence for judges
-This repo demonstrates:
-- Running product on Google Cloud Run
-- Gemini usage in a user-facing onboarding/support path
-- Accessibility-first UX design choices in gameplay interaction, including an experimental mode (Fog Mode) built to prove the accessibility approach holds up even as gameplay complexity grows, not just in the simplest case
+This repository contains the browser client, Cloud Run deployment materials, an
+experimental Gemini support path, and accessibility-oriented gameplay design,
+including Fog Mode. Current deployment, model use, remote-match persistence and
+assistive-technology usability require dated runtime evidence. Historical hackathon
+claims are not current infrastructure verification.
 
 ---
 
@@ -115,16 +107,26 @@ Duet: Solo expands access to strategy learning/play by centering assistive-techn
 
 ## Anonymous playtest feedback
 
-Completed remote games produce a minimal anonymous summary in Firestore, and each player may
-optionally submit one post-game rating, rotating rules question, note, or bug report. The form
-can be skipped, requires explicit consent to submit, and never writes room codes, reconnect
-tokens, DIDs, handles, email addresses, socket identifiers, or network addresses into the
-anonymous collections. Raw records carry a 30-day expiry timestamp.
+The source implements minimal anonymous completed-game summaries and optional post-game
+feedback for a configured Firestore deployment. Successful live writes and retention
+are not established by a rendering check. The intended privacy boundary excludes room
+codes, reconnect tokens, DIDs, handles, email addresses, socket identifiers and network
+addresses from the anonymous collections. The form requires explicit consent and can
+be skipped; raw records are assigned a 30-day expiry timestamp.
 
 Before deployment, enable Firestore TTL on the `expiresAt` field for both
 `anonymousCompletedGames` and `anonymousGameFeedback`. The portable schema and privacy boundary
 are maintained in the
 [`veiled-dominion-engine` contract directory](https://github.com/Loptr-Lab/veiled-dominion-engine/tree/main/docs/contracts).
+
+## PIXIE ecosystem continuity
+
+PIXIE is the shared guide; each surface has its own role, storage and permissions.
+Discovery, the local Creator workspace, practice notes and stewardship demonstrations
+are separate destinations. Links do not exchange private context or configure identity.
+
+See [PIXIE routes and verification](docs/PIXIE_CONTINUITY.md) for the destination map,
+explicitly unconfigured identity, and the observed source/deployment difference.
 
 ## Development status
 
@@ -134,7 +136,7 @@ Contributors are invited to review and comment on that document, particularly th
 
 ## Continuing development
 
-This project is under active development beyond the hackathon. The Veiled Dominion ecosystem — 4-player engine, Sealed Deck mechanics, stats-driven playable characters, and live Bluesky match posting via the-rift — is being built in the open.
+This project is under active development beyond the hackathon. The Veiled Dominion ecosystem — 4-player engine, Sealed Deck mechanics, stats-driven playable characters, and experimental Bluesky match-posting code for the-rift — is being built in the open. Current posting configuration and successful live posts remain unverified.
 
 See the [contributor wiki](https://github.com/Loptr-Lab/duet-solo-hackathon/wiki) for setup, architecture, and how to get involved.
 
