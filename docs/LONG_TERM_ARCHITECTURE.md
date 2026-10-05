@@ -112,3 +112,32 @@ PRs #67/#68/#71 and professional/external review requirements remain unchanged.
 - Public repository/PDS: https://atproto.com/specs/repository
 - Self-hosting responsibilities: https://atproto.com/guides/going-to-production
 - Railway backup/restore: https://docs.railway.com/guides/postgres-backups-restores
+
+## Trial-expiry transition checklist
+Do not treat remaining promotional credit as permanent hosting or as a monthly
+cost estimate. Google documents that workloads stop when an unupgraded trial ends.
+
+Before expiry, the owner records the exact billing deadline and resource/usage costs
+privately, exports operational data and configuration without exposing secrets, and
+checks restore capability. Compare keeping the current service with a paid billing
+account/free-tier allowances versus a measured alternative. Free-tier eligibility
+does not guarantee a zero bill; WebSockets, builds, image storage, network traffic
+and Firestore retention/deletes must be included.
+
+Do not click Upgrade, accept new paid terms or purchase another provider as part
+of this documentation task. Owner financial approval is separate. Alerts-only
+budgets are not hard spending caps; check actual eligibility/coverage before relying
+on a spend-cap budget. Maximum instances alone is not a complete billing cap.
+
+If migration is selected, first run the same container on the replacement with
+verified room coordination, operational storage/auth settings, two-client match,
+reconnect, restore and PDS tests. Plan the authoritative cutover and rollback before
+changing production DNS or retiring the current service. Do not leave two writable
+authorities for the same room. GitHub Pages can retain static/local gameplay and
+instructions, but does not replace this app's Node/Socket.IO remote-game backend.
+
+Billing references:
+- https://cloud.google.com/signup-faqs
+- https://docs.cloud.google.com/free/docs/free-cloud-features
+- https://cloud.google.com/run/pricing
+- https://docs.cloud.google.com/billing/docs/how-to/budgets-spend-caps
