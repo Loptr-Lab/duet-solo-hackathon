@@ -2,15 +2,13 @@
 
 PR #67 serves eight fixed responses from `agentScope.js`; `/api/agent` makes no
 model call. Use this sheet to review the player-facing text against DUET's
-implementation before merging and after any rules change. Every response must
+implementation during ongoing review and after any rules change. Every response must
 be at most 500 characters and use the intent returned by `gameReply`.
 
-**External review hold:** Keep PR #67 in draft until qualified people with
-game-rules and screen-reader game experience have commented and their findings
-are resolved or recorded with reasons in [issue #69](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/69).
-Record actual hands-on full-match and Fire TV/VoiceView results in
-[issue #70](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/70).
-CI and the simulated match test do not substitute for these observations.
+**Owner merge exception:** The October 5 owner instruction waived the merge
+prerequisite. All qualified reviewer/date entries below remain Pending. Record
+actual findings under #69 and real-client/full-match/Fire TV results under #70.
+Automated checks do not substitute for those observations.
 
 | Answer | Source in the DUET code | Reviewer | Date |
 | --- | --- | --- | --- |

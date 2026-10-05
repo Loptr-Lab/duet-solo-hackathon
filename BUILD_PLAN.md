@@ -87,3 +87,4 @@ If the repo doesn't exist yet: go to github.com → New repository → name it `
 ---
 
 *This plan assumes solo execution. If PAW/Pulsr become available again mid-build, the plan can absorb that — but treat this as the fallback that stands on its own regardless.*
+

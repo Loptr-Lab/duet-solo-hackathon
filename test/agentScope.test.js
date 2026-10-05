@@ -13,7 +13,7 @@ const cases = [
   ['What is Fog Mode?', 'fog', 'rules', 'Fog Mode adds elevation, limited sight, and HP combat. Higher ground can extend sight and increases attack damage; unexplored squares stay hidden. It is local two-player play on a shared device. The AI opponent and Spectator mode are disabled, and remote rooms use Classic mode.']
 ];
 
-test('each of eight game inputs receives the reviewed exact answer', () => {
+test('each of eight game inputs receives the specified exact answer', () => {
   for (const [input, topic, intent, reply] of cases) {
     assert.equal(scopedQuestion(input), topic, input);
     assert.deepEqual(gameReply(topic), { intent, reply }, input);

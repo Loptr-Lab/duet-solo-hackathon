@@ -9,7 +9,7 @@ endorse third-party forks.
 - room identifiers and reconnect tokens
 - move history, timing, evaluation values, and match outcomes
 - deck selection, aggregate play statistics, archetype tags, and optional future DIDs
-- game-help questions sent to DUET's server for fixed-answer selection; the route does not persist their text
+- game-help questions sent to DUET's server for fixed-answer selection; this route does not persist their text
 - optional Bluesky match-result posts
 - optional anonymous post-game ratings, structured answers, notes, and bug reports
 
@@ -44,10 +44,9 @@ completed match may submit, once per seat.
 ## PIXIE game-help boundary
 
 `/api/agent` receives a question on the DUET server and applies a deterministic
-game scope gate. In-scope questions select one of eight fixed, reviewed answers;
-off-topic and mixed messages receive the same Outside Support card. The server
-does not call a model or third-party help provider, persist question text, or
-write a per-user help event. The gate does not detect distress or establish a
-crisis protocol. A neutral Outside Support page is also available directly.
-Do not invite players to submit sensitive information. Review Cloud Run request
-logging separately before deployment.
+scope gate. In-scope questions select one of eight fixed answers; qualified
+external review remains pending. Off-topic and mixed messages receive the same
+Outside Support card. The route does not call a model or third-party help provider,
+persist question text or write a per-user help event. It does not detect distress
+or establish a crisis protocol. A neutral Outside Support page is available directly.
+Do not invite sensitive input. Verify Cloud Run request logging separately.

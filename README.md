@@ -1,6 +1,6 @@
 # Duet: Solo
-Screen-reader-first chess variant in active development. This draft branch implements PIXIE's eight fixed DUET answers; production deployment and accessibility acceptance remain unverified.
-The earlier **Build with Gemini XPRIZE** planning files are historical drafts, not current product claims.
+Screen-reader-first chess variant in active development, with PIXIE fixed game help.
+Earlier Gemini XPRIZE planning is historical; production and accessibility acceptance require current evidence.
 
 ---
 
@@ -21,18 +21,23 @@ Duet: Solo is an accessible strategy game experience designed for blind and low-
 
 The application includes:
 - Accessible game interaction patterns for screen readers
-- PIXIE game help: eight proposed answers pending qualified external review for rules, controls, and accessibility
+- PIXIE: eight fixed game-help answers and an Outside Support fallback, with no model API call
 - Cloud Run deployability for judging/demo reliability
 - An "Obsidian Realm" landing screen that leads into two gameplay modes: a classic ruleset, and an experimental Fog Mode (elevation-based vision and HP combat) — both built to the same accessibility standard, with information gated by fog rather than hidden only visually (see below)
 
 ---
 
-## PIXIE game help
-The server selects one of eight fixed answers from a bounded DUET question gate.
-Mixed and off-topic messages get one Outside Support card. Player questions do not
-leave the server through a model API. The separate `pixie/gemini-experiment`
-branch preserves the previous experimental model path; it is not deployed by
-this branch and needs its own review before any use.
+## PIXIE implementation and verification
+The server selects one of eight fixed DUET answers through a bounded question gate.
+Mixed and off-topic messages receive the same Outside Support response. No Gemini
+or other model API is called, and this help route does not persist question text.
+
+The owner authorized the merge exception on October 5. Qualified external review,
+real-client help interaction, full-match and assistive-technology acceptance remain
+pending under [#69](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/69) and
+[#70](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/70). Source implementation
+is not proof that the currently serving revision includes it. See the
+[answer review sheet](docs/PIXIE_LIVE_CHECK.md) and [release record](docs/RELEASE_STATUS.md).
 
 ---
 
@@ -43,7 +48,7 @@ this branch and needs its own review before any use.
   - Fog Mode's accessibility design gates *information*, not just visuals: querying a square via the command bar or screen reader returns only what a sighted player would actually see (visible, last-known/stale, or unexplored) — fog is a fairness mechanic, not an accessibility gap.
   - The Radius of Ruin / Sanctuary auras use a data-driven "breathing" animation (CSS custom properties set per-render from live board state — how many pieces are currently veiled or sheltered) rather than a fixed decorative pulse, with `prefers-reduced-motion` respected throughout.
 - **Backend:** Node.js + Express (`server.js`)
-- **Game-help endpoint:** `POST /api/agent` (deterministic DUET question gate and fixed answers; no model call)
+- **Support endpoint in current source:** `POST /api/agent` (fixed answers; no model call)
 - **Hosting target:** Google Cloud Run
 
 ---
@@ -67,62 +72,61 @@ Open `http://localhost:8080`
 
 ---
 
-## Cloud Run deployment
+## Deployment evidence and approval
+Cloud Run is the hosting target. A reachable page does not establish the serving
+commit, provider configuration, Firestore access, or functioning model/posting services.
 
-On September 29, the owner [reported enabling Cloud Build approval](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/68#issuecomment-5890922219) and rejecting a manual build while it awaited approval; nothing deployed. Reconfirm this setting before acting. A main push does not authorize deployment: owner build approval is separate from qualified external review, and an approved deployment can route 100% traffic.
+Read [the operations handoff](docs/OPERATIONS_HANDOFF.md) before changing production.
+Verify serving source, traffic, trigger and required configuration privately and
+reconfirm the owner's build-approval setting. Keep the Gemini key absent.
 
-**External-review hold:** Keep #68, #67, and #71 in draft until qualified rules and screen-reader feedback has been received and triaged under [#69](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/69). Hands-on observations remain tracked in [#70](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/70). CI, AI review, recruitment, and the October 16 checkpoint do not waive the gate. Eventual order: #68, then rebased/reviewed #67, then rebased/reviewed #71. No merge or production deployment is authorized by these documentation changes.
+On October 5, 2026 at 07:55 America/Chicago, the owner explicitly authorized an exception to the merge hold on #68/#67/#71 and requested the changes needed to continue development. This waives the merge prerequisite; it does not establish completed external review, accessibility acceptance, Xbox approval or a production deployment. Review evidence remains pending under #69 and hands-on results under #70.
+See [release status and remaining work](docs/RELEASE_STATUS.md).
 
-Before changing the Loptr Lab service, read the [operations handoff](docs/OPERATIONS_HANDOFF.md).
-The observed service is `duet-solo-hackathon` in `us-central1`; production configuration
-currently requires investigation. Review all environment variables and secret references
-against the active revision and deployment trigger before deploying. Do not use a partial
-`--set-env-vars` command or put an API key on the command line.
-Production deployment requires separate owner build approval; reconfirm the trigger. Keep
-`GEMINI_API_KEY` off this production service: current game help needs no key,
-and the older `main` code sends raw player text to Gemini if a key is attached.
-After an approved deployment, confirm the serving revision, its configuration, and the game path.
-
-For a separate deployment, enable Google Cloud project billing, configure provider quotas,
-a cloud budget, Firestore least privilege, retention, and privacy/security contacts before
-allowing public traffic. Use `BLUESKY_HANDLE` and `BLUESKY_APP_PASSWORD` only for a dedicated
-posting account.
-
-> A public fork pays for its own Cloud Run, Firestore, and posting usage. Do not deploy
-> with Loptr Lab credentials or production services.
+A public fork supplies and pays for its own services. Follow
+[FAN_FORK_GUIDE.md](FAN_FORK_GUIDE.md), [SECURITY.md](SECURITY.md), and
+[docs/DATA_GOVERNANCE.md](docs/DATA_GOVERNANCE.md); do not use Loptr Lab credentials.
 
 ---
 
 ## Evidence for judges
-This repo demonstrates:
-- Running product on Google Cloud Run
-- Proposed fixed DUET help and Outside Support boundary on this draft branch; production and usability verification remain open
-- Accessibility-first UX design choices in gameplay interaction, including an experimental mode (Fog Mode) built to prove the accessibility approach holds up even as gameplay complexity grows, not just in the simplest case
+This repository contains the browser client, Cloud Run deployment materials, an
+fixed PIXIE game-help path, and accessibility-oriented gameplay design,
+including Fog Mode. Current deployment, help interaction, remote-match persistence and
+assistive-technology usability require dated runtime evidence. Historical hackathon
+claims are not current infrastructure verification.
 
 ---
 
 ## Hackathon alignment
-Earlier Gemini XPRIZE planning is retained in archival documents. The current
-Fire TV accessibility challenge and ID@Xbox concept are described in
-[`duet-review.html`](duet-review.html) and the project documentation.
+Category: **Education & Human Potential**
 
-Duet: Solo expands access to strategy play by centering assistive-technology
-users and reducing onboarding friction with proposed fixed game help awaiting external review.
+Duet: Solo expands access to strategy learning/play by centering assistive-technology users and reducing onboarding friction with bounded game help.
 
 ---
 
 ## Anonymous playtest feedback
 
-Completed remote games produce a minimal anonymous summary in Firestore, and each player may
-optionally submit one post-game rating, rotating rules question, note, or bug report. The form
-can be skipped, requires explicit consent to submit, and never writes room codes, reconnect
-tokens, DIDs, handles, email addresses, socket identifiers, or network addresses into the
-anonymous collections. Raw records carry a 30-day expiry timestamp.
+The source implements minimal anonymous completed-game summaries and optional post-game
+feedback for a configured Firestore deployment. Successful live writes and retention
+are not established by a rendering check. The intended privacy boundary excludes room
+codes, reconnect tokens, DIDs, handles, email addresses, socket identifiers and network
+addresses from the anonymous collections. The form requires explicit consent and can
+be skipped; raw records are assigned a 30-day expiry timestamp.
 
 Before deployment, enable Firestore TTL on the `expiresAt` field for both
 `anonymousCompletedGames` and `anonymousGameFeedback`. The portable schema and privacy boundary
 are maintained in the
 [`veiled-dominion-engine` contract directory](https://github.com/Loptr-Lab/veiled-dominion-engine/tree/main/docs/contracts).
+
+## PIXIE ecosystem continuity
+
+PIXIE is the shared guide; each surface has its own role, storage and permissions.
+Discovery, the local Creator workspace, practice notes and stewardship demonstrations
+are separate destinations. Links do not exchange private context or configure identity.
+
+See [PIXIE routes and verification](docs/PIXIE_CONTINUITY.md) for the destination map,
+explicitly unconfigured identity, and the observed source/deployment difference.
 
 ## Development status
 
@@ -132,7 +136,7 @@ Contributors are invited to review and comment on that document, particularly th
 
 ## Continuing development
 
-This project is under active development beyond the hackathon. The Veiled Dominion ecosystem — 4-player engine, Sealed Deck mechanics, stats-driven playable characters, and live Bluesky match posting via the-rift — is being built in the open.
+This project is under active development beyond the hackathon. The Veiled Dominion ecosystem — 4-player engine, Sealed Deck mechanics, stats-driven playable characters, and experimental Bluesky match-posting code for the-rift — is being built in the open. Current posting configuration and successful live posts remain unverified.
 
 See the [contributor wiki](https://github.com/Loptr-Lab/duet-solo-hackathon/wiki) for setup, architecture, and how to get involved.
 

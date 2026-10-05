@@ -51,3 +51,4 @@ Every mechanics PR should state whether it changes:
 - documentation only.
 
 When Duet intentionally differs, keep the divergence explicit in tests and documentation. Promotion into canon requires a separate authoritative decision in `Loptr-Lab/veiled-dominion-engine`.
+

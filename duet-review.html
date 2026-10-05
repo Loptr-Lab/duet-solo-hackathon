@@ -41,24 +41,13 @@ small{color:var(--muted)}
 <h2 id="halloween-plan">Halloween 2026: work we can finish</h2>
 <p>October 31 is our internal target for a tested DUET web release candidate, an auditable environment and cost record, and an ID@Xbox concept submission if onboarding permits. It is not a console release date. Ren Rhapsody follows its separate UEFN and music-rights path.</p>
 <ol class="milestones">
-<li><time datetime="2026-10-03">October 3</time><span><strong>Record the environment.</strong> Capture the live build, hosting, PIXIE's fixed-answer behavior, Firestore use, costs, rights, and a baseline for room codes created versus joined.</span></li>
+<li><time datetime="2026-10-03">October 3</time><span><strong>Record the environment.</strong> Capture the serving source, hosting configuration, service availability, costs, rights, and a baseline for room codes created versus joined. Keep Gemini credentials absent; fixed PIXIE help needs no model key.</span></li>
 <li><time datetime="2026-10-10">October 10</time><span><strong>Complete remote matches.</strong> Test code creation, a second player joining, match completion, disconnect, and rejoin.</span></li>
 <li><time datetime="2026-10-17">October 17</time><span><strong>Test accessibility.</strong> Include keyboard and screen-reader players, record failures, and check whether players understand and use PIXIE's in-game suggestions.</span></li>
 <li><time datetime="2026-10-24">October 24</time><span><strong>Review the candidate.</strong> Resolve blocking bugs and prepare gameplay footage, accessibility findings, provenance, and the DUET-led Xbox concept.</span></li>
 <li><time datetime="2026-10-31">October 31</time><span><strong>Publish web evidence.</strong> Release the tested browser candidate and submit the ID@Xbox concept if account setup allows. Xbox approval and hardware deployment have no promised date.</span></li>
 </ol>
 <p><small>These are proposed internal checkpoints, not statements that the work has been completed. The game PIXIE can test one-suggestion UX; the separate iOS assistant still needs its own Files permissions and recovery tests.</small></p>
-
-<h2 id="fire-tv-challenge">Fire TV and accessibility challenge</h2>
-<p>We are evaluating DUET for Amazon Build, Ship, Shape using the same web build targeted for Halloween. By October 4, we need evidence that a board renders, D-pad focus moves, one legal move works, and VoiceView describes enough board state to play. This is a test gate, not a claim that Fire TV support is complete. If the path fails, the October 31 web work continues without a Fire TV submission.</p>
-<ul>
-<li>Can you play using only a remote or D-pad? Does focus become lost or trapped?</li>
-<li>Does VoiceView identify the selected square, piece, turn, and result of a move clearly enough to finish a match?</li>
-<li>Can you reload, disconnect, rejoin, and finish without losing an accessible route through the board?</li>
-<li>Does TV work make keyboard, touch, or screen-reader play on the web worse?</li>
-<li>Does PIXIE return the right fixed DUET answer while every off-topic or mixed message gets the same Outside Support card?</li>
-</ul>
-<p><strong>Hackathon constraint:</strong> each submitted change must also improve DUET accessibility, controller support, game assistant boundaries, or release quality. Report the device or simulator, VoiceView setting, exact steps, expected result, and observed result in a <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/issues">DUET issue</a>. Amazon tooling problems can also become friction-log evidence.</p>
 
 <h2>What we're testing in DUET</h2>
 <pre>platform client
@@ -125,8 +114,9 @@ authoritative DUET server</pre>
 <p><a href="https://www.patreon.com/cw/LoptrLab">Support on Patreon →</a></p>
 
 <h2>🌌 PIXIE — Explore the Atmosphere</h2>
-<p>PIXIE is the discovery and OS layer for the DUET ecosystem — not just another project, but the broader surface through which everything connects.</p>
-<p><a href="https://ibloud.github.io/50-ways-to-leave-another/pixie/demo/index.html">Enter PIXIE →</a></p>
+<p>PIXIE is the shared guide across distinct project surfaces. The public discovery demo offers topic discovery and Story Finder routes. The separate Creator workspace prepares work for manual sharing. Each destination retains its own storage and permissions; cross-project identity and automatic data exchange are not configured.</p>
+<p><a href="https://ibloud.github.io/50-ways-to-leave-another/pixie/demo/index.html">Discover PIXIE worlds →</a> · <a href="https://ibloud.github.io/pixie-creator-os/">Creator workspace →</a> · <a href="https://ibloud.github.io/pixie-creator-os/session.html">Practice session →</a></p>
+<p><small>These are prototypes with separate validation boundaries. Account sign-in and direct publishing are not connected in the Creator workspace. See <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/blob/main/docs/PIXIE_CONTINUITY.md">the route and verification record</a>.</small></p>
 
 <h2>🔐 Germ — Beyond the Public Layer</h2>
 <p>Germ is an opt-in private communication layer that lives outside the public Xbox-facing surface. It is not integrated with Xbox — it is a handoff destination for people who want to go deeper.</p>

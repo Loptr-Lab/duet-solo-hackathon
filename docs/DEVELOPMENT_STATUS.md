@@ -213,3 +213,4 @@ DUET remains **M1 COMPLETE** while this evidence-gathering work is pending.
 M0 should prove feasibility before implementation expands.
 
 Do not convert an unresolved feasibility question into an architectural assumption. When evidence changes, update this status document and the relevant decision/contract document rather than silently changing the milestone definition.
+

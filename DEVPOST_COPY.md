@@ -1,6 +1,6 @@
 # Devpost Project Details — Historical Draft
 
-> Historical Gemini-era planning copy only. Do not use the text below as a current submission or verified product claim. Draft #67 implements eight fixed answers; merge, external review, accessibility acceptance (#69/#70), and production verification remain pending. Existing main retains the Gemini route; the key was absent on the September 28 inspected revision. No Stripe payment flow or paid accessibility pack is implemented by the current main server.
+> Historical Gemini-era planning copy only. Do not reuse as a current submission or verified product claim. Current source implements eight fixed PIXIE answers without Gemini; external review, accessibility acceptance and production verification remain pending. No Stripe checkout or paid accessibility pack is implemented.
 
 ## Archived proposal text — not current product evidence
 
@@ -56,3 +56,4 @@ This kept the experience understandable for first-time users while preserving ac
 - Add richer support analytics and reporting
 - Improve onboarding personalization
 - Grow educator/community usage in Education & Human Potential contexts
+

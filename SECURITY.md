@@ -14,3 +14,4 @@ advisory if enabled. Operators of fan forks must publish their own security cont
 - Use a dedicated Bluesky app password, not an account password, and rotate it after exposure.
 - Restrict Firestore service-account permissions and configure retention before public use.
 - Do not connect a fan fork to Loptr Lab production projects, accounts, or data.
+
