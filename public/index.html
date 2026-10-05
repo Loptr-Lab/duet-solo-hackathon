@@ -1178,6 +1178,197 @@
         </div>
     </details>
 
+
+
+    <footer style="margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--border-hairline); font-size: 13px; opacity: 0.6;">
+        <span class="footer-mark-row">
+            <svg class="mark-icon sigil-ibloud" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ibloud sigil">
+                <circle class="ring" cx="50" cy="50" r="46"/>
+                <polygon class="diamond-outer" points="50,6 94,50 50,94 6,50"/>
+                <polygon class="diamond-mid" points="50,20 80,50 50,80 20,50"/>
+                <polygon class="diamond-inner" points="50,34 66,50 50,66 34,50"/>
+                <path class="fracture" d="M 8,58 L 26,52 L 36,60 L 50,48 L 62,58 L 74,50 L 92,44"/>
+                <line class="signal" x1="50" y1="50" x2="50" y2="38"/>
+                <line class="signal" x1="50" y1="50" x2="62" y2="50"/>
+                <line class="signal" x1="50" y1="50" x2="50" y2="62"/>
+                <line class="signal broken" x1="50" y1="50" x2="39" y2="50"/>
+                <polygon class="core" points="50,44 56,50 50,56 44,50"/>
+            </svg>
+        </span>
+        <a href="https://github.com/Loptr-Lab/duet-solo-hackathon" style="color: var(--grey-200);">Public repo ↗</a>
+        &nbsp;&middot;&nbsp;
+        <a href="https://github.com/ibloud/duet_engine_architecture" style="color: var(--grey-200);">Original Duet engine ↗</a>
+        &nbsp;&middot;&nbsp;
+        <a href="https://github.com/Loptr-Lab/veiled-dominion-engine" style="color: var(--grey-200);">Veiled Dominion engine ↗</a>
+        &nbsp;&middot;&nbsp;
+        <a href="https://loptrlab.com" style="color: var(--grey-200);">Loptr Lab ↗</a>
+        &nbsp;&middot;&nbsp;
+        <a href="https://loptrlab.com/about.html" style="color: var(--grey-200);">Meet I.B. Loud ↗</a>
+    </footer>
+
+</div>
+
+
+
+<!-- ===================================================================
+     SPEECH INPUT — additive only. Uses the browser's native
+     SpeechRecognition (Web Speech API), not the jam's old TTS/voice-output
+     ban (that restriction no longer applies anyway, per project decision to
+     leave the hackathon ruleset -- and recognition is a different category
+     from generated voice output regardless). This module never touches
+     GameState directly and never submits a move on its own: it only ever
+     writes into the existing #cmd input, the same box typing and clicking
+     already use, so a misheard word costs nothing more than an edit before
+     pressing Enter/Execute. Screen-reader narration for game events
+     continues to come from announce() -> #sr-status, unchanged.
+     =================================================================== -->
+
+
+<!-- ===================================================================
+     REMOTE PLAY — additive only. RemoteMode is a fully separate namespace
+     with its own state (RemoteState), its own board renderer, and its own
+     move-submission path. It does not read or write GameState, does not
+     call renderVisualBoard/computeLegalTargetsForDisplay/handleSquareClick,
+     and does not touch AIConfig, SpectatorConfig, or FogMode. Local play,
+     AI, Spectator, and Fog Mode are unaffected by anything below this line.
+     Server is authoritative -- classic Duet rules only (no Fog Mode remote,
+     per scope decision), enforced by the same veiled-chess-core engine
+     server-side.
+     =================================================================== -->
+
+
+
+
+
+
+
+
+
+
+<main class="page project-info" id="project-info" hidden aria-label="DUET project information">
+    <section class="power-section" id="community-power" aria-labelledby="community-power-title"><div class="power-kicker">COMMUNITY OWNERSHIP / XBOX PROOF</div><h2 id="community-power-title">Take your power back.</h2><p class="lead">DUET is not asking a community to applaud a finished product. We are building an evidence trail: players test it, challenge it, improve accessibility, contribute ideas, and help determine what gets built next. This is how we show a platform partner that the project has an active community around it.</p><div class="power-grid" aria-label="Community proof metrics"><div class="power-metric"><span class="num" id="power-players">0</span><span class="label">players who want to play</span></div><div class="power-metric"><span class="num" id="power-testers">0</span><span class="label">playtesters</span></div><div class="power-metric"><span class="num" id="power-access">0</span><span class="label">accessibility testers</span></div><div class="power-metric"><span class="num" id="power-design">0</span><span class="label">design contributors</span></div><div class="power-metric"><span class="num" id="power-creators">0</span><span class="label">creative contributors</span></div><div class="power-metric"><span class="num" id="power-community">0</span><span class="label">community organizers</span></div></div><h3>Show us what you want to take back.</h3><div class="power-actions"><label class="power-action"><input type="checkbox" value="play"><span><strong>I want to play.</strong><small>Join the player/test cohort.</small></span></label><label class="power-action"><input type="checkbox" value="test"><span><strong>I want to test.</strong><small>Break builds and report evidence.</small></span></label><label class="power-action"><input type="checkbox" value="design"><span><strong>I want to design.</strong><small>Propose mechanics, rules, or world ideas.</small></span></label><label class="power-action"><input type="checkbox" value="accessibility"><span><strong>I want to make it more accessible.</strong><small>Test captions, input, UI, motion, audio, and navigation.</small></span></label><label class="power-action"><input type="checkbox" value="create"><span><strong>I want to create.</strong><small>Art, music, writing, video, documentation, or tools.</small></span></label><label class="power-action"><input type="checkbox" value="community"><span><strong>I want to help the community.</strong><small>Organize playtests, discussion, or moderation.</small></span></label></div><div class="power-submit"><button class="btn-primary" type="button" id="claim-power">Claim your place</button><span class="power-status" id="power-status" role="status" aria-live="polite">No claim submitted yet.</span></div><div class="power-proof"><h3>Community proof — visible, attributable, auditable</h3><div class="proof-row"><span>Want to play</span><div class="proof-bar"><span id="bar-play"></span></div><span class="proof-count" id="count-play">0</span></div><div class="proof-row"><span>Playtest / break it</span><div class="proof-bar"><span id="bar-test"></span></div><span class="proof-count" id="count-test">0</span></div><div class="proof-row"><span>Design contributions</span><div class="proof-bar"><span id="bar-design"></span></div><span class="proof-count" id="count-design">0</span></div><div class="proof-row"><span>Accessibility testing</span><div class="proof-bar"><span id="bar-accessibility"></span></div><span class="proof-count" id="count-accessibility">0</span></div><div class="proof-row"><span>Creative contributions</span><div class="proof-bar"><span id="bar-create"></span></div><span class="proof-count" id="count-create">0</span></div><div class="proof-row"><span>Community work</span><div class="proof-bar"><span id="bar-community"></span></div><span class="proof-count" id="count-community">0</span></div></div><div class="power-note"><strong>Our rule:</strong> community input is evidence, not decoration. When a player request changes the build, we record the request, the decision, the test, and the result. These counters are intentionally local until a community data service is connected; they do not pretend to be Xbox approval, sales, or guaranteed demand.</div></section>
+<section class="release-section" id="halloween-release" aria-labelledby="halloween-title">
+  <div class="release-kicker">Halloween 2026 / Release Mission Control</div>
+  <div class="release-head">
+    <div>
+      <h2 id="halloween-title">MAKE IT RELEASE-WORTHY.</h2>
+      <p class="release-lead">Our internal finish line is Halloween. By October 31, DUET should be something people can play, experience, test, share, and judge — not merely a pitch. This is our target, not an Xbox-imposed deadline.</p>
+    </div>
+    <div class="release-date">10.31.26</div>
+  </div>
+  <div class="release-countdown" aria-label="Countdown to Halloween release target">
+    <div class="countdown-cell"><strong id="days-left">—</strong><span>Days</span></div>
+    <div class="countdown-cell"><strong id="hours-left">—</strong><span>Hours</span></div>
+    <div class="countdown-cell"><strong id="minutes-left">—</strong><span>Minutes</span></div>
+    <div class="countdown-cell"><strong id="seconds-left">—</strong><span>Seconds</span></div>
+  </div>
+  <div class="readiness-title"><span>Halloween Release Readiness</span><span id="release-percent">0%</span></div>
+  <div class="readiness-track" aria-label="Halloween release readiness"><span id="release-bar"></span></div>
+  <div class="gate-list" id="release-gates">
+    <label class="gate"><input type="checkbox" data-gate="playable"><span><strong>PLAYABLE</strong><small>Core experience runs from start to finish.</small></span></label>
+    <label class="gate"><input type="checkbox" data-gate="fun"><span><strong>CORE EXPERIENCE</strong><small>The central loop is demonstrable, coherent, and playtested.</small></span></label>
+    <label class="gate"><input type="checkbox" data-gate="controller"><span><strong>CONTROLLER / INPUT</strong><small>Primary play controls are tested and documented.</small></span></label>
+    <label class="gate"><input type="checkbox" data-gate="accessible"><span><strong>ACCESSIBLE</strong><small>Keyboard, screen-reader, motion, contrast, and other relevant accessibility paths are tested.</small></span></label>
+    <label class="gate"><input type="checkbox" data-gate="tested"><span><strong>COMMUNITY TESTED</strong><small>Real testers have exercised the release candidate and feedback is recorded.</small></span></label>
+    <label class="gate"><input type="checkbox" data-gate="polished"><span><strong>POLISHED</strong><small>Known release-blocking bugs and rough edges are resolved or documented.</small></span></label>
+    <label class="gate"><input type="checkbox" data-gate="evidence"><span><strong>PROOF PACKAGE</strong><small>Build, screenshots, trailer/demo, feedback, and contribution receipts are assembled.</small></span></label>
+    <label class="gate"><input type="checkbox" data-gate="rc"><span><strong>RELEASE CANDIDATE</strong><small>A tagged build exists that the team is willing to put in public hands.</small></span></label>
+    <label class="gate"><input type="checkbox" data-gate="xbox"><span><strong>XBOX PACKAGE</strong><small>Xbox-facing materials and technical information are ready for review.</small></span></label>
+    <label class="gate"><input type="checkbox" data-gate="final"><span><strong>FINAL REVIEW</strong><small>Community/company review confirms the release package is ready to publish.</small></span></label>
+  </div>
+  <div class="release-note"><strong style="color:var(--grey-200)">Two clocks, one finish line:</strong> October 31 is our release target. Xbox submission is a separate evaluation gate; reaching 100% here does not imply Xbox approval.</div>
+  <div class="broadcast-row">
+    <span class="broadcast-status" id="broadcast-status">Milestone broadcasting: waiting for verified release evidence.</span>
+    <button class="btn-primary" id="broadcast-milestone" type="button" disabled>Prepare Milestone</button>
+  </div>
+</section>
+
+<section class="launch-board" id="xbox-submission">
+  <div class="launch-kicker">Mission Control · Xbox Path</div>
+  <h2>FROM PLAYABLE PROOF → XBOX SUBMISSION</h2>
+  <p class="release-lead">The site now treats Xbox as an explicit production path. <strong>October 31, 2026 is our internal Halloween production target — not an Xbox deadline.</strong> Microsoft does not publish a universal Xbox submission deadline for this project; the actual Xbox gates are partner onboarding, concept approval, GDK/product setup, certification, and release.</p>
+  <div class="launch-deadline"><strong>INTERNAL TARGET · OCTOBER 31, 2026</strong><span>HALLOWEEN RELEASE / SUBMISSION-READY CHECKPOINT</span></div>
+  <div class="launch-steps">
+    <div class="launch-step"><b>01 · BUILD</b><strong>Choose the game</strong><small>Select a project below and produce a playable vertical slice/release candidate.</small></div>
+    <div class="launch-step"><b>02 · ONBOARD</b><strong>Xbox Partner + ID@Xbox</strong><small>Register as an Xbox partner, enroll in Partner Center, then submit the game concept to ID@Xbox.</small></div>
+    <div class="launch-step"><b>03 · APPROVE</b><strong>Concept + agreements</strong><small>Xbox reviews the concept. If approved, complete the required TLA/GDK agreements and onboarding.</small></div>
+    <div class="launch-step"><b>04 · PACKAGE</b><strong>GDK + Partner Center</strong><small>Create the Xbox product, enable the appropriate services, build/package the game, and prepare certification materials.</small></div>
+    <div class="launch-step"><b>05 · CERTIFY</b><strong>Certification → release</strong><small>Submit the package through Partner Center certification, resolve requirements, then configure and publish the release.</small></div>
+  </div>
+  <div class="choice-note"><strong>IMPORTANT:</strong> The current DUET browser build is proof and architecture work. It is not itself an Xbox package. Physical Xbox deployment, GDK access, provisioning, and certification evidence are separate gates.</div>
+</section>
+
+
+<section class="media-atmosphere" id="atmosphere-and-community">
+  <div class="launch-kicker">The Atmosphere · Music · Community · Communication</div>
+  <h2>THE WORLD AROUND THE BUILD</h2>
+  <p class="lead">The game is only one part of the experience. Watch the source material, support the music ecosystem, explore PIXIE to find other worlds, and keep community conversations available outside the Xbox-facing surface.</p>
+  <div class="media-grid">
+    <div>
+      <div class="video-link-panel">
+        <h3>Watch The Big Push</h3>
+        <p>Open the video on YouTube for playback, captions and player controls.</p>
+        <a class="btn-primary" href="https://www.youtube.com/watch?v=SnysmGissKw" target="_blank" rel="noopener">Watch on YouTube (opens a new tab)</a>
+      </div>
+    </div>
+    <div class="media-card">
+      <h3>THE BIG PUSH</h3>
+      <p>Go deeper into the music and behind-the-scenes ecosystem through The Big Push's Patreon.</p>
+      <div class="media-links"><a href="https://www.patreon.com/cw/TheBigPush" target="_blank" rel="noopener">Support / Explore</a><a href="https://www.youtube.com/watch?v=SnysmGissKw" target="_blank" rel="noopener">Watch on YouTube</a></div>
+    </div>
+  </div>
+  <div class="media-grid">
+    <div class="media-card">
+      <h3>PIXIE · EXPLORE THE ATMOSPHERE</h3>
+      <p>PIXIE's public discovery demo helps you explore topics and find stories. The separate Creator workspace prepares your work for manual sharing; each destination keeps its own permissions.</p>
+      <div class="media-links"><a href="https://ibloud.github.io/50-ways-to-leave-another/pixie/demo/index.html" target="_blank" rel="noopener">Discover PIXIE worlds</a></div>
+    </div>
+    <div class="media-card">
+      <h3>GERM · BEYOND THE PUBLIC LAYER</h3>
+      <p>Germ can provide private, consent-oriented communication outside the public Xbox-facing surface. Its current app supports private AT Protocol messaging and voice notes with end-to-end encryption.</p>
+      <div class="media-links"><a href="https://landing.ger.mx/newUser/web/#did:plc:o6kuv3yieti2vqrb7ckmd5vg+did:plc:b5uem672ci23lqrbz6j6bs2c" target="_blank" rel="noopener">Open Germ handoff</a><a href="https://apps.apple.com/us/app/germ-dm/id6446882771" target="_blank" rel="noopener">Germ DM</a></div>
+    </div>
+  </div>
+  <div class="bridge">
+    <h3>GERM BRIDGE · PROPOSED ARCHITECTURE</h3>
+    <p class="lead">We can build a bridge, but it should be an explicit community service—not pretend that Xbox is directly integrated with Germ. The clean boundary is:</p>
+    <div class="bridge-flow">XBOX GAME / PARTNER CENTER → PUBLIC COMMUNITY SURFACE → OPT-IN HANDOFF → GER.MX / GERＭ DM → PRIVATE ATProto CONVERSATION</div>
+    <p class="lead" style="margin-top:12px">A future bridge could issue an opt-in project/community invitation, carry a non-sensitive project or session identifier, and let the participant authenticate or open a Germ conversation. It should not export Xbox account data, private messages, credentials, or moderation data into Germ. Until that service exists and is tested, this page presents it as a proposed bridge rather than a working integration.</p>
+  </div>
+</section>
+
+<section class="project-board" id="choose-your-build">
+  <div class="launch-kicker">Choose Your Build</div>
+  <h2>WHICH PROJECT SHOULD GO TO XBOX?</h2>
+  <p class="lead">DUET is the current architecture proving ground, but it is not the only candidate. Pick the project that matches the kind of playable vertical slice you want to build. Each card gives players a way to play, inspect the repository, or join the build.</p>
+  <div class="project-grid">
+    <article class="project-card featured"><div class="type">Current Xbox proving ground</div><h3>DUET · Veiled Dominion</h3><p>Two-player accessible strategy game. The current site is testing the client/transport/server boundary before an Xbox/Godot implementation.</p><div class="project-actions"><a href="https://github.com/Loptr-Lab/duet-solo-hackathon">Repo</a><a href="#xbox-submission">Xbox path</a><a href="https://github.com/Loptr-Lab/duet-solo-hackathon/blob/main/CONTRIBUTING.md">Contribute</a></div></article>
+    <article class="project-card"><div class="type">Halloween / horror candidate</div><h3>VIOLET'S REVENGE</h3><p>Browser horror/game prototype. A natural candidate for a supervised vertical slice, playtest, QA, and later platform adaptation work.</p><div class="project-actions"><a href="https://github.com/ibloud/violets-revenge">Repo</a><a href="https://github.com/ibloud/violets-revenge/fork">Fork</a><a href="https://github.com/ibloud/violets-revenge/issues">Issues</a></div></article>
+    <article class="project-card"><div class="type">Music / UEFN candidate</div><h3>REN RHAPSODY</h3><p>Music-driven adventure and parkour concept with a documented UEFN path, rights research, and a growing playtest package.</p><div class="project-actions"><a href="https://github.com/ibloud/ren-rhapsody">Repo</a><a href="https://ibloud.github.io/ren-rhapsody/">Play / inspect</a><a href="https://github.com/ibloud/ren-rhapsody/issues">Issues</a></div></article>
+    <article class="project-card"><div class="type">Rhythm game</div><h3>REN TAP TAP REVENGE</h3><p>Three-lane rhythm prototype with taps, holds, swipes, combo scoring, and an inspectable build path.</p><div class="project-actions"><a href="https://github.com/ibloud/ren-tap-tap-revenge">Repo</a><a href="https://github.com/ibloud/ren-tap-tap-revenge/fork">Fork</a></div></article>
+    <article class="project-card"><div class="type">Rhythm / chart project</div><h3>TARANTULA · CLONE HERO</h3><p>Community custom-chart experiment built around the Tarantula track, useful for charting, tooling, QA, and music-game experimentation.</p><div class="project-actions"><a href="https://github.com/ibloud/tarantula-clone-hero">Repo</a><a href="https://github.com/ibloud/tarantula-clone-hero/fork">Fork</a></div></article>
+    <article class="project-card"><div class="type">Interactive narrative</div><h3>LIVING ROOM POETRY</h3><p>Small interactive text-adventure prototype that can serve as a lightweight narrative/game vertical slice.</p><div class="project-actions"><a href="https://github.com/ibloud/living-room-poetry">Repo</a><a href="https://github.com/ibloud/living-room-poetry/fork">Fork</a></div></article>
+    <article class="project-card"><div class="type">Action / experimental</div><h3>BATTLE THE BEAST</h3><p>An additional experimental game repository available for players and contributors to inspect when choosing a build direction.</p><div class="project-actions"><a href="https://github.com/ibloud/battle-the-beast">Repo</a><a href="https://github.com/ibloud/battle-the-beast/fork">Fork</a></div></article>
+    <article class="project-card"><div class="type">Game research / community</div><h3>AWESOME OPEN-SOURCE GAMES</h3><p>A discovery and reference lane for open-source game projects and possible collaborators, rather than an Xbox submission candidate itself.</p><div class="project-actions"><a href="https://github.com/ibloud/awesome-open-source-games">Explore</a></div></article>
+    <article class="project-card"><div class="type">Public discovery / local creation</div><h3>PIXIE</h3><p>Discover worlds, projects, experiments, and communities. Use the separate Creator workspace to prepare and manually share your own work.</p><div class="project-actions"><a href="https://ibloud.github.io/50-ways-to-leave-another/pixie/demo/index.html">Discover PIXIE worlds</a><a href="https://github.com/ibloud/pixie-holdings">Holdings repo</a><a href="https://ibloud.github.io/pixie-creator-os/">Creator workspace</a></div></article>
+  </div>
+  <div class="choice-note"><strong>PLAYER → BUILDER:</strong> You do not have to choose the “official” project. Pick a repo you can actually contribute to: playtest it, document a bug, improve accessibility, make a design contribution, build a prototype, open an issue, or fork it where the project permits.</div>
+</section>
+
+<section class="platform-roadmap" id="publishing-career-path">
+  <h2>FROM PROOF TO PUBLISHING — AND A PORTFOLIO</h2>
+  <p class="release-lead">The Halloween target is the production milestone. Publishing is a separate platform path: the prototype becomes a shippable game build, then enters the platform's actual developer, submission, certification, and release workflow.</p>
+  <div class="platform-grid">
+    <div class="platform-card"><h3>Xbox / ID@Xbox path</h3><ol><li>Finish the playable release candidate and evidence package.</li><li>Register as an Xbox creator/Partner Center and submit the game concept.</li><li>After concept approval and required agreements, move into full GDK/Xbox services and product setup.</li><li>Build/package the Xbox product, complete testing, submit for certification, then configure release in Partner Center.</li></ol><p style="margin-top:10px">This dashboard is the <strong>pre-submission proof layer</strong>; it is not Xbox approval.</p></div>
+    <div class="platform-card"><h3>Epic / Fortnite path</h3><ol><li>Use the Duet mechanic as a candidate for a UEFN/Fortnite adaptation rather than treating the browser build as a Fortnite island.</li><li>Rebuild the core interaction in UEFN/Verse and test it as a private version.</li><li>Join the Fortnite Developer Program, prepare metadata/media/attributions, and create a Creator Portal release.</li><li>Submit for moderation; after approval, publish the island and track its player analytics.</li></ol><p style="margin-top:10px">The Epic lane is a <strong>port/adaptation path</strong>, not a claim that the current web build is already publishable in Fortnite.</p></div>
+  </div>
+  <div class="portfolio-lane"><strong>UNEMPLOYMENT → EXPERIENCE RECEIPTS:</strong> each completed gate can become a portfolio artifact: accessibility test report, game-design document, bug/QA log, GitHub PR, release checklist, gameplay capture, deployment notes, platform submission package, and a documented retrospective. That turns the project into evidence of production practice rather than an unverified “I worked on a game” claim.</div>
+</section>
+
+</main>
+
+
+
 <script>
     const GameState = {
         board: [],
@@ -2456,35 +2647,6 @@
 
     initGame();
 </script>
-
-    <footer style="margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--border-hairline); font-size: 13px; opacity: 0.6;">
-        <span class="footer-mark-row">
-            <svg class="mark-icon sigil-ibloud" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ibloud sigil">
-                <circle class="ring" cx="50" cy="50" r="46"/>
-                <polygon class="diamond-outer" points="50,6 94,50 50,94 6,50"/>
-                <polygon class="diamond-mid" points="50,20 80,50 50,80 20,50"/>
-                <polygon class="diamond-inner" points="50,34 66,50 50,66 34,50"/>
-                <path class="fracture" d="M 8,58 L 26,52 L 36,60 L 50,48 L 62,58 L 74,50 L 92,44"/>
-                <line class="signal" x1="50" y1="50" x2="50" y2="38"/>
-                <line class="signal" x1="50" y1="50" x2="62" y2="50"/>
-                <line class="signal" x1="50" y1="50" x2="50" y2="62"/>
-                <line class="signal broken" x1="50" y1="50" x2="39" y2="50"/>
-                <polygon class="core" points="50,44 56,50 50,56 44,50"/>
-            </svg>
-        </span>
-        <a href="https://github.com/Loptr-Lab/duet-solo-hackathon" style="color: var(--grey-200);">Public repo ↗</a>
-        &nbsp;&middot;&nbsp;
-        <a href="https://github.com/ibloud/duet_engine_architecture" style="color: var(--grey-200);">Original Duet engine ↗</a>
-        &nbsp;&middot;&nbsp;
-        <a href="https://github.com/Loptr-Lab/veiled-dominion-engine" style="color: var(--grey-200);">Veiled Dominion engine ↗</a>
-        &nbsp;&middot;&nbsp;
-        <a href="https://loptrlab.com" style="color: var(--grey-200);">Loptr Lab ↗</a>
-        &nbsp;&middot;&nbsp;
-        <a href="https://loptrlab.com/about.html" style="color: var(--grey-200);">Meet I.B. Loud ↗</a>
-    </footer>
-
-</div>
-
 <script>
 async function sendAgentMessage() {
     const input = document.getElementById('agent-input');
@@ -2508,19 +2670,6 @@ async function sendAgentMessage() {
     }
 }
 </script>
-
-<!-- ===================================================================
-     SPEECH INPUT — additive only. Uses the browser's native
-     SpeechRecognition (Web Speech API), not the jam's old TTS/voice-output
-     ban (that restriction no longer applies anyway, per project decision to
-     leave the hackathon ruleset -- and recognition is a different category
-     from generated voice output regardless). This module never touches
-     GameState directly and never submits a move on its own: it only ever
-     writes into the existing #cmd input, the same box typing and clicking
-     already use, so a misheard word costs nothing more than an edit before
-     pressing Enter/Execute. Screen-reader narration for game events
-     continues to come from announce() -> #sr-status, unchanged.
-     =================================================================== -->
 <script>
     const SpeechInput = {
         recognition: null,
@@ -2660,18 +2809,6 @@ async function sendAgentMessage() {
 
     SpeechInput.init();
 </script>
-
-<!-- ===================================================================
-     REMOTE PLAY — additive only. RemoteMode is a fully separate namespace
-     with its own state (RemoteState), its own board renderer, and its own
-     move-submission path. It does not read or write GameState, does not
-     call renderVisualBoard/computeLegalTargetsForDisplay/handleSquareClick,
-     and does not touch AIConfig, SpectatorConfig, or FogMode. Local play,
-     AI, Spectator, and Fog Mode are unaffected by anything below this line.
-     Server is authoritative -- classic Duet rules only (no Fog Mode remote,
-     per scope decision), enforced by the same veiled-chess-core engine
-     server-side.
-     =================================================================== -->
 <script src="/socket.io/socket.io.js"></script>
 <script src="/client/ITransport.js"></script>
 <script src="/client/SocketTransport.js"></script>
@@ -3037,131 +3174,6 @@ async function sendAgentMessage() {
   tick(); setInterval(tick, 1000); render();
 })();
 </script>
-
-
-
-<main class="page project-info" id="project-info" hidden aria-label="DUET project information">
-    <section class="power-section" id="community-power" aria-labelledby="community-power-title"><div class="power-kicker">COMMUNITY OWNERSHIP / XBOX PROOF</div><h2 id="community-power-title">Take your power back.</h2><p class="lead">DUET is not asking a community to applaud a finished product. We are building an evidence trail: players test it, challenge it, improve accessibility, contribute ideas, and help determine what gets built next. This is how we show a platform partner that the project has an active community around it.</p><div class="power-grid" aria-label="Community proof metrics"><div class="power-metric"><span class="num" id="power-players">0</span><span class="label">players who want to play</span></div><div class="power-metric"><span class="num" id="power-testers">0</span><span class="label">playtesters</span></div><div class="power-metric"><span class="num" id="power-access">0</span><span class="label">accessibility testers</span></div><div class="power-metric"><span class="num" id="power-design">0</span><span class="label">design contributors</span></div><div class="power-metric"><span class="num" id="power-creators">0</span><span class="label">creative contributors</span></div><div class="power-metric"><span class="num" id="power-community">0</span><span class="label">community organizers</span></div></div><h3>Show us what you want to take back.</h3><div class="power-actions"><label class="power-action"><input type="checkbox" value="play"><span><strong>I want to play.</strong><small>Join the player/test cohort.</small></span></label><label class="power-action"><input type="checkbox" value="test"><span><strong>I want to test.</strong><small>Break builds and report evidence.</small></span></label><label class="power-action"><input type="checkbox" value="design"><span><strong>I want to design.</strong><small>Propose mechanics, rules, or world ideas.</small></span></label><label class="power-action"><input type="checkbox" value="accessibility"><span><strong>I want to make it more accessible.</strong><small>Test captions, input, UI, motion, audio, and navigation.</small></span></label><label class="power-action"><input type="checkbox" value="create"><span><strong>I want to create.</strong><small>Art, music, writing, video, documentation, or tools.</small></span></label><label class="power-action"><input type="checkbox" value="community"><span><strong>I want to help the community.</strong><small>Organize playtests, discussion, or moderation.</small></span></label></div><div class="power-submit"><button class="btn-primary" type="button" id="claim-power">Claim your place</button><span class="power-status" id="power-status" role="status" aria-live="polite">No claim submitted yet.</span></div><div class="power-proof"><h3>Community proof — visible, attributable, auditable</h3><div class="proof-row"><span>Want to play</span><div class="proof-bar"><span id="bar-play"></span></div><span class="proof-count" id="count-play">0</span></div><div class="proof-row"><span>Playtest / break it</span><div class="proof-bar"><span id="bar-test"></span></div><span class="proof-count" id="count-test">0</span></div><div class="proof-row"><span>Design contributions</span><div class="proof-bar"><span id="bar-design"></span></div><span class="proof-count" id="count-design">0</span></div><div class="proof-row"><span>Accessibility testing</span><div class="proof-bar"><span id="bar-accessibility"></span></div><span class="proof-count" id="count-accessibility">0</span></div><div class="proof-row"><span>Creative contributions</span><div class="proof-bar"><span id="bar-create"></span></div><span class="proof-count" id="count-create">0</span></div><div class="proof-row"><span>Community work</span><div class="proof-bar"><span id="bar-community"></span></div><span class="proof-count" id="count-community">0</span></div></div><div class="power-note"><strong>Our rule:</strong> community input is evidence, not decoration. When a player request changes the build, we record the request, the decision, the test, and the result. These counters are intentionally local until a community data service is connected; they do not pretend to be Xbox approval, sales, or guaranteed demand.</div></section>
-<section class="release-section" id="halloween-release" aria-labelledby="halloween-title">
-  <div class="release-kicker">Halloween 2026 / Release Mission Control</div>
-  <div class="release-head">
-    <div>
-      <h2 id="halloween-title">MAKE IT RELEASE-WORTHY.</h2>
-      <p class="release-lead">Our internal finish line is Halloween. By October 31, DUET should be something people can play, experience, test, share, and judge — not merely a pitch. This is our target, not an Xbox-imposed deadline.</p>
-    </div>
-    <div class="release-date">10.31.26</div>
-  </div>
-  <div class="release-countdown" aria-label="Countdown to Halloween release target">
-    <div class="countdown-cell"><strong id="days-left">—</strong><span>Days</span></div>
-    <div class="countdown-cell"><strong id="hours-left">—</strong><span>Hours</span></div>
-    <div class="countdown-cell"><strong id="minutes-left">—</strong><span>Minutes</span></div>
-    <div class="countdown-cell"><strong id="seconds-left">—</strong><span>Seconds</span></div>
-  </div>
-  <div class="readiness-title"><span>Halloween Release Readiness</span><span id="release-percent">0%</span></div>
-  <div class="readiness-track" aria-label="Halloween release readiness"><span id="release-bar"></span></div>
-  <div class="gate-list" id="release-gates">
-    <label class="gate"><input type="checkbox" data-gate="playable"><span><strong>PLAYABLE</strong><small>Core experience runs from start to finish.</small></span></label>
-    <label class="gate"><input type="checkbox" data-gate="fun"><span><strong>CORE EXPERIENCE</strong><small>The central loop is demonstrable, coherent, and playtested.</small></span></label>
-    <label class="gate"><input type="checkbox" data-gate="controller"><span><strong>CONTROLLER / INPUT</strong><small>Primary play controls are tested and documented.</small></span></label>
-    <label class="gate"><input type="checkbox" data-gate="accessible"><span><strong>ACCESSIBLE</strong><small>Keyboard, screen-reader, motion, contrast, and other relevant accessibility paths are tested.</small></span></label>
-    <label class="gate"><input type="checkbox" data-gate="tested"><span><strong>COMMUNITY TESTED</strong><small>Real testers have exercised the release candidate and feedback is recorded.</small></span></label>
-    <label class="gate"><input type="checkbox" data-gate="polished"><span><strong>POLISHED</strong><small>Known release-blocking bugs and rough edges are resolved or documented.</small></span></label>
-    <label class="gate"><input type="checkbox" data-gate="evidence"><span><strong>PROOF PACKAGE</strong><small>Build, screenshots, trailer/demo, feedback, and contribution receipts are assembled.</small></span></label>
-    <label class="gate"><input type="checkbox" data-gate="rc"><span><strong>RELEASE CANDIDATE</strong><small>A tagged build exists that the team is willing to put in public hands.</small></span></label>
-    <label class="gate"><input type="checkbox" data-gate="xbox"><span><strong>XBOX PACKAGE</strong><small>Xbox-facing materials and technical information are ready for review.</small></span></label>
-    <label class="gate"><input type="checkbox" data-gate="final"><span><strong>FINAL REVIEW</strong><small>Community/company review confirms the release package is ready to publish.</small></span></label>
-  </div>
-  <div class="release-note"><strong style="color:var(--grey-200)">Two clocks, one finish line:</strong> October 31 is our release target. Xbox submission is a separate evaluation gate; reaching 100% here does not imply Xbox approval.</div>
-  <div class="broadcast-row">
-    <span class="broadcast-status" id="broadcast-status">Milestone broadcasting: waiting for verified release evidence.</span>
-    <button class="btn-primary" id="broadcast-milestone" type="button" disabled>Prepare Milestone</button>
-  </div>
-</section>
-
-<section class="launch-board" id="xbox-submission">
-  <div class="launch-kicker">Mission Control · Xbox Path</div>
-  <h2>FROM PLAYABLE PROOF → XBOX SUBMISSION</h2>
-  <p class="release-lead">The site now treats Xbox as an explicit production path. <strong>October 31, 2026 is our internal Halloween production target — not an Xbox deadline.</strong> Microsoft does not publish a universal Xbox submission deadline for this project; the actual Xbox gates are partner onboarding, concept approval, GDK/product setup, certification, and release.</p>
-  <div class="launch-deadline"><strong>INTERNAL TARGET · OCTOBER 31, 2026</strong><span>HALLOWEEN RELEASE / SUBMISSION-READY CHECKPOINT</span></div>
-  <div class="launch-steps">
-    <div class="launch-step"><b>01 · BUILD</b><strong>Choose the game</strong><small>Select a project below and produce a playable vertical slice/release candidate.</small></div>
-    <div class="launch-step"><b>02 · ONBOARD</b><strong>Xbox Partner + ID@Xbox</strong><small>Register as an Xbox partner, enroll in Partner Center, then submit the game concept to ID@Xbox.</small></div>
-    <div class="launch-step"><b>03 · APPROVE</b><strong>Concept + agreements</strong><small>Xbox reviews the concept. If approved, complete the required TLA/GDK agreements and onboarding.</small></div>
-    <div class="launch-step"><b>04 · PACKAGE</b><strong>GDK + Partner Center</strong><small>Create the Xbox product, enable the appropriate services, build/package the game, and prepare certification materials.</small></div>
-    <div class="launch-step"><b>05 · CERTIFY</b><strong>Certification → release</strong><small>Submit the package through Partner Center certification, resolve requirements, then configure and publish the release.</small></div>
-  </div>
-  <div class="choice-note"><strong>IMPORTANT:</strong> The current DUET browser build is proof and architecture work. It is not itself an Xbox package. Physical Xbox deployment, GDK access, provisioning, and certification evidence are separate gates.</div>
-</section>
-
-
-<section class="media-atmosphere" id="atmosphere-and-community">
-  <div class="launch-kicker">The Atmosphere · Music · Community · Communication</div>
-  <h2>THE WORLD AROUND THE BUILD</h2>
-  <p class="lead">The game is only one part of the experience. Watch the source material, support the music ecosystem, explore PIXIE to find other worlds, and keep community conversations available outside the Xbox-facing surface.</p>
-  <div class="media-grid">
-    <div>
-      <div class="video-link-panel">
-        <h3>Watch The Big Push</h3>
-        <p>Open the video on YouTube for playback, captions and player controls.</p>
-        <a class="btn-primary" href="https://www.youtube.com/watch?v=SnysmGissKw" target="_blank" rel="noopener">Watch on YouTube (opens a new tab)</a>
-      </div>
-    </div>
-    <div class="media-card">
-      <h3>THE BIG PUSH</h3>
-      <p>Go deeper into the music and behind-the-scenes ecosystem through The Big Push's Patreon.</p>
-      <div class="media-links"><a href="https://www.patreon.com/cw/TheBigPush" target="_blank" rel="noopener">Support / Explore</a><a href="https://www.youtube.com/watch?v=SnysmGissKw" target="_blank" rel="noopener">Watch on YouTube</a></div>
-    </div>
-  </div>
-  <div class="media-grid">
-    <div class="media-card">
-      <h3>PIXIE · EXPLORE THE ATMOSPHERE</h3>
-      <p>PIXIE's public discovery demo helps you explore topics and find stories. The separate Creator workspace prepares your work for manual sharing; each destination keeps its own permissions.</p>
-      <div class="media-links"><a href="https://ibloud.github.io/50-ways-to-leave-another/pixie/demo/index.html" target="_blank" rel="noopener">Discover PIXIE worlds</a></div>
-    </div>
-    <div class="media-card">
-      <h3>GERM · BEYOND THE PUBLIC LAYER</h3>
-      <p>Germ can provide private, consent-oriented communication outside the public Xbox-facing surface. Its current app supports private AT Protocol messaging and voice notes with end-to-end encryption.</p>
-      <div class="media-links"><a href="https://landing.ger.mx/newUser/web/#did:plc:o6kuv3yieti2vqrb7ckmd5vg+did:plc:b5uem672ci23lqrbz6j6bs2c" target="_blank" rel="noopener">Open Germ handoff</a><a href="https://apps.apple.com/us/app/germ-dm/id6446882771" target="_blank" rel="noopener">Germ DM</a></div>
-    </div>
-  </div>
-  <div class="bridge">
-    <h3>GERM BRIDGE · PROPOSED ARCHITECTURE</h3>
-    <p class="lead">We can build a bridge, but it should be an explicit community service—not pretend that Xbox is directly integrated with Germ. The clean boundary is:</p>
-    <div class="bridge-flow">XBOX GAME / PARTNER CENTER → PUBLIC COMMUNITY SURFACE → OPT-IN HANDOFF → GER.MX / GERＭ DM → PRIVATE ATProto CONVERSATION</div>
-    <p class="lead" style="margin-top:12px">A future bridge could issue an opt-in project/community invitation, carry a non-sensitive project or session identifier, and let the participant authenticate or open a Germ conversation. It should not export Xbox account data, private messages, credentials, or moderation data into Germ. Until that service exists and is tested, this page presents it as a proposed bridge rather than a working integration.</p>
-  </div>
-</section>
-
-<section class="project-board" id="choose-your-build">
-  <div class="launch-kicker">Choose Your Build</div>
-  <h2>WHICH PROJECT SHOULD GO TO XBOX?</h2>
-  <p class="lead">DUET is the current architecture proving ground, but it is not the only candidate. Pick the project that matches the kind of playable vertical slice you want to build. Each card gives players a way to play, inspect the repository, or join the build.</p>
-  <div class="project-grid">
-    <article class="project-card featured"><div class="type">Current Xbox proving ground</div><h3>DUET · Veiled Dominion</h3><p>Two-player accessible strategy game. The current site is testing the client/transport/server boundary before an Xbox/Godot implementation.</p><div class="project-actions"><a href="https://github.com/Loptr-Lab/duet-solo-hackathon">Repo</a><a href="#xbox-submission">Xbox path</a><a href="https://github.com/Loptr-Lab/duet-solo-hackathon/blob/main/CONTRIBUTING.md">Contribute</a></div></article>
-    <article class="project-card"><div class="type">Halloween / horror candidate</div><h3>VIOLET'S REVENGE</h3><p>Browser horror/game prototype. A natural candidate for a supervised vertical slice, playtest, QA, and later platform adaptation work.</p><div class="project-actions"><a href="https://github.com/ibloud/violets-revenge">Repo</a><a href="https://github.com/ibloud/violets-revenge/fork">Fork</a><a href="https://github.com/ibloud/violets-revenge/issues">Issues</a></div></article>
-    <article class="project-card"><div class="type">Music / UEFN candidate</div><h3>REN RHAPSODY</h3><p>Music-driven adventure and parkour concept with a documented UEFN path, rights research, and a growing playtest package.</p><div class="project-actions"><a href="https://github.com/ibloud/ren-rhapsody">Repo</a><a href="https://ibloud.github.io/ren-rhapsody/">Play / inspect</a><a href="https://github.com/ibloud/ren-rhapsody/issues">Issues</a></div></article>
-    <article class="project-card"><div class="type">Rhythm game</div><h3>REN TAP TAP REVENGE</h3><p>Three-lane rhythm prototype with taps, holds, swipes, combo scoring, and an inspectable build path.</p><div class="project-actions"><a href="https://github.com/ibloud/ren-tap-tap-revenge">Repo</a><a href="https://github.com/ibloud/ren-tap-tap-revenge/fork">Fork</a></div></article>
-    <article class="project-card"><div class="type">Rhythm / chart project</div><h3>TARANTULA · CLONE HERO</h3><p>Community custom-chart experiment built around the Tarantula track, useful for charting, tooling, QA, and music-game experimentation.</p><div class="project-actions"><a href="https://github.com/ibloud/tarantula-clone-hero">Repo</a><a href="https://github.com/ibloud/tarantula-clone-hero/fork">Fork</a></div></article>
-    <article class="project-card"><div class="type">Interactive narrative</div><h3>LIVING ROOM POETRY</h3><p>Small interactive text-adventure prototype that can serve as a lightweight narrative/game vertical slice.</p><div class="project-actions"><a href="https://github.com/ibloud/living-room-poetry">Repo</a><a href="https://github.com/ibloud/living-room-poetry/fork">Fork</a></div></article>
-    <article class="project-card"><div class="type">Action / experimental</div><h3>BATTLE THE BEAST</h3><p>An additional experimental game repository available for players and contributors to inspect when choosing a build direction.</p><div class="project-actions"><a href="https://github.com/ibloud/battle-the-beast">Repo</a><a href="https://github.com/ibloud/battle-the-beast/fork">Fork</a></div></article>
-    <article class="project-card"><div class="type">Game research / community</div><h3>AWESOME OPEN-SOURCE GAMES</h3><p>A discovery and reference lane for open-source game projects and possible collaborators, rather than an Xbox submission candidate itself.</p><div class="project-actions"><a href="https://github.com/ibloud/awesome-open-source-games">Explore</a></div></article>
-    <article class="project-card"><div class="type">Public discovery / local creation</div><h3>PIXIE</h3><p>Discover worlds, projects, experiments, and communities. Use the separate Creator workspace to prepare and manually share your own work.</p><div class="project-actions"><a href="https://ibloud.github.io/50-ways-to-leave-another/pixie/demo/index.html">Discover PIXIE worlds</a><a href="https://github.com/ibloud/pixie-holdings">Holdings repo</a><a href="https://ibloud.github.io/pixie-creator-os/">Creator workspace</a></div></article>
-  </div>
-  <div class="choice-note"><strong>PLAYER → BUILDER:</strong> You do not have to choose the “official” project. Pick a repo you can actually contribute to: playtest it, document a bug, improve accessibility, make a design contribution, build a prototype, open an issue, or fork it where the project permits.</div>
-</section>
-
-<section class="platform-roadmap" id="publishing-career-path">
-  <h2>FROM PROOF TO PUBLISHING — AND A PORTFOLIO</h2>
-  <p class="release-lead">The Halloween target is the production milestone. Publishing is a separate platform path: the prototype becomes a shippable game build, then enters the platform's actual developer, submission, certification, and release workflow.</p>
-  <div class="platform-grid">
-    <div class="platform-card"><h3>Xbox / ID@Xbox path</h3><ol><li>Finish the playable release candidate and evidence package.</li><li>Register as an Xbox creator/Partner Center and submit the game concept.</li><li>After concept approval and required agreements, move into full GDK/Xbox services and product setup.</li><li>Build/package the Xbox product, complete testing, submit for certification, then configure release in Partner Center.</li></ol><p style="margin-top:10px">This dashboard is the <strong>pre-submission proof layer</strong>; it is not Xbox approval.</p></div>
-    <div class="platform-card"><h3>Epic / Fortnite path</h3><ol><li>Use the Duet mechanic as a candidate for a UEFN/Fortnite adaptation rather than treating the browser build as a Fortnite island.</li><li>Rebuild the core interaction in UEFN/Verse and test it as a private version.</li><li>Join the Fortnite Developer Program, prepare metadata/media/attributions, and create a Creator Portal release.</li><li>Submit for moderation; after approval, publish the island and track its player analytics.</li></ol><p style="margin-top:10px">The Epic lane is a <strong>port/adaptation path</strong>, not a claim that the current web build is already publishable in Fortnite.</p></div>
-  </div>
-  <div class="portfolio-lane"><strong>UNEMPLOYMENT → EXPERIENCE RECEIPTS:</strong> each completed gate can become a portfolio artifact: accessibility test report, game-design document, bug/QA log, GitHub PR, release checklist, gameplay capture, deployment notes, platform submission package, and a documented retrospective. That turns the project into evidence of production practice rather than an unverified “I worked on a game” claim.</div>
-</section>
-
-</main>
-
 <script>
 const SiteNavigation = (() => {
     const pages = ['front-page', 'game-screen', 'remote-game-screen'];
