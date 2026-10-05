@@ -1,6 +1,14 @@
 # Duet OAuth — Production Configuration
 
-This is the deployment checklist for the controlled Weaver participation system.
+This is the deployment checklist for DUET account sign-in and the separate controlled Weaver participation system.
+
+## Player sign-in entry and current evidence
+
+The game navigation links to `/signin.html`. The page checks `/auth/me`, presents a handle form only when the OAuth route is available, and reports unavailable on HTTP 404. Successful OAuth returns to `/signin.html?auth=success`; players can return to DUET or sign out there. Guest gameplay does not require sign-in. This adds an account entry point, not player-PDS game saving or identity-to-seat binding.
+
+On October 5, 2026 around 08:28 America/Chicago, the production browser returned `Cannot GET /auth/me`. This establishes that the inspected serving revision did not expose that route; the exact configuration or initialization failure was not determined. Do not call sign-in live from a navigation link alone.
+
+If `/auth/me` is still missing after deployment, privately verify the required origin and secret references below, Firestore access, and startup logs for `AT Protocol OAuth BFF enabled.` or the recorded initialization failure. Preserve existing service configuration; never paste secret values into chat or use a partial environment overwrite. Only after routes are available should a designated tester exercise OAuth and sign-out. The sign-in scope remains `atproto`; player game records need a separate collection-scoped implementation.
 
 ## Canonical public origin
 

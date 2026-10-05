@@ -875,6 +875,7 @@
   <nav class="site-nav" aria-label="DUET navigation">
     <a class="site-brand" href="#home" aria-label="DUET home" aria-current="page">DUET</a>
     <a href="#community-power">Get involved</a>
+    <a href="/signin.html">AT Proto sign-in</a>
     <a href="#atmosphere-and-community">PIXIE & community</a>
     <a href="#choose-your-build">Projects</a>
     <a href="#xbox-submission">Development plan</a>
@@ -1332,8 +1333,8 @@
     </div>
     <div class="media-card">
       <h3>THE BIG PUSH</h3>
-      <p>Go deeper into the music and behind-the-scenes ecosystem through The Big Push's Patreon.</p>
-      <div class="media-links"><a href="https://www.patreon.com/cw/TheBigPush" target="_blank" rel="noopener">Support / Explore</a><a href="https://www.youtube.com/watch?v=SnysmGissKw" target="_blank" rel="noopener">Watch on YouTube</a></div>
+      <p>Explore The Big Push's Patreon and watch the behind-the-scenes video for Xbox Marijuana.</p>
+      <div class="media-links"><a href="https://www.patreon.com/cw/TheBigPush" target="_blank" rel="noopener">Support / Explore</a><a href="https://youtu.be/QZUAFeXeh_k" target="_blank" rel="noopener" aria-label="Watch Xbox Marijuana behind the scenes on YouTube (opens a new tab)">Watch on YouTube</a></div>
     </div>
   </div>
   <div class="media-grid">
@@ -2864,7 +2865,7 @@ async function sendAgentMessage() {
             document.getElementById('remote-lobby').style.display = '';
             if (!RemoteState.socket) {
                 RemoteState.socket = io({ autoConnect: false });
-                RemoteState.transport = new SocketTransport(RemoteState.socket);
+                RemoteState.transport = new window.DuetSocketTransport(RemoteState.socket);
                 RemoteState.client = new DuetClient({ transport: RemoteState.transport });
                 RemoteMode._wireClientEvents();
             }

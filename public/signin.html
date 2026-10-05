@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AT Proto sign-in | DUET</title>
+<style>:root{color-scheme:dark}body{margin:0;background:#080808;color:#eee;font:18px/1.6 system-ui}main{max-width:650px;margin:auto;padding:40px 24px}a{color:#e3bd69}input,button{font:inherit;padding:12px;border:1px solid #ac8737;border-radius:4px}input{display:block;width:100%;box-sizing:border-box;margin:8px 0 18px}button{cursor:pointer}button:disabled{opacity:.6;cursor:default}:focus-visible{outline:3px solid #e3bd69;outline-offset:4px}</style></head>
+<body><main><a href="/">Return to DUET</a><h1>Sign in with AT Proto</h1>
+<p>Guest remote play does not require sign-in. Signing in does not save game records to your PDS; player-owned match saving is still being implemented.</p>
+<p id="account-status" role="status" aria-live="polite">Checking sign-in availability…</p>
+<form id="signin-form" action="/auth/atproto/login" method="get" hidden>
+<label for="handle">Your AT Proto handle</label><input id="handle" name="handle" autocomplete="username" required maxlength="253" placeholder="yourname.bsky.social">
+<p>You will continue to your account provider's OAuth page. Never enter your password into DUET.</p>
+<button type="submit">Continue to account provider</button></form>
+<button id="signout" type="button" hidden>Sign out</button>
+<p><a href="/">Continue playing DUET</a></p>
+<script>
+const status = document.getElementById('account-status');
+const form = document.getElementById('signin-form');
+const signout = document.getElementById('signout');
+async function checkAccount() {
+  form.hidden = true; signout.hidden = true;
+  try {
+    const response = await fetch('/auth/me', { credentials: 'same-origin', cache: 'no-store' });
+    if (response.status === 404) { status.textContent = 'AT Proto sign-in is unavailable on this deployment. The operator must verify OAuth configuration. You can still play as a guest.'; return; }
+    if (response.status === 401) { status.textContent = 'You are signed out. Use your handle to continue.'; form.hidden = false; return; }
+    if (!response.ok) throw new Error('account unavailable');
+    const account = await response.json();
+    if (account.authenticated !== true) throw new Error('unexpected account response');
+    status.textContent = 'Signed in as ' + (account.handle || 'your AT Proto account') + '. Game records are not yet saved to your PDS.';
+    signout.hidden = false;
+  } catch { status.textContent = 'Could not check your account. Try reloading. Guest play remains available.'; }
+}
+signout.addEventListener('click', async () => {
+  signout.disabled = true;
+  try { const response = await fetch('/auth/logout', { method: 'POST', credentials: 'same-origin' }); if (!response.ok) throw new Error('logout failed'); await checkAccount(); }
+  catch { status.textContent = 'Sign-out could not be confirmed. Try again.'; }
+  finally { signout.disabled = false; }
+});
+checkAccount();
+</script></main></body></html>
