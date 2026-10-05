@@ -141,7 +141,7 @@ Until M0 is demonstrated, do not expand the Xbox implementation into:
 - four-player console implementation;
 - production art;
 - Fog Mode;
-- Gemini/PIXIE;
+- porting PIXIE's fixed web game help to Xbox or adding a separately reviewed model feature;
 - unrelated persistence changes.
 
 These remain later milestones or production decisions, not M0 prerequisites unless the feasibility work shows otherwise.
@@ -213,3 +213,4 @@ DUET remains **M1 COMPLETE** while this evidence-gathering work is pending.
 M0 should prove feasibility before implementation expands.
 
 Do not convert an unresolved feasibility question into an architectural assumption. When evidence changes, update this status document and the relevant decision/contract document rather than silently changing the milestone definition.
+

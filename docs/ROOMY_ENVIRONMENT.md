@@ -96,7 +96,8 @@ No deadline or successful test result is implied by an empty field.
    Report hands-on evidence in GitHub #70 and qualified review in #69.
 6. Keep GitHub as the source of code/release evidence and issue resolution.
    Copying actionable Roomy findings to GitHub remains manual.
-7. Keep the existing #67/#68/#71 external-review holds and owner release gates.
+7. The owner waived the #67/#68/#71 merge hold on October 5; human review remains
+   pending. Keep production build approval and acceptance evidence separate.
 
 ## Storage and privacy boundary
 Roomy's official site says data storage is transitioning to AT Proto as permissioned

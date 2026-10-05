@@ -1,7 +1,7 @@
 # Required player-owned DUET game records
 Decision recorded October 5, 2026: signed-in players should own their durable DUET
 game records in their own PDS. This is an implementation requirement, not a claim
-that current production or PR #74 already does it.
+that current production or the merged fixed-help source already does it.
 
 ## Present versus required
 | Data | Current source | Required destination / control |
@@ -10,7 +10,7 @@ that current production or PR #74 already does it.
 | Durable player match record | Firestore match logs; no player-PDS writer | Player's resolved PDS, under their OAuth identity and permission |
 | OAuth state/session and reconnect secrets | Operator server storage | Remain private operational data; never public repo records |
 | Anonymous summaries/optional feedback | Separate Firestore collections | Distinct telemetry policy; not described as player-owned history |
-| Community reports/training discussion | Roomy not yet provisioned | Roomy community visibility as verified; code issues in GitHub |
+| Community reports/training discussion | Roomy channels provisioned; member access pending | Roomy community visibility as verified; code issues in GitHub |
 | Optional public result announcement | Configured project account's Bluesky post | Separate permission and disclosure; does not replace player record |
 
 Standard AT Proto repository records are public, including custom collections.
@@ -68,8 +68,9 @@ do not silently publish it as an ordinary custom record.
 A separate code PR should add the sanitized record schema, collection-specific
 OAuth flow, server-side identity/seat binding, save/readback endpoint and accessible
 post-match control. Then exercise write/readback using designated test accounts
-before inviting production testers to validate saving. This does not waive the
-existing PIXIE #67/#68/#71 rules/accessibility gates or authorize production deployment.
+before inviting production testers to validate saving. The October 5 exception waived the #67/#68/#71 merge prerequisite only;
+human rules/accessibility evidence remains pending. This document does not
+authorize production deployment.
 
 ## Primary references
 - Public repositories/PDS resolution: https://atproto.com/specs/repository

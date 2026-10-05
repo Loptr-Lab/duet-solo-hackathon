@@ -77,12 +77,12 @@ These code paths are not proof of successful production storage or posting.
    page, check /auth/me without sharing its identifiers, sign out, and confirm
    unauthenticated status. Play a match while signed in. Do not report PDS
    storage as passed: it is not implemented.
-9. Follow the release card for PIXIE. On the baseline build, record the actual
-   help behavior/unavailability with Gemini credentials absent. Do not expect
-   PR #74's fixed answers or Outside Support page unless the serving commit
-   includes them. Once released, check all eight topics, a mixed/off-topic
-   question, Outside Support return and screen-reader focus/announcements.
-   Compare proposed answers against actual DUET mechanics; record disagreements.
+9. Follow the release card for PIXIE. PR #67's fixed answers and Outside Support
+   page are merged in source; confirm the serving revision includes that merge
+   before testing them. Check all eight topics, mixed/off-topic questions,
+   Outside Support return and screen-reader focus/announcements. Record where
+   help is available in local versus remote play. Compare answers against actual
+   DUET mechanics and record disagreements. Keep Gemini credentials absent.
 10. Open PIXIE ecosystem links and report broken destinations. Cross-project
     identity, private-context sharing and direct Creator publishing remain
     unconfigured; a working link does not establish those integrations.
@@ -121,11 +121,11 @@ paths work; storage/feedback and configured posting have evidence or are explici
 marked unavailable. Report scope and unresolved failures instead of calling the
 whole build stable from CI alone.
 
-Existing #67/#68/#71 external-review holds remain. Production playtesting can
-proceed against the current serving build without merging them. The unreleased
-PIXIE candidate must first complete required review, accepted fixes and owner
-release approval; after deployment, repeat affected cases in production. This
-packet does not approve a deployment or mark any review requirement complete.
+The owner waived the #67/#68/#71 merge hold on October 5; those PRs are merged.
+Qualified review remains pending under #69/#70. Owner Cloud Build approval and
+serving-source verification remain separate steps; after deployment, exercise
+fixed help and repeat affected cases in production. This packet does not approve
+a deployment or mark any review requirement complete.
 
 ## Player-owned records and community destination
 

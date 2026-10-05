@@ -61,22 +61,11 @@ Changing `public/index.html` alone does not update that review surface.
 
 ## Next verification and governance
 
-1. Review these continuity corrections independently of the held support/operations PRs.
-2. Preserve the external-review hold on #68, #67 and #71. Qualified rules and
-   screen-reader feedback must be received and triaged under
-   [#69](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/69); hands-on evidence
-   remains under [#70](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/70).
-   CI and route checks do not close those gates.
-3. Reconcile overlapping README edits during the existing eventual order:
-   #68, then rebased/reviewed #67, then rebased/reviewed #71. Keep source, proposed
-   fixed help and independently observed production behavior distinct.
-4. Before any production change, privately establish serving revision, traffic,
-   trigger and owner build-approval setting. Keep the Gemini key absent.
-   Owner build approval is separate from external review. This continuity change
-   authorizes no build approval, deployment, service authentication or traffic change.
-5. After an authorized rollout, inspect both public surfaces. Confirm discovery
-   and Creator links, `main/CONTRIBUTING.md`, and the separate review-page wording;
-   record the serving revision and capture date.
-6. Use repository references until dedicated public status endpoints are implemented
-   and independently verified. If shared manifests change later, update both copies
-   and preserve explicit identity status.
+On October 5, 2026 at 07:55 America/Chicago, the owner explicitly authorized an exception to the merge hold on #68/#67/#71 and requested the changes needed to continue development. This waives the merge prerequisite; it does not establish completed external review, accessibility acceptance, Xbox approval or a production deployment. Review evidence remains pending under #69 and hands-on results under #70.
+
+Before deployment, privately verify the final source, trigger, configuration and
+traffic. After an authorized rollout, inspect both public surfaces, all fixed
+help topics and fallback, discovery/Creator links and contributor routes. Record
+the serving source and capture time. Route checks do not establish shared identity,
+PDS saving or completed human review. Use repository manifest references until
+public status endpoints are implemented and verified.

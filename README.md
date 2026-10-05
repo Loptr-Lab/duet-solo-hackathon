@@ -1,6 +1,17 @@
 # Duet: Solo
-Screen-reader-first, accessibility-built chess variant with an experimental onboarding/support path.
-Built for **Build with Gemini XPRIZE (Education & Human Potential)**.
+
+## Loptr Lab mission and participation
+
+Loptr Lab is a pre-seed, people-over-profit, accessibility-first venture working toward a self-sustaining model within a capitalist economy. Money sustains the work; meaningful change for people is its purpose. We accept funding only on terms that keep people and accessibility first. Our long-term vision includes universal basic income. We aim to bring change to life and leave a transparent record of what we tried, what worked, and what failed so others can carry it forward. This mission governs our projects, funding decisions, and partnerships; it is not a temporary marketing position.
+
+Current open review and contribution opportunities are voluntary and unpaid. Before work begins, agree in writing on scope, time, what will be public, credit preferences, and an exit path. You can stop at any point. Participation does not promise employment, ownership, revenue share, academic credit, or future pay. Any paid commission or other formal arrangement requires a separate signed agreement before work begins. External assistance or benefits belong to the participant and are not compensation from Loptr Lab.
+
+Financial support is optional and sustains infrastructure, maintenance, accessibility work, and documented development. Paying does not buy contributor status, canon authority, approvals, ownership, or employment. Participation and accessibility are not sponsorship rewards. Project-specific licenses and existing signed agreements continue to apply.
+
+[Full mission and participation terms](https://github.com/ibloud/ibloud.github.io/blob/main/MISSION.md).
+
+Screen-reader-first chess variant in active development, with PIXIE fixed game help.
+Earlier Gemini XPRIZE planning is historical; production and accessibility acceptance require current evidence.
 
 ---
 
@@ -21,21 +32,23 @@ Duet: Solo is an accessible strategy game experience designed for blind and low-
 
 The application includes:
 - Accessible game interaction patterns for screen readers
-- An experimental Gemini support endpoint in the current source; live model availability is unverified
+- PIXIE: eight fixed game-help answers and an Outside Support fallback, with no model API call
 - Cloud Run deployability for judging/demo reliability
 - An "Obsidian Realm" landing screen that leads into two gameplay modes: a classic ruleset, and an experimental Fog Mode (elevation-based vision and HP combat) — both built to the same accessibility standard, with information gated by fog rather than hidden only visually (see below)
 
 ---
 
-## Support implementation and verification
-The current `main` source includes a Gemini experiment for onboarding and gameplay
-questions, with structured JSON responses. Code presence does not establish a
-configured or functioning live model. Keep the Gemini key absent during the existing
-review hold.
+## PIXIE implementation and verification
+The server selects one of eight fixed DUET answers through a bounded question gate.
+Mixed and off-topic messages receive the same Outside Support response. No Gemini
+or other model API is called, and this help route does not persist question text.
 
-[PR #67](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/67) proposes fixed game
-help and an Outside Support response. It remains a draft under external review;
-that proposed behavior is not the current production claim.
+The owner authorized the merge exception on October 5. Qualified external review,
+real-client help interaction, full-match and assistive-technology acceptance remain
+pending under [#69](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/69) and
+[#70](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/70). Source implementation
+is not proof that the currently serving revision includes it. See the
+[answer review sheet](docs/PIXIE_LIVE_CHECK.md) and [release record](docs/RELEASE_STATUS.md).
 
 ---
 
@@ -46,7 +59,7 @@ that proposed behavior is not the current production claim.
   - Fog Mode's accessibility design gates *information*, not just visuals: querying a square via the command bar or screen reader returns only what a sighted player would actually see (visible, last-known/stale, or unexplored) — fog is a fairness mechanic, not an accessibility gap.
   - The Radius of Ruin / Sanctuary auras use a data-driven "breathing" animation (CSS custom properties set per-render from live board state — how many pieces are currently veiled or sheltered) rather than a fixed decorative pulse, with `prefers-reduced-motion` respected throughout.
 - **Backend:** Node.js + Express (`server.js`)
-- **Support endpoint in current source:** `POST /api/agent` (Gemini experiment; live availability unverified)
+- **Support endpoint in current source:** `POST /api/agent` (fixed answers; no model call)
 - **Hosting target:** Google Cloud Run
 
 ---
@@ -59,9 +72,7 @@ npm install
 ### 2) Configure environment
 Copy `.env.example` to `.env` and fill values:
 - `PORT`
-- `GEMINI_API_KEY` (leave absent during the review hold)
 - `PUBLIC_URL` (optional locally, recommended in deploy)
-- `AI_RATE_LIMIT_WINDOW_MS` and `AI_RATE_LIMIT_MAX` (keep enabled for public deployments)
 - `GOOGLE_CLOUD_PROJECT` (only when persistent remote play is enabled)
 
 ### 3) Start
@@ -76,12 +87,12 @@ Open `http://localhost:8080`
 Cloud Run is the hosting target. A reachable page does not establish the serving
 commit, provider configuration, Firestore access, or functioning model/posting services.
 
-The operations handoff is proposed in
-[PR #68](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/68). Before any production
-change, verify the serving source, traffic, trigger and required configuration privately,
-and reconfirm the owner's build-approval setting. Keep the Gemini key absent.
-Qualified external review and owner build approval are separate gates; a main push
-does not authorize production deployment.
+Read [the operations handoff](docs/OPERATIONS_HANDOFF.md) before changing production.
+Verify serving source, traffic, trigger and required configuration privately and
+reconfirm the owner's build-approval setting. Keep the Gemini key absent.
+
+On October 5, 2026 at 07:55 America/Chicago, the owner explicitly authorized an exception to the merge hold on #68/#67/#71 and requested the changes needed to continue development. This waives the merge prerequisite; it does not establish completed external review, accessibility acceptance, Xbox approval or a production deployment. Review evidence remains pending under #69 and hands-on results under #70.
+See [release status and remaining work](docs/RELEASE_STATUS.md).
 
 A public fork supplies and pays for its own services. Follow
 [FAN_FORK_GUIDE.md](FAN_FORK_GUIDE.md), [SECURITY.md](SECURITY.md), and
@@ -90,9 +101,9 @@ A public fork supplies and pays for its own services. Follow
 ---
 
 ## Evidence for judges
-This repository contains the browser client, Cloud Run deployment materials, an
-experimental Gemini support path, and accessibility-oriented gameplay design,
-including Fog Mode. Current deployment, model use, remote-match persistence and
+This repository contains the browser client, Cloud Run deployment materials, a
+fixed PIXIE game-help path, and accessibility-oriented gameplay design,
+including Fog Mode. Current deployment, help interaction, remote-match persistence and
 assistive-technology usability require dated runtime evidence. Historical hackathon
 claims are not current infrastructure verification.
 
@@ -101,7 +112,7 @@ claims are not current infrastructure verification.
 ## Hackathon alignment
 Category: **Education & Human Potential**
 
-Duet: Solo expands access to strategy learning/play by centering assistive-technology users and reducing onboarding friction with AI guidance.
+Duet: Solo expands access to strategy learning/play by centering assistive-technology users and reducing onboarding friction with bounded game help.
 
 ---
 
@@ -111,7 +122,7 @@ Build in public against the actually serving revision. Follow the
 [tester requirements, steps and report template](docs/PRODUCTION_PLAYTEST.md).
 AT Proto sign-in does not save match data in players' PDS repositories;
 current game persistence uses operator-controlled Firestore when configured.
-Unreleased fixed PIXIE help remains a separate candidate under review.
+Fixed PIXIE help is merged in source; deployment and human acceptance remain unverified.
 
 ## Anonymous playtest feedback
 

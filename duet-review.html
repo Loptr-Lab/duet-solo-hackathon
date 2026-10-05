@@ -41,7 +41,7 @@ small{color:var(--muted)}
 <h2 id="halloween-plan">Halloween 2026: work we can finish</h2>
 <p>October 31 is our internal target for a tested DUET web release candidate, an auditable environment and cost record, and an ID@Xbox concept submission if onboarding permits. It is not a console release date. Ren Rhapsody follows its separate UEFN and music-rights path.</p>
 <ol class="milestones">
-<li><time datetime="2026-10-03">October 3</time><span><strong>Record the environment.</strong> Capture the serving source, hosting configuration, service availability, costs, rights, and a baseline for room codes created versus joined. Keep Gemini credentials absent during the review hold.</span></li>
+<li><time datetime="2026-10-03">October 3</time><span><strong>Record the environment.</strong> Capture the serving source, hosting configuration, service availability, costs, rights, and a baseline for room codes created versus joined. Keep Gemini credentials absent; fixed PIXIE help needs no model key.</span></li>
 <li><time datetime="2026-10-10">October 10</time><span><strong>Complete remote matches.</strong> Test code creation, a second player joining, match completion, disconnect, and rejoin.</span></li>
 <li><time datetime="2026-10-17">October 17</time><span><strong>Test accessibility.</strong> Include keyboard and screen-reader players, record failures, and check whether players understand and use PIXIE's in-game suggestions.</span></li>
 <li><time datetime="2026-10-24">October 24</time><span><strong>Review the candidate.</strong> Resolve blocking bugs and prepare gameplay footage, accessibility findings, provenance, and the DUET-led Xbox concept.</span></li>
@@ -51,7 +51,7 @@ small{color:var(--muted)}
 
 <h2>Public production playtesting</h2>
 <p>Test the actually serving DUET revision with two players on separate devices. Follow our <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/blob/main/docs/PRODUCTION_PLAYTEST.md">requirements, player steps, data notice and report template</a>. Record device, assistive technology, serving revision and observed results. AT Proto sign-in does not save matches to your PDS; configured game persistence uses DUET's Firestore.</p>
-<p>Fixed PIXIE help remains an unreleased review candidate. Baseline production testing can continue; only test candidate features after their serving revision is confirmed. CI does not establish production storage or accessibility acceptance.</p>
+<p>Fixed PIXIE help is merged in source under the owner's October 5 exception. Human review remains pending; confirm the serving revision before testing the integrated help. CI does not establish production storage or accessibility acceptance.</p>
 
 <p>Player-owned game records in each player's PDS are <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/blob/main/docs/PLAYER_PDS_STORAGE.md">required next implementation work</a>. The existing Loptr Lab Roomy community now has <a href="https://roomy.space/did:plc:f62tthd7cmjpfvtlet2crpsq/01M45Y6MA3S2M1ER3V3BD9KPNY">DUET tester instructions</a> and <a href="https://roomy.space/did:plc:f62tthd7cmjpfvtlet2crpsq/01M45YA3TCEK75WZTFB86M5HQJ">training onboarding</a>. Joining is invite-only; ask the owner for an invitation. Normal-participant and accessibility checks remain pending. See the <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/blob/main/docs/ROOMY_ENVIRONMENT.md">setup and verification record</a>. Player-PDS game saving remains unimplemented.</p>
 <h2>What we're testing in DUET</h2>

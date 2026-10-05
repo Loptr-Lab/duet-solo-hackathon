@@ -8,8 +8,8 @@ Build with Gemini XPRIZE submission plan. This is evidence of the project's plan
 choice, not independent verification of official contest requirements.
 
 Current main uses Node/Express/Socket.IO, @google-cloud/firestore and AT Proto OAuth
-packages. The Gemini experiment remains in main, with its key required to remain
-absent during the existing hold. Fixed PIXIE help in #67/#74 is proposed and unmerged.
+packages. PR #67 is merged: PIXIE selects fixed answers without a model call. Keep Gemini
+credentials absent; deployment of the integrated source remains unverified.
 Firestore stores rooms, logs and auth/session/profile data; player PDS saving is not
 implemented. No Anthropic API/SDK integration was found in inspected runtime code.
 Claude references in design documents are drafting prompts, not game dependencies.
@@ -29,8 +29,8 @@ measurements of this workload and current entitlements.
 | Live multiplayer | Portable Node container, explicit room ownership and recovery | Host can change after testing; PDS is not a live game coordinator |
 | Durable player game records | Player's resolved PDS with specific OAuth permission | Public sanitized records, disclosure and consent; implementation pending |
 | Operational storage | Adapter for room/auth/cache data; retain Firestore initially | Add a Postgres adapter only with parity, backup/restore and migration evidence |
-| PIXIE help | Reviewed fixed answers as the next game-help release | Existing external-review hold remains; AI services optional future work |
-| Community/training | Roomy onboarding/discussion plus GitHub issue/release evidence | Provisioning pending; do not claim automatic bridges |
+| PIXIE help | Fixed answers integrated in source; human review pending | Owner merge exception recorded; deployment and acceptance require evidence |
+| Community/training | Roomy onboarding/discussion plus GitHub issue/release evidence | Twelve channels provisioned; normal-member access pending; no automatic bridges |
 | Xbox/Godot client | Separate platform adapter/proof with applicable GDK/console tooling | Hosting choice is independent; preserve M0 hardware/accessibility gates |
 
 Decentralization comes from portable identity/data and replaceable services.
@@ -88,19 +88,22 @@ than migrate the backend as a proxy for console progress.
    backup/restore; use the production playtest packet for the current baseline.
 2. Resolve live match/reconnect/storage defects before claiming stability; verify
    room ownership and capacity before horizontal scaling.
-3. Complete accepted fixed-help rules/accessibility changes through the existing
-   #68 -> rebased/reviewed #67 -> #71 reconciliation; owner release approval separate.
+3. Deploy the reconciled #68/#67/#71 source only after owner build approval,
+   verify the serving source, and test fixed help. Human rules/accessibility review
+   remains pending under #69/#70 despite the owner merge exception.
 4. Implement the player-PDS schema, identity/seat binding, save/readback, status,
    retry/export/delete slice in a separate reviewed code PR.
 5. Establish operational storage interfaces and a tested restore path; evaluate
    Postgres portability without an immediate data migration.
-6. Complete Roomy onboarding/training setup and use actual tester reports to choose fixes.
+6. Verify normal-member Roomy joining/posting and accessibility; finish sidebar
+   grouping and use actual tester reports to choose fixes.
 7. Resolve Xbox/Godot access/toolchain facts and test the applicable sample/hardware.
 8. Evaluate Azure or another host only against measured reliability/cost/operating
    improvements. Keep existing production stable until the replacement passes.
 
 None of these future steps are marked complete by documentation or CI alone.
-PRs #67/#68/#71 and professional/external review requirements remain unchanged.
+PRs #68/#67/#71 are merged under the October 5 owner exception. Human review and
+production acceptance remain unfinished; merging does not manufacture that evidence.
 
 ## Primary references checked October 5, 2026
 - Cloud Run WebSockets: https://docs.cloud.google.com/run/docs/triggering/websockets

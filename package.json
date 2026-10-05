@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "check": "node --check server.js && node --check gameNamespace.js && node --check roomStore.js && node --check services/storage.js && node --check atprotoPoster.js && node --check services/verifiedProfile.js && node --check services/atprotoAuth.js",
+    "check": "node --check server.js && node --check agentScope.js && node --check gameNamespace.js && node --check roomStore.js && node --check services/storage.js && node --check atprotoPoster.js && node --check services/verifiedProfile.js && node --check services/atprotoAuth.js",
     "test": "node --test"
   },
   "dependencies": {
@@ -17,3 +17,4 @@
     "socket.io": "^4.7.5"
   }
 }
+
