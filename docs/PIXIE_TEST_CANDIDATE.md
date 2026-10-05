@@ -1,4 +1,4 @@
-# PIXIE isolated review candidate
+# PIXIE review candidate
 
 Prepared October 5, 2026. This branch combines main at
 `180862ae3b179058961a31fad59696529750d293` (#73) with proposed fixed help
@@ -17,7 +17,7 @@ It is a test candidate, not a release or replacement for the held PRs.
 - Do not copy the obsolete October 4 Fire TV deadline into the review page. Device
   requirements and acceptance remain tracked under #69/#70.
 
-## Isolated runtime
+## Optional developer sandbox
 
 Run `npm install --ignore-scripts --no-audit --no-fund`, then `npm run sandbox`.
 Open `http://localhost:8080`. The dedicated launcher substitutes in-memory room
@@ -52,15 +52,25 @@ source and runtime command before sharing a preview URL.
 - No production endpoint, credential, Firestore collection or public posting was tested.
 - Container commands are prepared but the image has not been built or deployed here.
 
+## Public production testing
+
+Public playtesters use the actually serving production build, not the developer
+sandbox. Follow [the production playtest packet](PRODUCTION_PLAYTEST.md), also
+proposed independently in PR #75. Baseline gameplay testing can proceed now with
+the serving revision/configuration recorded. Do not attribute baseline results
+to this unreleased candidate. AT Proto sign-in is not per-player PDS storage.
+
 ## Remaining acceptance
 
-1. Provide and verify an isolated preview URL for this exact candidate revision.
+1. Complete the production release card for current baseline testing. An isolated
+   preview is optional developer evidence, not a required substitute for public testing.
 2. On iPad Safari/VoiceOver, test announcements, focus, recovery, help and fallback,
    Outside Support return, and a real-client full match. Record actual results under #70.
 3. Test Fire TV D-pad/VoiceView where required; retain provisional wording if blocked.
 4. Obtain external rules and screen-reader feedback under #69. All eight reviewer/date
    entries remain pending; Sanctuary/Radius/Veil sequence reconciliation remains open.
-5. Reissue the pinned review packet for this candidate; do not label production play
-   as testing this branch. CI and this sandbox do not waive the review gate.
+5. Reissue the pinned review packet for this candidate. After accepted review fixes
+   and owner-approved release, verify its serving revision and repeat affected cases
+   with production playtesters. CI and this sandbox do not waive the review gate.
 6. Reconcile accepted changes through the held PR sequence and obtain separate owner
    production approval only after the existing gates are satisfied.

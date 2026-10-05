@@ -1,5 +1,5 @@
 # Duet: Solo
-Screen-reader-first chess variant. This isolated test candidate incorporates PR #67’s proposed fixed PIXIE help on current main; external review and production acceptance remain pending.
+Screen-reader-first chess variant. This review candidate incorporates PR #67’s proposed fixed PIXIE help on current main; external review and production acceptance remain pending.
 The earlier Gemini XPRIZE planning is historical. See [candidate validation](docs/PIXIE_TEST_CANDIDATE.md).
 
 ---
@@ -78,8 +78,10 @@ The operations handoff is proposed in
 change, verify the serving source, traffic, trigger and required configuration privately,
 and reconfirm the owner's build-approval setting. Keep the Gemini key absent.
 The [operations handoff](docs/OPERATIONS_HANDOFF.md) is carried forward for review,
-not accepted by assembling this candidate. Test deployment must use separate
-storage and disable posting; see the candidate validation record.
+not accepted by assembling this candidate. Public playtesters test the serving
+production build using the [production playtest packet](docs/PRODUCTION_PLAYTEST.md).
+The isolated sandbox is optional developer evidence and cannot validate production
+identity or persistence. Unreleased help requires the existing review/release gates.
 Qualified external review and owner build approval are separate gates; a main push
 does not authorize production deployment.
 

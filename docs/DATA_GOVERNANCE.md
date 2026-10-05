@@ -52,3 +52,20 @@ crisis protocol. A neutral Outside Support page is also available directly.
 Do not invite players to submit sensitive information. Review Cloud Run request
 logging separately before deployment.
 
+
+## AT Proto identity and storage destinations
+
+AT Proto OAuth sign-in is not per-player PDS game storage. The current source
+uses Firestore for rooms, match logs, OAuth/session state and verified profiles.
+Match logs initialize player DIDs to null; the gameplay reconnect token is not
+bound to the OAuth identity. No per-player game-record write/read path exists.
+
+`atprotoPoster.js` can create an `app.bsky.feed.post` containing a short result
+through the project account configured by the operator. It does not archive
+moves in each player's repository. Live posting and persistence require runtime
+evidence. Anonymous summaries/feedback exclude identifiers by design; legacy
+room/match logs contain identifiers and reconnect tokens and must be governed
+separately. An `expiresAt` field alone does not prove deletion.
+
+See [public production playtest instructions](PRODUCTION_PLAYTEST.md) for the
+release card, player data notice, optional sign-in case and operator checks.
