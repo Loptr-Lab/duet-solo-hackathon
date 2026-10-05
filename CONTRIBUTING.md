@@ -93,3 +93,7 @@ When using MCP or other AI-assisted tooling:
 - For hardware-gated work, documentation and partner confirmation do not substitute for the required physical test.
 
 For detailed MCP restrictions, evidence handling, review-comment guidance, and the current M0-A call to action, see [`docs/MCP_CONTRIBUTION.md`](docs/MCP_CONTRIBUTION.md).
+
+## Current development priorities
+
+Start with the [release state](docs/RELEASE_STATUS.md) and [production test packet](docs/PRODUCTION_PLAYTEST.md). Fixed PIXIE help is merged; human review and deployed-build acceptance are pending. The next data feature is [player-PDS saving](docs/PLAYER_PDS_STORAGE.md), which is not implemented. Resolve multiplayer ownership/reconnect defects before scaling; keep host migration separate. Use [Roomy onboarding](docs/ROOMY_ENVIRONMENT.md) for tester/training coordination and GitHub for code and release evidence.

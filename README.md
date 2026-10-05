@@ -101,7 +101,7 @@ A public fork supplies and pays for its own services. Follow
 ---
 
 ## Evidence for judges
-This repository contains the browser client, Cloud Run deployment materials, an
+This repository contains the browser client, Cloud Run deployment materials, a
 fixed PIXIE game-help path, and accessibility-oriented gameplay design,
 including Fog Mode. Current deployment, help interaction, remote-match persistence and
 assistive-technology usability require dated runtime evidence. Historical hackathon
@@ -115,6 +115,14 @@ Category: **Education & Human Potential**
 Duet: Solo expands access to strategy learning/play by centering assistive-technology users and reducing onboarding friction with bounded game help.
 
 ---
+
+## Public production playtesting
+
+Build in public against the actually serving revision. Follow the
+[tester requirements, steps and report template](docs/PRODUCTION_PLAYTEST.md).
+AT Proto sign-in does not save match data in players' PDS repositories;
+current game persistence uses operator-controlled Firestore when configured.
+Fixed PIXIE help is merged in source; deployment and human acceptance remain unverified.
 
 ## Anonymous playtest feedback
 
@@ -159,3 +167,18 @@ Software is available under the [MIT License](LICENSE). Fan forks must use disti
 and must not imply Loptr Lab endorsement or canonical status. Before deploying, read
 [FAN_FORK_GUIDE.md](FAN_FORK_GUIDE.md), [SECURITY.md](SECURITY.md), and
 [docs/DATA_GOVERNANCE.md](docs/DATA_GOVERNANCE.md).
+
+## Player-owned records and community work
+
+Player-PDS game storage is required next implementation work, not current functionality.
+See [PDS requirements](docs/PLAYER_PDS_STORAGE.md) and the
+[Roomy tester/training setup](docs/ROOMY_ENVIRONMENT.md).
+The existing Loptr Lab Roomy community now has [DUET tester instructions](https://roomy.space/did:plc:f62tthd7cmjpfvtlet2crpsq/01M45Y6MA3S2M1ER3V3BD9KPNY)
+and [training onboarding](https://roomy.space/did:plc:f62tthd7cmjpfvtlet2crpsq/01M45YA3TCEK75WZTFB86M5HQJ). Joining is invite-only; the owner admits
+testers. Normal-participant and accessibility checks remain pending.
+
+## Long-term development direction
+
+Prioritize production reliability, player-owned PDS records and replaceable service
+adapters. Keep the current host while validating those changes; an Azure move does
+not itself establish an Xbox port. See [architecture direction and sequence](docs/LONG_TERM_ARCHITECTURE.md).
