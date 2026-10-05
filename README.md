@@ -105,6 +105,14 @@ Duet: Solo expands access to strategy learning/play by centering assistive-techn
 
 ---
 
+## Public production playtesting
+
+Build in public against the actually serving revision. Follow the
+[tester requirements, steps and report template](docs/PRODUCTION_PLAYTEST.md).
+AT Proto sign-in does not save match data in players' PDS repositories;
+current game persistence uses operator-controlled Firestore when configured.
+Unreleased fixed PIXIE help remains a separate candidate under review.
+
 ## Anonymous playtest feedback
 
 The source implements minimal anonymous completed-game summaries and optional post-game
