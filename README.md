@@ -156,3 +156,10 @@ Software is available under the [MIT License](LICENSE). Fan forks must use disti
 and must not imply Loptr Lab endorsement or canonical status. Before deploying, read
 [FAN_FORK_GUIDE.md](FAN_FORK_GUIDE.md), [SECURITY.md](SECURITY.md), and
 [docs/DATA_GOVERNANCE.md](docs/DATA_GOVERNANCE.md).
+
+## Player-owned records and community work
+
+Player-PDS game storage is required next implementation work, not current functionality.
+See [PDS requirements](docs/PLAYER_PDS_STORAGE.md) and the
+[Roomy tester/training setup](docs/ROOMY_ENVIRONMENT.md).
+Roomy provisioning and its invite URL remain pending owner authorization.

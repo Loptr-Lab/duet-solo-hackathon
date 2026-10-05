@@ -63,3 +63,10 @@ separately. An `expiresAt` field alone does not prove deletion.
 
 See [public production playtest instructions](PRODUCTION_PLAYTEST.md) for the
 release card, player data notice, optional sign-in case and operator checks.
+
+## Required player ownership change
+
+Durable signed-in player game records must be saved in their own PDS after
+explicit public-record disclosure and permission. This is required future work;
+current source still uses Firestore. See [implementation requirements](PLAYER_PDS_STORAGE.md).
+Standard repo records are public; do not publish private feedback or credentials.

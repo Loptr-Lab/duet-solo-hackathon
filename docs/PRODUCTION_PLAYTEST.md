@@ -126,3 +126,14 @@ proceed against the current serving build without merging them. The unreleased
 PIXIE candidate must first complete required review, accepted fixes and owner
 release approval; after deployment, repeat affected cases in production. This
 packet does not approve a deployment or mark any review requirement complete.
+
+## Player-owned records and community destination
+
+Player-PDS saving is required implementation work and remains unimplemented.
+See [the PDS contract and acceptance checklist](PLAYER_PDS_STORAGE.md). Current production
+testers should record this gap, not expect an existing save-to-PDS control.
+
+The [Roomy setup packet](ROOMY_ENVIRONMENT.md) defines DUET tester/feedback channels
+and a Loptr Lab training-project area. Environment and invite URL are pending
+owner authorization/provisioning. Until verified, report to the GitHub issues
+above; no automatic Roomy/GitHub/PDS bridge is claimed.
