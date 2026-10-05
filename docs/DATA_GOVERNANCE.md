@@ -9,7 +9,7 @@ endorse third-party forks.
 - room identifiers and reconnect tokens
 - move history, timing, evaluation values, and match outcomes
 - deck selection, aggregate play statistics, archetype tags, and optional future DIDs
-- messages sent to the Gemini support endpoint
+- game-help questions sent to DUET's server for fixed-answer selection; this route does not persist their text
 - optional Bluesky match-result posts
 - optional anonymous post-game ratings, structured answers, notes, and bug reports
 
@@ -27,7 +27,7 @@ Before enabling persistent public play, a fork operator must:
 5. avoid collecting names, email addresses, disability information, or research-participant
    records unless a separate reviewed process explicitly requires them;
 6. use synthetic data and throwaway accounts in development;
-7. never log API keys, reconnect tokens, full Gemini prompts, or Firestore credentials;
+7. never log API keys, reconnect tokens, game-help question text, or Firestore credentials;
 8. obtain appropriate consent before public posting or research use.
 
 Suggested starting maximums are 24 hours for abandoned rooms and 30 days for raw match logs.
@@ -41,8 +41,12 @@ These records deliberately exclude room codes, reconnect tokens, socket identifi
 handles, email addresses, and network addresses. Only a socket occupying a seat in the
 completed match may submit, once per seat.
 
-## AI boundary
+## PIXIE game-help boundary
 
-Messages sent to `/api/agent` are transmitted to the configured Gemini service. Do not
-invite users to submit sensitive information. Core gameplay must remain usable when Gemini
-is disabled or unavailable.
+`/api/agent` receives a question on the DUET server and applies a deterministic
+scope gate. In-scope questions select one of eight fixed answers; qualified
+external review remains pending. Off-topic and mixed messages receive the same
+Outside Support card. The route does not call a model or third-party help provider,
+persist question text or write a per-user help event. It does not detect distress
+or establish a crisis protocol. A neutral Outside Support page is available directly.
+Do not invite sensitive input. Verify Cloud Run request logging separately.
