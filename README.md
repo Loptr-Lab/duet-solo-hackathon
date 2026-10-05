@@ -76,12 +76,12 @@ Open `http://localhost:8080`
 Cloud Run is the hosting target. A reachable page does not establish the serving
 commit, provider configuration, Firestore access, or functioning model/posting services.
 
-The operations handoff is proposed in
-[PR #68](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/68). Before any production
-change, verify the serving source, traffic, trigger and required configuration privately,
-and reconfirm the owner's build-approval setting. Keep the Gemini key absent.
-Qualified external review and owner build approval are separate gates; a main push
-does not authorize production deployment.
+Read [the operations handoff](docs/OPERATIONS_HANDOFF.md) before changing production.
+Verify serving source, traffic, trigger and required configuration privately and
+reconfirm the owner's build-approval setting. Keep the Gemini key absent.
+
+On October 5, 2026 at 07:55 America/Chicago, the owner explicitly authorized an exception to the merge hold on #68/#67/#71 and requested the changes needed to continue development. This waives the merge prerequisite; it does not establish completed external review, accessibility acceptance, Xbox approval or a production deployment. Review evidence remains pending under #69 and hands-on results under #70.
+See [release status and remaining work](docs/RELEASE_STATUS.md).
 
 A public fork supplies and pays for its own services. Follow
 [FAN_FORK_GUIDE.md](FAN_FORK_GUIDE.md), [SECURITY.md](SECURITY.md), and
