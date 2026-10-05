@@ -853,8 +853,8 @@
 <a class="skip-link" href="#front-page">Skip to DUET</a>
 <header class="site-header">
   <nav class="site-nav" aria-label="DUET navigation">
-    <a class="site-brand" href="#play" aria-current="page">DUET · Play</a>
-    <a href="#home">Choose play mode</a>
+    <a class="site-brand" href="#home" aria-current="page">DUET · Home</a>
+    <a href="#play">Play</a>
     <a href="#community-power">Get involved</a>
     <a href="#atmosphere-and-community">PIXIE & community</a>
     <a href="#choose-your-build">Projects</a>
@@ -1383,7 +1383,7 @@
     let selectedSquare = null;
 
     function enterRealm() {
-        SiteNavigation.showPlay(false);
+        SiteNavigation.selectPlayPage('game-screen');
         const front = document.getElementById('front-page');
         const game = document.getElementById('game-screen');
         if (front) front.style.display = 'none';
@@ -2831,7 +2831,7 @@ async function sendAgentMessage() {
 
     const RemoteMode = {
         enterLobby() {
-            SiteNavigation.showPlay(false);
+            SiteNavigation.showLobby();
             document.getElementById('front-page').style.display = '';
             document.getElementById('game-screen').style.display = 'none';
             document.getElementById('remote-game-screen').style.display = 'none';
@@ -2956,7 +2956,7 @@ async function sendAgentMessage() {
         },
 
         _enterGameScreen() {
-            SiteNavigation.showPlay(false);
+            SiteNavigation.selectPlayPage('remote-game-screen');
             document.getElementById('game-screen').style.display = 'none';
             document.getElementById('front-page').style.display = 'none';
             document.getElementById('remote-lobby').style.display = 'none';
@@ -3189,7 +3189,7 @@ const SiteNavigation = (() => {
     function showPlay(focus = true) {
         project.hidden = true;
         pages.forEach(id => document.getElementById(id).style.display = id === playPage ? '' : 'none');
-        mark('#play');
+        mark(playPage === 'front-page' ? '#home' : '#play');
         if (focus) {
             const page = document.getElementById(playPage);
             const target = page.querySelector('input,button') || page;
@@ -3200,7 +3200,7 @@ const SiteNavigation = (() => {
         const hash = location.hash || '#play';
         const id = hash.slice(1);
         const target = document.getElementById(id);
-        if (id === 'home') {
+        if (id === 'home' || id === 'front-page') {
             if (project.hidden) playPage = pages.find(id => document.getElementById(id).style.display !== 'none' && id !== 'front-page') || playPage;
             project.hidden = true;
             pages.forEach(id => document.getElementById(id).style.display = id === 'front-page' ? '' : 'none');
@@ -3213,7 +3213,7 @@ const SiteNavigation = (() => {
         }
         if (id === 'play' || pages.includes(id)) { showPlay(); return; }
         if (!target || !project.contains(target)) return;
-        if (project.hidden) playPage = pages.find(id => document.getElementById(id).style.display !== 'none') || playPage;
+        if (project.hidden) playPage = pages.find(id => id !== 'front-page' && document.getElementById(id).style.display !== 'none') || playPage;
         pages.forEach(id => document.getElementById(id).style.display = 'none');
         project.hidden = false; mark(hash);
         const heading = target.querySelector('h2,h3') || target;
@@ -3225,7 +3225,17 @@ const SiteNavigation = (() => {
     }));
     window.addEventListener('hashchange',navigate);
     if (location.hash) navigate();
-    return {showPlay};
+    function selectPlayPage(id) {
+        if (!pages.includes(id)) return;
+        playPage = id;
+        showPlay(false);
+    }
+    function showLobby() {
+        project.hidden = true;
+        pages.forEach(id => document.getElementById(id).style.display = id === 'front-page' ? '' : 'none');
+        mark('#home');
+    }
+    return {showPlay, selectPlayPage, showLobby};
 })();
 </script>
 </body>
