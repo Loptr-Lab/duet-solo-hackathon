@@ -218,7 +218,7 @@ async function createAtprotoAuth({ db }) {
           }
         }
         await attachIdentity(res, session.did, verified);
-        res.redirect('/weaver/?auth=success');
+        res.redirect('/signin.html?auth=success');
       } catch (err) { next(err); }
     });
 
