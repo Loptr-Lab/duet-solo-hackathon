@@ -1,5 +1,11 @@
 # Contributing to Duet
 
+## Mission and participation terms
+
+Current open review and contribution opportunities are voluntary and unpaid. Before work begins, agree in writing on scope, time, what will be public, credit preferences, and an exit path. You can stop at any point. Participation does not promise employment, ownership, revenue share, academic credit, or future pay. Any paid commission or other formal arrangement requires a separate signed agreement before work begins. External assistance or benefits belong to the participant and are not compensation from Loptr Lab.
+
+[People over profit, accessibility first, and our funding boundary](https://github.com/ibloud/ibloud.github.io/blob/main/MISSION.md).
+
 Thanks for your interest in contributing to Duet and the Veiled Dominion engine. This document covers how to get oriented, what's already been evaluated, and what to avoid reinventing.
 
 ---
@@ -19,8 +25,8 @@ No Unity. No Unreal. No console platform dependencies. That's intentional — se
 
 ## Philosophy
 
-- **People over Profits.** No heavy legal/contractual overhead between collaborators.
-- **Accessibility-first, universally.** Not targeted at a single disability — built to work for everyone.
+- **People over profit.** Every contribution starts with a written scope: what is asked, what is public, the expected time, participation terms, and how to stop.
+- **Accessibility first across disabilities.** Browser screen-reader interaction is implemented; acceptance testing and Fire TV/VoiceView verification remain open in [#70](https://github.com/Loptr-Lab/duet-solo-hackathon/issues/70).
 - **No engine gatekeeping.** The project stays independent of proprietary game engines and console platform requirements, and must run on existing/current hardware.
 - **Open source, simple enough to join.** The repo should be approachable to any qualified contributor without a lengthy onboarding dependency chain.
 

@@ -2,6 +2,8 @@
 
 > Historical Gemini-era planning copy only. Do not reuse as a current submission or verified product claim. Current source implements eight fixed PIXIE answers without Gemini; external review, accessibility acceptance and production verification remain pending. No Stripe checkout or paid accessibility pack is implemented.
 
+Loptr Lab is a pre-seed, people-over-profit, accessibility-first venture working toward a self-sustaining model within a capitalist economy. Money sustains the work; meaningful change for people is its purpose. We accept funding only on terms that keep people and accessibility first. Our long-term vision includes universal basic income. We aim to bring change to life and leave a transparent record of what we tried, what worked, and what failed so others can carry it forward. This mission governs our projects, funding decisions, and partnerships; it is not a temporary marketing position.
+
 ## Archived proposal text — not current product evidence
 
 The Gemini title, pitch, operational claims, and future plans below record an earlier proposal. They do not establish live model use, verified accessibility, submission readiness, or authorization for support analytics/personalization.
@@ -56,4 +58,3 @@ This kept the experience understandable for first-time users while preserving ac
 - Add richer support analytics and reporting
 - Improve onboarding personalization
 - Grow educator/community usage in Education & Human Potential contexts
-
