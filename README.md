@@ -163,3 +163,9 @@ Player-PDS game storage is required next implementation work, not current functi
 See [PDS requirements](docs/PLAYER_PDS_STORAGE.md) and the
 [Roomy tester/training setup](docs/ROOMY_ENVIRONMENT.md).
 Roomy provisioning and its invite URL remain pending owner authorization.
+
+## Long-term development direction
+
+Prioritize production reliability, player-owned PDS records and replaceable service
+adapters. Keep the current host while validating those changes; an Azure move does
+not itself establish an Xbox port. See [architecture direction and sequence](docs/LONG_TERM_ARCHITECTURE.md).
