@@ -847,14 +847,31 @@
         #realm-intro .btn-primary { margin:8px 4px; }
         #front-page,#game-screen,#remote-game-screen { scroll-margin-top:130px; }
         @media(max-width:700px) { .site-nav { padding:6px 12px; gap:0 4px; } .site-brand { flex-basis:100%; } .project-info .media-grid,.project-info .platform-grid { grid-template-columns:1fr; } .project-info section { padding:18px; scroll-margin-top:190px; } #front-page,#game-screen,#remote-game-screen { scroll-margin-top:190px; } }
+
+        /* Splash: one play entry, with project navigation kept in the shared header. */
+        .site-nav { max-width:900px; }
+        #front-page { min-height:0; display:block; padding-top:48px; padding-bottom:48px; }
+        #realm-intro { margin:0; padding:40px; }
+        #realm-intro .sigil { top:32px; right:32px; width:80px; }
+        #realm-intro .signal { margin-bottom:18px; padding-right:100px; font-size:11px; }
+        #realm-intro h2 { max-width:none; padding-right:100px; margin-bottom:20px; }
+        #realm-intro .body { max-width:54ch; margin-bottom:28px; opacity:1; }
+        #realm-intro .btn-primary { margin:0 12px 8px 0; min-height:48px; }
+        #realm-intro .btn-primary + .btn-primary { border-color:#666; color:var(--grey-200); }
+        @media(max-width:600px) {
+            #front-page { padding-top:24px; padding-bottom:24px; }
+            #realm-intro { padding:24px; }
+            #realm-intro .sigil { top:24px; right:24px; width:56px; }
+            #realm-intro h2,#realm-intro .signal { padding-right:72px; }
+            #realm-intro .btn-primary { display:block; width:100%; margin:0 0 12px; }
+        }
     </style>
 </head>
 <body>
 <a class="skip-link" href="#front-page">Skip to DUET</a>
 <header class="site-header">
   <nav class="site-nav" aria-label="DUET navigation">
-    <a class="site-brand" href="#home" aria-current="page">DUET · Home</a>
-    <a href="#play">Play</a>
+    <a class="site-brand" href="#home" aria-label="DUET home" aria-current="page">DUET</a>
     <a href="#community-power">Get involved</a>
     <a href="#atmosphere-and-community">PIXIE & community</a>
     <a href="#choose-your-build">Projects</a>
@@ -874,10 +891,8 @@
         </svg>
         <p class="signal" aria-hidden="true">signal: open &middot; terrain: veiled</p>
         <h2>Enter the Obsidian Realm.</h2>
-        <p class="body">Duet is one lesson from a larger world — a board where restraint matters more than reach,
-        where higher ground sees further and costs more, and where the fog only lifts for those willing to move
-        through it. Play the classic duel, or step into Fog Mode and let the terrain decide what you're allowed
-        to know.</p>
+        <p class="body">One lesson from a larger world, where restraint matters more than reach.
+        Play Classic or explore Fog Mode on this device, or invite another player to a remote Classic match.</p>
         <button type="button" class="btn-primary" onclick="enterRealm()">Play on this device</button>
         <button type="button" class="btn-primary" onclick="RemoteMode.enterLobby()">Play Remote</button>
     </section>
