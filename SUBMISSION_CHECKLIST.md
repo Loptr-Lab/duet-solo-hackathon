@@ -1,5 +1,9 @@
 # Build with Gemini XPRIZE — Submission Checklist (Duet: Solo)
 
+> Archived checklist for an earlier submission concept. Current PIXIE game
+> help uses fixed answers and does not call Gemini; use current project
+> documentation before preparing any new submission.
+
 ## Product + Infra
 - [ ] App is live on Google Cloud Run
 - [ ] Public URL works in incognito
@@ -32,3 +36,4 @@
 - [ ] Repo shared with required judging/testing emails
 - [ ] Submission form fully completed
 - [ ] Final proofread + submit
+
