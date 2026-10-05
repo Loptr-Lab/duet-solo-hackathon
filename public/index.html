@@ -865,6 +865,8 @@
             #realm-intro h2,#realm-intro .signal { padding-right:72px; }
             #realm-intro .btn-primary { display:block; width:100%; margin:0 0 12px; }
         }
+        #realm-intro .splash-involved { display:inline-flex; align-items:center; justify-content:center; text-decoration:none; }
+        @media(max-width:600px) { #realm-intro .splash-involved { display:flex; } }
     </style>
 </head>
 <body>
@@ -895,6 +897,7 @@
         Play Classic or explore Fog Mode on this device, or invite another player to a remote Classic match.</p>
         <button type="button" class="btn-primary" onclick="enterRealm()">Play on this device</button>
         <button type="button" class="btn-primary" onclick="RemoteMode.enterLobby()">Play Remote</button>
+        <a class="btn-primary splash-involved" href="#community-power">Get involved</a>
     </section>
 
     <section class="realm-splash" id="remote-lobby" style="display:none;">
