@@ -5,8 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "check": "node --check server.js && node --check gameNamespace.js && node --check roomStore.js && node --check services/storage.js && node --check atprotoPoster.js && node --check services/verifiedProfile.js && node --check services/atprotoAuth.js",
-    "test": "node --test"
+    "check": "node --check server.js && node --check agentScope.js && node --check gameNamespace.js && node --check roomStore.js && node --check services/storage.js && node --check atprotoPoster.js && node --check services/verifiedProfile.js && node --check services/atprotoAuth.js && node --check scripts/start-pixie-sandbox.js",
+    "test": "node --test",
+    "sandbox": "node scripts/start-pixie-sandbox.js"
   },
   "dependencies": {
     "@atproto/api": "^0.20.44",
