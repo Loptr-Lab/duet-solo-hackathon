@@ -30,7 +30,7 @@ jobs:
           rm -rf _site
           mkdir -p _site
           cp duet-review.html _site/index.html
-          cp review-site/robots.txt review-site/sitemap.xml _site/
+          cp review-site/* _site/
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
