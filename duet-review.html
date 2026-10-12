@@ -17,6 +17,10 @@ small{color:var(--muted)}
 .video-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;margin:32px 0;border-radius:10px}
 .video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
 .paths{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:30px 0}.path{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:24px}.path h2{font-size:26px;margin:0 0 12px}.path p{margin:0 0 18px}.path .tag{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700}.path a.action{display:inline-block;padding:11px 15px;border:1px solid var(--accent);border-radius:5px;text-decoration:none;font-weight:700;margin:4px 8px 4px 0}.path a.action:hover,.path a.action:focus-visible{background:var(--accent);color:var(--bg)}.milestones{list-style:none;padding:0;display:grid;gap:10px}.milestones li{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:15px 18px;display:grid;grid-template-columns:135px 1fr;gap:12px}.milestones time{font-weight:700;color:var(--accent)}.examples{display:flex;gap:10px;flex-wrap:wrap}.examples a{border:1px solid var(--line);border-radius:6px;padding:8px 12px;color:var(--text);text-decoration:none}.examples a:hover,.examples a:focus-visible{border-color:var(--accent);color:var(--accent)}:focus-visible{outline:3px solid var(--accent);outline-offset:3px}@media(max-width:650px){.paths,.milestones li{grid-template-columns:1fr}main{padding:32px 18px 64px}}
+
+/* PIXIE: quiet contextual assistance with native disclosure fallback. */
+html{scroll-padding-bottom:110px}main{padding-bottom:140px!important}.pixie-dock{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));z-index:50;font-size:15px}.pixie-dock>summary{cursor:pointer;min-height:60px;display:flex;align-items:center;gap:12px;border:1px solid #b9dfc4;border-radius:35px;padding:8px 22px 8px 12px;background:#223b34;color:#effaf2;box-shadow:0 8px 30px #0008;font-weight:700;list-style:none}.pixie-dock>summary::-webkit-details-marker{display:none}.pixie-spark{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:#122521;color:#e9c68d;font-size:28px}.pixie-dock>summary small{display:block;font-size:11px;color:#c7dfce;font-weight:400}.pixie-panel{position:absolute;right:0;bottom:78px;width:min(400px,calc(100vw - 32px));max-height:calc(100dvh - 120px);overflow:auto;overscroll-behavior:contain;background:#172326;color:#edf2ec;border:1px solid #688878;border-radius:16px;padding:22px;box-shadow:0 12px 50px #0008}.pixie-panel h2{font-size:24px;margin:0 0 10px}.pixie-panel h3{font-size:16px;margin:18px 0 8px}.pixie-panel p{margin:0 0 12px}.pixie-panel a{color:#b9dfc4}.pixie-panel small{color:#c0cbc5}.pixie-links{list-style:none;padding:0}.pixie-links li{padding:10px 0;border-bottom:1px solid #3a4b46}.pixie-links a{display:inline-block;min-height:36px}.pixie-links small{display:block;font-size:12px}.pixie-close{min-height:44px;background:transparent;color:#b9dfc4;border:1px solid #688878;border-radius:7px;padding:10px 16px;cursor:pointer}.pixie-private{border-left:3px solid #e9c68d;padding:10px 14px;background:#252c25}.pixie-context{color:#e9c68d;font-size:12px}.pixie-restore{display:inline-block;margin-top:24px;min-height:44px}.pixie-hide{display:none}.pixie-js .pixie-hide{display:inline-block}@media(prefers-reduced-motion:reduce){.pixie-dock *{animation:none!important;transition:none!important}}
+
 </style>
 
 <link rel="canonical" href="https://break.loptrlab.com/">
@@ -160,6 +164,55 @@ GER.MX / GERM DM
 PRIVATE ATProto CONVERSATION</pre>
 
 <p><small>This page is an invitation to technical scrutiny. It is not a claim that Xbox deployment has been demonstrated.</small></p>
+
+<p><a class="pixie-restore" href="#pixie-help" id="pixie-restore">Open PIXIE help</a></p>
 </main>
+
+<details class="pixie-dock" id="pixie-help">
+<summary id="pixie-trigger"><span class="pixie-spark" aria-hidden="true">✦</span><span>PIXIE<small>Here to help</small></span></summary>
+<section class="pixie-panel" aria-labelledby="pixie-title">
+<h2 id="pixie-title" tabindex="-1">Greetings. I’m PIXIE.</h2>
+<p class="pixie-context">You’re at Break This Build.</p>
+<p>Choose one next step. I can point you to a playtest, help you describe an observation, or open another PIXIE door.</p>
+<ul class="pixie-links">
+<li><a href="https://duet.loptrlab.com/">Play DUET and find game help ↗</a><small>Fixed game-help topics; check the serving build before testing.</small></li>
+<li><a href="https://ibloud.github.io/ren-rhapsody/">Explore Ren Rhapsody ↗</a><small>Musical journey blueprint; not a verified playable Fortnite island.</small></li>
+<li><a href="https://github.com/Loptr-Lab/duet-solo-hackathon/blob/main/docs/PRODUCTION_PLAYTEST.md">Prepare a useful playtest report ↗</a><small>Record steps, expected and actual results, device and build. Remove private information before sharing.</small></li>
+</ul>
+<details><summary>Explore the other PIXIE doors</summary>
+<p><small>One PIXIE, distinct tools. Each destination keeps its own permissions and storage; these links do not transfer your information.</small></p>
+<ul class="pixie-links">
+<li><a href="https://loptrlab.com/training">Start with Loptr Lab training ↗</a><small>Find your starting point in our ecosystem.</small></li>
+<li><a href="https://50ways.loptrlab.com/pixie/demo/index.html">Discover worlds ↗</a><small>Public discovery and Story Finder routes.</small></li>
+<li><a href="https://ibloud.github.io/pixie-creator-os/">Creator workspace ↗</a><small>Local preparation and manual sharing.</small></li>
+<li><a href="https://ibloud.github.io/pixie-creator-os/session.html">Practice session ↗</a><small>Session notes and export; no recording connection.</small></li>
+<li><a href="https://ibloud.github.io/pixie-creator-os/tools.html">Creator tools ↗</a><small>Local story and DJ demonstrations.</small></li>
+<li><a href="https://made-sick.org/story-finder.html">Story Finder ↗</a><small>Public-feed discovery; no private mailbox or DMs.</small></li>
+<li><a href="https://holdings.loptrlab.com/">Holdings ↗</a><small>Synthetic economics and stewardship test bench.</small></li>
+<li><a href="https://ibloud.github.io/pixie-device-stewardship/">Device stewardship ↗</a><small>Research and demonstration; no device-file access.</small></li>
+<li><a href="https://ibloud.github.io/tarantula-clone-hero/">Learning pathways ↗</a><small>Early community learning and practice prototype.</small></li>
+</ul></details>
+<div class="pixie-private"><strong>PIXIE Project Companion · sandbox pilot</strong><p><small>Start with Loptr Lab training, find a small task, and prepare feedback. The companion currently requires an owner invitation; participant access has not yet been configured. Shared Library resources, AT Protocol membership checks and our future PDS are not connected.</small></p><a href="https://pixie-project-companion.ibloud-ivxx.chatgpt.site/">Open companion (invitation required) ↗</a></div>
+<p><small>This is guided help, not live chat. PIXIE stays quiet until opened and does not monitor your activity. Other destinations are prototypes; see the <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/blob/main/docs/PIXIE_CONTINUITY.md">route and verification record</a>.</small></p>
+<button class="pixie-close" type="button" id="pixie-close">Close help</button>
+<button class="pixie-close pixie-hide" type="button" id="pixie-hide">Hide for this visit</button>
+</section>
+</details>
+<script>
+(function () {
+  const dock = document.getElementById('pixie-help');
+  const trigger = document.getElementById('pixie-trigger');
+  const title = document.getElementById('pixie-title');
+  const restore = document.getElementById('pixie-restore');
+  document.documentElement.classList.add('pixie-js');
+  function closeHelp() { dock.open = false; trigger.focus(); }
+  dock.addEventListener('toggle', function () { if (dock.open) title.focus(); });
+  dock.addEventListener('keydown', function (event) { if (event.key === 'Escape' && dock.open) { event.preventDefault(); event.stopPropagation(); closeHelp(); } });
+  document.getElementById('pixie-close').addEventListener('click', closeHelp);
+  document.getElementById('pixie-hide').addEventListener('click', function () { dock.open = false; dock.hidden = true; restore.focus(); });
+  restore.addEventListener('click', function (event) { event.preventDefault(); dock.hidden = false; dock.open = true; title.focus(); });
+}());
+</script>
+
 </body>
 </html>
