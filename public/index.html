@@ -397,15 +397,6 @@
             line-height: 1.6;
             color: var(--grey-200);
         }
-        .history-log:empty::before {
-            content: "No moves yet.\A Click a piece to begin.";
-            white-space: pre;
-            color: var(--text-muted);
-            font-family: var(--font-sans);
-            display: block;
-            text-align: center;
-            padding: 12px 0;
-        }
         .history-log li { margin: 2px 0; }
 
         .legend-key {
@@ -908,9 +899,10 @@
         </svg>
         <p class="signal" aria-hidden="true">signal: open &middot; terrain: veiled</p>
         <h2>Enter the Obsidian Realm.</h2>
-        <p class="body">One lesson from a larger world, where restraint matters more than reach.
-        Play Classic or explore Fog Mode on this device, or invite another player to a remote Classic match.</p>
-        <button type="button" class="btn-primary" onclick="enterRealm()">Play on this device</button>
+        <p class="body">DUET is a chess variant with Death, Rebirth, and veiling rules.
+        Choose a computer opponent, take turns with another person on this device, or invite a friend to a remote match.</p>
+        <button type="button" class="btn-primary" onclick="enterRealm('computer')">Play computer</button>
+        <button type="button" class="btn-primary" onclick="enterRealm('local')">Two players on this device</button>
         <button type="button" class="btn-primary" onclick="RemoteMode.enterLobby()">Play Remote</button>
         <a class="btn-primary splash-involved" href="#community-power">Get involved</a>
     </section>
@@ -918,7 +910,7 @@
     <section class="realm-splash" id="remote-lobby" style="display:none;">
         <h2>Play Remote</h2>
         <p class="body">Classic Duet only for now — no Fog Mode, no AI opponent. Create a match and share the
-        code, or join a friend's match below.</p>
+        code, or join a friend's match below. Use separate devices or browser profiles for the two players; tabs in the same profile share reconnect information.</p>
         <div style="display:flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px;">
             <button type="button" class="btn-primary" onclick="RemoteMode.createMatch()">Create Match</button>
         </div>
@@ -1040,12 +1032,14 @@
         </p>
     </header>
 
+    <p id="play-mode-status" role="status" aria-live="polite">Two players on this device. White moves first; then pass the device to Black.</p>
+
     <div id="sr-status" class="sr-only" role="status" aria-live="assertive" aria-atomic="true"></div>
 
     <div class="toolbar" id="game-area">
-        <div class="chip-row" role="group" aria-hidden="true">
+        <div class="chip-row" role="group" aria-label="Game options">
             <button type="button" class="chip" id="audio-btn" onclick="toggleAudio()">Toggle Audio Cue</button>
-            <button type="button" class="chip" id="ds-ai-toggle" onclick="toggleAI()">AI: Off</button>
+            <button type="button" class="chip" id="ds-ai-toggle" aria-pressed="false" onclick="toggleAI()">AI: Off</button>
             <button type="button" class="chip" data-depth="2" onclick="selectDifficulty(2, this)">Easy</button>
             <button type="button" class="chip active" data-depth="3" onclick="selectDifficulty(3, this)">Medium</button>
             <button type="button" class="chip" data-depth="4" onclick="selectDifficulty(4, this)">Hard</button>
@@ -1416,13 +1410,21 @@
 
     let selectedSquare = null;
 
-    function enterRealm() {
+    function enterRealm(mode = 'local') {
+        if (SpectatorConfig.enabled) stopSpectatorMode();
+        if (mode === 'computer' && FogMode.enabled) toggleFogMode();
+        AIConfig.controllers.w = null;
+        AIConfig.controllers.b = mode === 'computer' ? { depth: 3 } : null;
+        const aiButton = document.getElementById('ds-ai-toggle');
+        aiButton.innerText = mode === 'computer' ? 'AI: On' : 'AI: Off';
+        aiButton.setAttribute('aria-pressed', String(mode === 'computer'));
+        initGame();
         SiteNavigation.selectPlayPage('game-screen');
         const front = document.getElementById('front-page');
         const game = document.getElementById('game-screen');
         if (front) front.style.display = 'none';
         if (game) game.style.display = '';
-        announce("Entering the Obsidian Realm.");
+        announce(mode === 'computer' ? "You are White. The computer plays Black." : "Two players on this device. After White moves, Black must make the next move.");
         const cmd = document.getElementById('cmd');
         if (cmd) cmd.focus();
     }
@@ -1609,6 +1611,7 @@
         GameState.turn = 'w';
         GameState.gameOver = false;
         GameState.turnNumber = 1;
+        selectedSquare = null;
 
         document.getElementById('log').innerText = '';
         document.getElementById('history-log').innerHTML = '';
@@ -1661,11 +1664,24 @@
         item2.innerText = msg;
         historyVisual.appendChild(item2);
         historyVisual.scrollTop = historyVisual.scrollHeight;
+        updatePlayStatus();
+    }
+
+    function updatePlayStatus() {
+        const status = document.getElementById('play-mode-status');
+        if (!status) return;
+        const side = GameState.turn === 'w' ? 'White' : 'Black';
+        status.innerText = GameState.gameOver ? 'Game over. Return home to start a new game.'
+            : SpectatorConfig.enabled ? `Watching computer players. ${side} to move.`
+            : isAIControlled(GameState.turn) ? `${side} computer is thinking. Please wait.`
+            : isAIControlled('b') ? 'Your turn. You play White; the computer plays Black.'
+            : `Two players on this device. ${side} to move — ${GameState.turn === 'b' ? 'pass the device to Black; there is no automatic computer reply.' : 'White makes the next move.'}`;
     }
 
     function updateTurnMeta() {
         const el = document.getElementById('turn-meta');
         if (el) el.innerText = `Move ${GameState.turnNumber} \u00B7 ${GameState.turn === 'w' ? 'White' : 'Black'}` + (FogMode.enabled ? ' \u00B7 Fog Mode' : '');
+        updatePlayStatus();
     }
 
     function processCommand() {
@@ -2553,7 +2569,7 @@
     function setAIOpponent(enabled, color = 'b', depth = 3) {
         AIConfig.controllers[color] = enabled ? { depth: Math.max(1, depth) } : null;
         const btn = document.getElementById('ds-ai-toggle');
-        if (btn) btn.innerText = enabled ? 'AI: On' : 'AI: Off';
+        if (btn) { btn.innerText = enabled ? 'AI: On' : 'AI: Off'; btn.setAttribute('aria-pressed', String(enabled)); }
         announce(enabled
             ? `AI opponent enabled, playing ${color === 'w' ? 'White' : 'Black'} at depth ${AIConfig.controllers[color].depth}.`
             : `AI opponent disabled for ${color === 'w' ? 'White' : 'Black'}.`);
