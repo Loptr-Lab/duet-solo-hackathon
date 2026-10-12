@@ -33,7 +33,7 @@ test('device and assistive technology questions map to game help without claimin
   assert.match(gameReply('accessibility').reply, /still needs device testing/);
 });
 
-test('off-topic and mixed personal messages receive the same fixed Outside Support card', () => {
+test('off-topic and mixed personal messages receive the same neutral game-help prompt', () => {
   for (const message of [
     '', 'hello', 'I need help with my health',
     'How do I move the queen? Also I feel unsafe',
@@ -46,8 +46,7 @@ test('off-topic and mixed personal messages receive the same fixed Outside Suppo
     'what is death?', 'x'.repeat(2001)
   ]) assert.equal(scopedQuestion(message), null, message);
   assert.deepEqual(OFF_TOPIC, {
-    reply: 'PIXIE answers questions about DUET only. Try asking about rules, controls, or Sanctuary. For other help, open Outside Support.',
-    intent: 'outside_support',
-    supportUrl: '/outside-support.html'
+    reply: 'I can help with DUET rules, controls, and accessibility. Try asking: "What are the DUET rules?" or "How do I use the controls?"',
+    intent: 'game_help'
   });
 });

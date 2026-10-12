@@ -32,7 +32,7 @@ Duet: Solo is an accessible strategy game experience designed for blind and low-
 
 The application includes:
 - Accessible game interaction patterns for screen readers
-- PIXIE: eight fixed game-help answers and an Outside Support fallback, with no model API call
+- PIXIE: eight fixed game-help answers and a neutral game-help fallback, with no model API call
 - Cloud Run deployability for judging/demo reliability
 - An "Obsidian Realm" landing screen that leads into two gameplay modes: a classic ruleset, and an experimental Fog Mode (elevation-based vision and HP combat) — both built to the same accessibility standard, with information gated by fog rather than hidden only visually (see below)
 
@@ -40,7 +40,7 @@ The application includes:
 
 ## PIXIE implementation and verification
 The server selects one of eight fixed DUET answers through a bounded question gate.
-Mixed and off-topic messages receive the same Outside Support response. No Gemini
+Mixed and off-topic messages receive the same neutral game-help prompt. No Gemini
 or other model API is called, and this help route does not persist question text.
 
 The owner authorized the merge exception on October 5. Qualified external review,

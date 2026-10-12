@@ -1122,14 +1122,13 @@
     <details class="panel" aria-labelledby="agent-heading">
         <summary id="agent-heading">Need Help?</summary>
         <div class="details-body">
-            <p>PIXIE has eight fixed answers about DUET rules, controls, and accessibility. A question with other words receives the same Outside Support card. Please do not enter personal information.</p>
+            <p>PIXIE has eight fixed answers about DUET rules, controls, and accessibility. If a question is not recognized, PIXIE suggests example game questions. Please do not enter personal information.</p>
             <label for="agent-input">Your question</label>
             <input type="text" id="agent-input" autocomplete="off">
             <button onclick="sendAgentMessage()">Ask</button>
             <p id="agent-status" role="status" aria-live="polite"></p>
         </div>
     </details>
-    <p><a href="/outside-support.html">Outside Support</a></p>
 
     <div class="panel key-row">
         <div class="key-panel">
@@ -2715,12 +2714,6 @@ async function sendAgentMessage() {
         });
         const data = await res.json();
         statusEl.textContent = data.reply || "Sorry, something went wrong.";
-        if (data.intent === 'outside_support' && data.supportUrl === '/outside-support.html') {
-            const link = document.createElement('a');
-            link.href = data.supportUrl;
-            link.textContent = 'Open Outside Support';
-            statusEl.append(' ', link);
-        }
     } catch (err) {
         statusEl.textContent = "Couldn't reach DUET game help. Try again.";
     }
