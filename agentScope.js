@@ -1,5 +1,5 @@
 // Only these bounded game questions receive PIXIE game help. A message with
-// unknown words receives the same Outside Support card, including mixed input.
+// unknown words receives the same neutral game-help prompt, including mixed input.
 const WORDS = new Set(`a about accessibility accessible and are attack audio bishop board can castle castling check checkmate chess clock code command commands control controls d death do does duet e2e4 elevation end enter explain fire fog focus for game get help how i in is isnt it jaws join keyboard king knight last legal make match mode move moves my navigate navigation nvda of on pad pawn pieces play queen radius read reader reading rebirth remote restart rook room ruin rules sanctuary screen square start status talkback the this to turn tv undo use voiceover voiceview what when where which win with work works`.split(' '));
 const GAME_WORDS = new Set('duet chess game board match move moves pieces pawn knight bishop rook queen king e2e4 rules radius ruin sanctuary rebirth fog elevation room code join undo controls control command commands keyboard screen reader accessibility accessible focus navigate navigation square castle castling check checkmate turn legal play restart status pad remote fire tv voiceview voiceover talkback nvda jaws'.split(' '));
 
@@ -39,9 +39,8 @@ const ANSWERS = Object.freeze({
 });
 
 const OFF_TOPIC = Object.freeze({
-  reply: 'PIXIE answers questions about DUET only. Try asking about rules, controls, or Sanctuary. For other help, open Outside Support.',
-  intent: 'outside_support',
-  supportUrl: '/outside-support.html'
+  reply: 'I can help with DUET rules, controls, and accessibility. Try asking: "What are the DUET rules?" or "How do I use the controls?"',
+  intent: 'game_help'
 });
 
 function scopedQuestion(message) {
