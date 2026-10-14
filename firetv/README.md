@@ -38,4 +38,12 @@ Test at minimum:
 6. Back returns to the title screen, and the ordinary non-TV page is unchanged.
 7. Layout and text remain readable at a typical 1080p viewing distance.
 
+## Browser previews
+
+The screenshots below are Chromium previews at 1920×1080, not Fire TV device captures.
+
+![Fire TV mode title screen](preview.png)
+
+![Fire TV mode gameplay screen](gameplay-preview.png)
+
 Amazon's submission still requires a device/simulator demonstration, store assets and an appropriate Fire OS or Vega deliverable. This repository change is the TV-ready HTML5 client prototype; it is not an Appstore submission or a claim of physical-device acceptance.
