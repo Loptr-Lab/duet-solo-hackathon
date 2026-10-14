@@ -849,6 +849,7 @@
         #realm-intro .body { max-width:54ch; margin-bottom:28px; opacity:1; }
         #realm-intro .btn-primary { margin:0 12px 8px 0; min-height:48px; }
         #realm-intro .btn-primary + .btn-primary { border-color:#666; color:var(--grey-200); }
+        #realm-intro .firetv-open { display:inline-flex; align-items:center; justify-content:center; white-space:nowrap; text-decoration:none; border-color:var(--amber-light); color:var(--amber-light); }
         @media(max-width:600px) {
             #front-page { padding-top:24px; padding-bottom:24px; }
             #realm-intro { padding:24px; }
@@ -857,7 +858,7 @@
             #realm-intro .btn-primary { display:block; width:100%; margin:0 0 12px; }
         }
         #realm-intro .splash-involved { display:inline-flex; align-items:center; justify-content:center; text-decoration:none; }
-        @media(max-width:600px) { #realm-intro .splash-involved { display:flex; } }
+        @media(max-width:600px) { #realm-intro .splash-involved,#realm-intro .firetv-open { display:flex; } }
     </style>
 
 <link rel="canonical" href="https://duet.loptrlab.com/">
@@ -906,6 +907,7 @@
         <button type="button" class="btn-primary" onclick="enterRealm('computer')">Play computer</button>
         <button type="button" class="btn-primary" onclick="enterRealm('local')">Two players on this device</button>
         <button type="button" class="btn-primary" onclick="RemoteMode.enterLobby()">Play Remote</button>
+        <a class="btn-primary firetv-open" href="/?firetv=1#home">TV &amp; controller mode</a>
         <a class="btn-primary splash-involved" href="#community-power">Get involved</a>
     </section>
 
@@ -3153,6 +3155,7 @@ async function sendAgentMessage() {
                     const div = document.createElement('div');
                     const sq = squareName(r, c);
                     div.className = 'sq ' + ((r + c) % 2 === 0 ? 'light' : 'dark');
+                    div.dataset.square = sq;
                     if (RemoteState.selectedSquare === sq) div.classList.add('selected');
                     div.addEventListener('click', () => RemoteMode._handleSquareClick(sq));
 
@@ -3291,4 +3294,3 @@ const SiteNavigation = (() => {
 </script>
 </body>
 </html>
-

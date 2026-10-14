@@ -1,17 +1,14 @@
-# DUET Fire TV prototype
+# DUET Fire TV and controller mode
 
-This prototype adds a remote-first TV presentation to the existing browser game. It is opt-in so ordinary web/mobile visits are unchanged.
+This change adds an opt-in, remote-first interface to the existing DUET browser game. The regular site remains the default. Open `https://duet.loptrlab.com/?firetv=1#home` to use the TV layout when the updated site is deployed.
 
-## What it adds
+## Inputs
 
-- TV-sized landing and gameplay layouts enabled by `?firetv=1` (or `?tv=1`).
-- D-pad spatial focus for the landing and option controls.
-- D-pad square navigation and Select-to-pick / Select-to-move interaction on the board.
-- A high-contrast focus indicator and spoken-accessible labels on board squares.
-- Play/Pause handling for pausing and resuming an in-progress match.
-- Fire TV Back/Escape handling to return from the game to the home screen.
+- **Fire TV remote or keyboard:** D-pad/arrows move focus, Select/Enter/Space chooses, Play/Pause pauses or resumes, and Back/Escape returns from a match.
+- **Standard gamepad:** Gamepad API D-pad or left stick moves focus, A selects, B or the standard Back/Select button returns, and Start/Menu pauses or resumes. Fire TV WebView supports the standard Gamepad API and maps the Amazon Fire Game Controller to the standard layout. Many Bluetooth HID console controllers expose that layout as well, but compatibility depends on the controller and Fire OS/browser version. [1] [2]
+- **Accessibility switches/controllers:** keyboard-emulating switches can use the arrow and Enter/Space path. Controllers exposed by the browser as a standard gamepad use the mapping above. This is not a claim that every single-switch or custom accessibility device is supported; confirm with the particular device and its OS/browser integration.
 
-The first play path is **Play computer**. Two-player-on-one-screen remains available. The remote-match flow depends on the existing server/socket endpoint and should be validated against the deployed service before being advertised as a Fire TV feature.
+The board has a visible focus indicator, roving keyboard focus, and spoken square names. TV mode removes the board's default hidden state so assistive technology can reach its square controls. These improvements do not replace a hands-on VoiceView or accessibility-device test.
 
 ## Run locally
 
@@ -22,28 +19,25 @@ npm install
 npm start
 ```
 
-Open `http://localhost:8080/?firetv=1` in a desktop browser and use keyboard arrows, Enter/Space, Escape, and the browser's Play/Pause key where available. Desktop browser testing is a development check, not proof of Fire TV certification.
+Open `http://localhost:8080/?firetv=1#home`. Use a compatible controller paired to the device, or test with keyboard arrows, Enter/Space, Escape, and Play/Pause where available. Automated desktop browser testing does not establish Fire TV hardware compatibility.
 
-## Fire TV validation / hackathon demo
+## Fire TV validation and hackathon evidence
 
-Amazon supports hosted and packaged HTML5 web apps. The hosted-app route can use the deployed DUET page with the TV flag, for example `https://duet.loptrlab.com/?firetv=1`, and is the shortest route to the existing game backend. Configure that URL in Amazon's Web App Tester / developer tooling, then verify on an actual Fire TV or the Fire TV/Vega simulator. Keep the current web page deployed with the Fire TV CSS/JS before testing the hosted URL.
+Test the TV remote, a standard-layout controller, menu navigation, local computer play, both local and remote board navigation, pause/resume, Back, readable 1080p layout, and the keyboard fallback. For accessibility, test the actual switch/controller and Fire TV VoiceView on the target device. Record any unsupported controller or focus behavior accurately.
 
-Test at minimum:
-
-1. D-pad focus is visible on all menu actions.
-2. Select starts Play computer and moves focus to the initial board square.
-3. D-pad traverses the board; Select picks a piece and then a destination.
-4. The AI replies and focus remains on the board after the move.
-5. Play/Pause opens the pause layer; Play/Pause or Select resumes.
-6. Back returns to the title screen, and the ordinary non-TV page is unchanged.
-7. Layout and text remain readable at a typical 1080p viewing distance.
+The Amazon Developer Hackathon rules accept web technologies for the Fire TV track, but the app must run on Fire OS or Vega OS and the required demonstration video must show it running on an actual Fire TV or Fire TV/Vega simulator. A public website alone is not that device demonstration. [3]
 
 ## Browser previews
 
-The screenshots below are Chromium previews at 1920×1080, not Fire TV device captures.
+The screenshots below are Chromium previews at 1920×1080, not Fire TV hardware captures.
 
 ![Fire TV mode title screen](preview.png)
-
 ![Fire TV mode gameplay screen](gameplay-preview.png)
 
-Amazon's submission still requires a device/simulator demonstration, store assets and an appropriate Fire OS or Vega deliverable. This repository change is the TV-ready HTML5 client prototype; it is not an Appstore submission or a claim of physical-device acceptance.
+This repository change is a TV-ready HTML5 client enhancement. It is not a native Fire TV package, an Appstore submission, or a claim of physical-device or accessibility certification.
+
+## References
+
+[1]: https://developer.amazon.com/docs/fire-tv/supporting-controllers-in-web-apps.html "Amazon Fire TV: Supporting Controllers in Web Apps"
+[2]: https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API "MDN: Using the Gamepad API"
+[3]: https://amazonappdev2026.devpost.com/rules "Amazon Developer Hackathon 2026: Official Rules"
