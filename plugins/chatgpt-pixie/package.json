@@ -1,0 +1,20 @@
+{
+  "name": "@loptrlab/pixie-project-companion",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Read-only source-linked MCP server for the PIXIE Project Companion.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "check": "node --check src/server.js && node --check src/catalog.mjs && node --check src/catalog-tools.js && node --check test/server.test.js && node --check scripts/package-plugin.mjs",
+    "test": "node --test",
+    "package": "node scripts/package-plugin.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "zod": "4.6.7"
+  }
+}
