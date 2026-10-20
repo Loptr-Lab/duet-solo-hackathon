@@ -1,11 +1,15 @@
 import express from "express";
 import pg from "pg";
 import { pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
 
 const { Pool } = pg;
 const app = express();
 app.disable("x-powered-by");
 app.use(express.json({ limit: "32kb" }));
+const here = path.dirname(fileURLToPath(import.meta.url));
+app.use(express.static(path.join(here, "public"), { index: "index.html", etag: true, maxAge: "1h" }));
 
 let pool;
 if (process.env.DATABASE_URL) {
