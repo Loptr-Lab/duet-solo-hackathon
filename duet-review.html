@@ -39,143 +39,16 @@ html{scroll-padding-bottom:110px}main{padding-bottom:140px!important}.pixie-dock
 </head>
 <body>
 <main>
-<p><small>LOPTR LAB · TWO EXPERIENCES · OPEN DEVELOPMENT</small></p>
+<p><small>LOPTR LAB · PROJECT TESTING AND DEVELOPMENT · UPDATED 20 OCTOBER 2026</small></p>
 <h1>Break this build.</h1>
-<p class="lede">Play DUET, our chess-variant prototype, and tell us where you get stuck. Ren Rhapsody is a separate, fan-made music-and-movement concept; its short First Movement browser prototype is now playable.</p>
+<p class="lede">Two separate projects, two different stages. DUET is offline for results analysis. REN’s Rhapsody has an experimental First Movement browser prototype available for review.</p>
 <div class="paths" aria-label="Choose an experience">
-  <article class="path"><p class="tag">01 · Playable web game</p><h2>DUET</h2><p>A chess variant with Death, Rebirth, and veiling rules. Choose a computer opponent, two players on one device, or a remote match with a friend. Keyboard and screen-reader testing is ongoing.</p><a class="action" href="https://duet.loptrlab.com/">Play DUET</a><a href="https://github.com/Loptr-Lab/duet-solo-hackathon/issues">Report a problem</a></article>
-  <article class="path"><p class="tag">02 · Music and movement prototype</p><h2>Ren Rhapsody</h2><p>First Movement is a fan-made browser prototype with one original rooftop scene, a beat-powered jump, five light fragments, and synthesized placeholder audio. An internal browser smoke test reached the ending with all five fragments; independent playtests, accessibility review, and iPad/browser checks remain outstanding. This is not a Fortnite island or an official Ren release. Any future Fortnite publication or Xbox adaptation remains a separate technical, rights, and platform-approval path.</p><a class="action" href="https://ibloud.github.io/ren-rhapsody/play/">Play First Movement</a><a class="action" href="https://ibloud.github.io/ren-rhapsody/">Read the blueprint</a><a href="https://github.com/ibloud/ren-rhapsody/issues">Review the work</a></article>
+<article class="path"><p class="tag">01 · Gameplay offline</p><h2>DUET</h2><p>The Google Cloud trial ended. We are analyzing the experiment’s results to continue development without an AI dependency. There is no confirmed reopening date.</p><a class="action" href="./duet/">Read DUET’s current status</a><a href="https://github.com/Loptr-Lab/duet-solo-hackathon/issues">Review findings and development</a></article>
+<article class="path"><p class="tag">02 · Experimental browser prototype</p><h2>REN’s Rhapsody: First Movement</h2><p>One original rooftop scene, a beat-powered jump, five light fragments, and synthesized placeholder audio. The browser prototype remains separate from the planned UEFN concept. Independent playtesting, accessibility acceptance, and iPad/browser verification remain outstanding.</p><a class="action" href="https://ibloud.github.io/ren-rhapsody/play/">Play First Movement</a><a class="action" href="https://ibloud.github.io/ren-rhapsody/">Read the blueprint</a><a href="https://github.com/ibloud/ren-rhapsody/issues">Report a finding</a></article>
 </div>
-<p><small>Both experiences are independent Loptr Lab projects. Platform approval, artist endorsement, and a published Fortnite island are not claimed here.</small></p>
-<section id="contribute" class="callout" aria-labelledby="contribute-title"><h2 id="contribute-title" style="margin-top:0">Help improve a build</h2><p>Choose DUET or Ren Rhapsody in PIXIE Project Companion. Pick one task, prepare a GitHub checkpoint and keep its submitted issue URL to resume later.</p><p><a href="https://pixie-project-companion.ibloud-ivxx.chatgpt.site/">Start with PIXIE →</a> · <a href="https://loptr-lab.github.io/training/">Read the contributor training</a></p><p><small>Open contributions are voluntary and unpaid unless a separate paid agreement exists. A draft is not enrollment or an assigned task.</small></p></section>
-
-<h2>Try DUET in two minutes</h2>
-<ol><li>Open DUET and choose <strong>Play computer</strong>, <strong>Two players on this device</strong>, or <strong>Play Remote</strong>. If those choices are missing, report the page URL and device; do not assume you are testing the same build.</li><li>Type <strong>e2e4</strong> and press Enter. With two local players, Black must move next (try <strong>e7e5</strong>). The computer replies only when AI is on. For remote play, share the room code with a friend using a separate device or browser profile.</li><li>Tell us what you expected and what happened, including your device/browser and chosen mode. You can reply where you found the project; a GitHub account is only needed to file an issue there.</li></ol>
-<details><summary>Development plans, technical review, and related projects</summary>
-<div class="callout">
-<p class="state">CURRENT STATE</p>
-<p><strong>DUET web build — ACTIVE DEVELOPMENT</strong><br>
-<strong>M1 client contract — COMPLETE</strong><br>
-<strong>M0-A Xbox hardware proof — FROZEN / PENDING EXTERNAL FACTS</strong></p>
-<p>The Xbox/Godot implementation waits for the required access and hardware evidence. Web playtests and the DUET concept can progress now.</p>
-</div>
-
-<h2 id="halloween-plan">Halloween 2026: work we can finish</h2>
-<p>October 31 is our internal target for a tested DUET web release candidate, an auditable environment and cost record, and an ID@Xbox concept submission if onboarding permits. It is not a console release date. Ren Rhapsody retains October 31 for its narrower First Movement preview and follows separate UEFN and music-rights gates for a later island release.</p>
-<ol class="milestones">
-<li><time datetime="2026-10-03">October 3</time><span><strong>Record the environment.</strong> Capture the serving source, hosting configuration, service availability, costs, rights, and a baseline for room codes created versus joined. Keep Gemini credentials absent; fixed PIXIE help needs no model key.</span></li>
-<li><time datetime="2026-10-10">October 10</time><span><strong>Complete remote matches.</strong> Test code creation, a second player joining, match completion, disconnect, and rejoin.</span></li>
-<li><time datetime="2026-10-17">October 17</time><span><strong>Test accessibility.</strong> Include keyboard and screen-reader players, record failures, and check whether players understand and use PIXIE's in-game suggestions.</span></li>
-<li><time datetime="2026-10-24">October 24</time><span><strong>Review the candidate.</strong> Resolve blocking bugs and prepare gameplay footage, accessibility findings, provenance, and the DUET-led Xbox concept.</span></li>
-<li><time datetime="2026-10-31">October 31</time><span><strong>Publish web evidence.</strong> Release the tested browser candidate and submit the ID@Xbox concept if account setup allows. Xbox approval and hardware deployment have no promised date.</span></li>
-</ol>
-<p><small>These are proposed internal checkpoints, not statements that the work has been completed. The game PIXIE can test one-suggestion UX; the separate iOS assistant still needs its own Files permissions and recovery tests.</small></p>
-
-<h2>Ren Rhapsody: First Movement</h2>
-<p>The Halloween scope is one complete short experience, one music-and-movement mechanic, a tested iPad/browser route, and gameplay, independent test and accessibility evidence. The browser preview is the default path. A one-zone UEFN prototype is conditional on confirmed development access and a working build by October 17.</p>
-<p>Checkpoints: October 15 environment and scope; October 17 end-to-end prototype; October 24 independent testing; October 28 feature freeze and route verification; October 31 tested preview. These are planned checkpoints, not completion claims. If playable acceptance fails, publish a clearly labeled development showcase and record the missed playable target.</p>
-<p><a href="https://github.com/ibloud/ren-rhapsody/blob/main/docs/HALLOWEEN-2026-FIRST-MOVEMENT.md">Rhapsody scope, ownership and release acceptance</a>. The playable browser preview is experimental; it does not establish independent playtesting, accessibility acceptance, artist/music rights, UEFN readiness, or platform approval. It is not a published Fortnite island.</p>
-
-<h2>Public production playtesting</h2>
-<p>Test the actually serving DUET revision with two players on separate devices. Follow our <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/blob/main/docs/PRODUCTION_PLAYTEST.md">requirements, player steps, data notice and report template</a>. Record device, assistive technology, serving revision and observed results. AT Proto sign-in does not save matches to your PDS; configured game persistence uses DUET's Firestore.</p>
-<p>Fixed PIXIE help is merged in source under the owner's October 5 exception. Human review remains pending; confirm the serving revision before testing the integrated help. CI does not establish production storage or accessibility acceptance.</p>
-
-<p>Player-owned game records in each player's PDS are <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/blob/main/docs/PLAYER_PDS_STORAGE.md">required next implementation work</a>. The existing Loptr Lab Roomy community now has <a href="https://roomy.space/did:plc:f62tthd7cmjpfvtlet2crpsq/01M45Y6MA3S2M1ER3V3BD9KPNY">DUET tester instructions</a> and <a href="https://roomy.space/did:plc:f62tthd7cmjpfvtlet2crpsq/01M45YA3TCEK75WZTFB86M5HQJ">training onboarding</a>. Joining is invite-only; ask the owner for an invitation. Normal-participant and accessibility checks remain pending. See the <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/blob/main/docs/ROOMY_ENVIRONMENT.md">setup and verification record</a>. Player-PDS game saving remains unimplemented.</p>
-<h2>What we're testing in DUET</h2>
-<pre>platform client
-      ↓
-  DuetClient
-      ↓
-  ITransport
-      ↓
-authoritative DUET server</pre>
-
-<p>The existing web client is the reference implementation. The server remains authoritative. Xbox/Godot is the proving ground for the platform boundary—not a reason to duplicate the game or create a second authority.</p>
-
-<h2>The challenge</h2>
-<p class="ask">Don't validate the architecture. Try to break it.</p>
-<ul>
-<li>What assumption have we not actually proved?</li>
-<li>Where does the abstraction leak?</li>
-<li>What Xbox/Godot constraint could invalidate it?</li>
-<li>What networking, identity, controller, TV, or accessibility issue are we overlooking?</li>
-<li>What should be tested before implementation moves forward?</li>
-</ul>
-
-<h2>What is known — and what isn't</h2>
-<p>Microsoft documents a Godot/Xbox development path. W4 Games provides Xbox console tooling for Godot. Those facts are not the same thing as proving that <em>this</em> project can build, package, deploy, and run successfully on <em>this</em> development environment and hardware.</p>
-
-<p>That distinction is intentional:</p>
-<div class="callout">
-<p><strong>Documentation can reduce uncertainty.</strong></p>
-<p><strong>Physical Xbox deployment establishes runtime evidence.</strong></p>
-</div>
-
-<h2>What happens next</h2>
-<p>M0-A is waiting on the external facts needed to build the actual compatibility matrix:</p>
-<ul>
-<li>Microsoft/Xbox partner access, GDK/GDKx, entitlement and provisioning</li>
-<li>W4 Games Xbox fork and supported Godot/GDK/toolchain tuple</li>
-<li>Physical dev-kit deployment and hardware validation</li>
-</ul>
-
-<p>Until those facts arrive, <strong>Xbox/Godot implementation</strong> stays frozen at M1. DUET web development and accessible playtesting continue.</p>
-
-<h2>Learn by breaking a smaller example</h2>
-<p>These repositories are skills practice and research examples. They are not extra choices for this release. Pick one issue you can reproduce, document what you expected, and share the steps or a focused fix.</p>
-<div class="examples">
-<a href="https://github.com/ibloud/violets-revenge">Violet's Revenge · browser QA</a>
-<a href="https://github.com/ibloud/ren-tap-tap-revenge">Ren Tap Tap Revenge · rhythm mechanics</a>
-<a href="https://github.com/ibloud/living-room-poetry">Living Room Poetry · narrative</a>
-<a href="https://github.com/ibloud/awesome-open-source-games">Open source games · research</a>
-<a href="https://github.com/ibloud/narrative-provenance">Narrative provenance · documentation</a>
-</div>
-
-<h2>How to review</h2>
-<p>Tell us what you tried, what you expected, and what happened. Screenshots and device/browser details help us reproduce a problem. Questions and confusing wording are useful feedback too.</p>
-
-<p><a href="https://github.com/Loptr-Lab/duet-solo-hackathon">DUET repository</a> · <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/blob/main/docs/DEVELOPMENT_STATUS.md">Current development status</a> · <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/issues">Share a reproducible issue</a></p>
-
-<hr style="border:none;border-top:1px solid var(--line);margin:64px 0 48px">
-
-<h2>🎬 The Big Push</h2>
-<p>The full vision — where DUET is going and why it matters.</p>
-<div class="video-wrap">
-  <iframe src="https://www.youtube.com/embed/SnysmGissKw" allowfullscreen title="The Big Push"></iframe>
-</div>
-<p>Project payments are paused while the financial and legal setup is reviewed. You can help by testing and reporting an observation.</p>
-
-<h2>🌌 PIXIE — Explore the Atmosphere</h2>
-<p>PIXIE is the shared guide across distinct project surfaces. The public discovery demo offers topic discovery and Story Finder routes. The separate Creator workspace prepares work for manual sharing. Each destination retains its own storage and permissions; cross-project identity and automatic data exchange are not configured.</p>
-<p><a href="https://50ways.loptrlab.com/pixie/demo/index.html">Discover PIXIE worlds →</a> · <a href="https://ibloud.github.io/pixie-creator-os/">Creator workspace →</a> · <a href="https://ibloud.github.io/pixie-creator-os/session.html">Practice session →</a></p>
-<p><small>These are prototypes with separate validation boundaries. Account sign-in and direct publishing are not connected in the Creator workspace. See <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/blob/main/docs/PIXIE_CONTINUITY.md">the route and verification record</a>.</small></p>
-
-<h2>🔐 Germ — Beyond the Public Layer</h2>
-<p>Germ is an opt-in private communication layer that lives outside the public Xbox-facing surface. It is not integrated with Xbox — it is a handoff destination for people who want to go deeper.</p>
-<p><a href="https://landing.ger.mx">Get Germ / DM on Germ →</a></p>
-
-<h2>🌉 Germ Bridge — Proposed Architecture</h2>
-<p>The distinction is explicit: Xbox is not integrated with Germ. A real bridge could eventually:</p>
-<ul>
-<li>Generate an opt-in community invitation</li>
-<li>Carry a non-sensitive project or session identifier</li>
-<li>Let someone authenticate and open a Germ conversation</li>
-<li>Keep Xbox account credentials, private messages, and moderation data out of the Germ layer</li>
-</ul>
-<pre>XBOX GAME / PARTNER CENTER
-      ↓
-PUBLIC COMMUNITY SURFACE
-      ↓
-OPT-IN HANDOFF
-      ↓
-GER.MX / GERM DM
-      ↓
-PRIVATE ATProto CONVERSATION</pre>
-
-<p><small>This page is an invitation to technical scrutiny. It is not a claim that Xbox deployment has been demonstrated.</small></p>
-
-<p><a class="pixie-restore" href="#pixie-help" id="pixie-restore">Open PIXIE help</a></p>
-</details>
+<section class="callout"><h2>REN’s Rhapsody development status</h2><p>October 31 remains the internal First Movement preview target. The current scope is a short, complete browser experience supported by independent testing and accessibility evidence. It is not a promised Fortnite release.</p><p><a href="https://github.com/ibloud/ren-rhapsody/blob/main/docs/HALLOWEEN-2026-FIRST-MOVEMENT.md">Read the current scope and acceptance criteria</a></p><h3>Where ArtCraft fits</h3><p>ArtCraft is under evaluation as a possible creative production tool for REN’s Rhapsody. Integration into the game or training workflow is not verified in the current project sources. The existing First Movement preview uses procedural canvas art and synthesized audio; it should not be presented as an ArtCraft build.</p><p><a href="https://github.com/storytold/artcraft">ArtCraft source</a> · <a href="https://github.com/ibloud/ren-rhapsody">REN’s Rhapsody source and development record</a></p></section>
+<section id="contribute" class="callout"><h2>Help improve a build</h2><p>For First Movement, record your device, browser, input method, steps, expected result and actual result. For DUET, review existing findings and requirements while gameplay is offline.</p><p><a href="https://ecosystem.loptrlab.com">Find a project with PIXIE</a> · <a href="https://loptr-lab.github.io/training/">Contributor training</a></p></section>
+<p><small>These are independent Loptr Lab projects. Artist endorsement, music permission, platform approval and a published Fortnite island are not established by the browser prototype.</small></p>
 </main>
 
 <details class="pixie-dock" id="pixie-help">
