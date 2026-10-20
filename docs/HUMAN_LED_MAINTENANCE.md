@@ -6,6 +6,10 @@
 
 Duet uses a **human-led, AI-optional** development process. AI-assisted tools may help with research, drafting, code suggestions, and documentation, but are never required to understand, build, test, review, deploy, or maintain the project. Contributors remain responsible for their submissions; a human maintainer owns release approval. Do not rewrite historical code solely because AI may have helped create it. Assess code by known provenance, license, tests, maintainability, and observed behavior.
 
+## Governing product boundary
+
+The product boundary is defined in [`PIXIE_ACCESSIBILITY_BOUNDARY.md`](PIXIE_ACCESSIBILITY_BOUNDARY.md): the only permitted AI-related product purpose is executive-function accessibility support through PIXIE in a closed franchise sandbox—continuity, not conquest. This purpose constrains runtime features and data use. Optional AI-assisted development does not authorize expanding PIXIE's runtime role. A proposal outside this boundary is out of scope unless the project owner explicitly revises the policy through a documented human decision.
+
 ## Runtime policy
 
 - PIXIE game help remains deterministic: eight fixed answers plus a neutral fallback. It must not call a generative model or require a model API key.
