@@ -6,6 +6,8 @@ on:
       - main
     paths:
       - "site/**"
+      - "scripts/build-browser-recovery.py"
+      - "test/browserRecovery.test.js"
       - "duet-review.html"
       - "review-site/**"
       - ".github/workflows/deploy-pages.yml"
@@ -30,6 +32,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Build and verify browser recovery
+        run: |
+          python3 scripts/build-browser-recovery.py
+          node --test test/browserRecovery.test.js
 
       - name: Prepare distinct project surfaces
         run: |
