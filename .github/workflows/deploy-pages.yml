@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "site/**"
+      - ".github/workflows/deploy-pages.yml"
+      - ".github/workflows/pages.yml"
   workflow_dispatch:
 
 permissions:
@@ -12,7 +16,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: github-pages
   cancel-in-progress: true
 
 jobs:
@@ -25,20 +29,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Prepare static site
-        run: |
-          rm -rf _site
-          mkdir -p _site
-          cp duet-review.html _site/index.html
-          cp review-site/* _site/
-
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload Pages artifact
+      - name: Upload current project site
         uses: actions/upload-pages-artifact@v4
         with:
-          path: _site
+          path: site
 
       - name: Deploy to GitHub Pages
         id: deployment
