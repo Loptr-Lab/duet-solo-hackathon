@@ -38,6 +38,12 @@ The application includes:
 
 ---
 
+## Human-led maintenance
+
+DUET is moving toward human-led, AI-optional development. AI tools may assist with drafts or code suggestions, but are not required to build, test, review, release, or maintain the project. Human contributors own decisions and verification. PIXIE's game help remains deterministic (eight fixed answers plus a neutral fallback, with no model API call); the minimax/alpha-beta opponent is a conventional search algorithm, not a generative-model dependency.
+
+See [docs/HUMAN_LED_MAINTENANCE.md](docs/HUMAN_LED_MAINTENANCE.md) for the contributor task menu, evidence standard, acceptance criteria, and production-safety boundaries. The Azure rebuild may continue in isolation; production remains unchanged unless a separate deployment is explicitly approved.
+
 ## PIXIE implementation and verification
 The server selects one of eight fixed DUET answers through a bounded question gate.
 Mixed and off-topic messages receive the same neutral game-help prompt. No Gemini
