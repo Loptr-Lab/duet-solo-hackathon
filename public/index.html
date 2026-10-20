@@ -3207,53 +3207,10 @@ async function sendAgentMessage() {
 </script>
 
 <script>
-(() => {
-  const TARGET = new Date('2026-10-31T23:59:59-05:00');
-  const KEY = 'duetHalloweenReadinessV1';
-  const defaults = {playable:false,fun:false,controller:false,accessible:false,tested:false,polished:false,evidence:false,rc:false,xbox:false,final:false};
-  let state = {...defaults};
-  try { state = {...defaults, ...JSON.parse(localStorage.getItem(KEY) || '{}')}; } catch (_) {}
-  const gates = [...document.querySelectorAll('#release-gates input[data-gate]')];
-  function render() {
-    const done = gates.filter(i => state[i.dataset.gate]).length;
-    const pct = Math.round(done / gates.length * 100);
-    document.getElementById('release-percent').textContent = pct + '%';
-    document.getElementById('release-bar').style.width = pct + '%';
-    gates.forEach(i => { i.checked = !!state[i.dataset.gate]; });
-    const ready = pct === 100;
-    const status = document.getElementById('broadcast-status');
-    const button = document.getElementById('broadcast-milestone');
-    if (ready) {
-      status.textContent = 'XBOX PACKAGE + HALLOWEEN RELEASE CANDIDATE: READY FOR FINAL HUMAN REVIEW.';
-      button.disabled = false;
-    } else {
-      status.textContent = done + ' of ' + gates.length + ' release gates complete. Broadcasting stays locked until the evidence is verified.';
-      button.disabled = true;
-    }
-  }
-  gates.forEach(i => i.addEventListener('change', () => {
-    state[i.dataset.gate] = i.checked;
-    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (_) {}
-    render();
-  }));
-  document.getElementById('broadcast-milestone')?.addEventListener('click', () => {
-    document.getElementById('broadcast-status').textContent = 'Milestone prepared. Connect the approved made-sick.org posting endpoint to publish it to Bluesky.';
-  });
-  function tick() {
-    const remaining = Math.max(0, TARGET.getTime() - Date.now());
-    const totalSeconds = Math.floor(remaining / 1000);
-    const days = Math.floor(totalSeconds / 86400);
-    const hours = Math.floor(totalSeconds % 86400 / 3600);
-    const minutes = Math.floor(totalSeconds % 3600 / 60);
-    const seconds = totalSeconds % 60;
-    document.getElementById('days-left').textContent = days;
-    document.getElementById('hours-left').textContent = String(hours).padStart(2,'0');
-    document.getElementById('minutes-left').textContent = String(minutes).padStart(2,'0');
-    document.getElementById('seconds-left').textContent = String(seconds).padStart(2,'0');
-  }
-  tick(); setInterval(tick, 1000); render();
-})();
+// The former countdown and self-attested readiness checklist were removed.
+// Release status is now documented above and requires evidence, not local checkboxes.
 </script>
+
 <script>
 const SiteNavigation = (() => {
     const pages = ['front-page', 'game-screen', 'remote-game-screen'];
