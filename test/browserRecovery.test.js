@@ -51,3 +51,54 @@ test('fixed PIXIE help answers locally and labels unsupported remote features',(
  get('agent-input').value='What are the rules?';run('sendAgentMessage()');assert.match(get('agent-status').textContent,/Rebirth/);
  get('agent-input').value='How do I join a remote room?';run('sendAgentMessage()');assert.match(get('agent-status').textContent,/not included/);
 });
+
+test('keyboard board navigation selects and completes a legal move',()=>{
+ const {run,get}=fresh();
+ run("function key(k, repeat=false){boardInput({key:k,repeat,preventDefault(){}})};key('Enter');key('ArrowUp');key('ArrowUp');key('Enter');");
+ assert.equal(run("window.Duet.query('e4').piece.type"),'p');
+ assert.equal(run('GameState.turn'),'b');
+ run("key('Escape')");assert.equal(run('selectedSquare'),null);
+ run("window.boardCursor='a8';key('ArrowUp');key('ArrowLeft')");assert.equal(run('window.boardCursor'),'a8');
+});
+test('remapping rejects duplicate keys, preserves Tab and applies new keys',()=>{
+ const {run,get}=fresh();
+ run("function bind(k){captureBoardBinding({key:k,preventDefault(){},stopPropagation(){}})};beginBoardBinding('up');bind('ArrowDown')");
+ assert.equal(run('boardKeys.up'),'ArrowUp');assert.match(get('board-input-status').textContent,/already assigned/);
+ run("bind('w');boardInput({key:'w',preventDefault(){}})");assert.equal(run('window.boardCursor'),'e3');
+ run("beginBoardBinding('down');captureBoardBinding({key:'Tab',preventDefault(){throw Error('Tab trapped')}})");assert.equal(run('pendingBoardKey'),null);
+ run('resetBoardKeys()');assert.equal(run('boardKeys.up'),'ArrowUp');
+});
+test('holding select does not submit repeated actions and unrelated keys remain free',()=>{
+ const {run}=fresh();
+ run("boardInput({key:'Enter',repeat:true,preventDefault(){}})");assert.equal(run('selectedSquare'),null);
+ run("boardInput({key:'Tab',preventDefault(){throw Error('Tab trapped')}})");
+ run("boardInput({key:'Enter',ctrlKey:true,preventDefault(){throw Error('modifier intercepted')}})");
+});
+test('speech stays off by default and never selects remote voices',()=>{
+ const {run,get}=fresh();
+ run("window.speechSynthesis={getVoices:()=>[{voiceURI:'remote',localService:false}],cancel(){},speak(){throw Error('remote voice used')}}; window.SpeechSynthesisUtterance=function(text){this.text=text};toggleSpokenFeedback()");
+ assert.equal(run('AudioSettings.spoken'),false);
+ assert.match(get('audio-status').textContent,/No installed local voice/);
+ run("window.speechSynthesis.getVoices=()=>[{voiceURI:'local',localService:true,name:'Local',lang:'en-US'},{voiceURI:'remote',localService:false}];window.spoken=[];window.speechSynthesis.speak=u=>window.spoken.push(u);toggleSpokenFeedback();querySquare('e2')");
+ assert.equal(run('window.spoken.at(-1).voice.voiceURI'),'local');
+ assert.match(run('window.spoken.at(-1).text'),/White Pawn/i);
+ run("window.speechSynthesis.getVoices=()=>[];speakGameMessage('test')");
+ assert.equal(run('AudioSettings.spoken'),false);
+});
+test('speech and cue preferences are independent and bounded; speech can be stopped',()=>{
+ const {run}=fresh();
+ run("setAudioPreference('cueVolume',0.2);setAudioPreference('speechVolume',0.8);setAudioPreference('rate',9)");
+ assert.equal(run('AudioSettings.cueVolume'),0.2);assert.equal(run('AudioSettings.speechVolume'),0.8);assert.equal(run('AudioSettings.rate'),2);
+ run("window.cancelled=false;window.speechSynthesis={cancel(){window.cancelled=true}};stopSpokenFeedback()");assert.equal(run('window.cancelled'),true);
+});
+test('Web Audio failures remain recoverable and do not block gameplay',()=>{
+ const {run,get}=fresh();run('toggleAudio();testCueTone()');
+ assert.equal(run('audioEnabled'),false);assert.match(get('audio-status').textContent,/unavailable/);
+ run("window.Duet.move('e2','e4')");assert.equal(run('GameState.turn'),'b');
+});
+test('cue volume changes generated gain and mute silences the proximity tone',()=>{
+ const {run}=fresh();
+ run("window.AudioContext=function(){this.state='running';this.currentTime=0;this.destination={};this.createGain=()=>({gain:{value:0,setValueAtTime(v){this.value=v}},connect(){}});this.createOscillator=()=>({type:'',frequency:{setValueAtTime(){}},connect(){},start(){}})};toggleAudio();setAudioPreference('cueVolume',0)");
+ assert.equal(run('audioEnabled'),true);assert.equal(run('gainNode.gain.value'),0);
+ run("setAudioPreference('cueVolume',1);toggleAudio()");assert.equal(run('audioEnabled'),false);assert.equal(run('gainNode.gain.value'),0);
+});

@@ -1,6 +1,21 @@
 # DUET release state and owner exception
 
-Updated October 5, 2026 (America/Chicago).
+Updated October 20, 2026 (America/Chicago).
+
+## Browser recovery accessibility testing
+
+A separate static recovery serves local Classic play after the cloud trial ended.
+The audio/keyboard test revision is prepared on
+`test/local-audio-keyboard-accessibility`; branch preparation is not deployment
+or independent accessibility acceptance. It adds optional local-voice narration,
+audio controls, remappable keyboard board input, and larger board/pieces.
+All 13 focused Node VM recovery checks passed during preparation. Audible output,
+iPad/VoiceOver, adaptive hardware, and TV/controller acceptance remain pending.
+See [the recovery record and test checklist](BROWSER_RECOVERY_2026-10-20.md).
+The historical cloud release record below is retained as evidence, not a current
+claim of cloud availability.
+
+## Historical cloud release record — October 5
 
 ## Authorization
 On October 5, 2026 at 07:55 America/Chicago, the owner explicitly authorized an exception to the merge hold on #68/#67/#71 and requested the changes needed to continue development. This waives the merge prerequisite; it does not establish completed external review, accessibility acceptance, Xbox approval or a production deployment. Review evidence remains pending under #69 and hands-on results under #70.
