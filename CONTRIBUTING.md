@@ -16,7 +16,7 @@ Thanks for your interest in contributing to Duet and the Veiled Dominion engine.
 - **Backend:** Node.js + Express (`server.js`)
 - **Realtime:** Socket.io (`gameNamespace.js`)
 - **Persistence:** Firestore (`roomStore.js`)
-- **AI Opponent:** Custom minimax + alpha-beta pruning with a hand-tuned `evaluateBoard()` — lives in `index.html`
+- **Computer opponent:** Custom minimax + alpha-beta pruning with a hand-tuned `evaluateBoard()` — a deterministic game-search algorithm in `index.html`, not a generative-model service
 - **Deployment:** Google Cloud Run (`us-central1`)
 
 No Unity. No Unreal. No console platform dependencies. That's intentional — see Philosophy below.
@@ -74,6 +74,16 @@ For Xbox/Godot feasibility work, record evidence rather than conclusions:
 - Treat Microsoft/Xbox and W4 Games statements as authoritative for their respective controlled systems, but do not treat a vendor statement as physical hardware proof.
 - Keep external blockers explicit and separate from project implementation status.
 - Do not mark M0-A complete until the documented PASS criteria in `docs/DEVELOPMENT_STATUS.md` have been demonstrated and recorded.
+
+## Human-led, AI-optional development
+
+AI tools are optional aids, not project authorities or a requirement for participation. A contributor may use them for research, drafts, or code suggestions, but remains responsible for understanding, verifying, and testing every submitted change. Human review is required for behavior, accessibility, security, and releases.
+
+Disclose AI assistance at a practical level in the PR description (for example, code suggestions or documentation drafting) and state what you personally verified. Do not publish private prompts or account information. Generated output is not evidence, and AI tools may not approve or merge their own work.
+
+**Runtime boundary:** PIXIE remains eight fixed game-help answers plus a neutral fallback, with no model API call. The custom minimax/alpha-beta opponent is a conventional search algorithm and is not removed by the AI-optional policy. Do not add model SDKs, credentials, or model-backed runtime endpoints without a reviewed proposal covering need, cost, privacy, accessibility, fallback, and removal.
+
+Follow the task checklist and acceptance criteria in [docs/HUMAN_LED_MAINTENANCE.md](docs/HUMAN_LED_MAINTENANCE.md). This transition does not itself authorize production deployment, DNS changes, or migration.
 
 ## MCP-assisted contribution
 
