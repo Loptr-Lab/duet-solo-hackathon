@@ -37,3 +37,13 @@ test("promotion creates Rebirth when none exists",()=>{
  assert.equal(n.board[0][0],"R_STAR");
 });
 test("invalid coordinates are rejected",()=>assert.throws(()=>applyMove(createInitialState(),"z9","a1")));
+
+test("Veiled pieces can move one empty square forward regardless of piece type",()=>{
+ const s=createInitialState();
+ s.board=Array.from({length:8},()=>Array(8).fill(null));
+ s.board[4][3]="N"; s.board[3][4]="r_star"; s.turn="w";
+ assert.equal(has(s,"d4","d5"),false); // not forward for White
+ // White moves toward decreasing row; diagonal forward is allowed if empty.
+ assert.equal(has(s,"d4","c5"),true);
+ assert.equal(has(s,"d4","e5"),true);
+});
