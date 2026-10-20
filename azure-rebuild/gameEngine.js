@@ -103,7 +103,7 @@ export function getLegalMoves(state, from) {
       const p=PIECES[piece], dir=p.side==="w"?-1:1;
       if (r-from[0] !== dir || Math.abs(c-from[1])>1 || state.board[r][c]) continue;
       // Veiled pieces may move one square forward only, never capture.
-      if (p.kind==="pawn" || standardLegal(state.board,piece,from,to)) moves.push(to);
+      moves.push(to);
       continue;
     }
     if (standardLegal(state.board,piece,from,to)) moves.push(to);
