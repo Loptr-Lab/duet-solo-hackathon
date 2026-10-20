@@ -23,6 +23,18 @@ No Unity. No Unreal. No console platform dependencies. That's intentional — se
 
 ---
 
+## PIXIE's permitted purpose
+
+The only permitted AI-related purpose in this project is executive-function accessibility support through PIXIE inside a closed Veiled Dominion franchise sandbox: **continuity, not conquest**. PIXIE supports orientation, context, and a bounded next step in a learning/test environment; it does not take over decisions, establish canon, or pursue autonomous goals.
+
+- Keep PIXIE's existing game help deterministic: eight fixed answers plus a neutral fallback, with no model API call or key.
+- Do not add generative-model runtime behavior, model SDKs, or external model endpoints to expand PIXIE's role.
+- AI tools used during development are optional and must be disclosed at a practical level; generated output is not evidence. Human contributors own verification and decisions.
+- Proposed features must directly support executive-function accessibility, preserve participant agency, minimize data use, be bounded and testable, and have a named human owner. If any point is unknown, pause for human review.
+- Do not send participant data, private logs, or secrets to external AI services.
+
+Read [`docs/PIXIE_ACCESSIBILITY_BOUNDARY.md`](docs/PIXIE_ACCESSIBILITY_BOUNDARY.md) before proposing PIXIE or AI-related changes. The policy states the intended boundary; the repository audit and accessibility acceptance work remain open until evidenced.
+
 ## Philosophy
 
 - **People over profit.** Every contribution starts with a written scope: what is asked, what is public, the expected time, participation terms, and how to stop.
