@@ -857,7 +857,27 @@
         @media(max-width:600px) { #realm-intro .splash-involved { display:flex; } }
      .nav-more{position:relative}.nav-more summary{cursor:pointer;padding:12px 8px;min-height:44px}.nav-more>div{position:absolute;right:0;top:100%;z-index:100;background:var(--bg-deep,#111);border:1px solid var(--border-hairline,#555);min-width:220px;padding:8px;display:grid}.nav-more a{display:block}.nav-more summary:focus-visible{outline:2px solid var(--amber-light);outline-offset:2px}
 @media(max-width:700px){.power-section{padding:20px}}
-</style>
+
+        /* Current outage / transparent project status */
+        .current-state-banner{max-width:760px;margin:20px auto;padding:16px 18px;border:1px solid #d4a853;border-left:4px solid #d4a853;background:rgba(212,168,83,.07);text-align:left}
+        .current-state-banner>strong,.state-label{font:700 11px var(--font-mono);letter-spacing:.12em;color:var(--amber-light)}
+        .current-state-banner p{margin:8px 0 0;font-size:13px;line-height:1.65;color:var(--grey-200)}
+        .current-state-section{border-color:#8c6d42}
+        .state-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:20px 0}
+        .state-card{border:1px solid var(--border-hairline);padding:16px;background:var(--black-obsidian)}
+        .state-card h3{margin:8px 0;color:var(--white-pure);font-size:15px;font-weight:400}
+        .state-card p,.state-list li{font-size:13px;line-height:1.65;color:var(--text-muted)}
+        .state-card p{margin:8px 0}
+        .state-card a,.state-list a{color:var(--amber-light);text-underline-offset:3px}
+        .state-subheading{margin:24px 0 8px;color:var(--white-pure);font-weight:400}
+        .state-list{padding-left:22px}
+        .state-list li{margin:7px 0}
+        .contributor-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+        #realm-intro .splash-involved{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+        @media(max-width:800px){.contributor-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        @media(max-width:600px){.state-grid,.contributor-grid{grid-template-columns:1fr}.current-state-banner{padding:13px}}
+
+    </style>
 
 <link rel="canonical" href="https://duet.loptrlab.com/">
 <meta name="description" content="Play DUET, an independent two-player strategy game from Loptr Lab. Try local play or remote Classic matches and help test keyboard and screen-reader access.">
@@ -879,6 +899,7 @@
   <nav class="site-nav" aria-label="DUET navigation">
     <a class="site-brand" href="#home" aria-label="DUET home" aria-current="page">DUET</a>
     <a href="https://break.loptrlab.com/">Test a build</a>
+    <a href="#community-power">Get involved</a>
     <a href="https://pixie-project-companion.ibloud-ivxx.chatgpt.site/">Contribute with PIXIE</a>
     <details class="nav-more"><summary>Project details</summary><div><a href="/signin.html">AT Proto sign-in</a><a href="#atmosphere-and-community">Music &amp; community</a><a href="#choose-your-build">Related projects</a><a href="#xbox-submission">Development plan</a><a href="#community-power">Contribution details</a></div></details>
   </nav>
@@ -896,11 +917,13 @@
         </svg>
         <p class="signal" aria-hidden="true">signal: open &middot; terrain: veiled</p>
         <h2>Enter the Obsidian Realm.</h2>
-        <p class="body">DUET is a chess variant with Death, Rebirth, and veiling rules.
-        Choose a computer opponent, take turns with another person on this device, or invite a friend to a remote match.</p>
-        <button type="button" class="btn-primary" onclick="enterRealm('computer')">Play computer</button>
-        <button type="button" class="btn-primary" onclick="enterRealm('local')">Two players on this device</button>
-        <button type="button" class="btn-primary" onclick="RemoteMode.enterLobby()">Play Remote</button>
+        <p class="body">DUET is an accessibility-first chess variant exploring Death, Rebirth, and veiling rules. The live game is currently unavailable while we investigate the outage and rebuild a reliable version. We are keeping this splash page as the public project home and will post verified progress here.</p>
+        <div class="current-state-banner" role="status" aria-live="polite">
+          <strong>GAME STATUS · TEMPORARILY UNAVAILABLE</strong>
+          <p>We have not verified the currently serving revision or completed a recovery deployment. Please do not rely on remote matches, saved games, sign-in, or production help being available right now.</p>
+        </div>
+        <a class="btn-primary" href="#current-state">Current state &amp; next steps</a>
+        <a class="btn-primary splash-involved" href="#community-power">Get involved</a>
 
     </section>
 
@@ -1270,41 +1293,52 @@
 
 
 <main class="page project-info" id="project-info" hidden aria-label="DUET project information">
-    <section class="power-section" id="community-power" aria-labelledby="community-power-title"><div class="power-kicker">CONTRIBUTE</div><h2 id="community-power-title">Help improve DUET.</h2><p class="lead">Test an interaction, report a barrier or propose a focused fix. PIXIE Project Companion helps you choose a task and keep progress in the project's GitHub record.</p><p><a class="btn-primary" href="https://pixie-project-companion.ibloud-ivxx.chatgpt.site/">Start with PIXIE</a> · <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/blob/main/CONTRIBUTING.md">Contributor instructions</a></p><p>Open contributions are voluntary and unpaid unless covered by a separate signed agreement. Preparing a draft does not enroll you or assign work.</p></section>
-<section class="release-section" id="halloween-release" aria-labelledby="halloween-title">
-  <div class="release-kicker">Halloween 2026 / Release Mission Control</div>
+    <section class="power-section" id="community-power" aria-labelledby="community-power-title">
+  <div class="power-kicker">GET INVOLVED · OPEN WORK</div>
+  <h2 id="community-power-title">Help bring DUET back—honestly and accessibly.</h2>
+  <p class="lead">The live game is down, and we are prioritizing diagnosis, rule correctness, accessible interaction, and a safe rebuild. You do not need to take on the whole project. Choose one small, clearly scoped contribution and record what you actually observed.</p>
+  <div class="state-grid contributor-grid">
+    <article class="state-card"><span class="state-label">BEST FIRST STEP</span><h3>Review the findings</h3><p>Read the current release status and production playtest instructions. Help separate confirmed facts from assumptions and identify missing evidence.</p><p><a href="https://github.com/Loptr-Lab/duet-solo-hackathon/blob/main/docs/RELEASE_STATUS.md">Release status</a> · <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/blob/main/docs/PRODUCTION_PLAYTEST.md">Playtest protocol</a></p></article>
+    <article class="state-card"><span class="state-label">ENGINEERING</span><h3>Test the rules</h3><p>Review move legality, path blocking, captures, Veiled restrictions, auras, promotion, and win conditions. Add reproducible tests; do not label unrun tests as passing.</p><p><a href="https://github.com/Loptr-Lab/duet-solo-hackathon/tree/azure/fresh-rebuild-foundation/azure-rebuild">Azure rebuild code</a> · <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/issues">Open issues</a></p></article>
+    <article class="state-card"><span class="state-label">ACCESSIBILITY</span><h3>Audit the interaction</h3><p>Review keyboard-only use, screen-reader names and announcements, focus after moves/errors, reduced motion, and whether information is equivalent for sighted and non-sighted players.</p><p><a href="https://github.com/Loptr-Lab/duet-solo-hackathon/issues/69">Rules/accessibility review</a> · <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/issues/70">Hands-on test results</a></p></article>
+    <article class="state-card"><span class="state-label">OPERATIONS</span><h3>Help verify recovery</h3><p>If you have authorized operator access, help identify the serving revision and failure from service/build evidence. Do not share secrets, session data, room codes, or reconnect tokens in public issues.</p><p><a href="https://github.com/Loptr-Lab/duet-solo-hackathon/blob/main/docs/OPERATIONS_HANDOFF.md">Operations handoff</a></p></article>
+    <article class="state-card"><span class="state-label">DOCUMENTATION</span><h3>Make the next step clearer</h3><p>Improve setup instructions, write a focused bug report, review the migration checklist, or document a test so another contributor can reproduce it.</p><p><a href="https://github.com/Loptr-Lab/duet-solo-hackathon/blob/main/CONTRIBUTING.md">Contributor instructions</a></p></article>
+    <article class="state-card"><span class="state-label">COMMUNITY</span><h3>Offer a bounded review</h3><p>Tell us which task you can help with, your preferred credit, and your time boundary before work begins. You can stop at any time.</p><p><a href="https://pixie-project-companion.ibloud-ivxx.chatgpt.site/">Start with PIXIE</a></p></article>
+  </div>
+  <p>Open contributions are voluntary and unpaid unless covered by a separate signed agreement. Agree on scope, time, public visibility, credit preferences, and an exit path before starting. Participation does not promise employment, ownership, revenue share, academic credit, or future pay. No one needs to provide passwords, app passwords, or administrator access to help.</p>
+</section>
+<section class="release-section current-state-section" id="current-state" aria-labelledby="current-state-title">
+  <div class="release-kicker">Project status · Updated October 20, 2026</div>
   <div class="release-head">
     <div>
-      <h2 id="halloween-title">MAKE IT RELEASE-WORTHY.</h2>
-      <p class="release-lead">Our internal finish line is Halloween. By October 31, DUET should be something people can play, experience, test, share, and judge — not merely a pitch. This is our target, not an Xbox-imposed deadline.</p>
+      <h2 id="current-state-title">THE GAME IS DOWN. THE WORK CONTINUES.</h2>
+      <p class="release-lead">The production game is currently unavailable. We are treating recovery and a verifiable rebuild as the priority—not presenting an unverified build as playable. This page remains the project's home while we document what is known, what is not yet proven, and how people can help.</p>
     </div>
-    <div class="release-date">10.31.26</div>
+    <div class="release-date">STATUS: BLOCKED</div>
   </div>
-  <div class="release-countdown" aria-label="Countdown to Halloween release target">
-    <div class="countdown-cell"><strong id="days-left">—</strong><span>Days</span></div>
-    <div class="countdown-cell"><strong id="hours-left">—</strong><span>Hours</span></div>
-    <div class="countdown-cell"><strong id="minutes-left">—</strong><span>Minutes</span></div>
-    <div class="countdown-cell"><strong id="seconds-left">—</strong><span>Seconds</span></div>
+  <div class="state-grid">
+    <article class="state-card"><span class="state-label">KNOWN FINDING</span><h3>Production is not verified</h3><p>The repository contains the app source and deployment instructions, but source code alone does not prove which revision is serving, whether its configuration is healthy, or whether multiplayer and persistence work.</p></article>
+    <article class="state-card"><span class="state-label">KNOWN FINDING</span><h3>Help can be deterministic</h3><p>PIXIE's intended game help uses eight fixed answers and a neutral fallback; it does not need a model API key. The deployed revision still needs to be confirmed and tested.</p></article>
+    <article class="state-card"><span class="state-label">KNOWN FINDING</span><h3>Rules need executable proof</h3><p>A candidate rules implementation did not fully validate ordinary chess movement, path blocking, and captures. Rules must be tested against the actual Duet mechanics before a build can be trusted.</p></article>
+    <article class="state-card"><span class="state-label">REBUILD IN PROGRESS</span><h3>Azure foundation only</h3><p>An isolated rebuild branch now has a scaffold and early local-play code. It is not a deployed replacement, remote multiplayer is not complete, and automated tests have not yet been verified as passing.</p></article>
   </div>
-  <div class="readiness-title"><span>Halloween Release Readiness</span><span id="release-percent">0%</span></div>
-  <div class="readiness-track" aria-label="Halloween release readiness"><span id="release-bar"></span></div>
-  <div class="gate-list" id="release-gates">
-    <label class="gate"><input type="checkbox" data-gate="playable"><span><strong>PLAYABLE</strong><small>Core experience runs from start to finish.</small></span></label>
-    <label class="gate"><input type="checkbox" data-gate="fun"><span><strong>CORE EXPERIENCE</strong><small>The central loop is demonstrable, coherent, and playtested.</small></span></label>
-    <label class="gate"><input type="checkbox" data-gate="controller"><span><strong>CONTROLLER / INPUT</strong><small>Primary play controls are tested and documented.</small></span></label>
-    <label class="gate"><input type="checkbox" data-gate="accessible"><span><strong>ACCESSIBLE</strong><small>Keyboard, screen-reader, motion, contrast, and other relevant accessibility paths are tested.</small></span></label>
-    <label class="gate"><input type="checkbox" data-gate="tested"><span><strong>COMMUNITY TESTED</strong><small>Real testers have exercised the release candidate and feedback is recorded.</small></span></label>
-    <label class="gate"><input type="checkbox" data-gate="polished"><span><strong>POLISHED</strong><small>Known release-blocking bugs and rough edges are resolved or documented.</small></span></label>
-    <label class="gate"><input type="checkbox" data-gate="evidence"><span><strong>PROOF PACKAGE</strong><small>Build, screenshots, trailer/demo, feedback, and contribution receipts are assembled.</small></span></label>
-    <label class="gate"><input type="checkbox" data-gate="rc"><span><strong>RELEASE CANDIDATE</strong><small>A tagged build exists that the team is willing to put in public hands.</small></span></label>
-    <label class="gate"><input type="checkbox" data-gate="xbox"><span><strong>XBOX PACKAGE</strong><small>Xbox-facing materials and technical information are ready for review.</small></span></label>
-    <label class="gate"><input type="checkbox" data-gate="final"><span><strong>FINAL REVIEW</strong><small>Community/company review confirms the release package is ready to publish.</small></span></label>
-  </div>
-  <div class="release-note"><strong style="color:var(--grey-200)">Two clocks, one finish line:</strong> October 31 is our release target. Xbox submission is a separate evaluation gate; reaching 100% here does not imply Xbox approval.</div>
-  <div class="broadcast-row">
-    <span class="broadcast-status" id="broadcast-status">Milestone broadcasting: waiting for verified release evidence.</span>
-    <button class="btn-primary" id="broadcast-milestone" type="button" disabled>Prepare Milestone</button>
-  </div>
+  <h3 class="state-subheading">What is not yet established</h3>
+  <ul class="state-list">
+    <li>The exact production failure, serving revision, and recovery path.</li>
+    <li>End-to-end remote match completion, illegal-move rejection, reconnect, and restart recovery.</li>
+    <li>Successful live database writes, retention/deletion behavior, or player-owned PDS game saves. PDS game saving is not implemented.</li>
+    <li>Real screen-reader acceptance, including keyboard flow, focus recovery, turn announcements, and final results.</li>
+    <li>Azure costs and eligibility for any free-tier allowance. No Azure resources have been provisioned for this rebuild.</li>
+  </ul>
+  <h3 class="state-subheading">Recovery and rebuild sequence</h3>
+  <ol class="state-list">
+    <li><strong>Diagnose:</strong> verify the live service, serving revision, traffic, logs, and configuration privately; do not expose credentials or room tokens.</li>
+    <li><strong>Test the rules:</strong> add executable tests for legal moves, Death and Rebirth, Veiled movement, auras, promotion, and end conditions.</li>
+    <li><strong>Restore a known-good playable build:</strong> keep the current production setup intact until a rollback-safe recovery is verified.</li>
+    <li><strong>Validate the replacement:</strong> test two real clients, reconnect/restart, persistence, and keyboard/screen-reader use before calling it ready.</li>
+    <li><strong>Decide hosting after evidence:</strong> validate cost and migration options before creating Azure resources or moving data.</li>
+  </ol>
+  <p class="release-note"><strong style="color:var(--grey-200)">Release honesty:</strong> The October 31 target is a planning target, not a promise. No readiness percentage or release gate will be marked complete without recorded evidence. This status does not mean the Azure rebuild is live.</p>
 </section>
 
 <section class="launch-board" id="xbox-submission">
