@@ -17,8 +17,8 @@ export const PIECES = {
   P: { name: "Pawn", glyph: "♙", side: "w", kind: "pawn" },
   p: { name: "Pawn", glyph: "♟", side: "b", kind: "pawn" }
 };
-const BACK = ["R", "N", "B", "Q", "K", "B", "N", "R"];
-const BACK_BLACK = ["r", "n", "b", "q", "k", "b", "n", "r"];
+const BACK = ["R", "N", "B", "R_STAR", "K", "B", "N", "R"];
+const BACK_BLACK = ["r", "n", "b", "r_star", "k", "b", "n", "r"];
 export const squareName = ([r, c]) => FILES[c] + (8 - r);
 export const parseSquare = (s) => {
   if (typeof s !== "string" || !/^[a-h][1-8]$/i.test(s.trim())) return null;
