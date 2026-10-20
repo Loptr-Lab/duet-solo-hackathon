@@ -1,5 +1,6 @@
 import express from "express";
 import pg from "pg";
+import { pathToFileURL } from "node:url";
 
 const { Pool } = pg;
 const app = express();
@@ -46,8 +47,11 @@ app.get("/", (_req, res) => {
   });
 });
 
-const port = Number.parseInt(process.env.PORT ?? "8080", 10);
-if (process.env.NODE_ENV !== "test") {
+const isDirectExecution =
+  process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+
+if (isDirectExecution) {
+  const port = Number.parseInt(process.env.PORT ?? "8080", 10);
   app.listen(port, "0.0.0.0", () => {
     console.log(`Duet rebuild scaffold listening on port ${port}`);
   });
