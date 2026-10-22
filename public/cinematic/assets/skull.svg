@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" aria-label="Death – the King piece">
+  <!-- Skull dome -->
+  <ellipse cx="24" cy="20" rx="14" ry="13" fill="currentColor"/>
+  <!-- Jaw -->
+  <rect x="14" y="30" width="20" height="9" rx="3" fill="currentColor"/>
+  <!-- Eye sockets -->
+  <ellipse cx="19" cy="20" rx="4" ry="4.5" fill="#000"/>
+  <ellipse cx="29" cy="20" rx="4" ry="4.5" fill="#000"/>
+  <!-- Nose -->
+  <path d="M22 25 L24 22 L26 25 Z" fill="#000"/>
+  <!-- Teeth -->
+  <rect x="16" y="33" width="3" height="4" rx="1" fill="#000"/>
+  <rect x="21" y="33" width="3" height="4" rx="1" fill="#000"/>
+  <rect x="26" y="33" width="3" height="4" rx="1" fill="#000"/>
+  <rect x="31" y="33" width="3" height="4" rx="1" fill="#000"/>
+</svg>
