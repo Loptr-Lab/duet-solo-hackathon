@@ -68,7 +68,7 @@ html.weaver {
 .weaver a {color:var(--primary);text-underline-offset:.2em;}
 .weaver :is(a,button):focus-visible {outline:3px solid var(--primary);outline-offset:4px;}
 .weaver .shell {width:min(1140px,calc(100% - 2.4rem));margin-inline:auto;overflow-wrap:anywhere;}
-.weaver header {min-height:0;padding:var(--space-6) 0 var(--space-5);}
+.weaver header {position:relative;padding-inline-end:6rem;min-height:0;padding:var(--space-6) 0 var(--space-5);}
 .weaver .hero {max-width:48rem;text-align:left;padding:0;margin:0;border:0;}
 .weaver :is(.eyebrow,.label) {color:var(--primary);font:600 1rem/1.5 var(--font-body);letter-spacing:normal;text-transform:none;}
 .weaver .hero h1 {margin:var(--space-3) 0;font:500 clamp(2.5rem,6vw,4rem)/1.1 var(--font-body);letter-spacing:normal;color:var(--on-surface);text-shadow:none;}
@@ -106,7 +106,7 @@ html.weaver {
 .weaver footer nav a {display:inline-flex;align-items:center;min-height:48px;}
 .weaver .pixie {position:fixed;right:max(1rem,env(safe-area-inset-right));bottom:max(1rem,env(safe-area-inset-bottom));z-index:10;}
 .weaver .pixie>button {border-color:var(--primary);box-shadow:0 4px 16px #0008;}
-.weaver .pixie-panel {display:none;width:min(26rem,calc(100vw - 2rem));max-height:calc(100dvh - 7rem);overflow:auto;margin-bottom:var(--space-2);padding:var(--space-3);border:1px solid var(--outline);border-radius:.6rem;background:var(--surface-container);box-shadow:0 4px 20px #0008;}
+.weaver .pixie-panel {overflow-wrap:anywhere;display:none;width:min(26rem,calc(100vw - 2rem));max-height:calc(100dvh - 7rem);overflow:auto;margin-bottom:var(--space-2);padding:var(--space-3);border:1px solid var(--outline);border-radius:.6rem;background:var(--surface-container);box-shadow:0 4px 20px #0008;}
 .weaver .pixie-panel.open {display:block;}
 .weaver .pixie-panel strong {color:var(--primary);font:600 1rem/1.5 var(--font-body);}
 .weaver .pixie-panel p {color:var(--on-surface);font-size:1rem;}
@@ -120,3 +120,24 @@ html.weaver {
  .weaver .hero h1 {font-size:clamp(2.2rem,10vw,3rem);}
 }
 @media(prefers-reduced-motion:reduce) {html.weaver {scroll-behavior:auto;}}
+/* Private invitation controls inherit the existing Weaver reading roles. */
+.weaver :is(input,select,textarea) {width:100%;max-width:100%;min-width:0;padding:.6rem;border:1px solid var(--on-surface-variant);border-radius:.4rem;background:var(--surface);color:var(--on-surface);font:1rem/1.5 var(--font-body);}
+.weaver :is(input,select,textarea):focus-visible {outline:3px solid var(--primary);outline-offset:4px;}
+.weaver #invitation-content {min-width:0;display:grid;gap:var(--space-2);}
+.weaver #invitation-content pre {white-space:pre-wrap;overflow-wrap:anywhere;font:1rem/1.65 var(--font-body);margin:0;}
+.weaver .companion-icon {width:40px;height:40px;object-fit:contain;margin-right:.5rem;}
+.weaver button:disabled {opacity:.65;cursor:wait;}
+.weaver [hidden] {display:none;}
+
+/* Owner-supplied Weaver mark; distinct from PIXIE's unchanged Companion icon. */
+.weaver .weaver-sigil {position:absolute;inset-block-start:2.4rem;inset-inline-end:0;width:4.8rem;height:4.8rem;color:#d4a853;}
+.weaver-sigil .ring,.weaver-sigil .thread {fill:none;stroke:currentColor;stroke-width:1.4;stroke-linejoin:round;}
+.weaver-sigil .ring {opacity:.5;}
+.weaver-sigil .inner {opacity:.65;}
+.weaver-sigil .core {fill:currentColor;animation:weaver-breathe 7s ease-in-out infinite;}
+@keyframes weaver-breathe {0%,100% {opacity:1;}50% {opacity:.5;}}
+@media(max-width:700px) {
+ .weaver header {padding-inline-end:0;}
+ .weaver .weaver-sigil {position:static;display:block;margin:0 0 1.6rem auto;width:3.2rem;height:3.2rem;}
+}
+@media(prefers-reduced-motion:reduce) {.weaver-sigil .core {animation:none;opacity:1;}}

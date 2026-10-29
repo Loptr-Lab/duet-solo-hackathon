@@ -170,3 +170,13 @@ overflow. Keyboard skip and PIXIE open/Escape passed. Representative text/backgr
 contrast pairs: neutral/void 15.44:1, neutral/panel 13.83:1, supporting/void 8.88:1,
 gold/void 9.24:1 and gold/panel 8.28:1. These are sampled pairs, not full certification.
 Physical iPad Safari and VoiceOver remain untested. Publication requires preview review.
+
+## Proposed private invitation flow — PR #105, 29 October 2026
+
+Continues from f135c4ddd5eb100c89533241635c0e0a47a66af6 on review/weaver-low-vision. The older staged readability work remains untouched in its original worktree. Current owner instructions supersede unsolicited registration and the read-only-helper restriction only for the private issued-invitation pathway; see the current contract in docs/provenance/WEAVER_DOOR.md.
+
+Implementation checks: npm run check and all 48 Node tests pass. New synthetic tests cover pending/unapproved/mismatched/stale invitations, exact-text digest binding, duplicate/concurrent acceptance, storage failure/retry, session/CSRF/owner denial, provider outages, every Germ permission state, follow direction, malformed destinations and unreachable handoff. Opening/retrying Germ performs no acceptance write and records no sending/delivery status. No real identity evidence or invitations were read or modified by these tests.
+
+Local Chromium checked static unavailable-backend behavior at 320/390/820/1440 CSS pixels, enlarged 200% text at 320px, keyboard Escape/focus return and helper controls. A separate synthetic mocked-backend browser test checked signed-out UI, exact text rendering without HTML execution, storage failure, receipt only after confirmation, Germ retry and removal of unavailable links. Sample text contrast and supplied mark's reduced-motion fallback pass. Static previews never contain those synthetic backend responses. Authoritative CSS/JS copies and both generated aliases match the existing builder. The exact owner-supplied Weaver SVG is distinct from the pinned, unchanged Companion image; the owner-supplied Yellow Door link is retained.
+
+Unverified operational requirements: configured OAuth origin/key and backend, private Firestore access rules and approved versioned records/evidence, qualified named-person review, W Identity provider support, current owner Germ declaration (request returned HTTP 403), destination/device acceptance, physical iPad Safari and VoiceOver. Preview deployment metadata and exact final commit are recorded in PR #105. No main merge, production promotion, DNS change, real invitation modification or message sending is authorized.

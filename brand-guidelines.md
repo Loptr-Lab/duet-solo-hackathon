@@ -37,3 +37,13 @@ VoiceOver, legal validation or official Material certification from local tests.
 This amendment stays on the existing review/weaver-low-vision branch and requires
 preview review before merge or publication. No DNS, game rules, hosting migration,
 server storage or production promotion is authorized.
+
+## Proposed invitation flow — PR #105, 29 October 2026
+
+The owner's newer instruction explicitly supersedes this file's earlier “read-only PIXIE / do not add interaction” restriction for the private, issued-invitation acceptance flow only. Public participation remains closed; no unsolicited request form is permitted. Account control, named-person verification, approval and explicit acceptance are different states. The versioned acceptance notice does not adopt disputed history, create a relationship, transfer/waive rights, authorize publication or accept collaboration terms.
+
+Implementation is proposed on the same review branch, not approved for publication. Use public/style.css and the existing builder for controls and aliases. Preserve the 20px default, normal tracking, bounded text, keyboard/Escape recovery, safe-area helper placement and reduced motion. The PIXIE helper reuses the Companion's unchanged sigil at the pinned pixie-ecosystem-guide commit 0d049b8114c09991ce0382e38661ae72dad64a02; no new PIXIE artwork is generated. Its remote asset is an explicit availability dependency.
+
+The Weaver's mark uses the owner's exact inline SVG supplied in this review: outer ring, W-shaped thread, nested diamonds and breathing core. It sits inside header before .hero, with the supplied 7-second pulse, narrow-screen placement and reduced-motion fallback. Only the existing header rule is amended for its layout reservation; public/style.css stays authoritative. The Yellow Door footer destination is the owner-supplied https://ibloud.github.io/inpatient-corridors-review/interactive/yellow-door/docs/ . The missing local commit 0185c72 was not recoverable here; the pasted SVG/CSS is the authoritative recovery source. No earlier rejected private wording was recovered from that worktree. Existing narrative and game links remain intact.
+
+Static review deployment must show backend unavailability, not synthetic identity or acceptance success. A Germ handoff is a person-controlled external navigation after durable acceptance, never an automated notification or delivery claim. Provider and owner-authorization failures leave privileged actions unavailable. Publication, real invitation changes, message sending and domain changes remain unauthorized.

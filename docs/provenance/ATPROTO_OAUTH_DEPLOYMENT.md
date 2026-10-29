@@ -37,3 +37,9 @@ The public OAuth endpoints are:
 The repository does **not** contain production secrets and does not claim that OAuth is live merely because the code exists. Before a real login can work, the public HTTPS base URL, OAuth client metadata, JWKS, private signing key, Firestore access, and deployment configuration must agree.
 
 The official atproto Node OAuth client handles the protocol mechanics including PKCE and DPoP. Duet uses a server-side/BFF session cookie so OAuth credentials remain server-side.
+
+## Weaver acceptance amendment — 29 October 2026
+
+New runtime routes are `/auth/weaver/capabilities`, `/auth/weaver/session`, `/auth/weaver/invitation`, POST `/auth/weaver/accept`, POST `/auth/weaver/germ`, and POST `/auth/weaver/owner/status`. Private responses are no-store. Every new POST requires the configured exact Origin, JSON content type, an authenticated session and its server-derived CSRF token. OAuth's existing PKCE/DPoP flow remains in use; `flow=weaver` returns to the private guide after sign-in. The existing `/auth/invitation/request` and `/auth/invitation/decide` paths are retired (410), not a back door to issue or approve invitations.
+
+No production configuration, real invitation record or credential was changed. The owner handle/DID/PDS binding is in config/weaver-owner.json and revalidated at runtime. Backend OAuth keys, a matching public origin, accessible private Firestore and authorized versioned invitation/evidence records are prerequisites. Do not deploy acceptance collections with public client access. W Identity is not integrated; Germ has only the documented user-navigation handoff. The existing GitHub Pages deployment remains static and cannot supply this backend.

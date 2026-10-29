@@ -45,11 +45,15 @@ if (roomStore && typeof roomStore.verifyAccess === 'function') {
   });
 }
 
+let weaverReady = false;
+app.get('/auth/weaver/capabilities', (req, res) => res.set('Cache-Control', 'no-store').json({ backend: weaverReady, automaticNamedVerification: false, wIdentity: false }));
+
 async function startServer() {
   if (roomStore.db && process.env.ATPROTO_BASE_URL && process.env.ATPROTO_OAUTH_PRIVATE_KEY) {
     try {
       const atprotoAuth = await createAtprotoAuth({ db: roomStore.db });
       atprotoAuth.routes(app);
+      weaverReady = true;
       console.log('AT Protocol OAuth BFF enabled.');
     } catch (err) {
       console.error('⚠️ AT Protocol OAuth initialization failed:', err.message);

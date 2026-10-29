@@ -1,0 +1,11 @@
+{
+  "handle": "ibloud.wsocial.eu",
+  "did": "did:plc:wa3u3bat5knu2hguqmq7siq4",
+  "pds": "https://pds.wsocial.network",
+  "reviewedAt": "2026-10-29",
+  "sources": [
+    "https://public.api.bsky.app/xrpc/com.atproto.identity.resolveHandle?handle=ibloud.wsocial.eu",
+    "https://plc.directory/did:plc:wa3u3bat5knu2hguqmq7siq4"
+  ],
+  "limitation": "Bidirectional public handle binding, not named-person verification or consent. Runtime owner actions require matching OAuth DID and fresh binding checks."
+}

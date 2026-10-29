@@ -1,5 +1,14 @@
 # Verified Profile System
 
+## Current owner direction — 29 October 2026, proposed PR #105 implementation
+
+The newer owner direction supersedes the historical invitation-request/registration lifecycle below. Participation is limited to existing issued invitations; unsolicited requests are closed. Account control, named-person verification, approval and explicit acceptance are separate. A matching DID or issue closure never records consent. Unresolved verification remains pending; confirmed mismatch excludes the account from that invitation.
+
+The current authoritative flow, private record contract, versioned acceptance notice, owner binding, provider limitations and Germ handoff rules are in [Weaver Door](WEAVER_DOOR.md#current-owner-direction--29-october-2026-proposed-pr-105-implementation). Use that contract rather than the older status diagrams below. Static previews cannot verify identity or save acceptance. No real invitation, production configuration or message was changed during this review.
+
+## Historical design below — superseded where it permits requests or equates credentials with participation
+
+
 ## Purpose
 
 The Weaver uses an existing AT Protocol identity as the prerequisite for participation. It does **not** create accounts or onboard people to AT Protocol/Bluesky.
