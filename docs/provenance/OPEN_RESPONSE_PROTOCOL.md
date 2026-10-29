@@ -84,3 +84,7 @@ Authorized participants may identify:
 - something they want documented differently
 
 The protocol treats disagreement as a legitimate response state.
+
+## Resumed operational review — 29 October 2026
+
+See [operational readiness and release handoff](../deployment/WEAVER_STAGING_REVIEW.md) for fresh hosting/owner/provider observations, the private historical-receipt endpoint, session/logout corrections, isolated test results and exact remaining operator gates. Static preview remains non-operational for authentication and acceptance. Automatic named-person verification remains disabled; no real invitation writes or messages are authorized.

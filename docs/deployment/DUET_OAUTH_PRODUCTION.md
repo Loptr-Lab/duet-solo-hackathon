@@ -1,5 +1,9 @@
 # Duet OAuth — Production Configuration
 
+## Current invitation-only deployment contract — 29 October 2026
+
+The [Weaver staging review](WEAVER_STAGING_REVIEW.md) and current Weaver Door supersede the historical request/approval lifecycle and deployment gates below. Existing issued invitations only; legacy request/decision endpoints return 410. Email/domain or human badges are not named-person verification. No production release is authorized. The documented production origin below is not an available isolated staging environment.
+
 This is the deployment checklist for DUET account sign-in and the separate controlled Weaver participation system.
 
 ## Player sign-in entry and current evidence

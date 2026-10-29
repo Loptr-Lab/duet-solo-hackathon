@@ -132,3 +132,7 @@ If the original collaborator does not respond, the archive should say so plainly
 This documentation records a creative/research process. It does not itself constitute a contract, license, assignment, partnership agreement, legal opinion, or determination of ownership.
 
 Questions concerning applicable law, jurisdiction, intellectual-property rights, tax, estate interests, or enforceability require appropriate professional review.
+
+## Resumed operational review — 29 October 2026
+
+See [operational readiness and release handoff](../deployment/WEAVER_STAGING_REVIEW.md) for fresh hosting/owner/provider observations, the private historical-receipt endpoint, session/logout corrections, isolated test results and exact remaining operator gates. Static preview remains non-operational for authentication and acceptance. Automatic named-person verification remains disabled; no real invitation writes or messages are authorized.

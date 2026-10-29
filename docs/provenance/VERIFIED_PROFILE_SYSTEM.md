@@ -114,3 +114,7 @@ A verified profile never automatically grants Weaver participation.
 The repository currently contains the public Weaver door and its existing Express/Firestore infrastructure. The production OAuth implementation must use an official atproto OAuth client, persistent session/state storage, HTTPS client metadata, secure cookies, CSRF/state protections supplied by the OAuth implementation, and the minimum requested scope (`atproto account:email`). The browser should never receive a server private key.
 
 For production deployment, domain verification can be performed server-side with DNS resolution. Email verification can use the account's confirmed AT Protocol email status rather than creating a second password/email account system.
+
+## Resumed operational review — 29 October 2026
+
+See [operational readiness and release handoff](../deployment/WEAVER_STAGING_REVIEW.md) for fresh hosting/owner/provider observations, the private historical-receipt endpoint, session/logout corrections, isolated test results and exact remaining operator gates. Static preview remains non-operational for authentication and acceptance. Automatic named-person verification remains disabled; no real invitation writes or messages are authorized.
