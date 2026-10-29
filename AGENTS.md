@@ -16,3 +16,12 @@ for this flow only. Read current sections of docs/provenance/WEAVER_DOOR.md,
 OPEN_RESPONSE_PROTOCOL.md and VERIFIED_PROFILE_SYSTEM.md. No unsolicited requests,
 real invitation writes, publication or message sending are authorized. Keep mock
 identities/provider responses confined to tests; static previews must fail closed.
+
+## Current deployment evidence — binding rule
+
+Before introducing or relying on hosting, storage, authentication or external
+services, verify the current authorized deployment and cite the evidence.
+Historical imports, configuration examples and passing mocked tests are not
+proof of operational availability. Inspect existing solutions before creating
+new ones. Report an unresolved dependency instead of choosing infrastructure
+without owner direction.

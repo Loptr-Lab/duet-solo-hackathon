@@ -1,3 +1,14 @@
+# Duet / Weaver implementation report
+
+## Current correction — 29 October 2026
+
+The prior report inferred a current Google backend from historical source. That inference is withdrawn. Owner direction establishes local/static Duet operation; no restoration of Cloud Run or Firestore is required. [The corrected staging handoff](deployment/WEAVER_STAGING_REVIEW.md) separates historical source, configured services, observed deployment and proposed integration.
+
+Acceptance now uses a provider-independent storage boundary. No production adapter is connected; the synthetic adapter remains test-only and is refused in production. The exact unavailable message, receipt recovery, sign-out/CSRF/isolation/error handling and reviewed presentation are preserved. The existing PR records the final tested commit, checks and fresh static preview. No infrastructure, real invitation or production data was changed.
+
+<details>
+<summary>Historical implementation reports — earlier Google-service requirements are superseded</summary>
+
 # DUET browser-only recovery — 20 October 2026
 
 ## Preserved evidence
@@ -187,3 +198,5 @@ Unverified operational requirements: configured OAuth origin/key and backend, pr
 Continued PR #105 from `2f15eeec81de0aad4835d4a4025e6d7ecdd05b83` without branch advancement at initial inspection. [Operational report](deployment/WEAVER_STAGING_REVIEW.md) records the current files/behavior, 51 passing tests, local browser journey, hosting inspection, official W provider assessment and blocked live gates. Public owner binding was freshly verified; owner OAuth, Cloud Run/Firestore configuration, live Germ, physical Safari and VoiceOver remain unverified. Static review does not save acceptance. No production or real invitation change occurred. Exact uploaded source SHA and fresh preview are recorded in PR #105 delivery metadata.
 
 Tested resumed implementation: `703d4ee12483a9283ef5642aec96bcf64b7efefd` (51 tests plus local Chromium). The operational handoff commit changes documentation only.
+
+</details>

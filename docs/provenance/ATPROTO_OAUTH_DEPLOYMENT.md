@@ -1,3 +1,16 @@
+# Historical Duet OAuth deployment record
+
+## Current status — 29 October 2026
+
+Duet has moved to local/static operation under current owner direction. The configuration and Google service instructions preserved below are **historical**, not evidence that those services exist or are currently authorized. Do not restore or configure them for Weaver. The old hostname is not selected as Weaver's current OAuth origin.
+
+The [current hosting assessment and provider-independent acceptance contract](../deployment/WEAVER_STAGING_REVIEW.md) records the observed existing PIXIE Companion as a possible reuse point, not an approved Weaver integration. No current persistent acceptance backend is established. The historical OAuth implementation remains source only; no replacement authentication system is introduced. Future integration must reuse the authorized identity contract at its verified origin and preserve DID-bound sessions, private credentials, secure cookies, expiry/logout and CSRF protections. A verified human flag is not named-person verification or acceptance.
+
+The production acceptance factory is unavailable even when historical database/OAuth settings are present. The UI states: **“Invitation acceptance is not available on this deployment. Nothing has been accepted.”** Real-provider and physical-device verification are not claimed.
+
+<details>
+<summary>Historical deployment instructions — do not execute as current setup guidance</summary>
+
 # Duet AT Protocol OAuth deployment
 
 Duet now contains the server-side scaffold for AT Protocol OAuth using the official Node OAuth client. The code is intentionally configuration-gated: gameplay remains available when OAuth secrets are absent, but production authentication is not enabled until the required deployment configuration exists.
@@ -47,3 +60,5 @@ No production configuration, real invitation record or credential was changed. T
 ## Resumed operational review — 29 October 2026
 
 See [operational readiness and release handoff](../deployment/WEAVER_STAGING_REVIEW.md) for fresh hosting/owner/provider observations, the private historical-receipt endpoint, session/logout corrections, isolated test results and exact remaining operator gates. Static preview remains non-operational for authentication and acceptance. Automatic named-person verification remains disabled; no real invitation writes or messages are authorized.
+
+</details>

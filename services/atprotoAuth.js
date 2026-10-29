@@ -3,6 +3,7 @@ const { Agent } = require('@atproto/api');
 const { JoseKey } = require('@atproto/jwk-jose');
 const { NodeOAuthClient } = require('@atproto/oauth-client-node');
 const { createDomainVerifier } = require('./domainVerification.js');
+const { productionWeaverStore } = require('./weaverStore');
 const { registerWeaverRoutes, csrf } = require('./weaverRoutes.js');
 const { createInvitationService } = require('./invitations.js');
 
@@ -42,7 +43,7 @@ function requireEnv(name) {
   return value;
 }
 
-async function createAtprotoAuth({ db }) {
+async function createAtprotoAuth({ db, weaverStore = productionWeaverStore() }) {
   const baseUrl = baseUrlFromEnv();
   const privateKey = requireEnv('ATPROTO_OAUTH_PRIVATE_KEY');
   const keyset = [await JoseKey.fromImportable(privateKey, process.env.ATPROTO_OAUTH_KEY_ID || 'duet-key-1')];
@@ -150,7 +151,7 @@ async function createAtprotoAuth({ db }) {
 
   function routes(app) {
     app.use('/auth', (req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });
-    registerWeaverRoutes(app, { db, getIdentity: getBrowserIdentity, baseUrl });
+    registerWeaverRoutes(app, { store: weaverStore, getIdentity: getBrowserIdentity, baseUrl });
     app.get('/client-metadata.json', (req, res) => res.json(client.clientMetadata));
     app.get('/jwks.json', (req, res) => res.json(client.jwks));
 

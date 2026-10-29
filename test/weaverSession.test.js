@@ -2,6 +2,7 @@ const test = require('node:test');
 const a = require('node:assert/strict');
 const crypto = require('node:crypto');
 const express = require('express');
+const { syntheticWeaverStore } = require('./helpers/weaverStore');
 const { createAtprotoAuth } = require('../services/atprotoAuth');
 
 test('existing OAuth BFF enforces expiry, DID binding, cookie attributes and logout using isolated synthetic sessions', async t => {
@@ -14,7 +15,7 @@ test('existing OAuth BFF enforces expiry, DID binding, cookie attributes and log
     get:async()=>({exists:data.has(`${name}/${id}`),data:()=>data.get(`${name}/${id}`)}),
     set:async value=>data.set(`${name}/${id}`,value),delete:async()=>{if(failDelete)throw Error('synthetic private storage error');return data.delete(`${name}/${id}`);}
   })})};
-  const auth=await createAtprotoAuth({db});
+  const auth=await createAtprotoAuth({db, weaverStore: syntheticWeaverStore()});
   let restore=0;
   auth.client.restore=async did=>{restore++;return {did};};
   for(const expiresAt of [undefined,null,NaN,Infinity,'tomorrow',Date.now()-1]){

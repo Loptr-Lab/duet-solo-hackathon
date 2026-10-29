@@ -32,7 +32,7 @@
     }
   }
   function failure(e) {
-    status.textContent = messages[e.error] || (e.error === 'backend_unavailable' ? 'This static preview has no private authentication or acceptance backend. It cannot verify identity or save acceptance. The game and public record remain available.' : 'Verification or storage could not be confirmed. The process remains pending; this is not acceptance or rejection. Retry when the service is available.');
+    status.textContent = messages[e.error] || (['backend_unavailable', 'acceptance_unavailable'].includes(e.error) ? 'Invitation acceptance is not available on this deployment. Nothing has been accepted.' : 'Verification or storage could not be confirmed. The process remains pending; this is not acceptance or rejection. Retry when the service is available.');
     support(e);
   }
   function signin() {

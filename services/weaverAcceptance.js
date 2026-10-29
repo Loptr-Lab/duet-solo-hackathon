@@ -1,5 +1,6 @@
 const crypto = require('node:crypto');
 const owner = require('../config/weaver-owner.json');
+const { productionWeaverStore, requireStore } = require('./weaverStore');
 const ACCEPTANCE_NOTICE = 'Acceptance opens discussion of Weaver, differing interpretations, contributions and possible rights or obligations. It does not itself confirm disputed history, establish a relationship, transfer rights, waive rights, authorize publication or accept separate collaboration terms.';
 function fail(code, status = 403) { const e = new Error(code); e.statusCode = status; throw e; }
 function invitationDigest(text) { return crypto.createHash('sha256').update(text).digest('hex'); }
@@ -16,49 +17,49 @@ function validate(inv, did, version, ownerDid = owner.did) {
 }
 function acceptanceId(inv, did) { return crypto.createHash('sha256').update(JSON.stringify([inv.id, inv.version, did])).digest('hex'); }
 function receipt(record) { return { invitationId: record.invitationId, version: record.version, acceptedAt: record.acceptedAt, recipientDid: record.recipientDid, noticeVersion: record.noticeVersion, invitationDigest: record.invitationDigest, status: 'accepted_to_discuss' }; }
-function createWeaverAcceptance({ db, now = Date.now, ownerDid = owner.did }) {
-  const invitations = db.collection('duet_auth');
-  const acceptances = db.collection('weaver_acceptances');
-  const invRef = did => invitations.doc(`invitation_${did}`);
+function createWeaverAcceptance({ store = productionWeaverStore(), now = Date.now, ownerDid = owner.did } = {}) {
+  const storage = () => requireStore(store);
   async function savedReceipt(did, invitationId, version) {
+    storage();
     if (typeof invitationId !== 'string' || !invitationId || invitationId.length > 500 || typeof version !== 'string' || !version || version.length > 500) fail('invalid_receipt_reference', 400);
     // The authenticated DID is always part of the key; callers cannot select another recipient.
-    const saved = await acceptances.doc(acceptanceId({ id: invitationId, version }, did)).get();
-    if (!saved.exists) fail('receipt_not_found', 404);
-    const record = saved.data();
+    const record = await storage().getReceipt(acceptanceId({ id: invitationId, version }, did));
+    if (!record) fail('receipt_not_found', 404);
     if (record.recipientDid !== did || record.invitationId !== invitationId || record.version !== version) fail('receipt_not_found', 404);
     return receipt(record);
   }
   async function review(did) {
-    const snap = await invRef(did).get(); const inv = snap.exists ? snap.data() : null;
+    const inv = await storage().getInvitation(did);
     validate(inv, did, undefined, ownerDid);
-    const saved = await acceptances.doc(acceptanceId(inv, did)).get();
-    if (saved.exists && saved.data().invitationDigest !== invitationDigest(inv.text)) fail('invitation_version_changed', 409);
-    return { invitationId: inv.id, version: inv.version, invitationDigest: invitationDigest(inv.text), text: inv.text, notice: ACCEPTANCE_NOTICE, noticeVersion: 'discuss-v1', verification: 'confirmed_for_this_invitation', receipt: saved.exists ? receipt(saved.data()) : null };
+    const saved = await storage().getReceipt(acceptanceId(inv, did));
+    if (saved && (saved.recipientDid !== did || saved.invitationId !== inv.id || saved.version !== inv.version || saved.invitationDigest !== invitationDigest(inv.text))) fail('invitation_version_changed', 409);
+    return { invitationId: inv.id, version: inv.version, invitationDigest: invitationDigest(inv.text), text: inv.text, notice: ACCEPTANCE_NOTICE, noticeVersion: 'discuss-v1', verification: 'confirmed_for_this_invitation', receipt: saved ? receipt(saved) : null };
   }
   async function accept(did, body) {
+    storage();
     if (body?.action !== 'accept_to_discuss' || body.noticeVersion !== 'discuss-v1') fail('explicit_acceptance_required', 400);
-    return db.runTransaction(async tx => {
-      const snap = await tx.get(invRef(did)); const inv = snap.exists ? snap.data() : null;
+    return storage().transaction(async tx => {
+      const inv = await tx.getInvitation(did);
       validate(inv, did, body.version, ownerDid);
       if (typeof body.version !== 'string' || inv.id !== body.invitationId || body.invitationDigest !== invitationDigest(inv.text)) fail('invitation_version_changed', 409);
-      const ref = acceptances.doc(acceptanceId(inv, did)); const previous = await tx.get(ref);
-      if (previous.exists) {
-        if (previous.data().invitationDigest !== invitationDigest(inv.text)) fail('invitation_version_changed', 409);
-        return receipt(previous.data());
+      const key = acceptanceId(inv, did); const previous = await tx.getReceipt(key);
+      if (previous) {
+        if (previous.recipientDid !== did || previous.invitationId !== inv.id || previous.version !== inv.version || previous.invitationDigest !== invitationDigest(inv.text)) fail('invitation_version_changed', 409);
+        return receipt(previous);
       }
       const record = { recipientDid: did, invitationId: inv.id, version: inv.version, acceptedAt: now(), invitationDigest: invitationDigest(inv.text), noticeVersion: 'discuss-v1', verificationEvidenceRefs: [...inv.verification.evidenceRefs] };
-      tx.create(ref, record);
+      await tx.createReceipt(key, record);
       return receipt(record);
     });
   }
   async function ownerStatus(actor, recipientDid) {
     if (actor !== ownerDid) fail('owner_access_forbidden');
     if (!/^did:(plc|web):[a-zA-Z0-9._:%-]+$/.test(recipientDid || '')) fail('invalid_recipient', 400);
-    const s = await invRef(recipientDid).get(); const inv = s.exists ? s.data() : null;
+    const inv = await storage().getInvitation(recipientDid);
     if (!inv) fail('invitation_not_found', 404);
-    const saved = inv.version ? await acceptances.doc(acceptanceId(inv, recipientDid)).get() : null;
-    return { invitationId: inv.id, version: inv.version || null, issued: inv.status === 'invited', approval: inv.approval?.status || 'pending', verification: inv.verification?.status || 'pending', receipt: saved?.exists ? receipt(saved.data()) : null };
+    const saved = inv.version ? await storage().getReceipt(acceptanceId(inv, recipientDid)) : null;
+    if (saved && (saved.recipientDid !== recipientDid || saved.invitationId !== inv.id || saved.version !== inv.version)) fail('receipt_not_found', 404);
+    return { invitationId: inv.id, version: inv.version || null, issued: inv.status === 'invited', approval: inv.approval?.status || 'pending', verification: inv.verification?.status || 'pending', receipt: saved ? receipt(saved) : null };
   }
   return { review, accept, ownerStatus, savedReceipt };
 }

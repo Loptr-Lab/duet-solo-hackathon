@@ -1,4 +1,5 @@
 const crypto = require('node:crypto');
+const { productionWeaverStore, storeAvailable, unavailableResponse } = require('./weaverStore');
 const { createWeaverAcceptance } = require('./weaverAcceptance');
 const { providers } = require('./germHandoff');
 const OWNER = require('../config/weaver-owner.json');
@@ -18,18 +19,20 @@ function requireCsrf(req, identity, origin) {
     const e = new Error('csrf_rejected'); e.statusCode = 403; throw e;
   }
 }
-function registerWeaverRoutes(app, { db, getIdentity, baseUrl, provider = providers(), ownerDid = OWNER.did, acceptance = createWeaverAcceptance({ db, ownerDid }) }) {
-  const origin = new URL(baseUrl).origin;
+function registerWeaverRoutes(app, { store = productionWeaverStore(), getIdentity, baseUrl, provider = providers(), ownerDid = OWNER.did, acceptance = createWeaverAcceptance({ store, ownerDid }) }) {
+  const origin = storeAvailable(store) ? new URL(baseUrl).origin : null;
   function route(method, path, handler) {
     app[method](path, async (req, res) => {
       res.set('Cache-Control', 'no-store').set('Pragma', 'no-cache');
       try {
+        if (!storeAvailable(store)) return unavailableResponse(res);
         const identity = await getIdentity(req);
         if (!identity?.did) return res.status(401).json({ error: 'authentication_required', support: troubleshooting('authentication_required') });
         if (method === 'post') requireCsrf(req, identity, origin);
         await handler(req, res, identity);
       } catch (e) {
-        const status = Object.hasOwn(ERROR_STATUS, e.message) && ERROR_STATUS[e.message] === e.statusCode ? e.statusCode : 503;
+        if (e?.message === 'acceptance_unavailable') return unavailableResponse(res);
+        const status = Object.hasOwn(ERROR_STATUS, e?.message) && ERROR_STATUS[e.message] === e.statusCode ? e.statusCode : 503;
         const code = status === 503 ? 'service_unavailable' : e.message;
         res.status(status).json({ error: code, support: troubleshooting(code) });
       }
