@@ -200,3 +200,7 @@ Continued PR #105 from `2f15eeec81de0aad4835d4a4025e6d7ecdd05b83` without branch
 Tested resumed implementation: `703d4ee12483a9283ef5642aec96bcf64b7efefd` (51 tests plus local Chromium). The operational handoff commit changes documentation only.
 
 </details>
+
+### Railway integration review follow-through
+
+The next amendment replaces the public page's unconfigured local acceptance client with navigation to the existing PIXIE Companion's scoped response view. Duet retains its unavailable provider-independent routes for historical tests; the public helper no longer calls them. A separate Companion review branch contains the existing-session/private-volume implementation; no new service, database or credential is introduced. Public helper checks pass at 320/390/820/1440 with no identity API calls or token transfer. The preserved newer Weaver suite passes all 56 entries. Companion's 89 tests, typecheck and production build pass; a separate synthetic browser test covers unavailable static backend, confirmed/failed saves, Germ and responsive reflow. Real provider/recipient acceptance, backup review, private existing-invitation preparation and Railway release remain unperformed. Recipient variable is documented, not set. Existing Railway staged configuration remains untouched. Exact commits and preview are recorded in PR #105 and the linked Companion PR.

@@ -1,5 +1,18 @@
 # The Weaver — Public Door
 
+## Canonical PIXIE runtime amendment — 29 October 2026
+
+The owner requested that private storage and sign-in use the existing PIXIE Companion Railway service. The earlier Firestore-bound Duet route scaffold below is superseded as a runtime deployment plan. Its policy/tests remain a review record; Duet retains its unavailable provider-independent routes as historical test coverage; the public helper no longer calls them. The public Weaver helper offers navigation to PIXIE's scoped private invitation view, not a cross-origin cookie/token transfer.
+
+Railway inspection confirmed the existing Companion service, persistent /data volume, PIXIE_DATA_FILE and PIXIE_SESSION_SECRET names. No variable values were read. Existing staged Railway changes were left untouched. Proposed recipient setting: **PIXIE_WEAVER_RECIPIENT_DID**. Public handle renmakesmusic.bsky.social resolved to **did:plc:c23lgmpk664gb47ygj7z7l6a**, with reverse DID binding checked 29 October 2026. This is account routing, not named-person verification, an issued invitation, approval or acceptance. It must never be placed in PIXIE_OWNER_DID.
+
+Companion review code reuses its one server-verified AT Protocol session, same-origin CSRF and existing encrypted private-file locking pattern. Weaver invitation/receipt data lives in a separate encrypted file beside the configured workspace file on the same mounted volume; it never enters workspace exports, machine-MCP authority, browser storage or a public PDS. No new database, service, dependency or account is introduced. The secret derives a separate purpose-bound encryption key; the original workspace and OAuth files are unchanged. No invitation is seeded or issued by configuration. Approved existing versioned records still require private, authorized operator preparation and backup review; no issuance endpoint is added.
+
+The public handoff and private response view are proposed code pending review, backup and release approval. No Railway variables, staged configuration, live runtime or real invitation record was changed. Current companion production source is ce0202ae6d7cc12b843c7a4a92f69ba35da0125b; review source is newer and is not claimed deployed.
+
+<details>
+<summary>Previous deployment assessment — preserved history, superseded by the Companion proposal above</summary>
+
 ## Current deployment correction — 29 October 2026
 
 The owner moved Duet to local/static operation. Historical server imports, deployment examples and mocked tests do not establish an authorized working backend. Do not restore Cloud Run or Firestore for Weaver. [Current hosting evidence, storage contract and next decision](../deployment/WEAVER_STAGING_REVIEW.md) supersede earlier operational assumptions.
@@ -40,7 +53,10 @@ Historical receipt recovery remains DID-bound and independent of current invitat
 
 # The Weaver — Public Door
 
+
 ## Current owner direction — 29 October 2026, proposed PR #105 implementation
+
+Storage/runtime details in this earlier section describe the superseded Firestore scaffold. The canonical PIXIE runtime amendment above replaces that deployment plan; the versioned invitation and acceptance contract remains unchanged.
 
 This section supersedes the earlier invitation-request/registration lifecycle below. Older text is retained as a historical design record, not a currently available participation route.
 
@@ -176,5 +192,7 @@ Questions concerning applicable law, jurisdiction, intellectual-property rights,
 ## Resumed operational review — 29 October 2026
 
 See [operational readiness and release handoff](../deployment/WEAVER_STAGING_REVIEW.md) for fresh hosting/owner/provider observations, the private historical-receipt endpoint, session/logout corrections, isolated test results and exact remaining operator gates. Static preview remains non-operational for authentication and acceptance. Automatic named-person verification remains disabled; no real invitation writes or messages are authorized.
+
+</details>
 
 </details>

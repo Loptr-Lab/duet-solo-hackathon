@@ -1,3 +1,13 @@
+# Companion integration amendment — 29 October 2026
+
+The owner's subsequent instruction selects the existing PIXIE Companion for proposed Weaver storage/code. This supersedes the hosting-decision blocker below; the previous audit is retained as history. No Google restoration is required. Companion review branch `review/weaver-pixie-acceptance` reuses its server-verified OAuth session, same-origin CSRF, existing secret and volume, with a separate purpose-encrypted `weaver.enc` file beside `PIXIE_DATA_FILE`. No service, database, secret or real invitation is created. Recipient configuration alone cannot issue/approve/accept an invitation.
+
+Public Weaver now offers navigation to `https://pixie-project-companion-production.up.railway.app/?weaver=1#weaver`. The destination's new Weaver code is under review, not live. The older Duet provider-independent factory remains unavailable; its server tests are preserved, but it is not the public helper's runtime. Companion owns private response UI and receipt recovery/download. No cookies/tokens cross sites. Both review commits and a static visual preview are recorded in PR #105 and its linked Companion draft PR.
+
+Remaining release gates: owner review/approval, private existing-invitation preparation and separate named-person evidence review, volume backup/restore and retention review, real-provider sign-in/recipient isolation/durable receipt checks on an authorized release target, current Germ permissions and physical Safari/VoiceOver testing. Static preview cannot accept invitations. Existing Railway staged changes and live service remain untouched.
+
+<details><summary>Previous deployment correction and evidence — retained history</summary>
+
 # Weaver deployment correction — 29 October 2026
 
 Status: provider-independent source correction completed; production invitation acceptance remains unavailable. This supersedes earlier instructions to restore or configure Google services. The owner moved Duet to local/static operation. No current Weaver backend follows from historical imports, example environment values, a source Dockerfile or passing mocked tests.
@@ -155,5 +165,7 @@ Implementation files: `public/weaver-invitation.js`, generated `site/weaver-invi
 Documentation files: this report, `docs/BROWSER_RECOVERY_2026-10-20.md`, `docs/deployment/DUET_OAUTH_PRODUCTION.md`, `docs/provenance/ATPROTO_OAUTH_DEPLOYMENT.md`, `docs/provenance/OPEN_RESPONSE_PROTOCOL.md`, `docs/provenance/VERIFIED_PROFILE_SYSTEM.md`, `docs/provenance/WEAVER_DOOR.md`.
 
 CI compatibility correction: the new official-BFF integration test exposed that the old CI Node 20 runtime cannot load the existing OAuth dependency graph (`undici_v8` requires Node >=22.19). The existing Dockerfile already uses `node:22-alpine`; `.github/workflows/ci.yml` now tests Node 22 to match it. No production runtime was changed. The initial resumed CI failure was not an acceptance/security failure; the corrected head must pass both CI events before delivery. This adds `.github/workflows/ci.yml` to the changed-file list. The final tested head is recorded in PR #105; the earlier implementation SHA above remains its source predecessor.
+
+</details>
 
 </details>
