@@ -147,3 +147,26 @@ Owner requested restoration of the Weaver entrance with access to Duet on the sa
 Owner reported small text and requested review for readers over 40 and people with low vision. The Weaver's existing 16px body and 11–14px labels/controls were replaced with a scalable 125% root and 1rem minimum reading/control text (20px at standard browser settings). Normal tracking and sentence-case labels, stronger heading weight, comfortable leading, bounded paragraph widths and reflowing cards replace dense small presentation. The existing source page and both generated entrances share these changes; game rules and controls are unchanged.
 
 Local Chromium checks pass at 320/390/640/820/1440 CSS pixels; 200% text enlargement at 320px has no horizontal page overflow. Checked visible keyboard focus, Weaver/game return links, guide control and reduced motion. Representative body, muted, gold-label, card and button foreground/background contrast pairs exceed 4.5:1. All 13 browser-recovery checks pass. This is implementation verification, not independent low-vision acceptance; physical iPad Safari, VoiceOver and public-domain rendering remain unverified because the environment blocks those hostnames.
+
+
+## Weaver brand correction preview — 29 October 2026
+
+Extends review/weaver-low-vision ce2e27bec201fb8a9b540d31b50bccea5b62f012.
+The actual supplied /duet/ Vercel HTML was retrieved (HTTP 200) and compared with
+public/weaver source and builder output. Existing current-main game routes retained.
+Applied the retrieved Loptr Lab Design Bible's near-black/neutral/sans/gold identity
+with Material semantic roles, scoped adaptive layouts, shared spacing and focus.
+Moved embedded Weaver presentation into public/style.css; the existing builder
+copies it byte-for-byte to site/style.css and fixes source/alias hrefs. Added that
+source CSS to the existing Pages path trigger. Game code and narrative are unchanged.
+Kept 20px reading/label/control defaults; fixed inherited 14px card prose. Reduced
+empty hero height and removed gold-tinted surface fills. Added skip focus and Escape
+close/focus return for the existing fixed informational PIXIE panel. No new AI,
+login, response form or participation system.
+
+Verified locally: existing syntax checks and all 37 Node tests passed; four widths
+320/390/820/1440 at normal 20px and simulated 200% root text (40px) had no page
+overflow. Keyboard skip and PIXIE open/Escape passed. Representative text/background
+contrast pairs: neutral/void 15.44:1, neutral/panel 13.83:1, supporting/void 8.88:1,
+gold/void 9.24:1 and gold/panel 8.28:1. These are sampled pairs, not full certification.
+Physical iPad Safari and VoiceOver remain untested. Publication requires preview review.
