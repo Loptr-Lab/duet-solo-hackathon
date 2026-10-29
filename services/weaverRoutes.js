@@ -3,6 +3,7 @@ const { createWeaverAcceptance } = require('./weaverAcceptance');
 const { providers } = require('./germHandoff');
 const OWNER = require('../config/weaver-owner.json');
 const SUPPORT_CODES = new Set(['authentication_required', 'invitation_not_found', 'invitation_account_mismatch', 'issued_invitation_required', 'invitation_review_pending', 'invitation_approval_pending', 'named_person_verification_pending', 'confirmed_identity_mismatch', 'owner_verification_pending', 'service_unavailable', 'invitation_version_changed']);
+const ERROR_STATUS = { authentication_required: 401, invitation_not_found: 404, invitation_account_mismatch: 403, issued_invitation_required: 403, invitation_review_pending: 409, invitation_approval_pending: 409, named_person_verification_pending: 409, confirmed_identity_mismatch: 403, owner_verification_pending: 409, invitation_version_changed: 409, explicit_acceptance_required: 400, csrf_rejected: 403, owner_access_forbidden: 403, invalid_recipient: 400, invalid_receipt_reference: 400, receipt_not_found: 404 };
 function troubleshooting(code) {
   code = SUPPORT_CODES.has(code) ? code : 'service_unavailable';
   const marker = `weaver-support-${crypto.createHash('sha256').update(`flow-v1:${code}`).digest('hex').slice(0, 12)}`;
@@ -28,8 +29,9 @@ function registerWeaverRoutes(app, { db, getIdentity, baseUrl, provider = provid
         if (method === 'post') requireCsrf(req, identity, origin);
         await handler(req, res, identity);
       } catch (e) {
-        const code = e.statusCode ? e.message : 'service_unavailable';
-        res.status(e.statusCode || 503).json({ error: code, support: troubleshooting(code) });
+        const status = Object.hasOwn(ERROR_STATUS, e.message) && ERROR_STATUS[e.message] === e.statusCode ? e.statusCode : 503;
+        const code = status === 503 ? 'service_unavailable' : e.message;
+        res.status(status).json({ error: code, support: troubleshooting(code) });
       }
     });
   }
@@ -44,6 +46,10 @@ function registerWeaverRoutes(app, { db, getIdentity, baseUrl, provider = provid
     const view = await acceptance.review(identity.did);
     const url = view.receipt ? await provider.germ(identity.did) : null;
     res.json({ ...view, csrfToken: identity.csrfToken, germEligible: Boolean(url) });
+  });
+  route('get', '/auth/weaver/receipt', async (req, res, identity) => {
+    // Historical access to one's own committed receipt is independent of current eligibility.
+    res.json({ receipt: await acceptance.savedReceipt(identity.did, req.query.invitationId, req.query.version) });
   });
   route('post', '/auth/weaver/accept', async (req, res, identity) => {
     await ownerBound();

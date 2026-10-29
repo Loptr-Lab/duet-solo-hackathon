@@ -57,21 +57,51 @@
     text('h3', 'Your acceptance receipt');
     text('p', `Acceptance to discuss saved for invitation ${saved.invitationId}, version ${saved.version}, at ${new Date(saved.acceptedAt).toISOString()}. Recipient account: ${saved.recipientDid}.`);
     text('p', 'This records acceptance to discuss only. No message notification has been sent by Weaver.');
+    action('Download this receipt', () => {
+      const url = URL.createObjectURL(new Blob([JSON.stringify(saved, null, 2)], { type: 'application/json' }));
+      const a = document.createElement('a'); a.href = url; a.download = 'weaver-acceptance-receipt.json'; a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    });
+  }
+  function earlierReceipt(generation) {
+    const d = document.createElement('details'); content.append(d); text('summary', 'Retrieve an earlier acceptance receipt', d);
+    text('p', 'Use the invitation ID and version from your receipt. This cannot accept an invitation or read another account’s receipt.', d);
+    const f = document.createElement('form'); d.append(f);
+    for (const [name, label] of [['invitationId', 'Invitation ID'], ['version', 'Invitation version']]) {
+      const l = text('label', label, f); l.htmlFor = `receipt-${name}`;
+      const input = document.createElement('input'); input.id = l.htmlFor; input.name = name; input.required = true; input.maxLength = 500; f.append(input);
+    }
+    const submit = text('button', 'Retrieve saved receipt', f); submit.type = 'submit';
+    f.addEventListener('submit', async e => {
+      e.preventDefault(); submit.disabled = true;
+      try {
+        const query = new URLSearchParams(new FormData(f));
+        const result = await api(`/auth/weaver/receipt?${query}`);
+        if (generation !== epoch) return;
+        content.replaceChildren(); receipt(result.receipt); status.textContent = 'Your earlier acceptance receipt is available. This does not change current invitation eligibility.';
+        action('Check current invitation', show);
+      } catch { if (generation === epoch) status.textContent = 'That receipt is unavailable to this account, or the service could not confirm storage. Retry with the original invitation ID and version.'; }
+      finally { submit.disabled = false; }
+    });
   }
   async function show() {
     if (busy) return; busy = true; const generation = ++epoch; content.replaceChildren(); view = null; status.textContent = 'Checking the private invitation service…';
     try {
       let cap;
       try { cap = await api('/auth/weaver/capabilities'); } catch { throw { error: 'backend_unavailable' }; }
+      if (generation !== epoch) return;
       if (cap.backend !== true) throw { error: 'backend_unavailable' };
       let session;
-      try { session = await api('/auth/weaver/session'); } catch(e) { if (e.error === 'authentication_required') { signin(); return; } throw e; }
+      try { session = await api('/auth/weaver/session'); } catch(e) { if (generation !== epoch) return; if (e.error === 'authentication_required') { signin(); return; } throw e; }
+      if (generation !== epoch) return;
       csrfToken = session.csrfToken;
       text('p', `Account control authenticated for ${session.did}. This is not named-person verification or consent.`);
       text('p', 'Automatic named-person verification, including W Identity, is unavailable. Required human review must be completed privately.');
       action('Sign out and clear this view', async () => { try { const r = await fetch('/auth/logout', {method:'POST',credentials:'same-origin'}); if (!r.ok) throw Error(); epoch++; csrfToken=''; view=null; content.replaceChildren(); signin(); } catch { status.textContent='Sign-out could not be confirmed. Retry.'; } });
       if (session.owner) ownerControls();
+      earlierReceipt(generation);
       view = await api('/auth/weaver/invitation');
+      if (generation !== epoch) return;
       text('h3', `Invitation ${view.invitationId} · version ${view.version}`);
       text('pre', view.text);
       text('p', view.notice);
@@ -105,7 +135,7 @@
           finally { b.disabled = false; }
         });
       }
-    } catch (e) { failure(e); } finally { busy = false; }
+    } catch (e) { if (generation === epoch) failure(e); } finally { busy = false; }
   }
   button.addEventListener('click', () => { const open = panel.classList.toggle('open'); button.setAttribute('aria-expanded', String(open)); if(open) { show(); document.getElementById('check-invitation').focus(); } });
   document.addEventListener('keydown', e => { if(e.key === 'Escape' && panel.classList.contains('open')) { panel.classList.remove('open'); button.setAttribute('aria-expanded','false'); button.focus(); } });

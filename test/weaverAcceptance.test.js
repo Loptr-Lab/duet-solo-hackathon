@@ -62,3 +62,32 @@ test('HTTP routes enforce session, CSRF, owner boundary and notification retry w
   a.equal((await call('germ',{})).status,409);germ='https://landing.ger.mx/newUser#did:plc:syntheticowner+did:plc:syntheticrecipient';a.equal((await call('germ',{})).status,200);a.equal((await call('germ',{})).status,200);a.equal(db.writes,1);
   a.equal((await call('invitation')).headers.get('cache-control'),'no-store');identity=ownerDid;a.equal((await call('owner/status',{recipientDid:did})).status,200);
 });
+
+test('recipient can recover an immutable receipt after revocation or invitation deletion, without evidence or cross-account access', async()=>{
+  const {db,service}=setup();const saved=await service.accept(did,body);
+  db.data.get(`duet_auth/invitation_${did}`).status='declined';
+  a.deepEqual(await service.savedReceipt(did,body.invitationId,body.version),saved);
+  db.data.delete(`duet_auth/invitation_${did}`);
+  a.deepEqual(await service.savedReceipt(did,body.invitationId,body.version),saved);
+  a.ok(!JSON.stringify(saved).includes('synthetic-private-ref'));
+  await a.rejects(service.savedReceipt('did:plc:other',body.invitationId,body.version),/receipt_not_found/);
+  await a.rejects(service.savedReceipt(did,body.invitationId,'v2'),/receipt_not_found/);
+  await a.rejects(service.savedReceipt(did,{},body.version),/invalid_receipt_reference/);
+  a.equal(db.writes,1);
+});
+
+test('receipt HTTP access stays DID-bound with owner/provider failures; external statusCode errors are sanitized',async t=>{
+  const {db,service}=setup();await service.accept(did,body);db.data.delete(`duet_auth/invitation_${did}`);
+  let identity=did, failure=false;
+  const app=express();app.use(express.json());
+  registerWeaverRoutes(app,{db,acceptance:service,ownerDid,baseUrl:'https://weaver.test',getIdentity:async()=>{
+    if(failure)throw Object.assign(Error('private identity token or evidence'),{statusCode:403});
+    return identity?{did:identity,csrfToken:csrf('synthetic-session')}:null;
+  },provider:{ownerAuthorized:async()=>false,germ:async()=>{throw Error('provider outage')}}});
+  const server=app.listen(0,'127.0.0.1');await new Promise(r=>server.once('listening',r));t.after(()=>server.close());
+  const url=`http://127.0.0.1:${server.address().port}/auth/weaver/receipt?invitationId=${body.invitationId}&version=${body.version}`;
+  let r=await fetch(url);a.equal(r.status,200);a.equal(r.headers.get('cache-control'),'no-store');a.equal((await r.json()).receipt.recipientDid,did);
+  identity='did:plc:other';a.equal((await fetch(url+'&recipientDid='+did)).status,404);
+  identity=null;a.equal((await fetch(url)).status,401);
+  failure=true;r=await fetch(url);a.equal(r.status,503);a.equal((await r.json()).error,'service_unavailable');a.equal(db.writes,1);
+});

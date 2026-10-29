@@ -20,6 +20,15 @@ function createWeaverAcceptance({ db, now = Date.now, ownerDid = owner.did }) {
   const invitations = db.collection('duet_auth');
   const acceptances = db.collection('weaver_acceptances');
   const invRef = did => invitations.doc(`invitation_${did}`);
+  async function savedReceipt(did, invitationId, version) {
+    if (typeof invitationId !== 'string' || !invitationId || invitationId.length > 500 || typeof version !== 'string' || !version || version.length > 500) fail('invalid_receipt_reference', 400);
+    // The authenticated DID is always part of the key; callers cannot select another recipient.
+    const saved = await acceptances.doc(acceptanceId({ id: invitationId, version }, did)).get();
+    if (!saved.exists) fail('receipt_not_found', 404);
+    const record = saved.data();
+    if (record.recipientDid !== did || record.invitationId !== invitationId || record.version !== version) fail('receipt_not_found', 404);
+    return receipt(record);
+  }
   async function review(did) {
     const snap = await invRef(did).get(); const inv = snap.exists ? snap.data() : null;
     validate(inv, did, undefined, ownerDid);
@@ -51,6 +60,6 @@ function createWeaverAcceptance({ db, now = Date.now, ownerDid = owner.did }) {
     const saved = inv.version ? await acceptances.doc(acceptanceId(inv, recipientDid)).get() : null;
     return { invitationId: inv.id, version: inv.version || null, issued: inv.status === 'invited', approval: inv.approval?.status || 'pending', verification: inv.verification?.status || 'pending', receipt: saved?.exists ? receipt(saved.data()) : null };
   }
-  return { review, accept, ownerStatus };
+  return { review, accept, ownerStatus, savedReceipt };
 }
 module.exports = { createWeaverAcceptance, validate, acceptanceId, ACCEPTANCE_NOTICE, invitationDigest, fail };

@@ -19,7 +19,8 @@ function baseUrlFromEnv() {
 function parseCookie(header, name) {
   if (!header) return null;
   const match = header.split(';').map((part) => part.trim()).find((part) => part.startsWith(`${name}=`));
-  return match ? decodeURIComponent(match.slice(name.length + 1)) : null;
+  try { return match ? decodeURIComponent(match.slice(name.length + 1)) : null; }
+  catch { return null; }
 }
 
 function appendSetCookie(res, value) {
@@ -102,7 +103,7 @@ async function createAtprotoAuth({ db }) {
     const snap = await collection.doc(`browser_${sessionId}`).get();
     if (!snap.exists) return null;
     const data = snap.data();
-    if (Number(data.expiresAt) < Date.now()) {
+    if (!Number.isFinite(data.expiresAt) || data.expiresAt <= Date.now()) {
       await collection.doc(`browser_${sessionId}`).delete().catch(() => {});
       return null;
     }
@@ -249,10 +250,10 @@ async function createAtprotoAuth({ db }) {
     app.post('/auth/logout', async (req, res, next) => {
       try {
         const sessionId = parseCookie(req.headers.cookie, SESSION_COOKIE);
-        if (sessionId) await collection.doc(`browser_${sessionId}`).delete().catch(() => {});
+        if (sessionId) await collection.doc(`browser_${sessionId}`).delete();
         clearSessionCookie(res);
         res.status(204).end();
-      } catch (err) { next(err); }
+      } catch (err) { res.status(503).json({ error: 'service_unavailable' }); }
     });
   }
 
