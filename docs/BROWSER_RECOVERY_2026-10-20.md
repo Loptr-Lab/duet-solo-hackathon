@@ -140,3 +140,10 @@ exist. No separate paid service or model API is required for this test revision.
 ## Weaver access restoration — 29 October 2026
 
 Owner requested restoration of the Weaver entrance with access to Duet on the same site. `scripts/build-weaver-site.py` publishes the preserved `public/weaver/index.html` at `/duet/` and `/duet/weaver/`, with links to `/duet/play/` and the retained status page `/duet/review.html`. The game links back to the Weaver. The existing Break This Build landing page also links to the Weaver. The Pages workflow now includes the Weaver source and builder, preventing future omission. No cloud runtime, game rules, remote service or DNS configuration was changed. Direct public-host checks are blocked by this execution environment's proxy; local published-layout navigation and the existing browser recovery tests are checked before publication. GitHub deployment status is separate from verification of Porkbun forwarding.
+
+
+## Weaver readability correction — 29 October 2026
+
+Owner reported small text and requested review for readers over 40 and people with low vision. The Weaver's existing 16px body and 11–14px labels/controls were replaced with a scalable 125% root and 1rem minimum reading/control text (20px at standard browser settings). Normal tracking and sentence-case labels, stronger heading weight, comfortable leading, bounded paragraph widths and reflowing cards replace dense small presentation. The existing source page and both generated entrances share these changes; game rules and controls are unchanged.
+
+Local Chromium checks pass at 320/390/640/820/1440 CSS pixels; 200% text enlargement at 320px has no horizontal page overflow. Checked visible keyboard focus, Weaver/game return links, guide control and reduced motion. Representative body, muted, gold-label, card and button foreground/background contrast pairs exceed 4.5:1. All 13 browser-recovery checks pass. This is implementation verification, not independent low-vision acceptance; physical iPad Safari, VoiceOver and public-domain rendering remain unverified because the environment blocks those hostnames.
