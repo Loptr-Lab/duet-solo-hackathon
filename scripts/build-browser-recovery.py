@@ -21,7 +21,7 @@ body=body.replace('<p class="quickstart" aria-hidden="true">', '<p class="quicks
 body=re.sub(r' When Fog Mode is on, querying.*?stale\.', '', body)
 body=body.replace('If a question is not recognized, PIXIE uses fixed game answers on this device.', 'Answers are selected on this device.')
 recovery_panel='''<section class="panel" aria-labelledby="recovery-title"><h2 id="recovery-title">DUET · Local play recovery</h2><p>Two players on this device or a local computer opponent. No account, cloud service, model API, telemetry or saved-game service is used. Refreshing closes this match. This is a tested recovery build; independent accessibility acceptance remains pending.</p><button type="button" class="btn-primary" onclick="startLocalGame(false)">New game · two players</button> <button type="button" class="btn-primary" onclick="startLocalGame(true)">New game · play computer</button></section>'''
-body=body.replace('<header class="hero">','''<nav aria-label="Recovery navigation"><a href="../">Current State</a> · <a href="https://break.loptrlab.com/">Break this build</a></nav>
+body=body.replace('<header class="hero">','''<nav aria-label="Recovery navigation"><a href="../">The Weaver</a> · <a href="../review.html">Current State</a> · <a href="https://break.loptrlab.com/">Break this build</a></nav>
 <header class="hero">''',1)
 help_start=body.index('    <details class="panel" aria-labelledby="agent-heading">')
 support_end=body.index('    <footer',help_start)
