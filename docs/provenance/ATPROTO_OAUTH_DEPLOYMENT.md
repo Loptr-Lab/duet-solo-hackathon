@@ -1,3 +1,16 @@
+# Historical Duet OAuth deployment record
+
+## Current status — 29 October 2026
+
+Duet has moved to local/static operation under current owner direction. The configuration and Google service instructions preserved below are **historical**, not evidence that those services exist or are currently authorized. Do not restore or configure them for Weaver. The old hostname is not selected as Weaver's current OAuth origin.
+
+The [current hosting assessment and provider-independent acceptance contract](../deployment/WEAVER_STAGING_REVIEW.md) records the observed existing PIXIE Companion as a possible reuse point, not an approved Weaver integration. No current persistent acceptance backend is established. The historical OAuth implementation remains source only; no replacement authentication system is introduced. Future integration must reuse the authorized identity contract at its verified origin and preserve DID-bound sessions, private credentials, secure cookies, expiry/logout and CSRF protections. A verified human flag is not named-person verification or acceptance.
+
+The production acceptance factory is unavailable even when historical database/OAuth settings are present. The UI states: **“Invitation acceptance is not available on this deployment. Nothing has been accepted.”** Real-provider and physical-device verification are not claimed.
+
+<details>
+<summary>Historical deployment instructions — do not execute as current setup guidance</summary>
+
 # Duet AT Protocol OAuth deployment
 
 Duet now contains the server-side scaffold for AT Protocol OAuth using the official Node OAuth client. The code is intentionally configuration-gated: gameplay remains available when OAuth secrets are absent, but production authentication is not enabled until the required deployment configuration exists.
@@ -37,3 +50,15 @@ The public OAuth endpoints are:
 The repository does **not** contain production secrets and does not claim that OAuth is live merely because the code exists. Before a real login can work, the public HTTPS base URL, OAuth client metadata, JWKS, private signing key, Firestore access, and deployment configuration must agree.
 
 The official atproto Node OAuth client handles the protocol mechanics including PKCE and DPoP. Duet uses a server-side/BFF session cookie so OAuth credentials remain server-side.
+
+## Weaver acceptance amendment — 29 October 2026
+
+New runtime routes are `/auth/weaver/capabilities`, `/auth/weaver/session`, `/auth/weaver/invitation`, POST `/auth/weaver/accept`, POST `/auth/weaver/germ`, and POST `/auth/weaver/owner/status`. Private responses are no-store. Every new POST requires the configured exact Origin, JSON content type, an authenticated session and its server-derived CSRF token. OAuth's existing PKCE/DPoP flow remains in use; `flow=weaver` returns to the private guide after sign-in. The existing `/auth/invitation/request` and `/auth/invitation/decide` paths are retired (410), not a back door to issue or approve invitations.
+
+No production configuration, real invitation record or credential was changed. The owner handle/DID/PDS binding is in config/weaver-owner.json and revalidated at runtime. Backend OAuth keys, a matching public origin, accessible private Firestore and authorized versioned invitation/evidence records are prerequisites. Do not deploy acceptance collections with public client access. W Identity is not integrated; Germ has only the documented user-navigation handoff. The existing GitHub Pages deployment remains static and cannot supply this backend.
+
+## Resumed operational review — 29 October 2026
+
+See [operational readiness and release handoff](../deployment/WEAVER_STAGING_REVIEW.md) for fresh hosting/owner/provider observations, the private historical-receipt endpoint, session/logout corrections, isolated test results and exact remaining operator gates. Static preview remains non-operational for authentication and acceptance. Automatic named-person verification remains disabled; no real invitation writes or messages are authorized.
+
+</details>

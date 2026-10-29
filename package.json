@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "check": "node --check server.js && node --check agentScope.js && node --check gameNamespace.js && node --check roomStore.js && node --check services/storage.js && node --check atprotoPoster.js && node --check services/verifiedProfile.js && node --check services/atprotoAuth.js",
+    "check": "node --check server.js && node --check agentScope.js && node --check gameNamespace.js && node --check roomStore.js && node --check services/storage.js && node --check atprotoPoster.js && node --check services/verifiedProfile.js && node --check services/atprotoAuth.js && node --check public/weaver-invitation.js && node --check services/weaverAcceptance.js && node --check services/weaverRoutes.js && node --check services/weaverStore.js",
     "test": "node --test"
   },
   "dependencies": {
@@ -17,4 +17,3 @@
     "socket.io": "^4.7.5"
   }
 }
-

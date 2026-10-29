@@ -7,6 +7,8 @@ on:
     paths:
       - "site/**"
       - "public/weaver/**"
+      - "public/weaver-invitation.js"
+      - "public/style.css"
       - "scripts/build-weaver-site.py"
       - "scripts/build-browser-recovery.py"
       - "test/browserRecovery.test.js"

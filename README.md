@@ -1,3 +1,5 @@
+Weaver presentation changes must follow [brand-guidelines.md](brand-guidelines.md), the existing Loptr Lab Design Bible and the single public/style.css authority. Preview before publication.
+
 # Duet: Solo
 
 ## Loptr Lab mission and participation

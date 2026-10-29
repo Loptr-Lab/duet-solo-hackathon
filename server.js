@@ -1,4 +1,5 @@
 const express = require('express');
+const { productionWeaverStore, capabilities, unavailableResponse } = require('./services/weaverStore');
 const path = require('path');
 const http = require('http');
 const { Server } = require('socket.io');
@@ -45,11 +46,16 @@ if (roomStore && typeof roomStore.verifyAccess === 'function') {
   });
 }
 
+const weaverStore = productionWeaverStore();
+let weaverAuthenticationReady = false;
+app.get('/auth/weaver/capabilities', (req, res) => res.set('Cache-Control', 'no-store').json(capabilities(weaverStore, weaverAuthenticationReady)));
+
 async function startServer() {
   if (roomStore.db && process.env.ATPROTO_BASE_URL && process.env.ATPROTO_OAUTH_PRIVATE_KEY) {
     try {
-      const atprotoAuth = await createAtprotoAuth({ db: roomStore.db });
+      const atprotoAuth = await createAtprotoAuth({ db: roomStore.db, weaverStore });
       atprotoAuth.routes(app);
+      weaverAuthenticationReady = true;
       console.log('AT Protocol OAuth BFF enabled.');
     } catch (err) {
       console.error('⚠️ AT Protocol OAuth initialization failed:', err.message);
@@ -59,6 +65,8 @@ async function startServer() {
     console.log('AT Protocol OAuth is not configured; gameplay remains available.');
   }
 
+  // No legacy OAuth/database configuration can enable an unverified acceptance adapter.
+  app.use('/auth/weaver', (req, res) => unavailableResponse(res));
   createGameNamespace(io, roomStore, playerStorage);
   httpServer.listen(PORT, HOST, () => {
     console.log(`Server listening on http://${HOST}:${PORT}`);

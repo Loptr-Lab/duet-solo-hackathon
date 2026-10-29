@@ -1,3 +1,14 @@
+# Duet / Weaver implementation report
+
+## Current correction — 29 October 2026
+
+The prior report inferred a current Google backend from historical source. That inference is withdrawn. Owner direction establishes local/static Duet operation; no restoration of Cloud Run or Firestore is required. [The corrected staging handoff](deployment/WEAVER_STAGING_REVIEW.md) separates historical source, configured services, observed deployment and proposed integration.
+
+Acceptance now uses a provider-independent storage boundary. No production adapter is connected; the synthetic adapter remains test-only and is refused in production. The exact unavailable message, receipt recovery, sign-out/CSRF/isolation/error handling and reviewed presentation are preserved. The existing PR records the final tested commit, checks and fresh static preview. No infrastructure, real invitation or production data was changed.
+
+<details>
+<summary>Historical implementation reports — earlier Google-service requirements are superseded</summary>
+
 # DUET browser-only recovery — 20 October 2026
 
 ## Preserved evidence
@@ -140,3 +151,56 @@ exist. No separate paid service or model API is required for this test revision.
 ## Weaver access restoration — 29 October 2026
 
 Owner requested restoration of the Weaver entrance with access to Duet on the same site. `scripts/build-weaver-site.py` publishes the preserved `public/weaver/index.html` at `/duet/` and `/duet/weaver/`, with links to `/duet/play/` and the retained status page `/duet/review.html`. The game links back to the Weaver. The existing Break This Build landing page also links to the Weaver. The Pages workflow now includes the Weaver source and builder, preventing future omission. No cloud runtime, game rules, remote service or DNS configuration was changed. Direct public-host checks are blocked by this execution environment's proxy; local published-layout navigation and the existing browser recovery tests are checked before publication. GitHub deployment status is separate from verification of Porkbun forwarding.
+
+
+## Weaver readability correction — 29 October 2026
+
+Owner reported small text and requested review for readers over 40 and people with low vision. The Weaver's existing 16px body and 11–14px labels/controls were replaced with a scalable 125% root and 1rem minimum reading/control text (20px at standard browser settings). Normal tracking and sentence-case labels, stronger heading weight, comfortable leading, bounded paragraph widths and reflowing cards replace dense small presentation. The existing source page and both generated entrances share these changes; game rules and controls are unchanged.
+
+Local Chromium checks pass at 320/390/640/820/1440 CSS pixels; 200% text enlargement at 320px has no horizontal page overflow. Checked visible keyboard focus, Weaver/game return links, guide control and reduced motion. Representative body, muted, gold-label, card and button foreground/background contrast pairs exceed 4.5:1. All 13 browser-recovery checks pass. This is implementation verification, not independent low-vision acceptance; physical iPad Safari, VoiceOver and public-domain rendering remain unverified because the environment blocks those hostnames.
+
+
+## Weaver brand correction preview — 29 October 2026
+
+Extends review/weaver-low-vision ce2e27bec201fb8a9b540d31b50bccea5b62f012.
+The actual supplied /duet/ Vercel HTML was retrieved (HTTP 200) and compared with
+public/weaver source and builder output. Existing current-main game routes retained.
+Applied the retrieved Loptr Lab Design Bible's near-black/neutral/sans/gold identity
+with Material semantic roles, scoped adaptive layouts, shared spacing and focus.
+Moved embedded Weaver presentation into public/style.css; the existing builder
+copies it byte-for-byte to site/style.css and fixes source/alias hrefs. Added that
+source CSS to the existing Pages path trigger. Game code and narrative are unchanged.
+Kept 20px reading/label/control defaults; fixed inherited 14px card prose. Reduced
+empty hero height and removed gold-tinted surface fills. Added skip focus and Escape
+close/focus return for the existing fixed informational PIXIE panel. No new AI,
+login, response form or participation system.
+
+Verified locally: existing syntax checks and all 37 Node tests passed; four widths
+320/390/820/1440 at normal 20px and simulated 200% root text (40px) had no page
+overflow. Keyboard skip and PIXIE open/Escape passed. Representative text/background
+contrast pairs: neutral/void 15.44:1, neutral/panel 13.83:1, supporting/void 8.88:1,
+gold/void 9.24:1 and gold/panel 8.28:1. These are sampled pairs, not full certification.
+Physical iPad Safari and VoiceOver remain untested. Publication requires preview review.
+
+## Proposed private invitation flow — PR #105, 29 October 2026
+
+Continues from f135c4ddd5eb100c89533241635c0e0a47a66af6 on review/weaver-low-vision. The older staged readability work remains untouched in its original worktree. Current owner instructions supersede unsolicited registration and the read-only-helper restriction only for the private issued-invitation pathway; see the current contract in docs/provenance/WEAVER_DOOR.md.
+
+Implementation checks: npm run check and all 48 Node tests pass. New synthetic tests cover pending/unapproved/mismatched/stale invitations, exact-text digest binding, duplicate/concurrent acceptance, storage failure/retry, session/CSRF/owner denial, provider outages, every Germ permission state, follow direction, malformed destinations and unreachable handoff. Opening/retrying Germ performs no acceptance write and records no sending/delivery status. No real identity evidence or invitations were read or modified by these tests.
+
+Local Chromium checked static unavailable-backend behavior at 320/390/820/1440 CSS pixels, enlarged 200% text at 320px, keyboard Escape/focus return and helper controls. A separate synthetic mocked-backend browser test checked signed-out UI, exact text rendering without HTML execution, storage failure, receipt only after confirmation, Germ retry and removal of unavailable links. Sample text contrast and supplied mark's reduced-motion fallback pass. Static previews never contain those synthetic backend responses. Authoritative CSS/JS copies and both generated aliases match the existing builder. The exact owner-supplied Weaver SVG is distinct from the pinned, unchanged Companion image; the owner-supplied Yellow Door link is retained.
+
+Unverified operational requirements: configured OAuth origin/key and backend, private Firestore access rules and approved versioned records/evidence, qualified named-person review, W Identity provider support, current owner Germ declaration (request returned HTTP 403), destination/device acceptance, physical iPad Safari and VoiceOver. Preview deployment metadata and exact final commit are recorded in PR #105. No main merge, production promotion, DNS change, real invitation modification or message sending is authorized.
+
+
+## Weaver resumed review — 29 October 2026
+
+Continued PR #105 from `2f15eeec81de0aad4835d4a4025e6d7ecdd05b83` without branch advancement at initial inspection. [Operational report](deployment/WEAVER_STAGING_REVIEW.md) records the current files/behavior, 51 passing tests, local browser journey, hosting inspection, official W provider assessment and blocked live gates. Public owner binding was freshly verified; owner OAuth, Cloud Run/Firestore configuration, live Germ, physical Safari and VoiceOver remain unverified. Static review does not save acceptance. No production or real invitation change occurred. Exact uploaded source SHA and fresh preview are recorded in PR #105 delivery metadata.
+
+Tested resumed implementation: `703d4ee12483a9283ef5642aec96bcf64b7efefd` (51 tests plus local Chromium). The operational handoff commit changes documentation only.
+
+</details>
+
+### Railway integration review follow-through
+
+The next amendment replaces the public page's unconfigured local acceptance client with navigation to the existing PIXIE Companion's scoped response view. Duet retains its unavailable provider-independent routes for historical tests; the public helper no longer calls them. A separate Companion review branch contains the existing-session/private-volume implementation; no new service, database or credential is introduced. Public helper checks pass at 320/390/820/1440 with no identity API calls or token transfer. The preserved newer Weaver suite passes all 56 entries. Companion's 89 tests, typecheck and production build pass; a separate synthetic browser test covers unavailable static backend, confirmed/failed saves, Germ and responsive reflow. Real provider/recipient acceptance, backup review, private existing-invitation preparation and Railway release remain unperformed. Recipient variable is documented, not set. Existing Railway staged configuration remains untouched. Exact commits and preview are recorded in PR #105 and the linked Companion PR.

@@ -3,6 +3,8 @@ const { Agent } = require('@atproto/api');
 const { JoseKey } = require('@atproto/jwk-jose');
 const { NodeOAuthClient } = require('@atproto/oauth-client-node');
 const { createDomainVerifier } = require('./domainVerification.js');
+const { productionWeaverStore } = require('./weaverStore');
+const { registerWeaverRoutes, csrf } = require('./weaverRoutes.js');
 const { createInvitationService } = require('./invitations.js');
 
 const SESSION_COOKIE = 'duet_at_session';
@@ -18,7 +20,8 @@ function baseUrlFromEnv() {
 function parseCookie(header, name) {
   if (!header) return null;
   const match = header.split(';').map((part) => part.trim()).find((part) => part.startsWith(`${name}=`));
-  return match ? decodeURIComponent(match.slice(name.length + 1)) : null;
+  try { return match ? decodeURIComponent(match.slice(name.length + 1)) : null; }
+  catch { return null; }
 }
 
 function appendSetCookie(res, value) {
@@ -40,7 +43,7 @@ function requireEnv(name) {
   return value;
 }
 
-async function createAtprotoAuth({ db }) {
+async function createAtprotoAuth({ db, weaverStore = productionWeaverStore() }) {
   const baseUrl = baseUrlFromEnv();
   const privateKey = requireEnv('ATPROTO_OAUTH_PRIVATE_KEY');
   const keyset = [await JoseKey.fromImportable(privateKey, process.env.ATPROTO_OAUTH_KEY_ID || 'duet-key-1')];
@@ -101,11 +104,12 @@ async function createAtprotoAuth({ db }) {
     const snap = await collection.doc(`browser_${sessionId}`).get();
     if (!snap.exists) return null;
     const data = snap.data();
-    if (Number(data.expiresAt) < Date.now()) {
+    if (!Number.isFinite(data.expiresAt) || data.expiresAt <= Date.now()) {
       await collection.doc(`browser_${sessionId}`).delete().catch(() => {});
       return null;
     }
     const session = await client.restore(data.did);
+    if (session.did !== data.did) throw new Error('session_identity_mismatch');
     return { did: data.did, session, verified: data.verified || null };
   }
 
@@ -140,18 +144,14 @@ async function createAtprotoAuth({ db }) {
   }
 
   async function getBrowserIdentity(req) {
-    return getIdentity(parseCookie(req.headers.cookie, SESSION_COOKIE));
-  }
-
-  function requireVerified(identity) {
-    if (!identity?.verified?.status || identity.verified.status !== 'VERIFIED PROFILE') {
-      const error = new Error('verified_profile_required');
-      error.statusCode = 403;
-      throw error;
-    }
+    const sessionId = parseCookie(req.headers.cookie, SESSION_COOKIE);
+    const identity = await getIdentity(sessionId);
+    return identity ? { ...identity, csrfToken: csrf(sessionId) } : null;
   }
 
   function routes(app) {
+    app.use('/auth', (req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });
+    registerWeaverRoutes(app, { store: weaverStore, getIdentity: getBrowserIdentity, baseUrl });
     app.get('/client-metadata.json', (req, res) => res.json(client.clientMetadata));
     app.get('/jwks.json', (req, res) => res.json(client.jwks));
 
@@ -159,7 +159,7 @@ async function createAtprotoAuth({ db }) {
       try {
         const handle = typeof req.query.handle === 'string' ? req.query.handle.trim() : '';
         if (!handle) return res.status(400).json({ error: 'handle_required' });
-        const state = crypto.randomBytes(24).toString('base64url');
+        const state = (req.query.flow === 'weaver' ? 'weaver:' : '') + crypto.randomBytes(24).toString('base64url');
         const url = await client.authorize(handle, { state, scope: 'atproto' });
         res.redirect(url);
       } catch (err) { next(err); }
@@ -218,7 +218,7 @@ async function createAtprotoAuth({ db }) {
           }
         }
         await attachIdentity(res, session.did, verified);
-        res.redirect('/signin.html?auth=success');
+        res.redirect(typeof state === 'string' && state.startsWith('weaver:') ? '/weaver/#invitation' : '/signin.html?auth=success');
       } catch (err) { next(err); }
     });
 
@@ -229,44 +229,32 @@ async function createAtprotoAuth({ db }) {
         const agent = new Agent(identity.session);
         const profile = await agent.getProfile({ actor: identity.did });
         const invitation = await invitations.get(identity.did);
-        return res.json({ authenticated: true, did: identity.did, handle: profile.data.handle, displayName: profile.data.displayName || null, verification: identity.verified || { status: 'UNVERIFIED', methods: [] }, invitation: invitation || { status: 'none' } });
+        return res.json({ authenticated: true, did: identity.did, handle: profile.data.handle, displayName: profile.data.displayName || null, verification: identity.verified || { status: 'UNVERIFIED', methods: [] }, invitation: invitation ? { id: invitation.id, status: invitation.status, version: invitation.version || null } : { status: 'none' } });
       } catch (err) { next(err); }
     });
 
-    app.post('/auth/invitation/request', async (req, res, next) => {
-      try {
-        const identity = await getBrowserIdentity(req);
-        if (!identity) return res.status(401).json({ error: 'authentication_required' });
-        requireVerified(identity);
-        res.status(201).json(await invitations.request(identity.did));
-      } catch (err) { next(err); }
-    });
+    // Owner direction 29 Oct: no unsolicited registration or invitation requests.
+    app.post('/auth/invitation/request', (req, res) => res.status(410).json({ error: 'unsolicited_invitations_closed' }));
 
     app.get('/auth/invitation/status', async (req, res, next) => {
       try {
         const identity = await getBrowserIdentity(req);
         if (!identity) return res.status(401).json({ error: 'authentication_required' });
-        res.json(await invitations.get(identity.did) || { status: 'none' });
+        const invitation = await invitations.get(identity.did);
+        res.json(invitation ? { id: invitation.id, status: invitation.status, version: invitation.version || null } : { status: 'none' });
       } catch (err) { next(err); }
     });
 
-    app.post('/auth/invitation/decide', async (req, res, next) => {
-      try {
-        const identity = await getBrowserIdentity(req);
-        if (!identity) return res.status(401).json({ error: 'authentication_required' });
-        const approver = process.env.INVITATION_APPROVER_DID;
-        if (!approver || identity.did !== approver) return res.status(403).json({ error: 'invitation_approval_forbidden' });
-        res.json(await invitations.decide(req.body?.did, req.body?.status, identity.did));
-      } catch (err) { next(err); }
-    });
+    // Legacy route cannot approve versioned Weaver invitations or identity evidence.
+    app.post('/auth/invitation/decide', (req, res) => res.status(410).json({ error: 'private_versioned_review_required' }));
 
     app.post('/auth/logout', async (req, res, next) => {
       try {
         const sessionId = parseCookie(req.headers.cookie, SESSION_COOKIE);
-        if (sessionId) await collection.doc(`browser_${sessionId}`).delete().catch(() => {});
+        if (sessionId) await collection.doc(`browser_${sessionId}`).delete();
         clearSessionCookie(res);
         res.status(204).end();
-      } catch (err) { next(err); }
+      } catch (err) { res.status(503).json({ error: 'service_unavailable' }); }
     });
   }
 
