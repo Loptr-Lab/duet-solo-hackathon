@@ -2987,6 +2987,10 @@ async function sendAgentMessage() {
 
         _wireClientEvents() {
             RemoteState.client.transport.on('connect', () => RemoteMode._attemptAutoRejoin());
+            RemoteState.client.transport.on('room_expired', ({ reason }) => {
+                RemoteMode._clearSavedMatch();
+                RemoteMode._announce(reason);
+            });
             RemoteState.client.on('opponent_joined', (state) => {
                 RemoteMode._applyState(state);
                 RemoteMode._enterGameScreen();

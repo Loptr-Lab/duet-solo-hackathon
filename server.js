@@ -3,10 +3,11 @@ const path = require('path');
 const http = require('http');
 const { Server } = require('socket.io');
 
-const { createFirestoreRoomStore } = require('./roomStore.js');
+const demoMode = process.env.DUET_STORAGE_MODE === 'memory-demo';
+if (process.env.DUET_STORAGE_MODE && !['memory-demo', 'firestore'].includes(process.env.DUET_STORAGE_MODE)) {
+  throw new Error('DUET_STORAGE_MODE must be firestore or memory-demo');
+}
 const { createGameNamespace } = require('./gameNamespace.js');
-const { createPlayerStorage } = require('./services/storage.js');
-const { createAtprotoAuth } = require('./services/atprotoAuth.js');
 const { scopedQuestion, gameReply, OFF_TOPIC } = require('./agentScope.js');
 
 const app = express();
@@ -23,6 +24,13 @@ app.use((req, res, next) => {
   next();
 });
 
+if (demoMode) {
+  app.get(['/', '/index.html'], (_req, res) => {
+    const html = require('fs').readFileSync(path.join(__dirname, 'public/index.html'), 'utf8');
+    res.type('html').send(html.replace('<body>', '<body><p role="status" style="padding:1rem">Temporary multiplayer demo: no account needed. Rooms expire after inactivity; restarting the server clears all matches. No saved games or feedback storage.</p>'));
+  });
+}
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/healthz', (req, res) => {
@@ -36,8 +44,10 @@ app.post('/api/agent', (req, res) => {
 
 const httpServer = http.createServer(app);
 const io = new Server(httpServer);
-const roomStore = createFirestoreRoomStore();
-const playerStorage = createPlayerStorage();
+const { createDemoRuntime } = require('./demoRuntime.js');
+const demo = demoMode ? createDemoRuntime(process.env) : null;
+const roomStore = demo ? demo.roomStore : require('./roomStore.js').createFirestoreRoomStore();
+const playerStorage = demo ? null : require('./services/storage.js').createPlayerStorage();
 
 if (roomStore && typeof roomStore.verifyAccess === 'function') {
   Promise.resolve(roomStore.verifyAccess()).catch((err) => {
@@ -48,7 +58,7 @@ if (roomStore && typeof roomStore.verifyAccess === 'function') {
 async function startServer() {
   if (roomStore.db && process.env.ATPROTO_BASE_URL && process.env.ATPROTO_OAUTH_PRIVATE_KEY) {
     try {
-      const atprotoAuth = await createAtprotoAuth({ db: roomStore.db });
+      const atprotoAuth = await require('./services/atprotoAuth.js').createAtprotoAuth({ db: roomStore.db });
       atprotoAuth.routes(app);
       console.log('AT Protocol OAuth BFF enabled.');
     } catch (err) {
@@ -59,7 +69,8 @@ async function startServer() {
     console.log('AT Protocol OAuth is not configured; gameplay remains available.');
   }
 
-  createGameNamespace(io, roomStore, playerStorage);
+  createGameNamespace(io, roomStore, playerStorage, demo ? demo.options : undefined);
+  if (demo) console.log('Memory demo: one process only; matches expire or disappear on restart. No cloud storage or posting.');
   httpServer.listen(PORT, HOST, () => {
     console.log(`Server listening on http://${HOST}:${PORT}`);
   });

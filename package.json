@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "check": "node --check server.js && node --check agentScope.js && node --check gameNamespace.js && node --check roomStore.js && node --check services/storage.js && node --check atprotoPoster.js && node --check services/verifiedProfile.js && node --check services/atprotoAuth.js",
-    "test": "node --test"
+    "test": "node --test",
+    "start:demo": "DUET_STORAGE_MODE=memory-demo node server.js"
   },
   "dependencies": {
     "@atproto/api": "^0.20.44",
@@ -15,6 +16,8 @@
     "@google-cloud/firestore": "^7.7.0",
     "express": "^4.19.2",
     "socket.io": "^4.7.5"
+  },
+  "devDependencies": {
+    "socket.io-client": "^4.8.4"
   }
 }
-
