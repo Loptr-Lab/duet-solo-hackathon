@@ -25,13 +25,19 @@ app.use((req, res, next) => {
 });
 
 if (demoMode) {
-  app.get(['/', '/index.html'], (_req, res) => {
-    const html = require('fs').readFileSync(path.join(__dirname, 'public/index.html'), 'utf8');
-    res.type('html').send(html.replace('<body>', '<body><p role="status" style="padding:1rem">Temporary multiplayer demo: no account needed. Rooms expire after inactivity; restarting the server clears all matches. No saved games or feedback storage.</p>'));
-  });
+  const html = require('./demoPage.js').renderDemoPage(
+    require('fs').readFileSync(path.join(__dirname, 'public/index.html'), 'utf8')
+  );
+  app.get(['/', '/index.html'], (_req, res) => res.type('html').send(html));
 }
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/api/runtime', (_req, res) => {
+  const source = process.env.RAILWAY_GIT_COMMIT_SHA || process.env.DUET_SOURCE_SHA || '';
+  res.setHeader('Cache-Control', 'no-store');
+  res.json({ mode: demoMode ? 'memory-demo' : 'firestore', sourceSha: /^[a-f0-9]{40}$/i.test(source) ? source : null });
+});
 
 app.get('/healthz', (req, res) => {
   res.status(200).send('ok');
@@ -72,7 +78,7 @@ async function startServer() {
   createGameNamespace(io, roomStore, playerStorage, demo ? demo.options : undefined);
   if (demo) console.log('Memory demo: one process only; matches expire or disappear on restart. No cloud storage or posting.');
   httpServer.listen(PORT, HOST, () => {
-    console.log(`Server listening on http://${HOST}:${PORT}`);
+    console.log(`Server listening on http://${HOST}:${httpServer.address().port}`);
   });
 }
 

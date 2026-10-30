@@ -88,9 +88,21 @@ test('demo startup never loads Google, identity or public posting modules', asyn
     }; require('./server.js');`;
   const child = spawn(process.execPath, ['-e', source], { cwd: require('node:path').join(__dirname, '..'), env: { ...process.env, DUET_STORAGE_MODE: 'memory-demo', PORT: '0' } });
   t.after(() => child.kill());
-  await new Promise((resolve, reject) => {
+  const port = await new Promise((resolve, reject) => {
     const timeout = setTimeout(() => reject(new Error('startup timeout')), 5000);
-    child.stdout.on('data', chunk => { if (chunk.toString().includes('Server listening')) { clearTimeout(timeout); resolve(); } });
+    child.stdout.on('data', chunk => { const match = chunk.toString().match(/Server listening on http:\/\/0.0.0.0:(\d+)/); if (match) { clearTimeout(timeout); resolve(Number(match[1])); } });
     child.once('exit', code => { clearTimeout(timeout); reject(new Error('early exit: ' + code)); });
   });
+  const origin = `http://127.0.0.1:${port}`;
+  assert.equal(await (await fetch(origin + '/healthz')).text(), 'ok');
+  const runtime = await (await fetch(origin + '/api/runtime')).json();
+  assert.equal(runtime.mode, 'memory-demo');
+  assert.equal(runtime.sourceSha, null);
+  const html = await (await fetch(origin)).text();
+  assert.match(html, /onclick="RemoteMode.enterLobby\(\)"/);
+  assert.match(html, /How to play Classic Duet/);
+  assert.match(html, /for="remote-join-code"/);
+  assert.doesNotMatch(html, /GAME STATUS · TEMPORARILY UNAVAILABLE/);
+  assert.doesNotMatch(html, /href="\/signin.html"/);
+  assert.equal(await (await fetch(origin + '/index.html')).text(), html);
 });

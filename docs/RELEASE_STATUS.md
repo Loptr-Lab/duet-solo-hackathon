@@ -1,6 +1,28 @@
 # DUET release state and owner exception
 
-Updated October 20, 2026 (America/Chicago).
+Updated October 30, 2026 (Europe/London).
+
+## Handshake multiplayer preparation — October 30
+
+PR [#106](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/106) adds an
+explicit, bounded memory-demo runtime for the existing Node/Socket.IO server.
+The initial PR head passed GitHub CI and all 40 local tests, including real local
+WebSockets in two rooms, token recovery, expiry and a completed 34-move game.
+Follow-up preparation makes the demo's remote-play entry and rules visible,
+labels its inputs and adds deployment/submission instructions. All 41 local tests
+passed after those changes. Final-head CI must
+be checked separately; automated clients are not physical-device acceptance.
+
+**Not deployed or submitted.** No public multiplayer URL or account-specific
+no-additional-cost hosting has been verified. The static recovery remains local
+play. Do not use its URL as evidence of separate-device multiplayer.
+
+Use [the demo run instructions](MEMORY_MULTIPLAYER_DEMO.md) and
+[Handshake submission draft](HANDSHAKE_SUBMISSION_2026-10.md). Continue hands-on
+acceptance under #70; no replacement assignment is created. The official-rules
+PDF deadline is October 30, 11:59 p.m. PT (October 31, 06:59 London), earlier than
+the mission screenshot. Entrant eligibility and OpenAI-mission qualification
+remain unconfirmed; code completion does not establish either.
 
 ## Browser recovery accessibility testing
 

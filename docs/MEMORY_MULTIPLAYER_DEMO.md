@@ -11,6 +11,10 @@ Open `http://localhost:8080`. On the same trusted network, a second device can
 open the host computer's reachable address on port 8080, create/join by room code,
 and play without an account. Local network access is not a public contest URL.
 
+A separate `Dockerfile.demo` packages this mode without modifying the existing
+production Dockerfile. It exposes a Play with a friend entry, Classic rules,
+labeled room/move inputs and explicit temporary-match limits.
+
 For a container host, set `DUET_STORAGE_MODE=memory-demo` and use `npm start`.
 Use exactly one replica and one Node process. Configure public HTTPS on the host;
 verify its current account allowance and billing behavior before provisioning.
@@ -53,3 +57,12 @@ Continue public/human acceptance under existing issue #70: record deployed SHA,
 one-process settings and URL; repeat on two physical devices and two simultaneous
 rooms, including reconnect and completed play. Measure CPU, RAM and egress before
 claiming the workload fits an account allowance. Do not mark #70 complete from CI.
+
+`GET /api/runtime` reports the selected storage mode and an optional validated
+40-character source SHA. Set `DUET_SOURCE_SHA` to the deployed commit when the
+host does not supply `RAILWAY_GIT_COMMIT_SHA`. The response contains no credentials.
+
+Contest-preparation validation on 30 October: all 41 local tests passed, including
+HTTP checks for the served demo entry, rules and runtime metadata, plus recovery
+from an acknowledgement timeout. Both static-site builders ran successfully.
+Container build, public hosting and physical-device acceptance remain unverified.
