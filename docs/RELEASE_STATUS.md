@@ -2,6 +2,34 @@
 
 Updated October 30, 2026 (Europe/London).
 
+## Live Railway demo — October 30, 20:10 London
+
+[Play the multiplayer demo](https://duet-multiplayer-production.up.railway.app).
+Railway deployment `f3f92daf-60a5-4cb7-a807-3944910d7bf8` succeeded, pinned to
+`7a1e8b81ae4b59e30030c2acf46009730867effc`. Public `/api/runtime` returned that
+SHA and `memory-demo`. Dockerfile.demo built successfully. Configuration: one
+replica, 0.5 GB memory limit, one vCPU, sleep enabled, 10 rooms and 30-minute idle
+expiry. No existing service, subscription, DNS or pending project change was altered.
+
+Public simulated-client WebSockets passed anonymous creation/joining in two
+rooms, synchronized state, wrong-turn/illegal-move rejection, invalid-token
+rejection, disconnect/rejoin, a completed 34-move game and post-game rejection.
+The second room received no first-room move broadcasts. The served page exposes
+the remote entry and rules without the stale outage splash. These are not
+physical-device, visual-browser or independent accessibility acceptance results.
+
+The owner authorized this metered deployment despite the account warning, to
+observe usage before the subscription ends November 18. Screenshots showed
+$0.26 current usage against $5 included. An initial runtime snapshot showed
+0.0171 GB RAM and 0.0039 vCPU; the one-hour average includes time before launch
+and must not be used as an operating-cost estimate. Actual incremental charges
+and account-wide billing impact remain unverified. No renewal was performed.
+
+Not submitted. Physical-device acceptance and entrant/project qualification
+remain open. The historical preparation note below records the earlier state;
+this live record supersedes its deployment status. Current-state page source is
+updated in PR #106; publication on the existing Pages site awaits merge.
+
 ## Handshake multiplayer preparation — October 30
 
 PR [#106](https://github.com/Loptr-Lab/duet-solo-hackathon/pull/106) adds an

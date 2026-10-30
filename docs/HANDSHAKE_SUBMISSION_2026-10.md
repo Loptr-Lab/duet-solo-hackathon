@@ -1,9 +1,9 @@
 # Handshake multiplayer challenge — submission draft
 
 Prepared 30 October 2026. **Not submitted; not yet ready for submission.**
-Implementation and automated checks are in PR #106. A verified public multiplayer
-URL, hosting allowance and physical-device acceptance remain missing. Do not
-submit the static local-play URL as evidence of remote multiplayer.
+Implementation and automated checks are in PR #106. A public Railway demo is now
+deployed and public simulated-client tests passed. Physical-device acceptance,
+entrant/project eligibility and actual billing impact remain unverified.
 
 ## Form fields
 
@@ -27,8 +27,12 @@ Independent screen-reader and device acceptance remain ongoing. The temporary
 multiplayer demo keeps games in server memory: idle rooms expire and server
 restarts clear matches. PIXIE provides fixed game help without a model API.
 
-**Project link/URL:** NOT AVAILABLE — insert only the verified public multiplayer
-endpoint, not the repository, status page, localhost or static recovery.
+**Project link/URL:** https://duet-multiplayer-production.up.railway.app
+
+Runtime mode and serving SHA verified through `/api/runtime` on 30 October.
+Public simulated-client WebSocket testing passed two rooms, reconnect and a
+completed 34-move match. Physical-device and independent accessibility acceptance
+remain pending. This is not a submission receipt.
 
 ## Eligibility and deadline
 
@@ -51,16 +55,18 @@ No form has been submitted and no agreement has been accepted by this work.
 
 ## Remaining release checks
 
-- [ ] Verify account-specific no-additional-cost hosting and exhaustion behavior.
+- [ ] Verify actual billing impact; owner explicitly authorized metered deployment
+      before the November 18 subscription end. Do not renew automatically.
 - [ ] Review/merge PR #106 through the repository workflow.
-- [ ] Deploy Dockerfile.demo with exactly one process/replica and public HTTPS.
-- [ ] Verify /api/runtime reports memory-demo and the intended source SHA
+- [x] Deploy Dockerfile.demo with one replica and public HTTPS.
+- [x] Verify /api/runtime reports memory-demo and the intended source SHA
       (RAILWAY_GIT_COMMIT_SHA or explicitly set DUET_SOURCE_SHA).
 - [ ] Two physical devices create/join a room anonymously; both boards agree.
 - [ ] Verify turn enforcement, invalid moves, refresh/rejoin and completed play.
 - [ ] Verify two independent rooms and record measured CPU, RAM and egress.
 - [ ] Record device/accessibility findings under existing issue #70.
-- [ ] Add the verified URL to the current-state page and this draft.
+- [x] Add the verified URL to this draft and current-state page source in PR #106.
+      Main-site publication still requires the repository merge workflow.
 - [ ] Confirm entrant eligibility, project/mission qualification and artwork rights.
 - [ ] Enter title, cover image, description and public URL in Handshake before
       the controlling deadline; verify the submission receipt.

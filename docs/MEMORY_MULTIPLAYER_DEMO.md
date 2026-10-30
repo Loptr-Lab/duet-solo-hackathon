@@ -66,3 +66,22 @@ Contest-preparation validation on 30 October: all 41 local tests passed, includi
 HTTP checks for the served demo entry, rules and runtime metadata, plus recovery
 from an acknowledgement timeout. Both static-site builders ran successfully.
 Container build, public hosting and physical-device acceptance remain unverified.
+
+## Deployed demo — 30 October 2026
+
+Public URL: https://duet-multiplayer-production.up.railway.app
+
+Railway project `duet-contest-demo`, deployment
+`f3f92daf-60a5-4cb7-a807-3944910d7bf8`, pinned to code
+`7a1e8b81ae4b59e30030c2acf46009730867effc`. Dockerfile.demo built and the service
+became healthy. Public runtime metadata agrees with the pinned source.
+One replica, 0.5 GB memory limit, one vCPU, sleep enabled. The owner explicitly
+authorized metered deployment before the existing November 18 subscription end;
+actual added billing is not yet established and no renewal was performed.
+
+Public simulated WebSocket clients passed two-room isolation, state updates,
+wrong-turn/illegal rejection, valid reconnect/invalid-token rejection and a
+completed 34-move match with post-game rejection. Physical devices, independent
+screen-reader acceptance and visual browser QA remain unverified. Initial
+metrics are startup observations, not a monthly cost forecast. Consult the
+live release record for evidence and the account Usage page for actual billing.
