@@ -15,13 +15,14 @@ function replaceSection(html, id, replacement) {
 }
 
 function renderDemoPage(html) {
-    html = replaceSection(html, 'realm-intro', `<section class="realm-splash" id="realm-intro">
-<h1>Duet: Solo</h1><h2>Two players. One veiled battlefield.</h2>
+    html = html.replace('</head>', '<link rel="stylesheet" href="/interaction.css"></head>');
+    html = replaceSection(html, 'realm-intro', `<section class="realm-splash" id="realm-intro" aria-labelledby="demo-title">
+<h1 id="demo-title">DUET · Multiplayer demo</h1><h2>Two players. One veiled battlefield.</h2>
 <p class="body">Play Classic Duet together from separate phones or computers. No account or installation needed. One player creates a room; the other joins with its code.</p>
 <button type="button" class="btn-primary" onclick="RemoteMode.enterLobby()">Play with a friend</button>
 <p class="body">Temporary demo: rooms expire after inactivity. Server restarts clear all matches. Refresh to reconnect while your room still exists. This demo does not save games or collect playtest feedback.</p>
 ${rules}
-<p><a href="https://break.loptrlab.com/duet/">Project home</a> · <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/pull/106">Build and verification status</a></p>
+<nav class="action-links" aria-label="DUET project links"><a href="https://break.loptrlab.com/duet/">Project home</a><a href="https://github.com/Loptr-Lab/duet-solo-hackathon/pull/106">Build and verification status</a></nav>
 </section>`);
     html = replaceSection(html, 'current-state', `<section class="release-section" id="current-state">
 <h2>Temporary multiplayer demo</h2><p>This deployment offers Classic room play. Local automated tests cover two rooms, reconnect and a completed match; independent device and screen-reader acceptance remain pending.</p>
