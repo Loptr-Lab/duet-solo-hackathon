@@ -141,3 +141,11 @@ html.weaver {
  .weaver .weaver-sigil {position:static;display:block;margin:0 0 1.6rem auto;width:3.2rem;height:3.2rem;}
 }
 @media(prefers-reduced-motion:reduce) {.weaver-sigil .core {animation:none;opacity:1;}}
+
+/* One shared mark for artistic expression; reuse the owner-supplied Weaver sigil. */
+.weaver .shared-histories{position:relative}
+.weaver .shared-histories>.section-head{padding-inline-end:80px}
+.weaver .shared-histories>.shared-art-symbol{position:absolute;inset-block-start:32px;inset-inline-end:0;width:56px;height:56px;margin:0;transform-origin:center;animation:shared-art-breathe 7s ease-in-out infinite}
+@keyframes shared-art-breathe{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.04);opacity:1}}
+@media(max-width:700px){.weaver .shared-histories>.section-head{padding-inline-end:64px}.weaver .shared-histories>.shared-art-symbol{width:40px;height:40px}}
+@media(prefers-reduced-motion:reduce){.weaver .shared-histories>.shared-art-symbol{animation:none;opacity:1}}
