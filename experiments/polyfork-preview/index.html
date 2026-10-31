@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self' 'sha256-L9YJ4usjdU5ve9sdYFazaOr8j4o74HkxECAPgutoP50='; style-src 'self'; connect-src 'self' https://polyfork.dev; img-src 'self' data: blob:; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'none'"
+    />
+    <meta name="referrer" content="no-referrer" />
+    <title>Duet · experimental 3D board study</title>
+    <link rel="stylesheet" href="preview.css" />
+    <script type="importmap">
+      { "imports": { "three": "./node_modules/three/build/three.module.js" } }
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#fixture-description">Skip to fixture description</a>
+    <header>
+      <p class="eyebrow">DUET / VISUAL LAB / EXPERIMENTAL</p>
+      <h1>A board, another perspective.</h1>
+      <p class="intro">
+        Read-only 3D study. Proposed visual treatments, not game rules, a
+        playable client, or accessibility acceptance.
+      </p>
+    </header>
+    <main>
+      <section class="viewer" aria-labelledby="board-heading">
+        <div class="viewer-head">
+          <h2 id="board-heading">Board preview</h2>
+          <span class="badge">READ ONLY</span>
+        </div>
+        <div
+          id="viewport"
+          role="img"
+          aria-label="Experimental board visualization. Exact positions and states are provided in the fixture description and piece list below."
+        >
+          <p id="startup">
+            Preparing preview… If JavaScript or WebGL is unavailable, use the
+            text fixture below.
+          </p>
+        </div>
+        <p id="status" role="status" aria-live="polite">
+          The text fixture is always available. The 3D view needs WebGL.
+        </p>
+        <div class="controls" role="group" aria-label="Camera presets">
+          <button type="button" data-view="white" aria-pressed="true">
+            White side</button
+          ><button type="button" data-view="top" aria-pressed="false">
+            Overhead</button
+          ><button type="button" data-view="black" aria-pressed="false">
+            Black side</button
+          ><button type="button" id="reset">Reset view</button
+          ><button type="button" id="close">Close 3D</button>
+        </div>
+        <p id="orientation">
+          White side: a1 is near-left, h1 near-right; rank 8 is far away.
+        </p>
+      </section>
+      <aside>
+        <section class="fixture-panel">
+          <p class="eyebrow">FIXTURE, NOT A LIVE MATCH</p>
+          <label for="fixture">Position study</label
+          ><select id="fixture">
+            <option value="opening">Normal · starting position</option>
+            <option value="selected">Selected · e2 pawn</option>
+            <option value="veiled">Veiled · e4 rook</option>
+          </select>
+          <h2 id="fixture-title">Normal · starting position</h2>
+          <p id="fixture-description" tabindex="-1">
+            White occupies ranks 1–2; Black occupies 7–8. Rebirth is on d1/d8
+            and Death on e1/e8. No pieces are selected or Veiled.
+          </p>
+          <div class="legend">
+            <span>□ SELECTED: square outline</span
+            ><span>◎ VEILED: ring + label</span
+            ><span>W / B: White / Black</span>
+          </div>
+          <p id="snapshot-note">White to move · no live players connected.</p>
+          <details>
+            <summary>Exact piece positions and states</summary>
+            <table>
+              <caption>
+                Read-only fixture pieces
+              </caption>
+              <thead>
+                <tr>
+                  <th>Square</th>
+                  <th>Piece</th>
+                  <th>State</th>
+                </tr>
+              </thead>
+              <tbody id="piece-list"></tbody>
+            </table>
+          </details>
+          <noscript
+            ><p>
+              JavaScript is disabled. Starting pieces: White pawns a2–h2; Black
+              pawns a7–h7. Back ranks a1–h1 and a8–h8: Rook, Knight, Bishop,
+              Rebirth, Death, Bishop, Knight, Rook.
+            </p></noscript
+          >
+        </section>
+        <section class="notes">
+          <h2>A small, static study</h2>
+          <p>
+            No moves, accounts, multiplayer connection or match data. No camera
+            motion or animation while idle. Controls support keyboard input;
+            direct gamepad/device support is unverified.
+          </p>
+          <p>
+            The rune is decoration, not a game resource. External models are
+            third-party assets and are not covered by this project’s MIT
+            license.
+          </p>
+          <a href="README.md">Run instructions, provenance and evidence</a>
+        </section>
+      </aside>
+    </main>
+    <footer>
+      Independent experiment · existing game, recovery and Weaver remain
+      separate.
+    </footer>
+    <script type="module" src="preview.mjs"></script>
+  </body>
+</html>

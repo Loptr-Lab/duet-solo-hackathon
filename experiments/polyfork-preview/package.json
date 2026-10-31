@@ -1,0 +1,16 @@
+{
+  "name": "duet-polyfork-preview",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "test:browser": "node checks/browser.mjs"
+  },
+  "dependencies": {
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "playwright": "1.56.1"
+  }
+}
