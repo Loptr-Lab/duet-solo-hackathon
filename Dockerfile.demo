@@ -1,0 +1,9 @@
+FROM node:22-alpine
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev --ignore-scripts --no-audit --no-fund
+COPY server.js demoRuntime.js demoPage.js gameNamespace.js veiled-chess-core-server.js agentScope.js ./
+COPY public ./public
+ENV PORT=8080 DUET_STORAGE_MODE=memory-demo
+EXPOSE 8080
+CMD ["node", "server.js"]

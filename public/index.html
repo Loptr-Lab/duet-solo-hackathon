@@ -936,11 +936,12 @@
         </div>
         <div style="display:flex; gap: 12px; align-items: center; flex-wrap: wrap;">
             <div class="command-bar-field" style="max-width: 180px;">
+                <label for="remote-join-code" class="sr-only">Room code</label>
                 <input type="text" id="remote-join-code" autocomplete="off" placeholder="ROOM CODE" maxlength="5" style="text-transform:uppercase;">
             </div>
             <button type="button" class="btn-primary" onclick="RemoteMode.joinMatch()">Join Match</button>
         </div>
-        <p id="remote-lobby-status" class="body" style="margin-top:16px;"></p>
+        <p id="remote-lobby-status" role="status" aria-live="polite" class="body" style="margin-top:16px;"></p>
         <button type="button" class="btn-primary" style="margin-top:20px; border-color: var(--text-muted); color: var(--text-muted);" onclick="RemoteMode.backToSplash()">Back</button>
     </section>
 
@@ -977,6 +978,7 @@
         <div class="controls-row command-bar">
             <div class="command-bar-field">
                 <span aria-hidden="true">&rsaquo;</span>
+                <label for="remote-cmd" class="sr-only">Move coordinates, for example e2e4</label>
                 <input type="text" id="remote-cmd" autocomplete="off" placeholder="e2e4 · move notation">
             </div>
             <button class="btn-primary" onclick="RemoteMode.submitCommand()">Execute</button>
@@ -1308,6 +1310,7 @@
   <p>Open contributions are voluntary and unpaid unless covered by a separate signed agreement. Agree on scope, time, public visibility, credit preferences, and an exit path before starting. Participation does not promise employment, ownership, revenue share, academic credit, or future pay. No one needs to provide passwords, app passwords, or administrator access to help.</p>
 </section>
 <section class="release-section current-state-section" id="current-state" aria-labelledby="current-state-title">
+  <p class="release-note">30 October: a separate multiplayer demo is prepared in <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/pull/106">PR #106</a>. <a href="https://duet-multiplayer-production.up.railway.app">The Railway multiplayer demo is live</a>; public automated checks passed. Physical-device acceptance and billing impact remain unverified. No Handshake entry has been submitted. <a href="https://break.loptrlab.com/duet/review.html#multiplayer-preparation">Current preparation status</a>.</p>
   <div class="release-kicker">Project status · Updated October 20, 2026</div>
   <div class="release-head">
     <div>
@@ -2987,10 +2990,20 @@ async function sendAgentMessage() {
 
         _wireClientEvents() {
             RemoteState.client.transport.on('connect', () => RemoteMode._attemptAutoRejoin());
+            RemoteState.client.transport.on('room_expired', ({ reason }) => {
+                RemoteMode._clearSavedMatch();
+                RemoteState.gameOver = true;
+                RemoteMode.enterLobby();
+                document.getElementById('remote-lobby-status').innerText = reason;
+                RemoteMode._announce(reason);
+            });
+            RemoteState.client.transport.on('connect_error', () => {
+                document.getElementById('remote-lobby-status').innerText = 'Cannot reach the game server. Check your connection and try again.';
+            });
             RemoteState.client.on('opponent_joined', (state) => {
                 RemoteMode._applyState(state);
                 RemoteMode._enterGameScreen();
-                RemoteMode._announce('Opponent joined. White to move.');
+                RemoteMode._announce('Opponent connected. ' + (state.gameOver ? 'Game over.' : (state.turn === 'w' ? 'White' : 'Black') + ' to move.'));
             });
             RemoteState.client.on('opponent_disconnected', ({ color }) => {
                 RemoteMode._announce((color === 'w' ? 'White' : 'Black') + ' disconnected.');
@@ -3009,7 +3022,7 @@ async function sendAgentMessage() {
             const statusEl = document.getElementById('remote-lobby-status');
             RemoteMode._resetFeedback();
             RemoteState.client.createRoom().then((res) => {
-                if (!res.ok) { statusEl.innerText = 'Could not create a match.'; return; }
+                if (!res.ok) { statusEl.innerText = res.reason || 'Could not create a match.'; return; }
                 RemoteState.roomId = res.roomId;
                 RemoteState.myColor = res.color;
                 RemoteMode._saveMatch(res.roomId, res.color, res.reconnectToken);

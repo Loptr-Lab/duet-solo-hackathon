@@ -24,7 +24,7 @@
 
 const crypto = require('crypto');
 const engine = require('./veiled-chess-core-server.js');
-const { postMatchResult } = require('./atprotoPoster.js');
+
 
 const ROOM_CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 function generateRoomCode() {
@@ -85,7 +85,7 @@ function publicRoomState(room) {
         winner: room.winner,
         playersConnected: { w: !!room.players.w, b: !!room.players.b },
     };
-    if (room.gameOver && room.anonymousMatchId) {
+    if (room.gameOver && room.anonymousMatchId && room.feedbackEnabled !== false) {
         state.feedback = {
             anonymousMatchId: room.anonymousMatchId,
             prompt: feedbackPromptFor(room.anonymousMatchId),
@@ -186,10 +186,26 @@ function cloneBoard(board) {
 // for testing: calling createGameNamespace again with a NEW empty rooms
 // cache but the SAME underlying roomStore simulates a real restart, since
 // nothing survives in memory except what's reloaded from the store.
-function createGameNamespace(io, roomStore, playerStorage) {
+function createGameNamespace(io, roomStore, playerStorage, options = {}) {
     const rooms = {};
+    const touched = new Map();
+    const now = options.now || Date.now;
+    function expireRooms() {
+        if (!options.idleMs) return;
+        for (const [id, at] of touched) {
+            if (now() - at < options.idleMs) continue;
+            delete rooms[id];
+            touched.delete(id);
+            io.to(id).emit('room_expired', { reason: 'Demo room expired after inactivity. Create a new room.' });
+            // Remove old subscriptions so a recycled room code cannot leak state.
+            if (typeof io.in === 'function') io.in(id).socketsLeave(id);
+        }
+    }
+    const expiryTimer = options.idleMs ? setInterval(expireRooms, Math.min(options.idleMs, 60000)) : null;
+    if (expiryTimer) expiryTimer.unref();
 
     async function persist(roomId, room) {
+        if (options.idleMs) touched.set(roomId, now());
         try {
             await roomStore.saveRoom(roomId, {
                 board: room.board,
@@ -217,6 +233,7 @@ function createGameNamespace(io, roomStore, playerStorage) {
     // already there (e.g. after a restart). Returns the room, or null if it
     // truly doesn't exist anywhere.
     async function getRoom(roomId) {
+        expireRooms();
         if (rooms[roomId]) return rooms[roomId];
         let stored;
         try {
@@ -235,9 +252,20 @@ function createGameNamespace(io, roomStore, playerStorage) {
         socket.data.color = null;
 
         socket.on('create_room', async (_payload, ack) => {
-            const roomId = generateRoomCode();
+            expireRooms();
+            if (options.maxRooms && socket.data.roomId && rooms[socket.data.roomId]) {
+                if (typeof ack === 'function') ack({ ok: false, reason: 'Already in a demo room. Refresh before creating another.' });
+                return;
+            }
+            if (options.maxRooms && Object.keys(rooms).length >= options.maxRooms) {
+                if (typeof ack === 'function') ack({ ok: false, reason: 'Demo room capacity reached. Try again after an idle room expires.' });
+                return;
+            }
+            let roomId;
+            do { roomId = generateRoomCode(); } while (rooms[roomId]);
             const token = generateToken();
             const room = {
+                feedbackEnabled: options.postResults !== false,
                 board: createInitialBoard(),
                 turn: 'w',
                 gameOver: false,
@@ -273,6 +301,14 @@ function createGameNamespace(io, roomStore, playerStorage) {
                 return;
             }
 
+            if (options.maxRooms && socket.data.roomId && socket.data.roomId !== roomId && rooms[socket.data.roomId]) {
+                if (typeof ack === 'function') ack({ ok: false, reason: 'Already in another demo room. Refresh before joining.' });
+                return;
+            }
+            if (room.players.w === socket.id) {
+                if (typeof ack === 'function') ack({ ok: false, reason: 'Use a separate device to join the other seat.' });
+                return;
+            }
             const token = generateToken();
             room.players.b = socket.id;
             room.tokens = room.tokens || {};
@@ -312,6 +348,10 @@ function createGameNamespace(io, roomStore, playerStorage) {
                 return;
             }
 
+            if (options.maxRooms && socket.data.roomId && socket.data.roomId !== roomId && rooms[socket.data.roomId]) {
+                if (typeof ack === 'function') ack({ ok: false, reason: 'Already in another demo room. Refresh before rejoining.' });
+                return;
+            }
             room.players[color] = socket.id;
             socket.join(roomId);
             socket.data.roomId = roomId;
@@ -464,8 +504,8 @@ function createGameNamespace(io, roomStore, playerStorage) {
             // for "post a real match result." Not awaited: a slow or failed
             // post to Bluesky must never delay or affect the ack/emit above,
             // which have already gone out to the players by this point.
-            if (room.gameOver && room.winner) {
-                postMatchResult({ winner: room.winner });
+            if (room.gameOver && room.winner && options.postResults !== false) {
+                require('./atprotoPoster.js').postMatchResult({ winner: room.winner });
             }
         });
 
@@ -512,7 +552,7 @@ function createGameNamespace(io, roomStore, playerStorage) {
         });
     });
 
-    return { rooms }; // exposed for tests only (to simulate a restart by discarding it)
+    return { rooms, expireRooms, close() { if (expiryTimer) clearInterval(expiryTimer); } }; // lifecycle/test hooks (to simulate a restart by discarding it)
 }
 
 module.exports = {

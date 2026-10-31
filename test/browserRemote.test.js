@@ -26,3 +26,17 @@ test('actual browser assets initialize the remote lobby and send a room request'
   await vm.runInContext('RemoteState.client.createRoom()', context);
   assert.equal(requests[0].message, 'create_room');
 });
+
+test('browser transport turns an acknowledgement timeout into a recoverable failure', async () => {
+  const root = path.join(__dirname, '../public/client');
+  const context = vm.createContext({ window: {} });
+  context.window = context;
+  for (const name of ['ITransport', 'SocketTransport']) vm.runInContext(fs.readFileSync(path.join(root, name + '.js'), 'utf8'), context);
+  let bound;
+  const socket = { timeout(ms) { bound = ms; return { emit(event, payload, done) { done(new Error('timeout')); } }; } };
+  const transport = new context.DuetSocketTransport(socket);
+  const result = await transport.request('make_move', { from: 'e2', to: 'e4' });
+  assert.equal(bound, 10000);
+  assert.equal(result.ok, false);
+  assert.match(result.reason, /Reconnect to check your game/);
+});

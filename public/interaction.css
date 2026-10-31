@@ -1,0 +1,14 @@
+/* Shared action spacing for Break This Build and the Duet demo.
+ * Material Web buttons: https://material-web.dev/components/button/
+ * Touch targets: https://support.google.com/accessibility/android/answer/7101858
+ * Uses each page's existing brand colors; no remote CSS or JS dependency.
+ */
+:root{--action-gap:8px;--action-padding:16px;--action-target:48px}
+.action-links{display:flex;flex-wrap:wrap;align-items:flex-start;gap:var(--action-gap);margin-block:16px}
+.action-links>a{display:inline-flex;align-items:center;min-height:var(--action-target);min-width:var(--action-target);max-width:100%;padding:8px 12px;line-height:1.4;overflow-wrap:anywhere;color:var(--accent,var(--amber-light,#d4a853));text-underline-offset:4px}
+.action-links>a:visited{color:var(--accent,var(--amber-light,#d4a853))}
+.action-links>a:focus-visible{outline:3px solid currentColor;outline-offset:3px}
+.action-links>a:hover{text-decoration-thickness:2px}
+.path .action-links>a.action{display:inline-flex;margin:0;padding:12px var(--action-padding)}
+.path .action-links>a:not(.action){flex-basis:100%}
+.realm-splash>.btn-primary{min-height:var(--action-target);max-width:100%;white-space:normal;margin-block:8px 16px}
