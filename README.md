@@ -182,3 +182,21 @@ testers. Normal-participant and accessibility checks remain pending.
 Prioritize production reliability, player-owned PDS records and replaceable service
 adapters. Keep the current host while validating those changes; an Azure move does
 not itself establish an Xbox port. See [architecture direction and sequence](docs/LONG_TERM_ARCHITECTURE.md).
+
+## Optional Polyfork visual resources — reviewed 31 October 2026
+
+The [training game-development resource shortlist](https://github.com/Loptr-Lab/training/blob/docs/polyfork-project-resources-2026-10-31/docs/tracks/game-development.md#polyfork-asset-resources--reviewed-31-october-2026)
+records candidate sources and the provenance/device-check exercise. Its review
+is tracked in [training PR #50](https://github.com/Loptr-Lab/training/pull/50).
+For an optional, separately scoped Duet visual study:
+- [Flagstone Floor Tile](https://polyfork.dev/asset/flagstone-floor-tile-2a04ea), ID `flagstone-floor-tile-2a04ea`: possible board surface.
+- [Condition Ring](https://polyfork.dev/asset/condition-ring-df5a73), ID `condition-ring-df5a73`: possible selection/veil marker paired with readable text.
+- [Glowing Rune Stone](https://polyfork.dev/asset/glowing-rune-stone-5a5558), ID `glowing-rune-stone-5a5558`: possible scenery, with no new mechanical meaning.
+
+These are vendor-listed free low-poly candidates, not downloaded files, tested
+imports, final art or implemented 3D gameplay. Read [current licensing](https://polyfork.dev/licensing)
+before integration; standalone redistribution and platform hosting have separate
+conditions. Third-party assets are outside this repository's MIT claim. Preserve
+the working 2D/control paths, current multiplayer deployment and existing human
+acceptance work. No new dependency, deployment, paid service or rules/canon change
+is introduced by this resource record.

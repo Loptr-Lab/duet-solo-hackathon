@@ -10,6 +10,9 @@ for target, prefix in [('site/index.html', './'), ('site/weaver/index.html', '..
                           f'href="{prefix}play/">Play Duet</a><a class="link-button" href="{prefix}review.html">Duet current state</a>')
     page = page.replace('<a class="door" href="#enter">Read the door</a>',
                         f'<a class="door" href="#enter">Read the door</a> <a class="door" href="{prefix}play/">Play Duet</a>')
+    page = page.replace('>Play Duet</a>', '>Play Duet locally</a>')
+    page = page.replace('<a class="door" href="#enter">Read the door</a>',
+                        '<a class="door" href="#enter">Read the door</a> <a class="door" href="https://duet-multiplayer-production.up.railway.app">Play Duet multiplayer demo</a>')
     path = root / target
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(page)
