@@ -1,0 +1,34 @@
+name: Azure rebuild scaffold CI
+
+on:
+  pull_request:
+    paths:
+      - "azure-rebuild/**"
+      - ".github/workflows/azure-rebuild-ci.yml"
+  push:
+    branches:
+      - "azure/fresh-rebuild-foundation"
+    paths:
+      - "azure-rebuild/**"
+      - ".github/workflows/azure-rebuild-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: azure-rebuild
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Run tests
+        run: npm test
