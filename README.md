@@ -38,6 +38,18 @@ The application includes:
 
 ---
 
+## Human-led maintenance
+
+DUET is moving toward human-led, AI-optional development. AI tools may assist with drafts or code suggestions, but are not required to build, test, review, release, or maintain the project. Human contributors own decisions and verification. PIXIE's game help remains deterministic (eight fixed answers plus a neutral fallback, with no model API call); the minimax/alpha-beta opponent is a conventional search algorithm, not a generative-model dependency.
+
+See [docs/HUMAN_LED_MAINTENANCE.md](docs/HUMAN_LED_MAINTENANCE.md) for the contributor task menu, evidence standard, acceptance criteria, and production-safety boundaries. The Azure rebuild may continue in isolation; production remains unchanged unless a separate deployment is explicitly approved.
+
+## PIXIE's permitted purpose
+
+PIXIE's only permitted AI-related purpose in Veiled Dominion: Duet is executive-function accessibility support inside a closed franchise sandbox: **continuity, not conquest**. It is a bounded learning and test environment, not an autonomous agent or an open-ended AI product. Human participants retain authority over decisions, canon, rules, and releases. PIXIE's existing game help remains deterministic (eight fixed answers plus a neutral fallback) and makes no model API call.
+
+See [`docs/PIXIE_ACCESSIBILITY_BOUNDARY.md`](docs/PIXIE_ACCESSIBILITY_BOUNDARY.md) for the governing boundary and [`docs/HUMAN_LED_MAINTENANCE.md`](docs/HUMAN_LED_MAINTENANCE.md) for contributor responsibilities and evidence requirements. This documents the intended policy; it does not claim the entire repository has already been audited for compliance.
+
 ## PIXIE implementation and verification
 The server selects one of eight fixed DUET answers through a bounded question gate.
 Mixed and off-topic messages receive the same neutral game-help prompt. No Gemini
