@@ -1,6 +1,10 @@
 # DUET release state and owner exception
 
-Updated October 30, 2026 (Europe/London).
+Updated November 3, 2026 (America/Chicago).
+
+## Break This Build 2027 input review
+
+Current goal: test start, play, recover and finish in Duet and First Movement, with separate MouthPad and Augmental VOX cases. [Existing production playtest packet](PRODUCTION_PLAYTEST.md#break-this-build-2027--hands-free-protocol-prepared-november-3-2026) records ordinary-input proxies, setup gates and physical-device blockers. Local static Duet completed a 34-move session by pointer and keyboard automation. This is not physical MouthPad/VOX, iPad Safari, VoiceOver or independent-player acceptance. Current public-source status lives in the existing [review page](../site/review.html#hands-free-2027), paired with hub PR #111. Historical cloud/demo evidence below retains its original date and limits; no production reconfiguration or fresh remote-game acceptance is claimed.
 
 ## Live Railway demo — October 30, 20:10 London
 

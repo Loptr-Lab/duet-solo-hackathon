@@ -139,3 +139,48 @@ Joining is invite-only; the owner sends invitations. A normal-participant join,
 posting and accessibility check remains pending. See [setup status](ROOMY_ENVIRONMENT.md).
 Copy actionable findings into the GitHub issues above; no automatic
 Roomy/GitHub/PDS bridge is configured.
+
+## Break This Build 2027 — hands-free protocol (prepared November 3, 2026)
+
+Continue the existing #70 acceptance work; no new contributor assignment or outreach is issued. The first reproducible Duet case is the existing static local Classic two-player recovery at `/duet/play/`. It is not proof of separate-device remote play. First Movement is the separate Rhapsody browser slice at `/ren-rhapsody/play/` on the paired preview, or its canonical project URL after an approved publication. Preserve the Halloween 2026 retrospective and artist/AI boundaries.
+
+### Vendor evidence and setup gate
+
+Checked November 3, 2026: [Augmental MouthPad](https://www.augmental.tech/) describes cursor, clicks and dragging; [VOX](https://www.augmental.tech/vox) describes dictation through macOS/iOS, including microphone use in Mac apps and text insertion on iOS. The VOX page links its hands-free chess demonstration. That demonstration motivates these tests; it establishes neither game's compatibility. No inspected first-party instruction establishes browser game-key mapping, sustained key down/up, repeat semantics, latency, or an iPadOS VOX game setup. Those remain blocked pending vendor documentation and a consented physical setup. Do not confuse unrelated products named Vox with Augmental VOX.
+
+[MouthPad onboarding](https://onboarding.augmental.tech/) recommends Chrome for its onboarding exercises. This is an onboarding recommendation, not game compatibility or a prohibition on separately testing Safari.
+
+### Four device cases
+
+1. **First Movement / MouthPad:** one cursor starts; selects a direction and Jump separately; recovers from a deliberately missed ledge; pauses/resumes; finishes; restarts. First reproduce the ordinary hold/capture barrier: hold Right with one pointer, move it over Jump, and observe Jump is not activated. In the reviewed optional click-to-move mode, click a direction to latch, click it again to stop, or click the other direction to switch; Jump is a separate click. Verify mode-off, pause, blur/page hiding, and restart clear movement. No two-pointer gesture is allowed for this test. Where Quiet Beat exists on its own reviewed branch, separately test Start, tap along, tempo change, Stop, and page-hide stop. Do not claim that branch is live.
+2. **First Movement / VOX:** establish the supported OS/app/browser combination and activation method first. Log which discrete actions actually produce browser events, then key-down/key-up/hold and timing. Try Start, Pause, Resume and Jump before movement combinations. If timing or holding is unreliable, retain the barrier and replay with timing assist; record latency and whether it helps. Assist supplies the beat boost, marks assisted results and excludes them from the best-score record. It is not a voice mapper or proof of VOX playability.
+3. **Duet / MouthPad:** two consenting players, with the hands-free player using one cursor. Start a two-player session, select a piece, cancel by selecting it again, make a legal move, hand off, recover from a mistaken selection, finish a real match, and restart. Report any assistance or extra input. Setup time, fatigue, rest and recovery matter as well as move completion.
+4. **Duet / VOX:** after verifying browser key delivery, map navigation, selection/confirmation and cancellation. Start and finish a session, alternate turns, cancel a mistake, and restart. Hold Select: `KeyboardEvent.repeat` must not select or commit another action. After a move, try the previous side's piece; wrong-turn actions must not change the board/turn. Test fresh duplicate voice commands separately: they need not set the repeat flag. No one may infer support from an ordinary keyboard pass.
+
+### Result register
+
+Use **planned**, **tested**, or **blocked**, with the result/limit stated separately. Never use tested as a synonym for passed.
+
+| Track | Status on November 3 | Environment / build / reproduction and limit |
+| --- | --- | --- |
+| Ordinary pointer, First Movement | tested | Linux, Chromium 154.0.8037.57, automated mouse at 820×1100; paired `review/ren-development-record` candidate. Existing `play/tests/browser.cjs` replays barrier fix, separate clicks, pause/recovery/5-fragment finish/restart and timing assist. Final commit is recorded in the paired PR handoff. Not human or MouthPad evidence |
+| Ordinary keyboard, First Movement | tested | Same Linux Chromium; existing default keyboard/browser regression plus optional timing-assist jump. Default flow and timing-assist source are separate from verified VOX delivery |
+| Ordinary pointer and keyboard, Duet | tested | Linux Chromium 154, static local recovery from current main `ad55c088...` (game source unchanged); `scripts/verify-handsfree-browser.cjs` plays the same 34-move complete sequence through DOM squares and native keyboard navigation, cancellation/repeat/turn/restart. Both seats automated; not two independent people |
+| Ordinary controls, Quiet Beat | tested | Optional `review/quiet-beat` at `e471e6d`; isolated scratch Chromium review tested Start, tap feedback, tempo selection to 72 BPM and Stop. Tempo used browser select automation; not a physical pointer/device acceptance. Excluded from main and hub release artifacts |
+| Ordinary physical iPad Safari, both games | blocked | No physical iPad/Safari environment; browser/OS/device versions unavailable, not guessed. Repeat the four paths when available |
+| Physical MouthPad, each game | blocked | No device/firmware/paired host available; exact OS/browser and fit/setup to be recorded before following cases 1 and 3 |
+| Physical Augmental VOX, each game | blocked | No device/app or verified key-mapping/hold configuration; vendor macOS/iOS dictation documentation is not a supported game setup. Cases 2 and 4 remain gated |
+| VoiceOver, each game | blocked | No Apple/VoiceOver setup; record OS/browser/VoiceOver/device and spoken output separately when testing |
+| Independent completion and consented device sessions | planned | No participant recruited or contacted; scope, input setup, assistance, recording and fatigue/rest preferences require agreement first |
+
+For every run copy: date/time; planned/tested/blocked; observed result; URL and exact commit/build; OS/browser version; device/firmware/app; mapping and event/hold/repeat evidence; steps; expected/actual; setup duration and assistance; optional fatigue/rest/recovery observations; reproduction artifact; next test. Do not collect private voice recordings or health details by default. Participants may stop at any time. Any physical session needs consent, comfortable setup and a clear exit path; outreach is a separate decision.
+
+### Reproduce ordinary-input checks
+
+Use the existing static site builders and serve the assembled hub at port 8042, then run:
+
+```sh
+PLAYWRIGHT_MODULE=/path/to/playwright CHROMIUM_PATH=/path/to/chromium DUET_TEST_URL=http://127.0.0.1:8042/duet/play/ node scripts/verify-handsfree-browser.cjs
+```
+
+The external browser tool adds no runtime dependency. Rhapsody's existing `play/tests/browser.cjs` remains its reproducible check. Neither browser script impersonates a physical device or mutates game state to reach the ending. Independent participants and actual iPad Safari, MouthPad, VOX and VoiceOver remain separate gates. Lead-search results belong only in the paired PR review handoff, not this public test surface.
