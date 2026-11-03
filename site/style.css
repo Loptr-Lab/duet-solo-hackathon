@@ -1046,7 +1046,7 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
 
 /* Break This Build navigation hub. */
 
-:root:where(.duet-hub){color-scheme:dark;--bg:#0d0f12;--panel:#15191e;--text:#f2f4f7;--muted:#aab2bd;--line:#303740;--accent:#d8ff4f}
+:root:where(.duet-hub){color-scheme:dark;--bg:#050505;--panel:#151515;--text:#e0e0e0;--muted:#b6b6b6;--line:#666;--accent:#d4a853}
 :where(html.duet-hub) *{box-sizing:border-box}:where(html.duet-hub) body{margin:0;background:var(--bg);color:var(--text);font:18px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 :where(html.duet-hub) main{max-width:920px;margin:0 auto;padding:48px 24px 96px}:where(html.duet-hub) h1{font-size:clamp(48px,9vw,86px);line-height:.95;margin:0 0 24px;letter-spacing:-.04em}
 :where(html.duet-hub) h2{font-size:26px;margin:48px 0 12px}:where(html.duet-hub) p{max-width:720px}:where(html.duet-hub) a{color:var(--accent)}:where(html.duet-hub) .lede{font-size:25px;line-height:1.35;color:var(--muted);max-width:720px}
@@ -1081,3 +1081,34 @@ html:where(.duet-hub){scroll-padding-bottom:110px}:where(html.duet-hub) main{pad
 
 /* Existing local recovery layout overrides. */
 :where(html.duet-recovery) body{overflow-x:hidden} :where(html.duet-recovery) .page{max-width:1200px} :where(html.duet-recovery) a{color:var(--amber-light)} :where(html.duet-recovery) button{min-height:44px} :where(html.duet-recovery) nav{margin-bottom:20px} :where(html.duet-recovery) .board-access{margin:16px 0;padding:16px;border:1px solid var(--border-hairline)} :where(html.duet-recovery) .board-access h2{font-size:16px} :where(html.duet-recovery) .board-access p{line-height:1.5} :where(html.duet-recovery) #board-navigator{padding:14px;border:2px solid var(--amber-light);width:fit-content;cursor:pointer} :where(html.duet-recovery) #board-navigator:focus-visible{outline:3px solid white;outline-offset:3px} :where(html.duet-recovery) .sq.keyboard-cursor{outline:3px solid var(--amber-light);outline-offset:-4px;z-index:1} :where(html.duet-recovery) #board-key-settings button{margin:8px 8px 0 0}  :where(html.duet-recovery) .board-row{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:24px;align-items:start} :where(html.duet-recovery) #visual-board{width:100%;max-width:720px;aspect-ratio:1;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr))} :where(html.duet-recovery) .board-row .sidebar{min-width:0;width:auto;gap:20px} :where(html.duet-recovery) .board-row .panel{max-width:none;padding:16px} :where(html.duet-recovery) .piece-token{width:72%;height:72%;font-size:clamp(18px,3vw,36px)} :where(html.duet-recovery) .piece-token.special{width:80%;height:80%;font-size:clamp(18px,2.7vw,32px)} @media(max-width:700px){:where(html.duet-recovery) .board-row{grid-template-columns:minmax(0,1fr)} :where(html.duet-recovery) .board-row .sidebar{width:100%} :where(html.duet-recovery) .piece-token{font-size:clamp(18px,5vw,32px)} :where(html.duet-recovery) .piece-token.special{font-size:clamp(18px,4.7vw,30px)}} :where(html.duet-recovery) .recovery-support-row{display:grid;grid-template-columns:minmax(240px,320px) minmax(0,1fr);gap:24px;align-items:start;margin:24px 0} :where(html.duet-recovery) .recovery-support-row .panel{max-width:none;min-width:0} :where(html.duet-recovery) .recovery-menus{display:grid;gap:16px;min-width:0} :where(html.duet-recovery) .recovery-menus .key-row{margin:0;padding:16px;gap:12px} :where(html.duet-recovery) .recovery-menus .key-panel{min-width:0;gap:8px} :where(html.duet-recovery) .recovery-menus .key-token{width:32px;height:32px;flex-shrink:0} :where(html.duet-recovery) .recovery-support-row button{white-space:normal;margin-top:8px;max-width:100%} @media(max-width:700px){:where(html.duet-recovery) .recovery-support-row{grid-template-columns:minmax(0,1fr)}}
+
+/* Shared onboarding components; PR #110 remains the stylesheet authority. */
+:where(html.duet-hub) body{font:20px/1.55 'Helvetica Neue',Helvetica,Arial,sans-serif}
+:where(html.duet-hub) main{padding-top:16px}
+:where(html.duet-hub) h1{font-size:clamp(32px,5vw,48px);line-height:1.15;letter-spacing:normal;margin-top:24px}
+:where(html.duet-hub) .lede{font-size:20px}
+:where(html.duet-hub) .path h2{font-size:28px}
+:where(html.duet-hub) .path .tag{font-size:14px;letter-spacing:normal;text-transform:none}
+:where(html.duet-hub) .path a.action{display:flex;align-items:center;justify-content:center;min-height:48px;margin:16px 0;border-color:var(--accent);color:var(--accent);background:var(--bg)}
+:where(html.duet-hub) .path a.action:is(:hover,:focus-visible){background:#252525;color:#f2e5ce}
+:where(html.duet-hub) .path p{margin-bottom:12px}
+.onboard-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;min-height:64px;border-bottom:1px solid #666;padding:8px 0}
+.onboard-bar a{display:inline-flex;align-items:center;min-height:48px}
+:where(html.duet-hub) summary{cursor:pointer;min-height:48px;padding:8px 0;font-weight:700}
+:where(html.duet-recovery) .hero{margin:8px 0;padding:8px 0}
+:where(html.duet-recovery) .hero h1{font-size:32px;letter-spacing:normal}
+:where(html.duet-recovery) .hero-top{margin-bottom:8px}
+:where(html.duet-recovery) .hero-meta{font-size:14px}
+:where(html.duet-recovery) .onboard-bar{font-size:16px}
+:where(html.duet-recovery) .onboard-intro{margin:16px 0;padding:16px;border:1px solid var(--border-hairline);background:var(--black-void)}
+:where(html.duet-recovery) .onboard-intro p{font-size:18px;line-height:1.5}
+:where(html.duet-recovery) #first-move-status{font-size:18px;color:var(--grey-100,#e0e0e0)}
+:where(html.duet-recovery) .board-access p{font-size:16px;line-height:1.5}
+:where(html.duet-recovery) .onboard-intro button,:where(html.duet-recovery) .onboard-intro summary,:where(html.duet-recovery) #completion-actions a,:where(html.duet-recovery) #completion-actions button{min-height:48px;font-size:16px}
+:where(html.duet-recovery) #completion-actions{border:1px solid var(--the-light,#d4a853);padding:16px;margin:16px 0}
+:where(html.duet-recovery) #completion-actions[hidden]{display:none}
+:where(html.duet-recovery) .onboard-intro a{display:inline-flex;align-items:center;min-height:48px}
+:where(html.duet-recovery) :focus-visible,:where(html.duet-hub) :focus-visible{outline:3px solid #d4a853;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.onboard-bar *, .onboard-intro *{animation:none!important;transition:none!important}}
+:where(html.duet-hub) .path p>a{display:inline-flex;align-items:center;min-height:48px}
+:where(html.duet-recovery) #board-navigator{font-size:16px;min-height:48px}

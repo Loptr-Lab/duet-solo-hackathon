@@ -1,6 +1,6 @@
 <!doctype html><html lang="en" class="duet-game duet-recovery"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src data:; connect-src 'none'; font-src 'none'; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"><title>DUET · Local play recovery</title><link rel="stylesheet" href="../style.css"></head><body><div class="page" id="game-screen">
 
-    <nav aria-label="Recovery navigation"><a href="../">The Weaver</a> · <a href="../review.html">Current State</a> · <a href="https://break.loptrlab.com/">Break this build</a></nav>
+    <nav class="onboard-bar" aria-label="Game navigation"><a href="../">Project context</a> · <a href="../review.html">Current State</a> · <a href="https://break.loptrlab.com/">Break this build</a> · <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/issues/new?title=Duet+playtest+finding&amp;body=Build+%2F+URL%3A%0ABrowser+%2F+OS%3A%0AInput+method+%28ordinary+pointer%2Fkeyboard%2C+MouthPad%2C+VOX%2C+VoiceOver%29%3A%0ASteps%3A%0AExpected%3A%0AActual%3A%0A">Report a finding</a></nav>
 <header class="hero">
         <div class="hero-top">
             <div>
@@ -27,7 +27,7 @@
         </p>
     </header>
 
-    <p id="play-mode-status" role="status" aria-live="polite">Two players on this device. White moves first; then pass the device to Black.</p>
+    <section class="onboard-intro" aria-labelledby="first-step-title"><h2 id="first-step-title">Make one legal move</h2><p>Two players · one device. Select e2, then select e4 to confirm a move and hand the turn to Black. Select the same square again or use Cancel selection to undo a selection. No move is committed by selecting a piece alone.</p><p id="first-move-status" role="status">First goal: make a legal move, then hand over the turn.</p><button type="button" onclick="cancelBoardSelection()">Cancel selection</button><details><summary>Input options</summary><p>Pointer: select a piece, then a legal target. Keyboard: focus Navigate board; arrows move, Enter selects and confirms, Escape cancels, R reads a square. Key remapping and optional audio controls are below. MouthPad and VOX physical compatibility remain unverified; VOX game-key mapping and holds are pending.</p></details></section><p id="play-mode-status" role="status" aria-live="polite">Two players on this device. White moves first; then pass the device to Black.</p>
 
     <div id="sr-status" class="sr-only" role="status" aria-live="assertive" aria-atomic="true"></div>
 
@@ -44,7 +44,7 @@
         <div class="turn-meta" id="turn-meta" aria-hidden="true">Move 1 &middot; White</div>
     </div>
 
-    <div class="board-row">
+    <section class="board-access" aria-labelledby="board-access-title"><h2 id="board-access-title">Board controls</h2><p id="board-key-help">Tab to Navigate board. Arrow keys move the cursor; Enter selects a piece, then a target. Escape cancels; R reads the square. Tab leaves the board. Typed moves and square queries remain available below.</p><div id="board-navigator" tabindex="0" role="application" aria-label="Navigate board" aria-describedby="board-key-help">Navigate board · arrow keys and Enter</div><p id="board-input-status" role="status" aria-live="polite" aria-atomic="true">Cursor starts at e2.</p><details id="board-key-settings"><summary>Remap keyboard or adaptive-switch keys</summary><p>Choose an action, then press its new key. Each key must be unique. Settings last until this page is refreshed. Devices must send keyboard keys; direct gamepad and TV-remote support are not included.</p><button type="button" id="bind-up" onclick="beginBoardBinding('up')">up</button> <button type="button" id="bind-down" onclick="beginBoardBinding('down')">down</button> <button type="button" id="bind-left" onclick="beginBoardBinding('left')">left</button> <button type="button" id="bind-right" onclick="beginBoardBinding('right')">right</button> <button type="button" id="bind-select" onclick="beginBoardBinding('select')">select</button> <button type="button" id="bind-cancel" onclick="beginBoardBinding('cancel')">cancel</button> <button type="button" id="bind-read" onclick="beginBoardBinding('read')">read</button> <button type="button" onclick="resetBoardKeys()">Restore default keys</button></details></section><section id="completion-actions" hidden aria-label="Game complete"><h2 id="completion-title" tabindex="-1">Game complete</h2><button id="replay-game" class="btn-primary" type="button" onclick="startLocalGame(false)">Replay · two players</button><a href="https://github.com/Loptr-Lab/duet-solo-hackathon/issues/new?title=Duet+playtest+finding&amp;body=Build+%2F+URL%3A%0ABrowser+%2F+OS%3A%0AInput+method+%28ordinary+pointer%2Fkeyboard%2C+MouthPad%2C+VOX%2C+VoiceOver%29%3A%0ASteps%3A%0AExpected%3A%0AActual%3A%0A">Report a finding</a><p>Include build/URL, browser, input method, steps, and expected versus actual behavior. Reports are public on GitHub; never include private credentials.</p></section><div class="board-row">
         <div id="visual-board" aria-hidden="true"></div>
         <div id="pass-overlay" class="pass-overlay hidden" aria-hidden="true">
             <p>Fog Mode is on. Pass the device and look away.</p>
@@ -102,7 +102,7 @@
     <p id="legend" aria-hidden="true">
         Move: <kbd>e2e4</kbd> &nbsp;&middot;&nbsp; Look at a square: <kbd>e4</kbd> &nbsp;&middot;&nbsp; Press Enter
         &nbsp;&middot;&nbsp; or click two squares on the board above
-    </p><section class="board-access" aria-labelledby="board-access-title"><h2 id="board-access-title">Board controls</h2><p id="board-key-help">Tab to Navigate board. Arrow keys move the cursor; Enter selects a piece, then a target. Escape cancels; R reads the square. Tab leaves the board. Typed moves and square queries remain available below.</p><div id="board-navigator" tabindex="0" role="application" aria-label="Navigate board" aria-describedby="board-key-help">Navigate board · arrow keys and Enter</div><p id="board-input-status" role="status" aria-live="polite" aria-atomic="true">Cursor starts at e2.</p><details id="board-key-settings"><summary>Remap keyboard or adaptive-switch keys</summary><p>Choose an action, then press its new key. Each key must be unique. Settings last until this page is refreshed. Devices must send keyboard keys; direct gamepad and TV-remote support are not included.</p><button type="button" id="bind-up" onclick="beginBoardBinding('up')">up</button> <button type="button" id="bind-down" onclick="beginBoardBinding('down')">down</button> <button type="button" id="bind-left" onclick="beginBoardBinding('left')">left</button> <button type="button" id="bind-right" onclick="beginBoardBinding('right')">right</button> <button type="button" id="bind-select" onclick="beginBoardBinding('select')">select</button> <button type="button" id="bind-cancel" onclick="beginBoardBinding('cancel')">cancel</button> <button type="button" id="bind-read" onclick="beginBoardBinding('read')">read</button> <button type="button" onclick="resetBoardKeys()">Restore default keys</button></details></section><details class="board-access" id="audio-settings"><summary>Audio and spoken feedback · testing</summary><p>Audio is off by default. Speech uses only voices reported by your browser as installed locally. No microphone or model service is used. Keep spoken feedback off when using a screen reader to avoid duplicate speech. Preferences reset on refresh.</p><button type="button" id="spoken-toggle" aria-pressed="false" onclick="toggleSpokenFeedback()">Spoken feedback</button> <button type="button" onclick="speakGameMessage('DUET local voice test. White pawn on e two.')">Test voice</button> <button type="button" onclick="speakGameMessage(AudioSettings.lastMessage)">Repeat last message</button> <button type="button" onclick="stopSpokenFeedback()">Stop speech</button><p>Turn spoken feedback on before testing a voice.</p><label for="local-voice">Installed local voice</label><select id="local-voice" onchange="AudioSettings.voiceURI=this.value"></select> <button type="button" onclick="refreshLocalVoices()">Refresh voices</button><p><label for="cueVolume">Cue volume <output id="cueVolume-value" for="cueVolume">50%</output></label><input id="cueVolume" type="range" min="0" max="1" step="0.05" value="0.5" oninput="setAudioPreference('cueVolume',this.value)"></p><p><label for="speechVolume">Speech volume <output id="speechVolume-value" for="speechVolume">70%</output></label><input id="speechVolume" type="range" min="0" max="1" step="0.05" value="0.7" oninput="setAudioPreference('speechVolume',this.value)"></p><p><label for="rate">Speech speed <output id="rate-value" for="rate">1×</output></label><input id="rate" type="range" min="0.5" max="2" step="0.1" value="1" oninput="setAudioPreference('rate',this.value)"></p><button type="button" onclick="testCueTone()">Test tone</button><p>The toolbar Audio Cue button controls the continuous proximity tone. Test tone plays a short sample independently. Voice commands, direct gamepads and TV-remote support are not included.</p><p id="audio-status" role="status" aria-live="polite">Expand and choose Refresh voices to check local speech availability.</p></details>
+    </p><details class="board-access" id="audio-settings"><summary>Audio and spoken feedback · testing</summary><p>Audio is off by default. Speech uses only voices reported by your browser as installed locally. No microphone or model service is used. Keep spoken feedback off when using a screen reader to avoid duplicate speech. Preferences reset on refresh.</p><button type="button" id="spoken-toggle" aria-pressed="false" onclick="toggleSpokenFeedback()">Spoken feedback</button> <button type="button" onclick="speakGameMessage('DUET local voice test. White pawn on e two.')">Test voice</button> <button type="button" onclick="speakGameMessage(AudioSettings.lastMessage)">Repeat last message</button> <button type="button" onclick="stopSpokenFeedback()">Stop speech</button><p>Turn spoken feedback on before testing a voice.</p><label for="local-voice">Installed local voice</label><select id="local-voice" onchange="AudioSettings.voiceURI=this.value"></select> <button type="button" onclick="refreshLocalVoices()">Refresh voices</button><p><label for="cueVolume">Cue volume <output id="cueVolume-value" for="cueVolume">50%</output></label><input id="cueVolume" type="range" min="0" max="1" step="0.05" value="0.5" oninput="setAudioPreference('cueVolume',this.value)"></p><p><label for="speechVolume">Speech volume <output id="speechVolume-value" for="speechVolume">70%</output></label><input id="speechVolume" type="range" min="0" max="1" step="0.05" value="0.7" oninput="setAudioPreference('speechVolume',this.value)"></p><p><label for="rate">Speech speed <output id="rate-value" for="rate">1×</output></label><input id="rate" type="range" min="0.5" max="2" step="0.1" value="1" oninput="setAudioPreference('rate',this.value)"></p><button type="button" onclick="testCueTone()">Test tone</button><p>The toolbar Audio Cue button controls the continuous proximity tone. Test tone plays a short sample independently. Voice commands, direct gamepads and TV-remote support are not included.</p><p id="audio-status" role="status" aria-live="polite">Expand and choose Refresh voices to check local speech availability.</p></details>
 
     <div class="sr-only">
         <h3>Game Log (Visual History)</h3>
@@ -588,6 +588,7 @@ function testCueTone() {
     }
 
     function announce(msg) {
+        if (GameState.turnNumber > 1 && !GameState.gameOver) document.getElementById('first-move-status').textContent = 'First move made. Hand the turn to '+(GameState.turn === 'w' ? 'White' : 'Black')+'.';
         document.getElementById('sr-status').innerText = msg; speakGameMessage(msg);
         document.getElementById('log').innerText += msg + '\n';
         document.getElementById('log').scrollTop = document.getElementById('log').scrollHeight;
@@ -806,6 +807,8 @@ function testCueTone() {
         const result = checkLossCondition(GameState.board);
         if (result.over && !GameState.gameOver) {
             GameState.gameOver = true;
+            document.getElementById('completion-actions').hidden = false;
+            document.getElementById('completion-title').focus();
             const loserName = result.loser === 'w' ? 'White' : 'Black';
             const winnerName = result.winner === 'w' ? 'White' : 'Black';
             announce(`${loserName}'s Rebirth has lost control. ${winnerName} wins.`);
@@ -1666,14 +1669,20 @@ function gameReply(topic) { return ANSWERS[topic] || null; }
 
 
 function startLocalGame(computer) {
+ document.getElementById('completion-actions').hidden = true;
+ document.getElementById('first-move-status').textContent = 'First goal: make a legal move, then hand over the turn.';
  AIConfig.controllers.w = null;
  AIConfig.controllers.b = computer ? {depth: 2} : null;
  document.getElementById('ds-ai-toggle').innerText = computer ? 'Computer: On' : 'Computer: Off';
  document.getElementById('ds-ai-toggle').setAttribute('aria-pressed', String(computer));
  document.querySelectorAll('.chip[data-depth]').forEach(el => el.classList.toggle('active', el.dataset.depth === '2'));
  selectedSquare = null;
+ window.boardCursor = 'e2';
  initGame();
- document.getElementById('cmd').focus();
+ document.getElementById('board-navigator').focus();
+}
+function cancelBoardSelection() {
+ selectedSquare = null; document.getElementById('cmd').value = ''; renderVisualBoard(createSnapshot()); boardFeedback('Selection cancelled. Choose your piece.');
 }
 function sendAgentMessage() {
  const input = document.getElementById('agent-input');
