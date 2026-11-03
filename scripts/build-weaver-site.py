@@ -20,3 +20,6 @@ for target, prefix in [('site/index.html', './'), ('site/weaver/index.html', '..
 print('Built Weaver entrance and /weaver/ alias; original source preserved.')
 
 (root / 'site/weaver-invitation.js').write_bytes((root / 'public/weaver-invitation.js').read_bytes())
+
+# The root hub uses the same authoritative stylesheet as the Duet surfaces.
+(root / 'review-site/style.css').write_bytes((root / 'public/style.css').read_bytes())
