@@ -6,7 +6,7 @@
 <title>Break This Build 2027 | Hands-free play tests</title>
 
 <link rel="stylesheet" href="./style.css">
-<link rel="stylesheet" href="./interaction.css">
+
 
 <link rel="canonical" href="https://break.loptrlab.com/">
 <meta name="description" content="Choose DUET or Ren Rhapsody, join Loptr Lab’s public playtests, report reproducible issues, and follow the work toward stronger builds.">
@@ -25,14 +25,14 @@
 <body>
 <main aria-labelledby="page-title">
 <header class="onboard-bar"><a href="#page-title">Loptr Lab · Break This Build</a><a href="#context">Test record &amp; context</a></header>
-<h1 id="page-title">Choose a game. Make a move.</h1>
-<p class="lede">Break This Build 2027 · Choose a game → Check input options → Play → Replay or report a finding.</p>
-<p>No account or training is needed to play. Pointer and keyboard options are available; physical MouthPad, VOX, iPad Safari and VoiceOver acceptance is still pending.</p>
+<h1 id="page-title">Play a game.</h1>
+<p class="lede">2027 playtest: start, play, recover, finish.</p>
 <section class="paths" aria-label="Choose a game">
-<article class="path" aria-labelledby="rhapsody-title"><p class="tag">Music and movement</p><h2 id="rhapsody-title">First Movement</h2><p>Your first goal: move across the rooftop and make a jump. Check Input options beside Start for optional click-to-move and timing assist.</p><a class="action" href="https://ibloud.github.io/ren-rhapsody/play/">Play First Movement</a><p><a href="https://ibloud.github.io/ren-rhapsody/#hands-free-2027">First Movement test record</a></p></article>
-<article class="path" aria-labelledby="duet-title"><p class="tag">Local two-player strategy</p><h2 id="duet-title">Duet</h2><p>Your first goal: make a legal move and hand the turn to the other player. Play together on one device using pointer or keyboard controls.</p><a class="action" href="./duet/play/">Play Duet</a><p><a href="./duet/review.html#hands-free-2027">Duet test record</a></p></article>
+<article class="path" aria-labelledby="rhapsody-title"><img class="game-art" src="https://ibloud.github.io/ren-rhapsody/assets/social-preview.png" alt="" aria-hidden="true" width="1280" height="640"><span class="tag">Music and movement</span><h2 id="rhapsody-title">First Movement</h2><p>Find five lights. Start with a move and a jump.</p><a class="action" href="https://ibloud.github.io/ren-rhapsody/play/">Play First Movement</a><a class="record-link" href="https://ibloud.github.io/ren-rhapsody/#hands-free-2027">First Movement test record</a><details class="input-preview"><summary>Input options</summary><p>Use arrows or A/D to move and Space to jump, or use touch controls. Optional click-to-move and timing assist are off by default; choose them beside Start. Assisted runs are labeled and excluded from best records.</p></details></article>
+<article class="path" aria-labelledby="duet-title"><img class="game-art" src="./duet-artwork.svg" alt="" aria-hidden="true" width="1280" height="640"><span class="tag">Local two-player</span><h2 id="duet-title">Duet</h2><p>Make a legal move, then hand the turn to the other player.</p><a class="action" href="./duet/play/">Play Duet</a><a class="record-link" href="./duet/review.html#hands-free-2027">Duet test record</a><details class="input-preview"><summary>Input options and remote mode</summary><p>Select a piece, then its target; select the same square again to cancel. Or type a move such as e2e4. The game’s Input options include keyboard navigation and cancellation.</p><p><a href="https://duet-multiplayer-production.up.railway.app">Remote multiplayer demo</a> requires creating or joining a room. Reconnect works only while that temporary room exists; expiry or a server restart clears it. This is separate from local play.</p></details></article>
 </section>
-<details id="context" class="callout"><summary>Test cases, Halloween retrospective, AI disclosure and optional learning</summary><p><a href="https://ibloud.github.io/ren-rhapsody/#play-submission">Rhapsody development record</a> · <a href="./duet/">The Weaver reading surface</a> · <a href="https://duet-multiplayer-production.up.railway.app">Separate remote Duet demo · availability unverified here</a></p>
+<p class="supporting-intro">No account or training is needed to play. Physical MouthPad, VOX, iPad Safari and VoiceOver acceptance remains pending.</p>
+<details id="context" class="callout"><summary>Test cases, Halloween retrospective, AI disclosure and optional learning</summary><p><a href="https://ibloud.github.io/ren-rhapsody/#play-submission">Rhapsody development record</a> · <a href="./duet/">The Weaver reading surface</a> · <a href="https://duet-multiplayer-production.up.railway.app">Separate remote Duet demo · current published build</a></p>
 <section class="callout" id="hands-free-2027" aria-labelledby="hands-free-title"><h2 id="hands-free-title">2027 hands-free test cases · evidence checked November 3, 2026</h2>
 <h3>One goal for Break This Build 2027</h3>
 <p>Test whether a player can <strong>start, play, recover, and finish</strong> First Movement and Duet using hands-free input. MouthPad and Augmental VOX are separate test cases for each game. Ordinary pointer/keyboard checks help find barriers; they do not prove device compatibility.</p>
@@ -58,12 +58,10 @@
 <p><a href="https://joinhandshake.com/move-program/referral?referralCode=AB04EB&amp;utm_source=referral">Handshake MOVE — referral link</a>: destination access, free access, account requirements, current missions, and referral terms remain unverified. The owner describes a Handshake “Vibe Code an App” mission using Google AI Studio; its referenced screenshot was not available to inspect here. Check current conditions before joining.</p>
 <p><a href="https://opinionai.substack.com/p/free-ai-courses-from-anthropic-google">Opinion AI's free AI learning path</a> is a third-party guide to free learning resources, checked November 3. Its paid companion guides are separate; the guide notes possible account requirements and paid certificates. Check individual providers' current terms. Both resources are optional.</p>
 <h3>Where ArtCraft fits</h3><p>ArtCraft remains an optional production-tool study, not a verified integration. First Movement uses procedural canvas art and synthesized audio. The <a href="https://github.com/ibloud/ren-rhapsody/pull/12">existing issue #11 storyboard study and asset-access findings</a> remain separate review work, not gameplay or accepted canon.</p><p><a href="https://github.com/storytold/artcraft">ArtCraft source</a> · <a href="https://github.com/ibloud/ren-rhapsody">Rhapsody source and rights boundaries</a></p></section>
-<section class="callout" aria-labelledby="routes-title"><h2 id="routes-title">Which door goes where?</h2><ul><li><strong>Break This Build:</strong> this shared testing and development hub. It links projects; it does not merge their rules or runtimes.</li><li><strong>The Weaver:</strong> a creative/provenance reading surface at /duet/. It is separate from the game controls.</li><li><strong>DUET multiplayer:</strong> the temporary Railway room-code demo. <strong>DUET local recovery:</strong> /duet/play/, for one-device play or a computer opponent.</li><li><strong>First Movement:</strong> the existing short browser prototype at ren-rhapsody/play/. The wider Ren/UEFN blueprint remains a concept, not a published Fortnite island.</li><li><strong>PIXIE:</strong> the existing contributor guide. Its reviewed snapshots have their own dates; they are not live release acceptance.</li></ul><p>Halloween is retained as the historical First Movement checkpoint. Its open independent and physical-device acceptance gates remain visible in the current development record. Polyfork and ArtCraft are optional production studies; a 3D conversion is outside this status update.</p><p><a href="https://github.com/Loptr-Lab/duet-solo-hackathon/pull/106">DUET deployment and test evidence</a> · <a href="https://github.com/ibloud/ren-rhapsody/blob/main/docs/HALLOWEEN-2026-FIRST-MOVEMENT.md">First Movement acceptance</a> · <a href="https://github.com/ibloud/ren-rhapsody/issues/11">Existing storyboard/tool study</a> · <a href="https://github.com/ibloud/ibloud.github.io/blob/main/docs/ECOSYSTEM_ARCHITECTURE.md">Canonical ecosystem map</a></p></section>
+<section class="callout" aria-labelledby="routes-title"><h2 id="routes-title">Which door goes where?</h2><ul><li><strong>Break This Build:</strong> this shared testing and development hub. It links projects; it does not merge their rules or runtimes.</li><li><strong>The Weaver:</strong> a creative/provenance reading surface at /duet/. It is separate from the game controls.</li><li><strong>Duet remote multiplayer demo:</strong> the temporary Railway room-code demo. <strong>Duet local two-player:</strong> /duet/play/, for one-device play or a computer opponent.</li><li><strong>First Movement:</strong> the existing short browser prototype at ren-rhapsody/play/. The wider Ren/UEFN blueprint remains a concept, not a published Fortnite island.</li><li><strong>PIXIE:</strong> the existing contributor guide. Its reviewed snapshots have their own dates; they are not live release acceptance.</li></ul><p>Halloween is retained as the historical First Movement checkpoint. Its open independent and physical-device acceptance gates remain visible in the current development record. Polyfork and ArtCraft are optional production studies; a 3D conversion is outside this status update.</p><p><a href="https://github.com/Loptr-Lab/duet-solo-hackathon/pull/106">Duet deployment and test evidence</a> · <a href="https://github.com/ibloud/ren-rhapsody/blob/main/docs/HALLOWEEN-2026-FIRST-MOVEMENT.md">First Movement acceptance</a> · <a href="https://github.com/ibloud/ren-rhapsody/issues/11">Existing storyboard/tool study</a> · <a href="https://github.com/ibloud/ibloud.github.io/blob/main/docs/ECOSYSTEM_ARCHITECTURE.md">Canonical ecosystem map</a></p></section>
 <section id="contribute" class="callout"><h2>Help improve a build</h2><a class="pixie-restore" id="pixie-restore" href="#pixie-help">Open PIXIE help</a><p>For First Movement, record your device, browser, input method, steps, expected result and actual result. For DUET, choose remote room-code play or local Classic recovery and report which build you tested. Record device, browser, input, expected result and actual result; never publish reconnect tokens or room codes.</p><p><a href="https://ecosystem.loptrlab.com">Find a project with PIXIE</a> · <a href="https://loptr-lab.github.io/training/">Contributor training</a></p></section>
 <p><small>These are independent Loptr Lab projects. Artist endorsement, music permission, platform approval and a published Fortnite island are not established by the browser prototype.</small></p>
 </details>
-</main>
-
 <details class="pixie-dock" id="pixie-help">
 <summary id="pixie-trigger"><span class="pixie-spark" aria-hidden="true">✦</span><span>PIXIE<small>Here to help</small></span></summary>
 <section class="pixie-panel" aria-labelledby="pixie-title">
@@ -76,6 +74,9 @@
 <button class="pixie-close pixie-hide" type="button" id="pixie-hide">Hide for this visit</button>
 </section>
 </details>
+</main>
+
+
 <script>
 (function () {
   const dock = document.getElementById('pixie-help');
@@ -92,5 +93,7 @@
 }());
 </script>
 
-</body>
+<script>
+function revealRecord(){let id;try{id=decodeURIComponent(location.hash.slice(1))}catch{return}let target=document.getElementById(id);if(!target)return;let node=target;while(node){if(node.tagName==='DETAILS')node.open=true;node=node.parentElement}target.scrollIntoView({block:'start'})}addEventListener('hashchange',revealRecord);if(location.hash)revealRecord();
+</script></body>
 </html>

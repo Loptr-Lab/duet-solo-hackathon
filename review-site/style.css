@@ -1046,23 +1046,41 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
 :where(html.duet-game) [hidden]{display:none!important}
 
 
-/* Break This Build navigation hub. */
+/* Break This Build hub: play first, supporting evidence in native disclosures. */
+:root:where(.duet-hub){color-scheme:dark;font-size:125%;--bg:#050505;--panel:#151515;--text:#e0e0e0;--muted:#c9c9c9;--line:#888;--accent:#d4a853}
+:where(html.duet-hub) *{box-sizing:border-box}
+:where(html.duet-hub) body{margin:0;background:var(--bg);color:var(--text);font:1rem/1.6 'Helvetica Neue',Helvetica,Arial,sans-serif;text-align:left;hyphens:none;overflow-wrap:anywhere}
+:where(html.duet-hub) main{max-width:1200px;margin:auto;padding:0 1rem 3rem}
+:where(html.duet-hub) h1{font-size:2rem;line-height:1.5;letter-spacing:normal;margin:1rem 0}
+:where(html.duet-hub) h2{font-size:1.4rem;line-height:1.5;margin:0 0 .5rem}
+:where(html.duet-hub) h3{font-size:1.2rem;line-height:1.5;margin:1rem 0}
+:where(html.duet-hub) p{font-size:1rem;max-width:65ch;margin:0 0 2em}
+:where(html.duet-hub) :is(a,a:visited){color:var(--accent);text-underline-offset:.2em}
+:where(html.duet-hub) a:hover{color:var(--text)}
+:where(html.duet-hub) :focus-visible{outline:3px solid var(--accent);outline-offset:4px}
+:where(html.duet-hub) :is(button,summary){font:inherit;min-height:56px;max-width:100%;padding:.6rem;cursor:pointer;color:var(--text);background:var(--bg)}
+:where(html.duet-hub) .lede{font-size:1rem;line-height:1.6;color:var(--muted)}
+:where(html.duet-hub) .paths{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.2rem;margin:1rem 0 2rem}
+:where(html.duet-hub) .path{min-width:0;padding:1rem;border:1px solid var(--line);background:var(--panel);border-radius:.5rem;display:flex;flex-direction:column;align-items:stretch}
+:where(html.duet-hub) .game-art{display:block;width:100%;height:auto;aspect-ratio:2/1;object-fit:cover;margin-bottom:1rem;border-radius:.3rem}
+:where(html.duet-hub) .game-art[src$=".svg"]{object-fit:contain}
+:where(html.duet-hub) .path p{max-width:40ch}
+:where(html.duet-hub) .path .tag{display:block;color:var(--accent);font-size:1rem;font-weight:600;margin-bottom:.4rem}
+:where(html.duet-hub) .path a.action{display:flex;align-items:center;justify-content:center;min-height:56px;padding:.6rem;border:2px solid var(--accent);border-radius:.3rem;text-decoration:none;font-weight:700;color:var(--text);background:var(--bg)}
+:where(html.duet-hub) .path a.action:is(:hover,:focus-visible){background:#1a1a1a;color:var(--text)}
+:where(html.duet-hub) .record-link{display:inline-flex;align-items:center;min-height:56px;padding:.4rem 0}
+:where(html.duet-hub) .input-preview{border-top:1px solid var(--line);margin-top:.5rem}
+:where(html.duet-hub) .input-preview summary{background:transparent}
+:where(html.duet-hub) .input-preview p{margin-top:1rem}
+:where(html.duet-hub) .callout{border:1px solid var(--line);background:var(--panel);padding:1rem;margin:2rem 0;border-radius:.5rem}
+:where(html.duet-hub) .callout .callout{padding:1rem 0;border:0;border-top:1px solid var(--line)}
+:where(html.duet-hub) :is(small,li){font-size:1rem;color:var(--muted)}
+:where(html.duet-hub) li{margin-bottom:1rem}
+:where(html.duet-hub) pre{white-space:pre-wrap;overflow-wrap:anywhere;max-width:100%;font:inherit}
+@media(max-width:650px){:where(html.duet-hub) .paths{grid-template-columns:1fr}:where(html.duet-hub) main{padding-inline:.6rem}}
 
-:root:where(.duet-hub){color-scheme:dark;--bg:#050505;--panel:#151515;--text:#e0e0e0;--muted:#b6b6b6;--line:#666;--accent:#d4a853}
-:where(html.duet-hub) *{box-sizing:border-box}:where(html.duet-hub) body{margin:0;background:var(--bg);color:var(--text);font:18px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-:where(html.duet-hub) main{max-width:920px;margin:0 auto;padding:48px 24px 96px}:where(html.duet-hub) h1{font-size:clamp(48px,9vw,86px);line-height:.95;margin:0 0 24px;letter-spacing:-.04em}
-:where(html.duet-hub) h2{font-size:26px;margin:48px 0 12px}:where(html.duet-hub) p{max-width:720px}:where(html.duet-hub) a{color:var(--accent)}:where(html.duet-hub) .lede{font-size:25px;line-height:1.35;color:var(--muted);max-width:720px}
-:where(html.duet-hub) .callout{border:1px solid var(--line);background:var(--panel);padding:24px;margin:32px 0;border-radius:10px}
-:where(html.duet-hub) pre{overflow:auto;background:#090b0d;border:1px solid var(--line);padding:20px;border-radius:8px;font-size:16px}
-:where(html.duet-hub) ul{padding-left:24px}:where(html.duet-hub) .state{font-weight:700;letter-spacing:.02em}:where(html.duet-hub) .ask{font-size:24px;font-weight:650}
-:where(html.duet-hub) small{color:var(--muted)}
-:where(html.duet-hub) .video-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;margin:32px 0;border-radius:10px}
-:where(html.duet-hub) .video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
-:where(html.duet-hub) .paths{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:30px 0}:where(html.duet-hub) .path{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:24px}:where(html.duet-hub) .path h2{font-size:26px;margin:0 0 12px}:where(html.duet-hub) .path p{margin:0 0 18px}:where(html.duet-hub) .path .tag{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700}:where(html.duet-hub) .path a.action{display:inline-block;padding:11px 15px;border:1px solid var(--accent);border-radius:5px;text-decoration:none;font-weight:700;margin:4px 8px 4px 0}:where(html.duet-hub) .path a.action:hover,:where(html.duet-hub) .path a.action:focus-visible{background:var(--accent);color:var(--bg)}:where(html.duet-hub) .milestones{list-style:none;padding:0;display:grid;gap:10px}:where(html.duet-hub) .milestones li{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:15px 18px;display:grid;grid-template-columns:135px 1fr;gap:12px}:where(html.duet-hub) .milestones time{font-weight:700;color:var(--accent)}:where(html.duet-hub) .examples{display:flex;gap:10px;flex-wrap:wrap}:where(html.duet-hub) .examples a{border:1px solid var(--line);border-radius:6px;padding:8px 12px;color:var(--text);text-decoration:none}:where(html.duet-hub) .examples a:hover,:where(html.duet-hub) .examples a:focus-visible{border-color:var(--accent);color:var(--accent)}:where(html.duet-hub) :focus-visible{outline:3px solid var(--accent);outline-offset:3px}@media(max-width:650px){:where(html.duet-hub) .paths,:where(html.duet-hub) .milestones li{grid-template-columns:1fr}:where(html.duet-hub) main{padding:32px 18px 64px}}
-
-:where(html.duet-hub) .path{min-width:0}
 /* PIXIE: quiet contextual assistance with native disclosure fallback. */
-html:where(.duet-hub){scroll-padding-bottom:110px}:where(html.duet-hub) main{padding-bottom:140px!important}:where(html.duet-hub) .pixie-dock{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));z-index:50;font-size:15px}:where(html.duet-hub) .pixie-dock>summary{cursor:pointer;min-height:60px;display:flex;align-items:center;gap:12px;border:1px solid #b9dfc4;border-radius:35px;padding:8px 22px 8px 12px;background:#223b34;color:#effaf2;box-shadow:0 8px 30px #0008;font-weight:700;list-style:none}:where(html.duet-hub) .pixie-dock>summary::-webkit-details-marker{display:none}:where(html.duet-hub) .pixie-spark{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:#122521;color:#e9c68d;font-size:28px}:where(html.duet-hub) .pixie-dock>summary small{display:block;font-size:11px;color:#c7dfce;font-weight:400}:where(html.duet-hub) .pixie-panel{position:absolute;right:0;bottom:78px;width:min(400px,calc(100vw - 32px));max-height:calc(100dvh - 120px);overflow:auto;overscroll-behavior:contain;background:#172326;color:#edf2ec;border:1px solid #688878;border-radius:16px;padding:22px;box-shadow:0 12px 50px #0008}:where(html.duet-hub) .pixie-panel h2{font-size:24px;margin:0 0 10px}:where(html.duet-hub) .pixie-panel h3{font-size:16px;margin:18px 0 8px}:where(html.duet-hub) .pixie-panel p{margin:0 0 12px}:where(html.duet-hub) .pixie-panel a{color:#b9dfc4}:where(html.duet-hub) .pixie-panel small{color:#c0cbc5}:where(html.duet-hub) .pixie-links{list-style:none;padding:0}:where(html.duet-hub) .pixie-links li{padding:10px 0;border-bottom:1px solid #3a4b46}:where(html.duet-hub) .pixie-links a{display:inline-block;min-height:36px}:where(html.duet-hub) .pixie-links small{display:block;font-size:12px}:where(html.duet-hub) .pixie-close{min-height:44px;background:transparent;color:#b9dfc4;border:1px solid #688878;border-radius:7px;padding:10px 16px;cursor:pointer}:where(html.duet-hub) .pixie-private{border-left:3px solid #e9c68d;padding:10px 14px;background:#252c25}:where(html.duet-hub) .pixie-context{color:#e9c68d;font-size:12px}:where(html.duet-hub) .pixie-restore{display:inline-block;margin-top:24px;min-height:44px}:where(html.duet-hub) .pixie-hide{display:none}.pixie-js:where(.duet-hub) .pixie-hide{display:inline-block}@media(prefers-reduced-motion:reduce){:where(html.duet-hub) .pixie-dock *{animation:none!important;transition:none!important}}
+:where(html.duet-hub) .pixie-dock{position:static;margin:2rem 0;max-width:65ch;font-size:1rem}:where(html.duet-hub) .pixie-dock>summary{cursor:pointer;min-height:60px;display:flex;align-items:center;gap:12px;border:1px solid #b9dfc4;border-radius:35px;padding:8px 22px 8px 12px;background:#223b34;color:#effaf2;box-shadow:0 8px 30px #0008;font-weight:700;list-style:none}:where(html.duet-hub) .pixie-dock>summary::-webkit-details-marker{display:none}:where(html.duet-hub) .pixie-spark{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:#122521;color:#e9c68d;font-size:28px}:where(html.duet-hub) .pixie-dock>summary small{display:block;font-size:1rem;color:#c7dfce;font-weight:400}:where(html.duet-hub) .pixie-panel{position:static;width:min(65ch,100%);max-height:none;overflow:auto;overscroll-behavior:contain;background:#172326;color:#edf2ec;border:1px solid #688878;border-radius:16px;padding:22px;box-shadow:0 12px 50px #0008}:where(html.duet-hub) .pixie-panel h2{font-size:24px;margin:0 0 10px}:where(html.duet-hub) .pixie-panel h3{font-size:1rem;margin:18px 0 8px}:where(html.duet-hub) .pixie-panel p{margin:0 0 2em}:where(html.duet-hub) .pixie-panel a{color:#b9dfc4}:where(html.duet-hub) .pixie-panel small{color:#c0cbc5}:where(html.duet-hub) .pixie-links{list-style:none;padding:0}:where(html.duet-hub) .pixie-links li{padding:10px 0;border-bottom:1px solid #3a4b46}:where(html.duet-hub) .pixie-links a{display:inline-block;min-height:56px}:where(html.duet-hub) .pixie-links small{display:block;font-size:1rem}:where(html.duet-hub) .pixie-close{min-height:56px;background:transparent;color:#b9dfc4;border:1px solid #688878;border-radius:7px;padding:10px 16px;cursor:pointer}:where(html.duet-hub) .pixie-private{border-left:3px solid #e9c68d;padding:10px 14px;background:#252c25}:where(html.duet-hub) .pixie-context{color:#e9c68d;font-size:1rem}:where(html.duet-hub) .pixie-restore{display:inline-block;margin-top:24px;min-height:56px}:where(html.duet-hub) .pixie-hide{display:none}.pixie-js:where(.duet-hub) .pixie-hide{display:inline-block}@media(prefers-reduced-motion:reduce){:where(html.duet-hub) .pixie-dock *{animation:none!important;transition:none!important}}
 
 
 /* Existing shared interaction rules. */
@@ -1130,18 +1148,18 @@ html:where(.duet-hub){scroll-padding-bottom:110px}:where(html.duet-hub) main{pad
 @media(max-width:900px) { :where(html.duet-game) .board-row { grid-template-columns:minmax(0,1fr); } :where(html.duet-game) .recovery-support-row { grid-template-columns:minmax(0,1fr); } }
 @media(max-width:480px) { :where(html.duet-game) .page { padding:.6rem; } }
 /* Shared onboarding components; PR #110 remains the stylesheet authority. */
-:where(html.duet-hub) body{font:20px/1.55 'Helvetica Neue',Helvetica,Arial,sans-serif}
-:where(html.duet-hub) main{padding-top:16px}
-:where(html.duet-hub) h1{font-size:clamp(32px,5vw,48px);line-height:1.15;letter-spacing:normal;margin-top:24px}
-:where(html.duet-hub) .lede{font-size:20px}
-:where(html.duet-hub) .path h2{font-size:28px}
-:where(html.duet-hub) .path .tag{font-size:14px;letter-spacing:normal;text-transform:none}
-:where(html.duet-hub) .path a.action{display:flex;align-items:center;justify-content:center;min-height:48px;margin:16px 0;border-color:var(--accent);color:var(--accent);background:var(--bg)}
-:where(html.duet-hub) .path a.action:is(:hover,:focus-visible){background:#252525;color:#f2e5ce}
-:where(html.duet-hub) .path p{margin-bottom:12px}
+
+
+
+
+
+
+
+
+
 .onboard-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;min-height:64px;border-bottom:1px solid #666;padding:8px 0}
 .onboard-bar a{display:inline-flex;align-items:center;min-height:48px}
-:where(html.duet-hub) summary{cursor:pointer;min-height:48px;padding:8px 0;font-weight:700}
+
 
 
 
@@ -1157,4 +1175,3 @@ html:where(.duet-hub){scroll-padding-bottom:110px}:where(html.duet-hub) main{pad
 
 
 @media(prefers-reduced-motion:reduce){.onboard-bar *, .onboard-intro *{animation:none!important;transition:none!important}}
-:where(html.duet-hub) .path p>a{display:inline-flex;align-items:center;min-height:48px}
