@@ -158,32 +158,34 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
             --black-obsidian: #1a1a1a;
             --white-pure: #ffffff;
             --grey-200: #e0e0e0;
-            --text-muted: #666666;
+            --text-muted: #c9c9c9;
             --grey-700: #333333;
             --amber-light: #d4a853;
             --amber-glow-08: rgba(212,168,83,0.08);
             --amber-glow-10: rgba(212,168,83,0.10);
             --amber-glow-30: rgba(212,168,83,0.3);
-            --border-hairline: #1a1a1a;
+            --border-hairline: #777777;
             --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             --font-mono: 'SF Mono', 'Menlo', 'Consolas', monospace;
         }
         :where(html.duet-game) * { box-sizing: border-box; }
+        :where(html.duet-game) { font-size:125%; color-scheme:dark; }
         :where(html.duet-game) body {
+            font-size:1rem; line-height:1.6; text-align:left; hyphens:none; overflow-wrap:anywhere;
             font-family: var(--font-sans);
             background: var(--black-void);
             color: var(--grey-200);
             margin: 0;
         }
         :where(html.duet-game) .page {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 32px 20px 48px;
+
         }
 
         :where(html.duet-game) .hero {
-            padding-bottom: 20px;
-            margin-bottom: 28px;
+
+
             border-bottom: 1px solid var(--border-hairline);
         }
         :where(html.duet-game) .hero-top {
@@ -194,7 +196,7 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
             flex-wrap: wrap;
         }
         :where(html.duet-game) .hero-eyebrow {
-            font-size: 12.8px;
+            font-size: 1rem;
             text-transform: uppercase;
             letter-spacing: 0.15em;
             color: var(--amber-light);
@@ -210,16 +212,16 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
         }
         :where(html.duet-game) .hero-meta {
             text-align: right;
-            font-size: 12px;
+            font-size: 1rem;
             color: var(--text-muted);
             letter-spacing: 0.1em;
             text-transform: uppercase;
             line-height: 1.8;
         }
         :where(html.duet-game) .hero p.tagline {
-            font-size: 15px;
+            font-size: 1rem;
             line-height: 1.55;
-            opacity: 0.85;
+            opacity: 1;
             max-width: 62ch;
             margin: 20px 0 16px 0;
         }
@@ -228,11 +230,11 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
             flex-wrap: wrap;
             gap: 8px 18px;
             font-family: var(--font-mono);
-            font-size: 13px;
+            font-size: 1rem;
         }
         :where(html.duet-game) .hero-nav a {
             color: var(--grey-200);
-            opacity: 0.75;
+            opacity: 1;
             text-decoration: none;
             border-bottom: 1px solid transparent;
         }
@@ -244,7 +246,7 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
             background: var(--black-obsidian);
             border-left: 2px solid var(--amber-light);
             padding: 10px 14px;
-            font-size: 14px;
+            font-size: 1rem;
             line-height: 1.5;
             margin-top: 16px;
         }
@@ -258,7 +260,7 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
 
         /* Halloween 2026 release mission control */
         :where(html.duet-game) .release-section{margin:40px 0;border:1px solid var(--border-hairline);padding:28px;background:linear-gradient(180deg,rgba(212,168,83,.07),transparent)}
-        :where(html.duet-game) .release-kicker{font:11px var(--font-mono);color:var(--amber-light);letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+        :where(html.duet-game) .release-kicker{font:1rem var(--font-mono);color:var(--amber-light);letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
         :where(html.duet-game) .release-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-end;flex-wrap:wrap}
         :where(html.duet-game) .release-section h2{color:var(--white-pure);font-size:clamp(1.7rem,4vw,2.6rem);font-weight:300;margin:0 0 8px;letter-spacing:-.02em}
         :where(html.duet-game) .release-date{font:700 clamp(1.2rem,3vw,1.8rem) var(--font-mono);color:var(--white-pure);white-space:nowrap}
@@ -266,53 +268,53 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
         :where(html.duet-game) .release-countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0 24px}
         :where(html.duet-game) .countdown-cell{border:1px solid var(--border-hairline);padding:14px;background:rgba(255,255,255,.015);text-align:center}
         :where(html.duet-game) .countdown-cell strong{display:block;font:300 1.7rem var(--font-mono);color:var(--white-pure)}
-        :where(html.duet-game) .countdown-cell span{display:block;margin-top:4px;color:var(--text-muted);font:10px var(--font-mono);text-transform:uppercase;letter-spacing:.1em}
-        :where(html.duet-game) .readiness-title{display:flex;justify-content:space-between;gap:12px;font:12px var(--font-mono);text-transform:uppercase;letter-spacing:.1em;color:var(--amber-light)}
+        :where(html.duet-game) .countdown-cell span{display:block;margin-top:4px;color:var(--text-muted);font:1rem var(--font-mono);text-transform:uppercase;letter-spacing:.1em}
+        :where(html.duet-game) .readiness-title{display:flex;justify-content:space-between;gap:12px;font:1rem var(--font-mono);text-transform:uppercase;letter-spacing:.1em;color:var(--amber-light)}
         :where(html.duet-game) .readiness-track{height:7px;background:var(--black-obsidian);margin:8px 0 20px;border:1px solid var(--border-hairline)}
         :where(html.duet-game) .readiness-track span{display:block;height:100%;width:0;background:var(--amber-light);transition:width .35s ease}
         :where(html.duet-game) .gate-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
         :where(html.duet-game) .gate{display:grid;grid-template-columns:28px 1fr;gap:10px;border:1px solid var(--border-hairline);padding:12px;background:rgba(255,255,255,.012)}
         :where(html.duet-game) .gate input{margin-top:2px;width:18px;height:18px;accent-color:var(--amber-light)}
-        :where(html.duet-game) .gate strong{display:block;color:var(--white-pure);font-size:13px;font-weight:400}
+        :where(html.duet-game) .gate strong{display:block;color:var(--white-pure);font-size:1rem;font-weight:400}
         :where(html.duet-game) .gate small{display:block;color:var(--text-muted);line-height:1.4;margin-top:3px}
-        :where(html.duet-game) .release-note{margin-top:18px;padding:13px;border-left:2px solid var(--amber-light);background:var(--black-obsidian);color:var(--text-muted);font-size:12px;line-height:1.6}
+        :where(html.duet-game) .release-note{margin-top:18px;padding:13px;border-left:2px solid var(--amber-light);background:var(--black-obsidian);color:var(--text-muted);font-size:1rem;line-height:1.6}
         :where(html.duet-game) .broadcast-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:20px;padding-top:18px;border-top:1px solid var(--border-hairline)}
-        :where(html.duet-game) .broadcast-status{font:12px var(--font-mono);color:var(--text-muted)}
+        :where(html.duet-game) .broadcast-status{font:1rem var(--font-mono);color:var(--text-muted)}
         @media(max-width:700px){:where(html.duet-game) .release-section{padding:20px}:where(html.duet-game) .release-countdown{grid-template-columns:repeat(2,1fr)}:where(html.duet-game) .gate-list{grid-template-columns:1fr}}
 
 
         :where(html.duet-game) .platform-roadmap{margin:40px 0;border:1px solid var(--border-hairline);padding:26px;background:rgba(255,255,255,.012)}
         :where(html.duet-game) .platform-roadmap h2{color:var(--white-pure);font-size:1.8rem;font-weight:300;margin:0 0 8px}:where(html.duet-game) .platform-roadmap h2:before{content:"↗";color:var(--amber-light);margin-right:12px}
-        :where(html.duet-game) .platform-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px}:where(html.duet-game) .platform-card{border:1px solid var(--border-hairline);padding:16px}:where(html.duet-game) .platform-card h3{font:700 12px var(--font-mono);letter-spacing:.1em;color:var(--amber-light);text-transform:uppercase}:where(html.duet-game) .platform-card p,:where(html.duet-game) .platform-card li{color:var(--text-muted);font-size:12px;line-height:1.6}:where(html.duet-game) .platform-card ol{padding-left:20px;margin:10px 0 0}
-        :where(html.duet-game) .portfolio-lane{margin-top:12px;padding:13px;border-left:2px solid var(--amber-light);color:var(--grey-200);font-size:12px;line-height:1.6}:where(html.duet-game) .portfolio-lane strong{color:var(--white-pure)}
+        :where(html.duet-game) .platform-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px}:where(html.duet-game) .platform-card{border:1px solid var(--border-hairline);padding:16px}:where(html.duet-game) .platform-card h3{font:700 1rem var(--font-mono);letter-spacing:.1em;color:var(--amber-light);text-transform:uppercase}:where(html.duet-game) .platform-card p,:where(html.duet-game) .platform-card li{color:var(--text-muted);font-size:1rem;line-height:1.6}:where(html.duet-game) .platform-card ol{padding-left:20px;margin:10px 0 0}
+        :where(html.duet-game) .portfolio-lane{margin-top:12px;padding:13px;border-left:2px solid var(--amber-light);color:var(--grey-200);font-size:1rem;line-height:1.6}:where(html.duet-game) .portfolio-lane strong{color:var(--white-pure)}
         @media(max-width:700px){:where(html.duet-game) .platform-grid{grid-template-columns:1fr}}
 
 
         /* Platform launch board */
         :where(html.duet-game) .launch-board{margin:40px 0;border:1px solid var(--amber-light);padding:28px;background:linear-gradient(180deg,rgba(212,168,83,.09),rgba(255,255,255,.01))}
         :where(html.duet-game) .launch-board h2{color:var(--white-pure);font-size:clamp(1.8rem,4vw,2.7rem);font-weight:300;margin:0 0 8px}
-        :where(html.duet-game) .launch-kicker{font:11px var(--font-mono);color:var(--amber-light);letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+        :where(html.duet-game) .launch-kicker{font:1rem var(--font-mono);color:var(--amber-light);letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
         :where(html.duet-game) .launch-deadline{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin:18px 0;padding:16px;border:1px solid var(--border-hairline);background:var(--black-obsidian)}
-        :where(html.duet-game) .launch-deadline strong{font:700 15px var(--font-mono);color:var(--white-pure);letter-spacing:.06em}
-        :where(html.duet-game) .launch-deadline span{font:12px var(--font-mono);color:var(--text-muted)}
+        :where(html.duet-game) .launch-deadline strong{font:700 1rem var(--font-mono);color:var(--white-pure);letter-spacing:.06em}
+        :where(html.duet-game) .launch-deadline span{font:1rem var(--font-mono);color:var(--text-muted)}
         :where(html.duet-game) .launch-steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:18px 0 22px}
         :where(html.duet-game) .launch-step{border:1px solid var(--border-hairline);padding:14px;min-height:125px;background:rgba(255,255,255,.012)}
-        :where(html.duet-game) .launch-step b{display:block;font:700 11px var(--font-mono);color:var(--amber-light);margin-bottom:7px}
-        :where(html.duet-game) .launch-step strong{display:block;color:var(--white-pure);font-size:13px;font-weight:400;margin-bottom:5px}
-        :where(html.duet-game) .launch-step small{display:block;color:var(--text-muted);font-size:11px;line-height:1.45}
+        :where(html.duet-game) .launch-step b{display:block;font:700 1rem var(--font-mono);color:var(--amber-light);margin-bottom:7px}
+        :where(html.duet-game) .launch-step strong{display:block;color:var(--white-pure);font-size:1rem;font-weight:400;margin-bottom:5px}
+        :where(html.duet-game) .launch-step small{display:block;color:var(--text-muted);font-size:1rem;line-height:1.45}
         :where(html.duet-game) .project-board{margin:40px 0;border:1px solid var(--border-hairline);padding:28px;background:rgba(255,255,255,.012)}
         :where(html.duet-game) .project-board h2{color:var(--white-pure);font-size:clamp(1.7rem,4vw,2.4rem);font-weight:300;margin:0 0 8px}
         :where(html.duet-game) .project-board .lead{max-width:70ch;line-height:1.7;color:var(--grey-200);opacity:.9}
         :where(html.duet-game) .project-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:20px}
         :where(html.duet-game) .project-card{border:1px solid var(--border-hairline);padding:16px;min-height:205px;display:flex;flex-direction:column;background:var(--black-obsidian)}
         :where(html.duet-game) .project-card.featured{border-color:var(--amber-light)}
-        :where(html.duet-game) .project-card .type{font:10px var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--amber-light);margin-bottom:8px}
-        :where(html.duet-game) .project-card h3{font-size:15px;color:var(--white-pure);font-weight:400;margin:0 0 7px}
-        :where(html.duet-game) .project-card p{font-size:12px;line-height:1.55;color:var(--text-muted);margin:0 0 12px}
+        :where(html.duet-game) .project-card .type{font:1rem var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--amber-light);margin-bottom:8px}
+        :where(html.duet-game) .project-card h3{font-size:1rem;color:var(--white-pure);font-weight:400;margin:0 0 7px}
+        :where(html.duet-game) .project-card p{font-size:1rem;line-height:1.55;color:var(--text-muted);margin:0 0 12px}
         :where(html.duet-game) .project-card .project-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto}
-        :where(html.duet-game) .project-card a{border:1px solid var(--border-hairline);padding:7px 9px;color:var(--grey-200);font:10px var(--font-mono);text-decoration:none;text-transform:uppercase;letter-spacing:.05em}
+        :where(html.duet-game) .project-card a{border:1px solid var(--border-hairline);padding:7px 9px;color:var(--grey-200);font:1rem var(--font-mono);text-decoration:none;text-transform:uppercase;letter-spacing:.05em}
         :where(html.duet-game) .project-card a:hover{border-color:var(--amber-light);color:var(--amber-light)}
-        :where(html.duet-game) .choice-note{margin-top:18px;padding:13px;border-left:2px solid var(--amber-light);color:var(--text-muted);font-size:12px;line-height:1.6}
+        :where(html.duet-game) .choice-note{margin-top:18px;padding:13px;border-left:2px solid var(--amber-light);color:var(--text-muted);font-size:1rem;line-height:1.6}
         @media(max-width:850px){:where(html.duet-game) .launch-steps{grid-template-columns:repeat(2,minmax(0,1fr))}:where(html.duet-game) .project-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
         @media(max-width:600px){:where(html.duet-game) .launch-board,:where(html.duet-game) .project-board{padding:20px}:where(html.duet-game) .launch-steps,:where(html.duet-game) .project-grid{grid-template-columns:1fr}}
 
@@ -323,16 +325,16 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
         :where(html.duet-game) .media-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:14px;margin-top:20px}
         :where(html.duet-game) .video-frame{aspect-ratio:16/9;width:100%;border:1px solid var(--border-hairline);background:#000}
         :where(html.duet-game) .media-card{border:1px solid var(--border-hairline);padding:18px;background:var(--black-obsidian)}
-        :where(html.duet-game) .media-card h3{font-size:14px;color:var(--white-pure);font-weight:400;margin:0 0 7px}
-        :where(html.duet-game) .media-card p{font-size:12px;line-height:1.6;color:var(--text-muted);margin:0 0 12px}
-        :where(html.duet-game) .media-links{display:flex;gap:8px;flex-wrap:wrap}:where(html.duet-game) .media-links a{border:1px solid var(--border-hairline);padding:8px 10px;color:var(--grey-200);font:10px var(--font-mono);text-decoration:none;text-transform:uppercase}:where(html.duet-game) .media-links a:hover{border-color:var(--amber-light);color:var(--amber-light)}
+        :where(html.duet-game) .media-card h3{font-size:1rem;color:var(--white-pure);font-weight:400;margin:0 0 7px}
+        :where(html.duet-game) .media-card p{font-size:1rem;line-height:1.6;color:var(--text-muted);margin:0 0 12px}
+        :where(html.duet-game) .media-links{display:flex;gap:8px;flex-wrap:wrap}:where(html.duet-game) .media-links a{border:1px solid var(--border-hairline);padding:8px 10px;color:var(--grey-200);font:1rem var(--font-mono);text-decoration:none;text-transform:uppercase}:where(html.duet-game) .media-links a:hover{border-color:var(--amber-light);color:var(--amber-light)}
         :where(html.duet-game) .bridge{margin-top:20px;border:1px solid var(--amber-light);padding:20px;background:rgba(212,168,83,.05)}
-        :where(html.duet-game) .bridge h3{font-size:14px;color:var(--amber-light);font-weight:400;margin:0 0 8px}:where(html.duet-game) .bridge-flow{font:11px var(--font-mono);line-height:1.9;color:var(--grey-200);overflow:auto;white-space:nowrap;padding:12px;border:1px solid var(--border-hairline);background:var(--black-obsidian)}
+        :where(html.duet-game) .bridge h3{font-size:1rem;color:var(--amber-light);font-weight:400;margin:0 0 8px}:where(html.duet-game) .bridge-flow{font:1rem var(--font-mono);line-height:1.9;color:var(--grey-200);overflow:auto;white-space:normal;padding:12px;border:1px solid var(--border-hairline);background:var(--black-obsidian)}
         @media(max-width:750px){:where(html.duet-game) .media-grid{grid-template-columns:1fr}:where(html.duet-game) .media-atmosphere{padding:20px}}
 
         /* Community ownership / Xbox proof layer */
         :where(html.duet-game) .power-section{margin:40px 0;border:1px solid var(--border-hairline);padding:28px;background:linear-gradient(180deg,rgba(212,168,83,.045),transparent)}
-        :where(html.duet-game) .power-section .power-kicker{font:11px var(--font-mono);color:var(--amber-light);letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+        :where(html.duet-game) .power-section .power-kicker{font:1rem var(--font-mono);color:var(--amber-light);letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
         :where(html.duet-game) .power-section h2{color:var(--white-pure);font-size:clamp(1.7rem,4vw,2.6rem);font-weight:300;margin:0 0 12px;letter-spacing:-.02em}
         :where(html.duet-game) .power-section .lead{max-width:68ch;line-height:1.7;color:var(--grey-200);opacity:.9}
 :where(html.duet-game) .toolbar {
@@ -354,7 +356,7 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
         :where(html.duet-game) .chip {
             padding: 10px 20px;
             font-family: var(--font-sans);
-            font-size: 12px;
+            font-size: 1rem;
             letter-spacing: 0.08em;
             text-transform: uppercase;
             border: 1px solid var(--border-hairline);
@@ -377,27 +379,28 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
         }
         :where(html.duet-game) .turn-meta {
             font-family: var(--font-mono);
-            font-size: 15.2px;
+            font-size: 1rem;
             color: var(--text-muted);
             letter-spacing: 0.05em;
         }
 
         :where(html.duet-game) .board-row {
-            display: flex;
-            gap: 40px;
-            align-items: flex-start;
-            flex-wrap: wrap;
+
+
+
+
             margin-bottom: 32px;
             position: relative;
         }
         :where(html.duet-game) #visual-board {
-            display: grid;
-            grid-template-columns: repeat(8, 46px);
-            grid-template-rows: repeat(8, 46px);
-            gap: 0;
-            border: 1px solid var(--border-hairline);
-            width: fit-content;
-            max-width: 100%;
+
+
+
+
+
+
+
+
         }
         :where(html.duet-game) .sq {
             position: relative;
@@ -475,20 +478,20 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
         }
 
         :where(html.duet-game) .piece-token {
-            width: 32px;
-            height: 32px;
+
+
             border-radius: 50%;
             border: 2px solid var(--border-hairline);
             background: var(--black-obsidian);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+
             color: var(--grey-200);
             opacity: 0.92;
             position: relative;
         }
-        :where(html.duet-game) .piece-token.special { width: 36px; height: 36px; font-size: 16px; }
+        :where(html.duet-game) .piece-token.special {    }
         :where(html.duet-game) .piece-token.owner-w { border-color: var(--amber-light); }
         :where(html.duet-game) .piece-token.owner-b { border-color: var(--text-muted); }
         :where(html.duet-game) .legal-dot {
@@ -505,9 +508,9 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
             left: 50%;
             transform: translateX(-50%);
             font-family: var(--font-mono);
-            font-size: 9px;
+            font-size: 1rem;
             color: var(--text-muted);
-            white-space: nowrap;
+            white-space: normal;
         }
 
         :where(html.duet-game) .sidebar {
@@ -525,7 +528,7 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
             max-width: 640px;
         }
         :where(html.duet-game) .panel-eyebrow {
-            font-size: 12.8px;
+            font-size: 1rem;
             text-transform: uppercase;
             letter-spacing: 0.15em;
             color: var(--amber-light);
@@ -538,14 +541,14 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
             margin: 0;
             padding-left: 1.2em;
             font-family: var(--font-mono);
-            font-size: 13px;
+            font-size: 1rem;
             line-height: 1.6;
             color: var(--grey-200);
         }
         :where(html.duet-game) .history-log li { margin: 2px 0; }
 
         :where(html.duet-game) .legend-key {
-            font-size: 15.2px;
+            font-size: 1rem;
             line-height: 2;
             color: var(--text-muted);
         }
@@ -561,7 +564,7 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
         :where(html.duet-game) .legal-swatch { border-radius: 50%; background: var(--amber-light); opacity: 0.7; }
 
         :where(html.duet-game) .help-body {
-            font-size: 15.2px;
+            font-size: 1rem;
             color: var(--grey-200);
             line-height: 1.8;
         }
@@ -579,14 +582,14 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
         }
         :where(html.duet-game) .command-bar-field {
             flex: 1;
-            min-width: 220px;
+            min-width: 0;
             display: flex;
             align-items: center;
             gap: 8px;
             border: 1px solid var(--border-hairline);
             padding: 12px 16px;
             font-family: var(--font-mono);
-            font-size: 15.2px;
+            font-size: 1rem;
             color: var(--text-muted);
         }
         :where(html.duet-game) .command-bar-field input {
@@ -595,7 +598,7 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
             border: none;
             color: var(--white-pure);
             font-family: var(--font-mono);
-            font-size: 15.2px;
+            font-size: 1rem;
             outline: none;
             padding: 0;
         }
@@ -605,7 +608,7 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
             color: var(--amber-light);
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            font-size: 12px;
+            font-size: 1rem;
             font-family: var(--font-sans);
             padding: 13px 28px;
             cursor: pointer;
@@ -613,7 +616,7 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
         }
         :where(html.duet-game) .btn-primary:hover { background: var(--amber-glow-08); }
         :where(html.duet-game) .btn-primary:disabled {
-            opacity: 0.4;
+            opacity: 1; border-style:dashed;
             cursor: not-allowed;
         }
         :where(html.duet-game) .btn-primary[aria-pressed="true"] {
@@ -623,7 +626,7 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
 
         :where(html.duet-game) #legend {
             font-family: var(--font-mono);
-            font-size: 13px;
+            font-size: 1rem;
             color: var(--text-muted);
             margin: 6px 0 14px 0;
         }
@@ -644,11 +647,11 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
             max-height: 200px;
             overflow-y: auto;
             font-family: var(--font-mono);
-            font-size: 13px;
+            font-size: 1rem;
         }
 
         :where(html.duet-game) .panel h2 {
-            font-size: 14px;
+            font-size: 1rem;
             text-transform: uppercase;
             letter-spacing: 0.08em;
             border-left: 2px solid var(--amber-light);
@@ -657,14 +660,14 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
             font-weight: 400;
         }
         :where(html.duet-game) .panel h3 {
-            font-size: 13px;
+            font-size: 1rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             color: var(--amber-light);
             margin: 14px 0 4px 0;
             font-weight: 400;
         }
-        :where(html.duet-game) .panel p { font-size: 14px; line-height: 1.5; margin: 4px 0; }
+        :where(html.duet-game) .panel p { font-size: 1rem; line-height: 1.5; margin: 4px 0; }
         :where(html.duet-game) .support-option {
             padding-top: 12px;
             margin-top: 12px;
@@ -701,12 +704,12 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
         :where(html.duet-game) .key-label {
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            font-size: 15.2px;
+            font-size: 1rem;
             color: var(--grey-200);
         }
 
         :where(html.duet-game) input, :where(html.duet-game) button, :where(html.duet-game) select {
-            font-size: 16px;
+            font-size: 1rem;
             padding: 5px;
             background: var(--black-obsidian);
             color: var(--grey-200);
@@ -725,7 +728,7 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
             margin: -1px;
             overflow: hidden;
             clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
+            white-space: normal;
             border: 0;
         }
 
@@ -745,7 +748,7 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
         }
         :where(html.duet-game) .pass-overlay.hidden { display: none; }
         :where(html.duet-game) .pass-overlay p {
-            font-size: 15px;
+            font-size: 1rem;
             color: var(--text-muted);
             max-width: 40ch;
             margin: 0;
@@ -805,7 +808,7 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
         }
         :where(html.duet-game) .realm-splash .signal {
             font-family: var(--font-mono);
-            font-size: 12px;
+            font-size: 1rem;
             letter-spacing: 0.08em;
             color: var(--text-muted);
             text-transform: lowercase;
@@ -822,9 +825,9 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
             max-width: 20ch;
         }
         :where(html.duet-game) .realm-splash .body {
-            font-size: 15px;
+            font-size: 1rem;
             color: var(--grey-200);
-            opacity: 0.85;
+            opacity: 1;
             max-width: 46ch;
             line-height: 1.6;
             margin: 0 0 28px 0;
@@ -898,7 +901,7 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
             stroke: var(--amber-light);
             stroke-width: 1.25;
             stroke-linejoin: round;
-            opacity: 0.85;
+            opacity: 1;
         }
         :where(html.duet-game) .sigil-ibloud .signal {
             stroke: var(--text-muted);
@@ -925,7 +928,7 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
             display: block;
             cursor: pointer;
             padding: 20px;
-            font-size: 14px;
+            font-size: 1rem;
             text-transform: uppercase;
             letter-spacing: 0.08em;
             border-left: 2px solid var(--amber-light);
@@ -958,24 +961,23 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
 
         /* Shared navigation and a contained, readable project area. */
         :where(html.duet-game) [hidden] { display:none !important; }
-        :root:where(.duet-game) { --text-muted:#aaa; }
-        :where(html.duet-game) .site-header { position:sticky; top:0; z-index:20; background:var(--black-void); border-bottom:1px solid #333; }
-        :where(html.duet-game) .site-nav { max-width:1100px; margin:auto; padding:10px 20px; display:flex; flex-wrap:wrap; gap:4px 12px; }
-        :where(html.duet-game) .site-nav a { color:var(--grey-200); text-decoration:none; padding:12px 8px; min-height:44px; font-size:14px; }
+        :where(html.duet-game) .site-header { position:relative; z-index:20; background:var(--black-void); border-bottom:1px solid #333; }
+        :where(html.duet-game) .site-nav { max-width:1200px; margin:auto; padding:10px 20px; display:flex; flex-wrap:wrap; gap:4px 12px; }
+        :where(html.duet-game) .site-nav a { color:var(--grey-200); text-decoration:none; padding:12px 8px; min-height:56px; font-size:1rem; }
         :where(html.duet-game) .site-nav a[aria-current] { color:var(--amber-light); text-decoration:underline; text-underline-offset:6px; }
         :where(html.duet-game) .site-brand { font-weight:700; margin-right:auto; }
         :where(html.duet-game) .skip-link { position:fixed; top:-100px; left:12px; z-index:30; background:var(--black-obsidian); color:white; padding:14px; }
         :where(html.duet-game) .skip-link:focus { top:8px; }
         :where(html.duet-game) a:focus-visible,:where(html.duet-game) button:focus-visible,:where(html.duet-game) input:focus-visible,:where(html.duet-game) summary:focus-visible { outline:3px solid var(--amber-light); outline-offset:4px; }
-        :where(html.duet-game) .project-info { max-width:1100px; }
+        :where(html.duet-game) .project-info { max-width:1200px; }
         :where(html.duet-game) .project-info section { margin:0 0 24px; scroll-margin-top:130px; }
         :where(html.duet-game) .project-info h2 { font-size:clamp(1.5rem,3vw,2rem); line-height:1.25; }
-        :where(html.duet-game) .project-info p,:where(html.duet-game) .project-info li,:where(html.duet-game) .project-info small { font-size:15px; line-height:1.65; }
+        :where(html.duet-game) .project-info p,:where(html.duet-game) .project-info li,:where(html.duet-game) .project-info small { font-size:1rem; line-height:1.65; }
         :where(html.duet-game) .project-info .project-grid { grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr)); }
         :where(html.duet-game) .project-info .launch-steps { grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr)); }
         :where(html.duet-game) .project-info .media-grid { grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; }
         :where(html.duet-game) .project-info .project-card { min-height:0; }
-        :where(html.duet-game) .project-info .media-links a,:where(html.duet-game) .project-info .project-actions a { font-size:12px; padding:12px; min-height:44px; }
+        :where(html.duet-game) .project-info .media-links a,:where(html.duet-game) .project-info .project-actions a { font-size:1rem; padding:12px; min-height:56px; }
         :where(html.duet-game) .bridge-flow { white-space:normal; overflow-wrap:anywhere; line-height:1.8; }
         :where(html.duet-game) .video-link-panel { padding:22px; border:1px solid #333; background:var(--black-obsidian); }
         :where(html.duet-game) .video-link-panel h3 { margin:0; color:white; }
@@ -985,14 +987,14 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
         @media(max-width:700px) { :where(html.duet-game) .site-nav { padding:6px 12px; gap:0 4px; } :where(html.duet-game) .site-brand { flex-basis:100%; } :where(html.duet-game) .project-info .media-grid,:where(html.duet-game) .project-info .platform-grid { grid-template-columns:1fr; } :where(html.duet-game) .project-info section { padding:18px; scroll-margin-top:190px; } :where(html.duet-game) #front-page,:where(html.duet-game) #game-screen,:where(html.duet-game) #remote-game-screen { scroll-margin-top:190px; } }
 
         /* Splash: one play entry, with project navigation kept in the shared header. */
-        :where(html.duet-game) .site-nav { max-width:900px; }
+        :where(html.duet-game) .site-nav { max-width:1200px; }
         :where(html.duet-game) #front-page { min-height:0; display:block; padding-top:48px; padding-bottom:48px; }
         :where(html.duet-game) #realm-intro { margin:0; padding:40px; }
         :where(html.duet-game) #realm-intro .sigil { top:32px; right:32px; width:80px; }
-        :where(html.duet-game) #realm-intro .signal { margin-bottom:18px; padding-right:100px; font-size:11px; }
+        :where(html.duet-game) #realm-intro .signal { margin-bottom:18px; padding-right:100px; font-size:1rem; }
         :where(html.duet-game) #realm-intro h2 { max-width:none; padding-right:100px; margin-bottom:20px; }
         :where(html.duet-game) #realm-intro .body { max-width:54ch; margin-bottom:28px; opacity:1; }
-        :where(html.duet-game) #realm-intro .btn-primary { margin:0 12px 8px 0; min-height:48px; }
+        :where(html.duet-game) #realm-intro .btn-primary { margin:0 12px 8px 0; min-height:56px; }
         :where(html.duet-game) #realm-intro .btn-primary + .btn-primary { border-color:#666; color:var(--grey-200); }
         @media(max-width:600px) {
             :where(html.duet-game) #front-page { padding-top:24px; padding-bottom:24px; }
@@ -1003,18 +1005,18 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
         }
         :where(html.duet-game) #realm-intro .splash-involved { display:inline-flex; align-items:center; justify-content:center; text-decoration:none; }
         @media(max-width:600px) { :where(html.duet-game) #realm-intro .splash-involved { display:flex; } }
-     :where(html.duet-game) .nav-more{position:relative}:where(html.duet-game) .nav-more summary{cursor:pointer;padding:12px 8px;min-height:44px}:where(html.duet-game) .nav-more>div{position:absolute;right:0;top:100%;z-index:100;background:var(--bg-deep,#111);border:1px solid var(--border-hairline,#555);min-width:220px;padding:8px;display:grid}:where(html.duet-game) .nav-more a{display:block}:where(html.duet-game) .nav-more summary:focus-visible{outline:2px solid var(--amber-light);outline-offset:2px}
+     :where(html.duet-game) .nav-more{position:relative}:where(html.duet-game) .nav-more summary{cursor:pointer;padding:12px 8px;min-height:56px}:where(html.duet-game) .nav-more>div{position:absolute;right:0;top:100%;z-index:100;background:var(--bg-deep,#111);border:1px solid var(--border-hairline,#555);min-width:220px;padding:8px;display:grid}:where(html.duet-game) .nav-more a{display:block}:where(html.duet-game) .nav-more summary:focus-visible{outline:2px solid var(--amber-light);outline-offset:2px}
 @media(max-width:700px){:where(html.duet-game) .power-section{padding:20px}}
 
         /* Current outage / transparent project status */
         :where(html.duet-game) .current-state-banner{max-width:760px;margin:20px auto;padding:16px 18px;border:1px solid #d4a853;border-left:4px solid #d4a853;background:rgba(212,168,83,.07);text-align:left}
-        :where(html.duet-game) .current-state-banner>strong,:where(html.duet-game) .state-label{font:700 11px var(--font-mono);letter-spacing:.12em;color:var(--amber-light)}
-        :where(html.duet-game) .current-state-banner p{margin:8px 0 0;font-size:13px;line-height:1.65;color:var(--grey-200)}
+        :where(html.duet-game) .current-state-banner>strong,:where(html.duet-game) .state-label{font:700 1rem var(--font-mono);letter-spacing:.12em;color:var(--amber-light)}
+        :where(html.duet-game) .current-state-banner p{margin:8px 0 0;font-size:1rem;line-height:1.65;color:var(--grey-200)}
         :where(html.duet-game) .current-state-section{border-color:#8c6d42}
         :where(html.duet-game) .state-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:20px 0}
         :where(html.duet-game) .state-card{border:1px solid var(--border-hairline);padding:16px;background:var(--black-obsidian)}
-        :where(html.duet-game) .state-card h3{margin:8px 0;color:var(--white-pure);font-size:15px;font-weight:400}
-        :where(html.duet-game) .state-card p,:where(html.duet-game) .state-list li{font-size:13px;line-height:1.65;color:var(--text-muted)}
+        :where(html.duet-game) .state-card h3{margin:8px 0;color:var(--white-pure);font-size:1rem;font-weight:400}
+        :where(html.duet-game) .state-card p,:where(html.duet-game) .state-list li{font-size:1rem;line-height:1.65;color:var(--text-muted)}
         :where(html.duet-game) .state-card p{margin:8px 0}
         :where(html.duet-game) .state-card a,:where(html.duet-game) .state-list a{color:var(--amber-light);text-underline-offset:3px}
         :where(html.duet-game) .state-subheading{margin:24px 0 8px;color:var(--white-pure);font-weight:400}
@@ -1035,14 +1037,14 @@ html:where(:not(.duet-game):not(.duet-hub)).weaver {
 :where(html.duet-game) .muted-action{border-color: var(--text-muted) !important; color: var(--text-muted) !important;}
 :where(html.duet-game) .fog-details{ margin-top:8px !important; padding-top:8px !important; border-top:1px solid var(--border-hairline) !important;}
 :where(html.duet-game) .amber-copy{color:var(--amber-light) !important;}
-:where(html.duet-game) .mono-copy{font-family:var(--font-mono) !important; font-size:13px !important;}
-:where(html.duet-game) .engine-footer{margin-top: 36px !important; padding-top: 16px !important; border-top: 1px solid var(--border-hairline) !important; font-size: 13px !important; opacity: 0.6 !important;}
+:where(html.duet-game) .mono-copy{font-family:var(--font-mono) !important; font-size:1rem !important;}
+:where(html.duet-game) .engine-footer{margin-top: 36px !important; padding-top: 16px !important; border-top: 1px solid var(--border-hairline) !important; font-size: 1rem !important; opacity: 1 !important;}
 :where(html.duet-game) .engine-link{color: var(--grey-200) !important;}
 :where(html.duet-game) .engine-link{color:var(--grey-200) !important}
 :where(html.duet-game) .bridge-copy{margin-top:12px !important}
 :where(html.duet-game) .platform-note{margin-top:10px !important}
 :where(html.duet-game) [hidden]{display:none!important}
-:where(html.duet-game) #remote-board{display:grid;grid-template-columns:repeat(8,46px);grid-template-rows:repeat(8,46px);border:1px solid var(--border-hairline);width:fit-content}
+
 
 /* Break This Build navigation hub. */
 
@@ -1079,9 +1081,54 @@ html:where(.duet-hub){scroll-padding-bottom:110px}:where(html.duet-hub) main{pad
 :where(html:is(.duet-demo,.duet-hub)) .path .action-links>a:not(.action){flex-basis:100%}
 :where(html:is(.duet-demo,.duet-hub)) .realm-splash>.btn-primary{min-height:var(--action-target);max-width:100%;white-space:normal;margin-block:8px 16px}
 
-/* Existing local recovery layout overrides. */
-:where(html.duet-recovery) body{overflow-x:hidden} :where(html.duet-recovery) .page{max-width:1200px} :where(html.duet-recovery) a{color:var(--amber-light)} :where(html.duet-recovery) button{min-height:44px} :where(html.duet-recovery) nav{margin-bottom:20px} :where(html.duet-recovery) .board-access{margin:16px 0;padding:16px;border:1px solid var(--border-hairline)} :where(html.duet-recovery) .board-access h2{font-size:16px} :where(html.duet-recovery) .board-access p{line-height:1.5} :where(html.duet-recovery) #board-navigator{padding:14px;border:2px solid var(--amber-light);width:fit-content;cursor:pointer} :where(html.duet-recovery) #board-navigator:focus-visible{outline:3px solid white;outline-offset:3px} :where(html.duet-recovery) .sq.keyboard-cursor{outline:3px solid var(--amber-light);outline-offset:-4px;z-index:1} :where(html.duet-recovery) #board-key-settings button{margin:8px 8px 0 0}  :where(html.duet-recovery) .board-row{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:24px;align-items:start} :where(html.duet-recovery) #visual-board{width:100%;max-width:720px;aspect-ratio:1;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr))} :where(html.duet-recovery) .board-row .sidebar{min-width:0;width:auto;gap:20px} :where(html.duet-recovery) .board-row .panel{max-width:none;padding:16px} :where(html.duet-recovery) .piece-token{width:72%;height:72%;font-size:clamp(18px,3vw,36px)} :where(html.duet-recovery) .piece-token.special{width:80%;height:80%;font-size:clamp(18px,2.7vw,32px)} @media(max-width:700px){:where(html.duet-recovery) .board-row{grid-template-columns:minmax(0,1fr)} :where(html.duet-recovery) .board-row .sidebar{width:100%} :where(html.duet-recovery) .piece-token{font-size:clamp(18px,5vw,32px)} :where(html.duet-recovery) .piece-token.special{font-size:clamp(18px,4.7vw,30px)}} :where(html.duet-recovery) .recovery-support-row{display:grid;grid-template-columns:minmax(240px,320px) minmax(0,1fr);gap:24px;align-items:start;margin:24px 0} :where(html.duet-recovery) .recovery-support-row .panel{max-width:none;min-width:0} :where(html.duet-recovery) .recovery-menus{display:grid;gap:16px;min-width:0} :where(html.duet-recovery) .recovery-menus .key-row{margin:0;padding:16px;gap:12px} :where(html.duet-recovery) .recovery-menus .key-panel{min-width:0;gap:8px} :where(html.duet-recovery) .recovery-menus .key-token{width:32px;height:32px;flex-shrink:0} :where(html.duet-recovery) .recovery-support-row button{white-space:normal;margin-top:8px;max-width:100%} @media(max-width:700px){:where(html.duet-recovery) .recovery-support-row{grid-template-columns:minmax(0,1fr)}}
-
+/* Shared Duet workspace: local recovery and remote room play. */
+:where(html.duet-game) p { margin:0 0 2em; max-width:65ch; line-height:1.6; }
+:where(html.duet-game) :is(button,input,select,textarea,summary,kbd,small) { font:inherit; }
+:where(html.duet-game) button { color:var(--grey-200); background:var(--black-void); border:1px solid var(--text-muted); padding:.6rem .9rem; cursor:pointer; }
+:where(html.duet-game) :is(a,a:visited) { color:var(--amber-light); text-underline-offset:.2em; }
+:where(html.duet-game) a:hover { color:var(--grey-200); }
+:where(html.duet-game) a:focus-visible { color:var(--grey-200); outline:3px solid var(--amber-light); outline-offset:4px; }
+:where(html.duet-game) :is(button,summary) { min-height:56px; min-width:48px; max-width:100%; white-space:normal; }
+:where(html.duet-game) summary { cursor:pointer; padding:.6rem; }
+:where(html.duet-game) :is(input,select,textarea) { min-width:0; max-width:100%; color:var(--grey-200); background:var(--black-void); border:1px solid var(--text-muted); padding:.6rem; min-height:56px; }
+:where(html.duet-game) :is(input,textarea)::placeholder { color:var(--text-muted); opacity:1; }
+:where(html.duet-game) .page { width:100%; padding:1rem; }
+:where(html.duet-game) .board-row { display:grid; grid-template-columns:minmax(0,1fr) minmax(12rem,280px); gap:1.2rem; align-items:start; }
+:where(html.duet-game) :is(#visual-board,#remote-board) { display:grid; width:100%; aspect-ratio:1; grid-template-columns:repeat(8,minmax(0,1fr)); grid-template-rows:repeat(8,minmax(0,1fr)); border:1px solid var(--border-hairline); }
+:where(html.duet-game) .board-row .sidebar { min-width:0; width:auto; gap:1rem; }
+:where(html.duet-game) .board-row .panel { max-width:none; min-width:0; padding:1rem; }
+:where(html.duet-game) .piece-token { width:72%; height:72%; font-size:clamp(20px,3vw,36px); }
+:where(html.duet-game) .piece-token.special { width:80%; height:80%; font-size:clamp(20px,2.7vw,32px); }
+:where(html.duet-game) .command-bar-field { flex:1 1 12rem; flex-wrap:wrap; min-width:0; }
+:where(html.duet-game) .command-bar-field label { flex-basis:100%; }
+:where(html.duet-demo) #remote-lobby:has(details[open]) .lobby-actions button { border-color:var(--text-muted); color:var(--grey-200); }
+:where(html.duet-game) .command-bar-field input { width:100%; min-width:0; }
+:where(html.duet-game) .panel p { margin:0 0 2em; line-height:1.6; }
+:where(html.duet-game) :is(.chip,.btn-primary):hover { background:#151515; color:var(--grey-200); }
+:where(html.duet-game) :is(.chip.active,button[aria-pressed="true"]) { border:3px double var(--amber-light); color:var(--grey-200); background:#1a1a1a; }
+:where(html.duet-game) .sq.selected { outline:3px solid var(--amber-light); outline-offset:-4px; }
+:where(html.duet-game) .sq.keyboard-cursor { outline:3px dashed var(--grey-200); outline-offset:-4px; z-index:1; }
+:where(html.duet-game) #board-navigator { padding:.6rem; border:2px solid var(--amber-light); width:fit-content; max-width:100%; cursor:pointer; min-height:56px; }
+:where(html.duet-game) .board-access { margin:1rem 0; padding:1rem; border:1px solid var(--border-hairline); }
+:where(html.duet-game) .recovery-support-row { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:1.2rem; margin:1.2rem 0; }
+:where(html.duet-game) .recovery-menus { display:grid; gap:1rem; min-width:0; }
+:where(html.duet-game) .recovery-support-row .panel { max-width:none; min-width:0; }
+:where(html.duet-game) .key-panel { min-width:0; flex-wrap:wrap; }
+:where(html.duet-game) :is(.hero-meta,.turn-meta,.panel-eyebrow,.history-log,.legend,.key-label) { font-size:1rem; }
+:where(html.duet-game) :is(.hero,.toolbar) { margin:0 0 1rem; padding:1rem 0; }
+:where(html.duet-game) .hero h1 { font-size:2.2rem; line-height:1.5; text-shadow:none; }
+:where(html.duet-game) :is(.onboard-intro,.remote-input-options) { margin:1rem 0; }
+:where(html.duet-game) #completion-actions { border:1px solid var(--amber-light); padding:1rem; margin:1rem 0; }
+:where(html.duet-demo) #realm-intro, :where(html.duet-demo) #remote-lobby { padding:0; margin:0 0 1rem; border:0; max-width:none; overflow:visible; }
+:where(html.duet-demo) #realm-intro { display:block; min-height:0; }
+:where(html.duet-demo) #realm-intro h1, :where(html.duet-demo) #remote-lobby h2 { font-size:2.2rem; font-weight:300; line-height:1.5; margin:0 0 1rem; color:var(--grey-200); }
+:where(html.duet-demo) #realm-intro .body, :where(html.duet-demo) #remote-lobby .body { font-size:1rem; max-width:65ch; margin:0 0 2em; line-height:1.6; color:var(--grey-200); }
+:where(html.duet-demo) .site-nav { max-width:1200px; }
+:where(html.duet-demo) .lobby-code-field { max-width:24ch !important; }
+:where(html.duet-demo) .lobby-code-field label { flex-basis:100%; }
+:where(html.duet-demo) .remote-room-actions { display:flex; flex-wrap:wrap; gap:1rem; margin:1rem 0; }
+@media(max-width:900px) { :where(html.duet-game) .board-row { grid-template-columns:minmax(0,1fr); } :where(html.duet-game) .recovery-support-row { grid-template-columns:minmax(0,1fr); } }
+@media(max-width:480px) { :where(html.duet-game) .page { padding:.6rem; } }
 /* Shared onboarding components; PR #110 remains the stylesheet authority. */
 :where(html.duet-hub) body{font:20px/1.55 'Helvetica Neue',Helvetica,Arial,sans-serif}
 :where(html.duet-hub) main{padding-top:16px}
@@ -1095,20 +1142,19 @@ html:where(.duet-hub){scroll-padding-bottom:110px}:where(html.duet-hub) main{pad
 .onboard-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;min-height:64px;border-bottom:1px solid #666;padding:8px 0}
 .onboard-bar a{display:inline-flex;align-items:center;min-height:48px}
 :where(html.duet-hub) summary{cursor:pointer;min-height:48px;padding:8px 0;font-weight:700}
-:where(html.duet-recovery) .hero{margin:8px 0;padding:8px 0}
-:where(html.duet-recovery) .hero h1{font-size:32px;letter-spacing:normal}
-:where(html.duet-recovery) .hero-top{margin-bottom:8px}
-:where(html.duet-recovery) .hero-meta{font-size:14px}
-:where(html.duet-recovery) .onboard-bar{font-size:16px}
-:where(html.duet-recovery) .onboard-intro{margin:16px 0;padding:16px;border:1px solid var(--border-hairline);background:var(--black-void)}
-:where(html.duet-recovery) .onboard-intro p{font-size:18px;line-height:1.5}
-:where(html.duet-recovery) #first-move-status{font-size:18px;color:var(--grey-100,#e0e0e0)}
-:where(html.duet-recovery) .board-access p{font-size:16px;line-height:1.5}
-:where(html.duet-recovery) .onboard-intro button,:where(html.duet-recovery) .onboard-intro summary,:where(html.duet-recovery) #completion-actions a,:where(html.duet-recovery) #completion-actions button{min-height:48px;font-size:16px}
-:where(html.duet-recovery) #completion-actions{border:1px solid var(--the-light,#d4a853);padding:16px;margin:16px 0}
-:where(html.duet-recovery) #completion-actions[hidden]{display:none}
-:where(html.duet-recovery) .onboard-intro a{display:inline-flex;align-items:center;min-height:48px}
-:where(html.duet-recovery) :focus-visible,:where(html.duet-hub) :focus-visible{outline:3px solid #d4a853;outline-offset:3px}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @media(prefers-reduced-motion:reduce){.onboard-bar *, .onboard-intro *{animation:none!important;transition:none!important}}
 :where(html.duet-hub) .path p>a{display:inline-flex;align-items:center;min-height:48px}
-:where(html.duet-recovery) #board-navigator{font-size:16px;min-height:48px}

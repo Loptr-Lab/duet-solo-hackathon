@@ -21,10 +21,10 @@
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "DUET · Loptr Lab", "url": "https://duet.loptrlab.com/", "description": "Play DUET, an independent two-player strategy game from Loptr Lab. Try local play or remote Classic matches and help test keyboard and screen-reader access."}</script>
 </head>
 <body>
-<a class="skip-link" href="#front-page">Skip to DUET</a>
+<a class="skip-link" href="#front-page">Skip to Duet</a>
 <header class="site-header">
-  <nav class="site-nav" aria-label="DUET navigation">
-    <a class="site-brand" href="#home" aria-label="DUET home" aria-current="page">DUET</a>
+  <nav class="site-nav" aria-label="Duet navigation">
+    <a class="site-brand" href="#home" aria-label="Duet home" aria-current="page">Duet</a>
     <a href="https://break.loptrlab.com/">Test a build</a>
     <a href="#community-power">Get involved</a>
     <a href="https://pixie-project-companion.ibloud-ivxx.chatgpt.site/">Contribute with PIXIE</a>
@@ -55,19 +55,20 @@
     </section>
 
     <section class="realm-splash" id="remote-lobby" hidden>
-        <h2>Play Remote</h2>
+        <p class="hero-eyebrow">Remote multiplayer demo</p><h2>Duet · room setup</h2>
         <p class="body">Classic Duet only for now — no Fog Mode, no AI opponent. Create a match and share the
         code, or join a friend's match below. Use separate devices or browser profiles for the two players; tabs in the same profile share reconnect information.</p>
         <div class="lobby-actions">
-            <button type="button" class="btn-primary" onclick="RemoteMode.createMatch()">Create Match</button>
+            <button type="button" class="btn-primary" onclick="RemoteMode.createMatch()">Create room</button>
         </div>
-        <div class="lobby-join">
+        <details class="panel"><summary>Join an existing room</summary><div class="lobby-join">
             <div class="lobby-code-field command-bar-field">
-                <label for="remote-join-code" class="sr-only">Room code</label>
+                <label for="remote-join-code">Room code</label>
                 <input class="lobby-code-input" type="text" id="remote-join-code" autocomplete="off" placeholder="ROOM CODE" maxlength="5">
             </div>
-            <button type="button" class="btn-primary" onclick="RemoteMode.joinMatch()">Join Match</button>
+            <button type="button" class="btn-primary" onclick="RemoteMode.joinMatch()">Join room</button>
         </div>
+        </details>
         <p id="remote-lobby-status" role="status" aria-live="polite" class="lobby-status body"></p>
         <button type="button" class="lobby-back btn-primary" onclick="RemoteMode.backToSplash()">Back</button>
     </section>
@@ -78,13 +79,15 @@
     <header class="hero">
         <div class="hero-top">
             <div>
-                <p class="hero-eyebrow">Veiled Dominion &middot; Remote</p>
-                <h1 id="remote-room-heading">Duet</h1>
+                <p class="hero-eyebrow">Remote multiplayer demo</p>
+                <h1 id="remote-room-heading">Duet</h1><p id="remote-session-label"></p>
             </div>
         </div>
         <p class="tagline" id="remote-status-line">Waiting for an opponent…</p>
     </header>
 
+    <details class="remote-input-options panel"><summary>Input options</summary><p>Select a piece, then a target. Select the same square again to cancel. Or type a move such as e2e4 below: Enter sends, Escape cancels selection and clears the input. Tab moves between controls. No key hold is required. Physical MouthPad, VOX, iPad Safari and VoiceOver acceptance remains pending; VOX game-key mapping and holds are unverified.</p></details>
+    <section id="remote-completion" class="panel" hidden><h2 id="remote-completion-title" tabindex="-1">Match complete</h2><p>This match has ended. A new match requires a new room and both players choosing their seats.</p><button class="btn-primary" type="button" onclick="RemoteMode.startAnotherMatch()">Set up another room</button></section>
     <div id="remote-sr-status" class="sr-only" role="status" aria-live="assertive" aria-atomic="true"></div>
 
         <div class="toolbar">
@@ -93,7 +96,7 @@
 
     <div class="board-row">
         <div id="remote-board"></div>
-        <aside class="sidebar">
+        <aside class="sidebar remote-sidebar">
             <div class="panel">
                 <h3 class="panel-eyebrow">Move History</h3>
                 <ol id="remote-history-log" class="history-log"></ol>
@@ -105,13 +108,14 @@
         <div class="controls-row command-bar">
             <div class="command-bar-field">
                 <span aria-hidden="true">&rsaquo;</span>
-                <label for="remote-cmd" class="sr-only">Move coordinates, for example e2e4</label>
+                <label for="remote-cmd">Move coordinates, for example e2e4</label>
                 <input type="text" id="remote-cmd" autocomplete="off" placeholder="e2e4 · move notation">
             </div>
-            <button class="btn-primary" onclick="RemoteMode.submitCommand()">Execute</button>
+            <button class="btn-primary" onclick="RemoteMode.submitCommand()">Make move</button><button type="button" onclick="RemoteMode.cancelSelection()">Cancel selection</button>
         </div>
     </div>
 
+    <details class="panel"><summary>Connection and temporary match recovery</summary><p>Refresh to reconnect while the room still exists. Room expiry or a server restart clears the match; there is no durable saved game. If recovery fails, return to room setup and create or join a new room. Use separate browser profiles for the players.</p><button type="button" onclick="RemoteMode.enterLobby()">Room setup and reconnect</button></details>
     <section id="remote-feedback" class="panel feedback-panel" aria-labelledby="remote-feedback-heading" hidden>
         <h2 id="remote-feedback-heading">Optional playtest feedback</h2>
         <p>Your response is stored without your name, handle, email address, IP address, room code, or reconnect token. The raw-feedback retention limit is 30 days. You can skip this entirely.</p>
@@ -240,7 +244,7 @@
 
     <div class="controls">
         <div class="controls-row command-bar">
-            <label for="cmd" class="sr-only">Command (e.g., e2e4 or e4 to query):</label>
+            <label for="cmd">Command (e.g., e2e4 or e4 to query):</label>
             <div class="command-bar-field">
                 <span aria-hidden="true">&rsaquo;</span>
                 <input type="text" id="cmd" autocomplete="off" aria-describedby="instructions" placeholder="e2e4 · move notation">
@@ -2055,7 +2059,7 @@ async function sendAgentMessage() {
             }
             if (!RemoteState.transport.isConnected()) RemoteState.transport.connect();
             RemoteMode._attemptAutoRejoin();
-            document.getElementById('remote-join-code').focus();
+            document.querySelector('#remote-lobby .lobby-actions button').focus();
         },
 
         // If a match was in progress when the page closed or the server
@@ -2181,12 +2185,19 @@ async function sendAgentMessage() {
             document.getElementById('front-page').hidden = true;
             document.getElementById('remote-lobby').hidden = true;
             document.getElementById('remote-game-screen').hidden = false;
-            document.getElementById('remote-room-heading').innerText = `Duet — Room ${RemoteState.roomId}`;
+            document.getElementById('remote-room-heading').innerText = 'Duet';
+            document.getElementById('remote-session-label').innerText = 'Room '+RemoteState.roomId;
             const cmd = document.getElementById('remote-cmd');
             if (cmd) cmd.focus();
         },
 
         _applyState(state) {
+            const completed = document.getElementById('remote-completion');
+            if (completed) {
+                const firstCompletion = state.gameOver && completed.hidden;
+                completed.hidden = !state.gameOver;
+                if (firstCompletion) document.getElementById('remote-completion-title').focus();
+            }
             RemoteState.board = state.board;
             RemoteState.turn = state.turn;
             RemoteState.gameOver = state.gameOver;
@@ -2261,6 +2272,23 @@ async function sendAgentMessage() {
             log.scrollTop = log.scrollHeight;
         },
 
+        startAnotherMatch() {
+            if (!RemoteState.gameOver) return;
+            RemoteMode._clearSavedMatch();
+            if (RemoteState.client) RemoteState.client.disconnect();
+            RemoteState.socket = null;
+            RemoteState.client = null;
+            RemoteState.selectedSquare = null;
+            RemoteMode.enterLobby();
+        },
+
+        cancelSelection() {
+            RemoteState.selectedSquare = null;
+            document.getElementById('remote-cmd').value = '';
+            RemoteMode._render();
+            RemoteMode._announce('Selection cancelled. No move was sent.');
+        },
+
         submitCommand() {
             const input = document.getElementById('remote-cmd');
             const cmd = input.value.toLowerCase().trim();
@@ -2318,6 +2346,7 @@ async function sendAgentMessage() {
                     const div = document.createElement('div');
                     const sq = squareName(r, c);
                     div.className = 'sq ' + ((r + c) % 2 === 0 ? 'light' : 'dark');
+                    div.dataset.square = sq;
                     if (RemoteState.selectedSquare === sq) div.classList.add('selected');
                     div.addEventListener('click', () => RemoteMode._handleSquareClick(sq));
 
@@ -2337,8 +2366,9 @@ async function sendAgentMessage() {
         },
     };
 
-    document.getElementById('remote-cmd')?.addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') RemoteMode.submitCommand();
+    document.getElementById('remote-cmd')?.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { e.preventDefault(); RemoteMode.cancelSelection(); }
+        if (e.key === 'Enter') { e.preventDefault(); if (!e.repeat) RemoteMode.submitCommand(); }
     });
 </script>
 
