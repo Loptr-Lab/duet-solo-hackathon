@@ -16,19 +16,21 @@ function replaceSection(html, id, replacement) {
 
 function renderDemoPage(html) {
     html = html.replace('class="duet-game"', 'class="duet-game duet-demo"');
+    // Same compact navigation as recovery; participation stays in project context.
+    html = html.replace(/<header class="site-header">[\s\S]*?<\/header>/, `<header class="site-header"><nav class="site-nav" aria-label="Duet navigation"><a class="site-brand" href="#home">Duet</a><details class="nav-more"><summary>Project details</summary><div><a href="#current-state">Build status</a><a href="#community-power">Participation and training</a><a href="https://break.loptrlab.com/duet/">Project home</a></div></details></nav></header>`);
     html = replaceSection(html, 'realm-intro', `<section class="realm-splash" id="realm-intro" aria-labelledby="demo-title">
-<h1 id="demo-title">DUET · Multiplayer demo</h1><h2>Two players. One veiled battlefield.</h2>
-<p class="body">Play Classic Duet together from separate phones or computers. No account or installation needed. One player creates a room; the other joins with its code.</p>
-<button type="button" class="btn-primary" onclick="RemoteMode.enterLobby()">Play with a friend</button>
-<p class="body">Temporary demo: rooms expire after inactivity. Server restarts clear all matches. Refresh to reconnect while your room still exists. This demo does not save games or collect playtest feedback.</p>
+<p class="hero-eyebrow">Remote multiplayer demo</p><h1 id="demo-title">Duet</h1>
+<p class="body">Play Classic Duet from separate devices. Create a room and share its code, or join a friend’s room. White moves first.</p>
+<button type="button" class="btn-primary" onclick="RemoteMode.enterLobby()">Set up a room</button>
+<details class="panel"><summary>Match limits and recovery</summary><p>Temporary demo: rooms expire after inactivity. Server restarts clear all matches. Refresh to reconnect while your room still exists. This demo does not save games or collect playtest feedback.</p><p>Use separate devices or browser profiles for the players. Tabs in the same profile share reconnect information.</p></details>
 ${rules}
-<nav class="action-links" aria-label="DUET project links"><a href="https://break.loptrlab.com/duet/">Project home</a><a href="https://github.com/Loptr-Lab/duet-solo-hackathon/pull/106">Build and verification status</a></nav>
+<nav class="action-links" aria-label="Duet project links"><a href="https://break.loptrlab.com/duet/">Project home</a><a href="https://github.com/Loptr-Lab/duet-solo-hackathon/pull/112">Build and verification status</a></nav>
 </section>`);
     html = replaceSection(html, 'current-state', `<section class="release-section" id="current-state">
 <h2>Temporary multiplayer demo</h2><p>This deployment offers Classic room play. Local automated tests cover two rooms, reconnect and a completed match; independent device and screen-reader acceptance remain pending.</p>
 <p><a href="https://github.com/Loptr-Lab/duet-solo-hackathon/issues/70">Acceptance checks</a> · <a href="https://break.loptrlab.com/duet/review.html">Project status</a></p></section>`);
     html = html.replace('<a href="/signin.html">AT Proto sign-in</a>', '');
-    html = html.replace('<div id="remote-board"></div>', '<div id="remote-board"></div>' + rules);
+    html = html.replace('<aside class="sidebar remote-sidebar">', '<aside class="sidebar remote-sidebar">' + rules);
     return html;
 }
 

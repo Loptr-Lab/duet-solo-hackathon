@@ -19,7 +19,7 @@ body=body.replace('<div>Or tap <span class="mono-accent">Speak Move</span> and s
 body=body.replace('<p class="quickstart" aria-hidden="true">', '<p class="quickstart">')
 body=re.sub(r' When Fog Mode is on, querying.*?stale\.', '', body)
 body=body.replace('If a question is not recognized, PIXIE uses fixed game answers on this device.', 'Answers are selected on this device.')
-recovery_panel='''<section class="panel" aria-labelledby="recovery-title"><h2 id="recovery-title">DUET · Local play recovery</h2><p>Two players on this device or a local computer opponent. No account, cloud service, model API, telemetry or saved-game service is used. Refreshing closes this match. This is a tested recovery build; independent accessibility acceptance remains pending.</p><button type="button" class="btn-primary" onclick="startLocalGame(false)">New game · two players</button> <button type="button" class="btn-primary" onclick="startLocalGame(true)">New game · play computer</button></section>'''
+recovery_panel='''<section class="panel" aria-labelledby="recovery-title"><h2 id="recovery-title">Duet · Local two-player</h2><p>Two players on this device or a local computer opponent. No account, cloud service, model API, telemetry or saved-game service is used. Refreshing closes this match. This is a tested recovery build; independent accessibility acceptance remains pending.</p><button type="button" class="btn-primary" onclick="startLocalGame(false)">New game · two players</button> <button type="button" class="btn-primary" onclick="startLocalGame(true)">New game · play computer</button></section>'''
 body=body.replace('<header class="hero">','''<nav aria-label="Recovery navigation"><a href="../">The Weaver</a> · <a href="../review.html">Current State</a> · <a href="https://break.loptrlab.com/">Break this build</a></nav>
 <header class="hero">''',1)
 help_start=body.index('    <details class="panel" aria-labelledby="agent-heading">')
@@ -186,17 +186,37 @@ engine=engine[:a]+engine[b:]
 engine=audio_code+'\n'+engine
 engine=engine.replace("document.getElementById('sr-status').innerText = msg;", "document.getElementById('sr-status').innerText = msg; speakGameMessage(msg);")
 engine=engine.replace('gainNode.gain.setValueAtTime(vol, audioCtx.currentTime);','gainNode.gain.setValueAtTime(vol * AudioSettings.cueVolume, audioCtx.currentTime);')
+# Front-load a real move using the existing board and controls.
+body=body.replace('<nav aria-label="Recovery navigation">', '<nav class="onboard-bar" aria-label="Game navigation">')
+body=body.replace('>The Weaver</a>', '>Project context</a>')
+body=body.replace('<p class="hero-eyebrow">Veiled Dominion</p>', '<p class="hero-eyebrow">Local two-player</p>')
+intro='''<section class="onboard-intro" aria-labelledby="first-step-title"><h2 id="first-step-title">Make one legal move</h2><p>Two players · one device. Select e2, then select e4 to confirm a move and hand the turn to Black. Select the same square again or use Cancel selection to undo a selection. No move is committed by selecting a piece alone.</p><p id="first-move-status" role="status">First goal: make a legal move, then hand over the turn.</p><button type="button" onclick="cancelBoardSelection()">Cancel selection</button><details><summary>Control details</summary><p>Pointer: select a piece, then a legal target. Keyboard: focus Navigate board; arrows move, Enter selects and confirms, Escape cancels, R reads a square. Key remapping and optional audio controls are below. MouthPad and VOX physical compatibility remain unverified; VOX game-key mapping and holds are pending.</p></details></section>'''
+body=body.replace('<div class="board-row">','<details class="panel"><summary>Input options</summary>'+intro+board_controls+'</details><div class="board-row">',1)
+body=body.replace('<div class="board-row">','<section id="completion-actions" hidden aria-label="Game complete"><h2 id="completion-title" tabindex="-1">Game complete</h2><button id="replay-game" class="btn-primary" type="button" onclick="startLocalGame(false)">Replay · two players</button><a href="https://github.com/Loptr-Lab/duet-solo-hackathon/issues/new?title=Duet+playtest+finding&amp;body=Build+%2F+URL%3A%0ABrowser+%2F+OS%3A%0AInput+method+%28ordinary+pointer%2Fkeyboard%2C+MouthPad%2C+VOX%2C+VoiceOver%29%3A%0ASteps%3A%0AExpected%3A%0AActual%3A%0A">Report a finding</a><p>Include build/URL, browser, input method, steps, and expected versus actual behavior. Reports are public on GitHub; never include private credentials.</p></section><div class="board-row">',1)
+# Move existing keyboard navigation above the board, leaving one copy.
+last=body.rfind(board_controls)
+first=body.find(board_controls)
+if last != first: body=body[:last]+body[last+len(board_controls):]
+body=body.replace('</nav>',' · <a href="https://github.com/Loptr-Lab/duet-solo-hackathon/issues/new?title=Duet+playtest+finding&amp;body=Build+%2F+URL%3A%0ABrowser+%2F+OS%3A%0AInput+method+%28ordinary+pointer%2Fkeyboard%2C+MouthPad%2C+VOX%2C+VoiceOver%29%3A%0ASteps%3A%0AExpected%3A%0AActual%3A%0A">Report a finding</a></nav>',1)
+engine=engine.replace('function announce(msg) {', "function announce(msg) {\n        if (GameState.turnNumber > 1 && !GameState.gameOver) document.getElementById('first-move-status').textContent = 'First move made. Hand the turn to '+(GameState.turn === 'w' ? 'White' : 'Black')+'.';",1)
+engine=engine.replace('            GameState.gameOver = true;', "            GameState.gameOver = true;\n            document.getElementById('completion-actions').hidden = false;\n            document.getElementById('completion-title').focus();",1)
 helpcode=(root/'agentScope.js').read_text().split('module.exports =')[0]
 extra='''
 function startLocalGame(computer) {
+ document.getElementById('completion-actions').hidden = true;
+ document.getElementById('first-move-status').textContent = 'First goal: make a legal move, then hand over the turn.';
  AIConfig.controllers.w = null;
  AIConfig.controllers.b = computer ? {depth: 2} : null;
  document.getElementById('ds-ai-toggle').innerText = computer ? 'Computer: On' : 'Computer: Off';
  document.getElementById('ds-ai-toggle').setAttribute('aria-pressed', String(computer));
  document.querySelectorAll('.chip[data-depth]').forEach(el => el.classList.toggle('active', el.dataset.depth === '2'));
  selectedSquare = null;
+ window.boardCursor = 'e2';
  initGame();
- document.getElementById('cmd').focus();
+ document.getElementById('board-navigator').focus();
+}
+function cancelBoardSelection() {
+ selectedSquare = null; document.getElementById('cmd').value = ''; renderVisualBoard(createSnapshot()); boardFeedback('Selection cancelled. Choose your piece.');
 }
 function sendAgentMessage() {
  const input = document.getElementById('agent-input');
@@ -294,7 +314,7 @@ extra+='''
 if (window.speechSynthesis && window.speechSynthesis.addEventListener) window.speechSynthesis.addEventListener('voiceschanged', refreshLocalVoices);
 '''
 # Default to two humans; the optional computer is a local deterministic search.
-html='''<!doctype html><html lang="en" class="duet-game duet-recovery"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src data:; connect-src 'none'; font-src 'none'; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"><title>DUET · Local play recovery</title><link rel="stylesheet" href="../style.css"></head><body>'''+body+'<script>'+engine+'\n'+helpcode+'\n'+extra+'</script></body></html>'
+html='''<!doctype html><html lang="en" class="duet-game duet-recovery"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src data:; connect-src 'none'; font-src 'none'; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"><title>Duet · Local two-player</title><link rel="stylesheet" href="../style.css"></head><body>'''+body+'<script>'+engine+'\n'+helpcode+'\n'+extra+'</script></body></html>'
 assert not re.search(r'fetch\(|new WebSocket|<script[^>]+src=|https?://[^\s]+(?:\.js|\.css)',html)
 (root/'site/play/index.html').write_text(html)
 print('Built static local recovery:',len(html),'bytes')

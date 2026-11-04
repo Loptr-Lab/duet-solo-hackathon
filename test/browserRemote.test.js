@@ -14,7 +14,7 @@ test('actual browser assets initialize the remote lobby and send a room request'
   };
   const requests = [];
   const socket = { connected: false, connect() { this.connected = true; }, disconnect() {}, on() {}, off() {}, emit(message, payload, reply) { requests.push({ message, payload }); reply({ ok: false }); } };
-  const context = vm.createContext({ window: {}, document: { getElementById: element }, localStorage: { getItem() { return null; } }, io: () => socket, SiteNavigation: { showLobby() {} } });
+  const context = vm.createContext({ window: {}, document: { getElementById: element, querySelector: () => element('create-room') }, localStorage: { getItem() { return null; } }, io: () => socket, SiteNavigation: { showLobby() {} } });
   context.window = context;
   for (const name of ['ITransport', 'SocketTransport', 'DuetClient']) vm.runInContext(fs.readFileSync(path.join(root, 'client', name + '.js'), 'utf8'), context);
   const script = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(match => match[1]).find(source => source.includes('const RemoteState ='));

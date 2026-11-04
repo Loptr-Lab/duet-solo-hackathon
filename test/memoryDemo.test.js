@@ -105,4 +105,25 @@ test('demo startup never loads Google, identity or public posting modules', asyn
   assert.doesNotMatch(html, /GAME STATUS · TEMPORARILY UNAVAILABLE/);
   assert.doesNotMatch(html, /href="\/signin.html"/);
   assert.equal(await (await fetch(origin + '/index.html')).text(), html);
+  for (const match of html.matchAll(/<link[^>]+rel="stylesheet"[^>]+href="([^"]+)"/g)) {
+    const response = await fetch(new URL(match[1], origin));
+    assert.equal(response.status, 200, match[1]);
+    assert.match(response.headers.get('content-type'), /text\/css/);
+    assert.equal(await response.text(), require('node:fs').readFileSync(require('node:path').join(__dirname,'../public/style.css'),'utf8'));
+  }
+});
+
+test('demo package and rendered page share the authoritative stylesheet', async () => {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const root = path.join(__dirname, '..');
+  const rendered = require('../demoPage').renderDemoPage(fs.readFileSync(path.join(root,'public/index.html'),'utf8'));
+  assert.match(fs.readFileSync(path.join(root,'Dockerfile.demo'),'utf8'), /COPY public \.\/public/);
+  assert.doesNotMatch(rendered, /href="\/?interaction\.css"|<style\b|\sstyle=/);
+  assert.match(rendered, /href="\.\/style.css"/);
+  assert.match(rendered, /Remote multiplayer demo/);
+  assert.doesNotMatch(rendered, /Duet: Solo|DUET · Multiplayer demo/);
+  for (const match of rendered.matchAll(/<link[^>]+rel="stylesheet"[^>]+href="([^"]+)"/g)) {
+    assert.ok(fs.statSync(path.join(root,'public',match[1])).isFile(), 'Docker COPY public must include '+match[1]);
+  }
 });

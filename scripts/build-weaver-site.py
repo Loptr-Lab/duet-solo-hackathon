@@ -23,3 +23,11 @@ print('Built Weaver entrance and /weaver/ alias; original source preserved.')
 
 # The root hub uses the same authoritative stylesheet as the Duet surfaces.
 (root / 'review-site/style.css').write_bytes((root / 'public/style.css').read_bytes())
+
+# Reuse the existing Duet sigil; strip its game-entry handlers for a decorative image.
+import re
+sigil = re.search(r'<svg class="sigil-entry sigil"[\s\S]*?</svg>', (root / 'public/index.html').read_text()).group(0)
+sigil = re.sub(r' (?:onclick|onkeydown|tabindex|role|aria-label)="[^"]*"', '', sigil)
+sigil = sigil.replace('<svg ', '<svg aria-hidden="true" ')
+sigil = sigil.replace('var(--border-hairline)', '#888888').replace('var(--text-muted)', '#c9c9c9').replace('var(--amber-light)', '#d4a853')
+(root / 'review-site/duet-artwork.svg').write_text(sigil)
