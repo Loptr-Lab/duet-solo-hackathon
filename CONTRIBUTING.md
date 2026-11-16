@@ -1,5 +1,7 @@
 # Contributing to Duet
 
+Read [AGENTS.md](AGENTS.md) first for the shared reading requirement, local authority, checks and existing-work/release boundaries. This route supplements the contribution requirements below.
+
 ## Mission and participation terms
 
 Current open review and contribution opportunities are voluntary and unpaid. Before work begins, agree in writing on scope, time, what will be public, credit preferences, and an exit path. You can stop at any point. Participation does not promise employment, ownership, revenue share, academic credit, or future pay. Any paid commission or other formal arrangement requires a separate signed agreement before work begins. External assistance or benefits belong to the participant and are not compensation from Loptr Lab.
