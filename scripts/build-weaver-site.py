@@ -17,6 +17,7 @@ for target, prefix in [('site/index.html', './'), ('site/weaver/index.html', '..
     # HTTPS URL already listed in the hub sitemap as their canonical address.
     assert 'rel="canonical"' not in page
     page = page.replace('</head>', '<link rel="canonical" href="https://break.loptrlab.com/duet/">\n</head>', 1)
+    page = page.replace('</head>', '<script type="application/ld+json" id="site-breadcrumbs">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Break This Build","item":"https://break.loptrlab.com/"},{"@type":"ListItem","position":2,"name":"The Weaver","item":"https://break.loptrlab.com/duet/"}]}</script>\n' + '</head>', 1)
     path = root / target
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(page)
