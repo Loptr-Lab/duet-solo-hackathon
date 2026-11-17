@@ -13,6 +13,10 @@ for target, prefix in [('site/index.html', './'), ('site/weaver/index.html', '..
     page = page.replace('>Play Duet</a>', '>Play Duet locally</a>')
     page = page.replace('<a class="door" href="https://ibloud.github.io/inpatient-corridors-review/interactive/yellow-door/docs/">Read the door</a>',
                         '<a class="door" href="https://ibloud.github.io/inpatient-corridors-review/interactive/yellow-door/docs/">Read the door</a> <a class="door" href="https://duet-multiplayer-production.up.railway.app">Play Duet multiplayer demo</a>')
+    # Both published entrances represent the same reading surface. Keep the
+    # HTTPS URL already listed in the hub sitemap as their canonical address.
+    assert 'rel="canonical"' not in page
+    page = page.replace('</head>', '<link rel="canonical" href="https://break.loptrlab.com/duet/">\n</head>', 1)
     path = root / target
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(page)
