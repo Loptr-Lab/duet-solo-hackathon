@@ -1,5 +1,14 @@
 # Duet: Solo
 
+## Repository instructions and contribution entry
+
+Start with [AGENTS.md](AGENTS.md), explicitly read the
+[shared ecosystem instructions](https://github.com/ibloud/ibloud.github.io/blob/docs/agent-design-continuity/docs/ECOSYSTEM_INSTRUCTIONS.md), then follow the local sources and existing
+issues/PRs identified there. The shared update is under review in portfolio PR #59;
+a link does not load instructions automatically. Project-specific canon, privacy,
+security, licensing and release gates remain in this repository.
+
+
 ## Loptr Lab mission and participation
 
 Loptr Lab is a pre-seed, people-over-profit, accessibility-first venture working toward a self-sustaining model within a capitalist economy. Money sustains the work; meaningful change for people is its purpose. We accept funding only on terms that keep people and accessibility first. Our long-term vision includes universal basic income. We aim to bring change to life and leave a transparent record of what we tried, what worked, and what failed so others can carry it forward. This mission governs our projects, funding decisions, and partnerships; it is not a temporary marketing position.
