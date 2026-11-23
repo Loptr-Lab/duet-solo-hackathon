@@ -3,10 +3,9 @@ from pathlib import Path
 import re
 root=Path(__file__).resolve().parents[1]
 s=(root/'public/index.html').read_text()
-css='\n'.join(re.findall(r'<style>(.*?)</style>',s,re.S))
 start=s.index('<div class="page" id="game-screen"')
 end=s.index('<!-- ===================================================================',start)
-body=s[start:end].strip().replace('id="game-screen" style="display:none;"','id="game-screen"')
+body=s[start:end].strip().replace('id="game-screen" hidden','id="game-screen"')
 for ident in ['speak-btn','spectator-toggle','fog-mode-toggle']:
  body=re.sub(r'<button\b[^>]*id="'+ident+r'"[^>]*>.*?</button>','',body,flags=re.S)
 for ident in ['speech-instructions','speech-status']:
@@ -295,7 +294,7 @@ extra+='''
 if (window.speechSynthesis && window.speechSynthesis.addEventListener) window.speechSynthesis.addEventListener('voiceschanged', refreshLocalVoices);
 '''
 # Default to two humans; the optional computer is a local deterministic search.
-html='''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; font-src 'none'; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"><title>DUET · Local play recovery</title><style>'''+css+'''\nbody{overflow-x:hidden} .page{max-width:1200px} a{color:var(--amber-light)} button{min-height:44px} nav{margin-bottom:20px} .board-access{margin:16px 0;padding:16px;border:1px solid var(--border-hairline)} .board-access h2{font-size:16px} .board-access p{line-height:1.5} #board-navigator{padding:14px;border:2px solid var(--amber-light);width:fit-content;cursor:pointer} #board-navigator:focus-visible{outline:3px solid white;outline-offset:3px} .sq.keyboard-cursor{outline:3px solid var(--amber-light);outline-offset:-4px;z-index:1} #board-key-settings button{margin:8px 8px 0 0}  .board-row{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:24px;align-items:start} #visual-board{width:100%;max-width:720px;aspect-ratio:1;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr))} .board-row .sidebar{min-width:0;width:auto;gap:20px} .board-row .panel{max-width:none;padding:16px} .piece-token{width:72%;height:72%;font-size:clamp(18px,3vw,36px)} .piece-token.special{width:80%;height:80%;font-size:clamp(18px,2.7vw,32px)} @media(max-width:700px){.board-row{grid-template-columns:minmax(0,1fr)} .board-row .sidebar{width:100%} .piece-token{font-size:clamp(18px,5vw,32px)} .piece-token.special{font-size:clamp(18px,4.7vw,30px)}} .recovery-support-row{display:grid;grid-template-columns:minmax(240px,320px) minmax(0,1fr);gap:24px;align-items:start;margin:24px 0} .recovery-support-row .panel{max-width:none;min-width:0} .recovery-menus{display:grid;gap:16px;min-width:0} .recovery-menus .key-row{margin:0;padding:16px;gap:12px} .recovery-menus .key-panel{min-width:0;gap:8px} .recovery-menus .key-token{width:32px;height:32px;flex-shrink:0} .recovery-support-row button{white-space:normal;margin-top:8px;max-width:100%} @media(max-width:700px){.recovery-support-row{grid-template-columns:minmax(0,1fr)}}</style></head><body>'''+body+'<script>'+engine+'\n'+helpcode+'\n'+extra+'</script></body></html>'
+html='''<!doctype html><html lang="en" class="duet-game duet-recovery"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src data:; connect-src 'none'; font-src 'none'; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"><title>DUET · Local play recovery</title><link rel="stylesheet" href="../style.css"></head><body>'''+body+'<script>'+engine+'\n'+helpcode+'\n'+extra+'</script></body></html>'
 assert not re.search(r'fetch\(|new WebSocket|<script[^>]+src=|https?://[^\s]+(?:\.js|\.css)',html)
 (root/'site/play/index.html').write_text(html)
 print('Built static local recovery:',len(html),'bytes')

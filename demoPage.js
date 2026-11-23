@@ -15,7 +15,7 @@ function replaceSection(html, id, replacement) {
 }
 
 function renderDemoPage(html) {
-    html = html.replace('</head>', '<link rel="stylesheet" href="/interaction.css"></head>');
+    html = html.replace('class="duet-game"', 'class="duet-game duet-demo"');
     html = replaceSection(html, 'realm-intro', `<section class="realm-splash" id="realm-intro" aria-labelledby="demo-title">
 <h1 id="demo-title">DUET · Multiplayer demo</h1><h2>Two players. One veiled battlefield.</h2>
 <p class="body">Play Classic Duet together from separate phones or computers. No account or installation needed. One player creates a room; the other joins with its code.</p>

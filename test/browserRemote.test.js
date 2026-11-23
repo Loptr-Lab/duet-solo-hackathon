@@ -22,7 +22,7 @@ test('actual browser assets initialize the remote lobby and send a room request'
   vm.runInContext(script, context);
   vm.runInContext('RemoteMode.enterLobby()', context);
   assert.equal(socket.connected, true);
-  assert.equal(element('remote-lobby').style.display, '');
+  assert.equal(element('remote-lobby').hidden, false);
   await vm.runInContext('RemoteState.client.createRoom()', context);
   assert.equal(requests[0].message, 'create_room');
 });

@@ -102,3 +102,17 @@ test('cue volume changes generated gain and mute silences the proximity tone',()
  assert.equal(run('audioEnabled'),true);assert.equal(run('gainNode.gain.value'),0);
  run("setAudioPreference('cueVolume',1);toggleAudio()");assert.equal(run('audioEnabled'),false);assert.equal(run('gainNode.gain.value'),0);
 });
+
+
+test('game, hub and generated recovery load the authoritative stylesheet without embedded presentation', () => {
+ const root = require('node:path').join(__dirname, '..');
+ for (const [file, href] of [['public/index.html','./style.css'], ['duet-review.html','./style.css'], ['site/play/index.html','../style.css']]) {
+  const page = fs.readFileSync(require('node:path').join(root, file), 'utf8');
+  assert.doesNotMatch(page, /<style\b|\sstyle\s*=/i, file);
+  assert.match(page, new RegExp('href="' + href.replaceAll('.', '\\.') + '"'), file);
+ }
+ const central = fs.readFileSync(require('node:path').join(root, 'public/style.css'), 'utf8');
+ for (const file of ['site/style.css','review-site/style.css']) {
+  assert.equal(fs.readFileSync(require('node:path').join(root,file), 'utf8'),central,file + ' is a generated copy');
+ }
+});
