@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Veiled Dominion: Duet — Experiment Review | Loptr Lab</title>
+<meta name="description" content="Veiled Dominion: Duet experiment review, local recovery, evidence, playtest protocol, and rebuild decision gate.">
+<link rel="canonical" href="https://break.loptrlab.com/duet/review.html">
+<style>
+:root{color-scheme:dark;--bg:#0d0f12;--panel:#15191e;--text:#f2f4f7;--muted:#aab2bd;--line:#303740;--accent:#d8ff4f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:18px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}main{max-width:900px;margin:auto;padding:42px 24px 90px}h1{font-size:clamp(42px,8vw,74px);line-height:1;margin:12px 0 20px;letter-spacing:-.04em}h2{font-size:28px;margin:44px 0 12px}h3{font-size:20px;margin:26px 0 8px}p,li{max-width:760px}a{color:var(--accent)}.muted{color:var(--muted)}.tag{font-size:13px;letter-spacing:.08em;color:var(--accent);font-weight:700}.tagline{font-size:clamp(23px,4vw,34px);font-weight:750;line-height:1.25;max-width:760px}.panel{border:1px solid var(--line);background:var(--panel);padding:24px;border-radius:10px;margin:26px 0}.status{border-left:4px solid var(--accent);padding:14px 18px;background:var(--panel)}table{border-collapse:collapse;width:100%;display:block;overflow:auto}th,td{text-align:left;vertical-align:top;border-bottom:1px solid var(--line);padding:12px;min-width:180px}th{color:var(--accent)}.checks{list-style:none;padding-left:0}.checks li{margin:10px 0}.checks li:before{content:"□ ";color:var(--accent)}.nav{display:flex;gap:16px;flex-wrap:wrap;margin:20px 0}.nav a{display:inline-block;border:1px solid var(--accent);padding:10px 14px;border-radius:5px;text-decoration:none;font-weight:700}.small{font-size:15px;color:var(--muted)}@media(max-width:600px){main{padding:28px 18px 70px}.panel{padding:18px}}
+</style>
+</head>
+<body><main>
+<p class="tag">LOPTR LAB · EXPERIMENT REVIEW</p>
+<h1>Veiled Dominion: Duet</h1>
+<p class="tagline">You can lose the "King" Have a Great Knight and still win the game</p>
+<div class="status"><strong>Current status:</strong> The Google Cloud trial ended. Cloud gameplay services are offline. Local recovery/play is the current route; verify the exact build and route before claiming availability. This is a pause for evidence and engineering review—not a claim that the idea failed or that nobody played.</div>
+<div class="nav"><a href="../duet/play/">Try local play</a><a href="https://github.com/Loptr-Lab/duet-solo-hackathon/issues">Review issues</a><a href="https://github.com/Loptr-Lab/duet-solo-hackathon">Source repository</a><a href="../">Back to Break This Build</a></div>
+<h2>What were we testing?</h2>
+<p><strong>Game hypothesis:</strong> a chess-derived game with asymmetric mechanics and meaningful alternatives to conventional king-centered victory can produce interesting strategic play. Players should be able to understand the rules, make consequential choices, complete a game, and want to play again.</p>
+<p><strong>Infrastructure hypothesis:</strong> remote play, persistence, reconnect, and optional assistance may broaden access or improve the experience—but only if demonstrated value justifies their complexity. Core play should remain recoverable without cloud services or AI/model calls.</p>
+<p>These hypotheses are evaluated separately. Code completion, deployment requests, or Cloud Run activity are not proof of engagement, usability, or a completed match.</p>
+<h2>Timeline</h2>
+<ul>
+<li><strong>Concept and development:</strong> experimental mechanics and prototype developed.</li>
+<li><strong>Cloud experiment:</strong> temporary hosted services were used.</li>
+<li><strong>Trial ended:</strong> cloud gameplay services are offline.</li>
+<li><strong>Recovery:</strong> local play is the fallback path, subject to build/route verification.</li>
+<li><strong>Evidence review:</strong> reconcile surviving analytics, match records, tests, feedback, and limitations.</li>
+<li><strong>Next experiment:</strong> choose only after the decision gates below are reviewed.</li>
+</ul>
+<h2>Evidence ledger</h2>
+<p>Unknown is not zero, and missing telemetry is not evidence of disinterest. Add dated sources and build identifiers as evidence is reconciled.</p>
+<table><thead><tr><th>Question</th><th>Current status</th><th>Evidence needed</th></tr></thead><tbody>
+<tr><td>Can a player reach and start local play?</td><td>Verify the serving build and route</td><td>Dated device/browser test, URL, commit/build</td></tr>
+<tr><td>Are custom rules consistent and understandable?</td><td>Open review</td><td>Rule test cases, independent playtest notes, adjudicated examples</td></tr>
+<tr><td>Can a full game be completed?</td><td>Not established by infrastructure logs alone</td><td>Completed match record or witnessed test</td></tr>
+<tr><td>Is genuine player interest demonstrated?</td><td>Unknown unless recoverable evidence supports it</td><td>Privacy-respecting starts, completions, return play, or direct feedback</td></tr>
+<tr><td>Does computer-opponent play help?</td><td>Unproven</td><td>Clearly labeled mode, difficulty disclosure, feedback</td></tr>
+<tr><td>Does optional assistance improve accessibility?</td><td>Unproven</td><td>Independent accessibility review; assistance must not decide for player</td></tr>
+<tr><td>Are remote play, reconnect, and persistence worth maintaining?</td><td>Cloud services offline; value unproven</td><td>Demonstrated need plus acceptance and operational feasibility</td></tr>
+<tr><td>Is the experience accessible?</td><td>Not accepted as complete</td><td>Keyboard, screen reader, low-vision, reduced-motion, recovery testing</td></tr>
+</tbody></table>
+<h2>Local recovery and playtest protocol</h2>
+<ul><li><strong>Local Classic, two people on one device:</strong> useful for rules and interaction review.</li><li><strong>Local computer opponent:</strong> label the mode and its limitations; do not treat it as human-player evidence.</li><li><strong>Remote matches, accounts, cloud saves and reconnect:</strong> offline unless separately verified.</li></ul>
+<p>Optional feedback prompts: Which rules or terms were unclear? What decision felt meaningful? Did anything seem unfair, inconsistent, or broken? Could you recover from a mistake or interruption? Did you finish? Would you play again, and why?</p>
+<p>Feedback is voluntary. Do not collect personal information by default. If telemetry is absent, disclose that. Never publish identifiers, room codes, reconnect tokens, or private messages.</p>
+<h2>Test protocol</h2>
+<ol><li>Record date, exact URL, build/commit, browser and device.</li><li>Read the rules without coaching; note interpretation questions.</li><li>Start local play and complete a match if possible.</li><li>Record rule discrepancies, accessibility barriers, interruption/recovery, and unexpected behavior.</li><li>Submit optional feedback; distinguish automation, owner testing, and independent playtesting.</li><li>Preserve reproducible bugs and decisions in GitHub and summarize verified findings here.</li></ol>
+<h2>Findings, interpretations, and unknowns</h2>
+<p>Keep these three categories separate. A lack of telemetry is a limitation, not a conclusion. Do not infer player interest, game quality, or failure from Cloud Run request activity alone.</p>
+<h2>Rebuild decision gate</h2>
+<ul class="checks"><li>Rules and experimental/canonical boundaries are documented and reviewed.</li><li>Local play has dated acceptance evidence, including a full-game path.</li><li>Available historical data has been reviewed with its limitations stated.</li><li>A real player need for remote play has been demonstrated or clearly articulated.</li><li>Architecture supports local recovery and does not require AI/model services for core play.</li><li>Hosting, persistence, reconnect, security, maintenance, and failure recovery have owners and realistic costs.</li><li>Accessibility acceptance is part of the gate—not a post-launch promise.</li><li>The smallest next experiment and success/failure criteria are written before implementation.</li></ul>
+<h2>Research connection</h2>
+<p>Duet remains its own game experiment. It is not automatically PIXIE, ScreenWeaver, or Veiled Dominion's canonical engine. A future Loptr Lab field note may examine what happens when an AI/cloud-dependent creative experiment is made useful after its infrastructure disappears: local-first recovery, optional services, graceful degradation, human control, and the distinction between hypothesis and deployment. Publish substantive conclusions only when evidence supports them.</p>
+<h2>Invitation to review</h2>
+<p>We welcome focused review from players, chess-variant designers, accessibility testers, and engineers. Useful feedback is reproducible: a rule interpretation, barrier, unexpected outcome, or evidence that changes the next experiment. This is not a claim that the prototype is finished or a promise of future participation.</p>
+<p class="small">Status statements should be updated only after dated verification. The page intentionally does not claim cloud functionality or player outcomes that have not been verified.</p>
+</main></body></html>
