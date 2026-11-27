@@ -19,7 +19,7 @@ The rules authority is `Loptr-Lab/veiled-dominion-engine`, whose current target 
 | Loss of control | A Veiled Rebirth immediately returns `rebirth_lost_control` game over | No equivalent canonical four-player rule has been approved | Experimental |
 | Reapplication | Applying Veil resets the fixed counter | Canonical implementation behavior must be deterministic while preserving owner-turn expiration | Experimental implementation detail |
 | Pawn promotion | Tiered Rebirth/Knight/Bishop promotion with an overloaded-board state | Not part of the current four-player rulebook | Experimental |
-| Fog Mode | Elevation, vision, HP/combat, and hidden information | Not part of the base canonical game | Optional and noncanonical |
+| Fog Mode | Elevation on chessboard squares models terrain, vision, and fog of war; the prototype also uses HP/combat and hidden information | Not part of the base canonical game; a future actual-map/MOBA-style direction is design intent, not an approved rules specification | Optional and noncanonical |
 | Resonance | Psychic and cinematic presentation language | Presentation language only | Not a stat or resource |
 
 ## Base-engine boundaries
@@ -35,7 +35,7 @@ In particular:
 
 ## Fog Mode
 
-Fog Mode is a separate optional system with elevation, vision, HP/combat, and hidden information. It is not part of Duet's extracted base engine and is not canonical Veiled Dominion gameplay. Promotion would require an explicit four-player design decision.
+Fog Mode is a separate optional system with elevation, vision, HP/combat, and hidden information. Elevation on chessboard squares models how terrain affects sight and fog of war; the grid is a spatial prototype whose lessons are intended to inform a future actual-map, MOBA-style direction for the four-player game. That transition is design intent, not a settled map specification. Fog Mode is not part of Duet's extracted base engine or canonical Veiled Dominion gameplay. The current 8×8 layout, terrain profile, numeric sight rules, HP values, damage modifiers, and hidden-information handoff remain experimental. Promotion would require an explicit four-player design decision.
 
 ## Resonance and sound
 
