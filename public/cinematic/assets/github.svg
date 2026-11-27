@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" aria-label="GitHub – Open Source">
+  <!-- GitHub Octocat simplified -->
+  <circle cx="24" cy="18" r="12" fill="currentColor"/>
+  <!-- Body -->
+  <path d="M12 28 C12 36 18 40 24 40 C30 40 36 36 36 28" fill="currentColor"/>
+  <!-- Tentacles -->
+  <path d="M16 36 L12 42" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M24 40 L24 44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M32 36 L36 42" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Face cutout -->
+  <circle cx="20" cy="17" r="2.5" fill="#000"/>
+  <circle cx="28" cy="17" r="2.5" fill="#000"/>
+  <path d="M20 22 Q24 26 28 22" stroke="#000" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+</svg>
