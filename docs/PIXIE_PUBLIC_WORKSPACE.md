@@ -20,4 +20,4 @@ Open the workspace in a signed-out session, choose Training, and request a 5-min
 
 ## Separate and planned
 
-The ChatGPT MCP prototype is a separate optional integration; its connection is not required here. GitHub/AT Protocol signup, member authorization, saved progress, internal communications, approved shared Library resources and a Loptr Lab PDS are not implemented. Public initial contact and recruitment precede onboarding and explicitly authorized internal access.
+The ChatGPT MCP server source is maintained separately in [`plugins/chatgpt-pixie/`](../plugins/chatgpt-pixie/). It is a read-only catalog integration that is not deployed or connected to ChatGPT; this public workspace does not depend on it. GitHub/AT Protocol signup, member authorization, saved progress, internal communications, approved shared Library resources and a Loptr Lab PDS are not implemented. Public initial contact and recruitment precede onboarding and explicitly authorized internal access.

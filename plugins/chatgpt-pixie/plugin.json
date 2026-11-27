@@ -1,0 +1,32 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "pixie-project-companion",
+  "version": "0.1.0",
+  "description": "Explore Loptr Lab projects and distinct PIXIE surfaces using source-linked public information.",
+  "author": {
+    "name": "Loptr Lab",
+    "url": "https://loptrlab.com/"
+  },
+  "homepage": "https://ecosystem.loptrlab.com/",
+  "repository": "https://github.com/Loptr-Lab/duet-solo-hackathon",
+  "license": "MIT",
+  "keywords": ["PIXIE", "Loptr Lab", "project discovery", "accessibility"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "PIXIE Project Companion",
+        "shortDescription": "Explore Loptr Lab projects and distinct PIXIE surfaces.",
+        "longDescription": "Search a curated, dated catalog of public Loptr Lab projects and separate PIXIE iterations. Review each surface's role, maturity, status, boundaries, and source links. This companion is read-only and does not access private project data or take actions.",
+        "developerName": "Loptr Lab",
+        "category": "Productivity",
+        "capabilities": ["Read"],
+        "websiteURL": "https://ecosystem.loptrlab.com/",
+        "defaultPrompt": [
+          "Show me the different PIXIE surfaces and what is verified about each.",
+          "Find the public, read-only discovery path and explain its current boundaries.",
+          "Which Loptr Lab projects are relevant to creating, playing, or contributing?"
+        ]
+      }
+    }
+  }
+}
